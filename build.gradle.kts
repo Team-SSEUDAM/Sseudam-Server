@@ -75,8 +75,8 @@ tasks.register("addLintPreCommitHook", DefaultTask::class) {
     description = "Install git hooks"
     doLast {
         val hooksDir = project.file(".git/hooks")
-        val scriptDir = project.file("scripts")
-        val preCommit = scriptDir.resolve("pre-commit")
+        val sourceDir = project.file(".githooks")
+        val preCommit = sourceDir.resolve("pre-commit")
         Runtime.getRuntime().exec("chmod +x .git/hooks/pre-commit")
         preCommit.copyTo(hooksDir.resolve("pre-commit"), overwrite = true)
         hooksDir.resolve("pre-commit").setExecutable(true)
