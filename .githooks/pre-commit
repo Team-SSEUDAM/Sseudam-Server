@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# staged 파일만 가져오기
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.kt$')
+
+if [ -z "$STAGED_FILES" ]; then
+  echo "No Kotlin files staged. Skipping ktlint."
+  exit 0
+fi
+
+echo "Running ktlintFormat on staged files..."
+./gradlew ktlintFormat > /dev/null
+
+# 변경된 파일이 있으면 다시 스테이지
+MODIFIED_FILES=$(git diff --name-only)
+
+if [ -n "$MODIFIED_FILES" ]; then
+  echo "Detected changes after ktlintFormat. Re-staging modified files..."
+  echo "$MODIFIED_FILES" | xargs git add
+  echo "🔄 Files reformatted. Please re-commit your changes."
+  exit 1
+fi
+
+echo "✅ Ktlint passed. Continuing with commit."
+exit 0
