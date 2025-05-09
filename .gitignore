@@ -36,5 +36,21 @@ out/
 ### VS Code ###
 .vscode/
 
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### Required removal files ##
+**/.jqwik-database
+
+### env ####
+*.pem
+.*.env
+*.env
+
 ### Kotlin ###
 .kotlin
+
+logs
