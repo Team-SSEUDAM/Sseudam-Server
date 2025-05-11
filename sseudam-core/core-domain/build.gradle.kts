@@ -21,7 +21,6 @@ dependencies {
     implementation(libs.bundles.spring.modulith)
     runtimeOnly(libs.bundles.spring.modulith.runtime)
 
-
     testImplementation(libs.spring.modulith.test)
 }
 
