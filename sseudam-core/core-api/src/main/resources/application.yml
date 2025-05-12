@@ -16,7 +16,7 @@ spring:
       - monitoring.yml
 #      - authentication-redis.yml
 #      - authentication.yml
-#      - oauth.yml
+      - oauth.yml
 #      - rsa.yml
 #      - notification.yml
   #      - aws.yml
