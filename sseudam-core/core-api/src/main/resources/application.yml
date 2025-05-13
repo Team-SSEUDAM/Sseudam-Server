@@ -8,15 +8,15 @@ spring:
   threads:
     virtual:
       enabled: true
-#  config:
-#    import:
-#      - db-core.yml
-#      - redis.yml
-#      - logging.yml
-#      - monitoring.yml
+  config:
+    import:
+      - db-core.yml
+      - redis.yml
+      - logging.yml
+      - monitoring.yml
 #      - authentication-redis.yml
 #      - authentication.yml
-#      - oauth.yml
+      - oauth.yml
 #      - rsa.yml
 #      - notification.yml
   #      - aws.yml
