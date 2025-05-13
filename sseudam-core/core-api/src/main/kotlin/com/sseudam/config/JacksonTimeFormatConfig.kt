@@ -34,9 +34,5 @@ class JacksonTimeFormatConfig {
                 YearMonth::class.java,
                 YearMonthSerializer(DateTimeFormatter.ofPattern("yyyy-MM")),
             )
-            addSerializer(
-                LocalTime::class.java,
-                LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss.SSS")),
-            )
         }
 }

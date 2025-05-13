@@ -31,7 +31,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
         statusCode: HttpStatusCode,
         request: WebRequest,
     ): ResponseEntity<Any>? {
-        val errorResponse = ErrorResponse.of(ex.javaClass.simpleName, ex.message!!)
+        val errorResponse = ErrorResponse.of(ex.javaClass.simpleName, ex.message ?: "No message available")
         val apiResponse = ApiResponse.fail(statusCode.value(), errorResponse)
         return super.handleExceptionInternal(ex, apiResponse, headers, statusCode, request)
     }
@@ -43,8 +43,9 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
         request: WebRequest,
     ): ResponseEntity<Any>? {
         log.error("MethodArgumentNotValidException : {}", e.message, e)
-        val errorMessage: String? = e.bindingResult.allErrors[0].defaultMessage
-        val errorResponse = ErrorResponse.of(e.javaClass.simpleName, errorMessage!!)
+        val errors = e.bindingResult.allErrors.mapNotNull { it.defaultMessage }
+        val errorMessage = if (errors.isNotEmpty()) errors.joinToString("; ") else "Validation failed"
+        val errorResponse = ErrorResponse.of(e.javaClass.simpleName, errorMessage)
         val apiResponse = ApiResponse.fail(status.value(), errorResponse)
         return ResponseEntity.status(status).body(apiResponse)
     }
@@ -98,15 +99,6 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
     @ExceptionHandler(Exception::class)
     protected fun handleException(e: Exception): ResponseEntity<ApiResponse<ErrorResponse>> {
         log.error("Internal Server Error : {}", e.message, e)
-        val internalServerError: ErrorType = ErrorType.INTERNAL_SERVER_ERROR
-        val errorResponse = ErrorResponse.of(e.javaClass.simpleName, internalServerError.message)
-        val apiResponse = ApiResponse.fail(internalServerError.status, errorResponse)
-        return ResponseEntity.status(internalServerError.status).body(apiResponse)
-    }
-
-    @ExceptionHandler(RuntimeException::class)
-    protected fun handleRuntimeException(e: RuntimeException): ResponseEntity<ApiResponse<ErrorResponse>> {
-        log.error("Internal Server Runtime Error : {}", e.message, e)
         val internalServerError: ErrorType = ErrorType.INTERNAL_SERVER_ERROR
         val errorResponse = ErrorResponse.of(e.javaClass.simpleName, internalServerError.message)
         val apiResponse = ApiResponse.fail(internalServerError.status, errorResponse)

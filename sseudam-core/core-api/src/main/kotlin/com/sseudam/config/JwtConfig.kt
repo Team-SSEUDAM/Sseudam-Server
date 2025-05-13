@@ -19,6 +19,7 @@ import java.util.UUID
 class JwtConfig(
     private val rsaKeyProperties: RsaKeyProperties,
 ) {
+    // TODO: Test 추가할 것.
     @Bean
     fun jwtDecoder(): JwtDecoder =
         NimbusJwtDecoder
