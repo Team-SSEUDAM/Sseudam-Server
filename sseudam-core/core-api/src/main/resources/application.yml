@@ -14,10 +14,11 @@ spring:
       - redis.yml
       - logging.yml
       - monitoring.yml
-#      - authentication-redis.yml
-#      - authentication.yml
+      - authentication-redis.yml
+      - authentication.yml
       - oauth.yml
-#      - rsa.yml
+      - swagger.yml
+      - rsa.yml
 #      - notification.yml
   #      - aws.yml
   web.resources.add-mappings: false
