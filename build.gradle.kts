@@ -15,6 +15,10 @@ plugins {
     alias(libs.plugins.hidetake.swagger.generator) apply false
 }
 
+kapt {
+    includeCompileClasspath = false
+}
+
 allprojects {
     version = project.findProperty("applicationVersion")?.toString() ?: "0.1.0"
     group = project.findProperty("projectGroup")?.toString() ?: "com.sseudam"

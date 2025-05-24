@@ -31,5 +31,4 @@ jobs:
       - name: Build with Gradle Cache
         uses: gradle/gradle-build-action@v3
         with:
-          arguments: :sseudam-core:core-api:build --no-daemon
-          cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/release' }}
+          arguments: :sseudam-core:core-api:build --no-daemon --stacktrace --info

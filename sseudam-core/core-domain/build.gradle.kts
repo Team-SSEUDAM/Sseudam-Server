@@ -1,3 +1,7 @@
+plugins {
+    kotlin("kapt")
+}
+
 extra["springModulithVersion"] = "1.3.5"
 
 dependencies {
@@ -20,6 +24,8 @@ dependencies {
     // Spring Modulith (bundle 사용)
     implementation(libs.bundles.spring.modulith)
     runtimeOnly(libs.bundles.spring.modulith.runtime)
+
+    kapt("org.springframework.modulith:spring-modulith-docs:1.3.5")
 
     testImplementation(libs.spring.modulith.test)
 }
