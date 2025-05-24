@@ -12,7 +12,6 @@ jobs:
     strategy:
       matrix:
         java-version: [ "21" ]
-        kotlin-version: [ "2.1.0" ]
         distribution: [ "corretto" ]
     steps:
       - name: Checkout code
@@ -22,7 +21,6 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java-version }}
-          kotlin-version: ${{ matrix.kotlin-version }}
           distribution: ${{ matrix.distribution }}
 
       - name: Grant execute permission for gradlew
