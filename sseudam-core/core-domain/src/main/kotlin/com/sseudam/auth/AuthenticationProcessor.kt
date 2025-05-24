@@ -13,7 +13,7 @@ class AuthenticationProcessor(
     private val tokenRepository: TokenRepository,
     private val authenticationHistoryWriter: AuthenticationHistoryWriter,
 ) {
-    fun login(
+    fun socialLogin(
         deviceId: String?,
         user: User,
         credentialSseudam: CredentialSseudam,
@@ -36,7 +36,7 @@ class AuthenticationProcessor(
             )
         }
 
-    fun login(
+    fun socialLogin(
         deviceId: String,
         socialUser: SocialUser,
     ): Token =
