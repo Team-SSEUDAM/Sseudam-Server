@@ -15,10 +15,6 @@ plugins {
     alias(libs.plugins.hidetake.swagger.generator) apply false
 }
 
-kapt {
-    includeCompileClasspath = false
-}
-
 allprojects {
     version = project.findProperty("applicationVersion")?.toString() ?: "0.1.0"
     group = project.findProperty("projectGroup")?.toString() ?: "com.sseudam"
@@ -50,6 +46,12 @@ subprojects {
         implementation(libs.jackson.kotlin)
         implementation(libs.hibernate.spatial)
 
+        // Spring Modulith (bundle 사용)
+        implementation(libs.bundles.spring.modulith)
+        runtimeOnly(libs.bundles.spring.modulith.runtime)
+        kapt("org.springframework.modulith:spring-modulith-docs:1.3.5")
+        testImplementation(libs.spring.modulith.test)
+
         annotationProcessor(libs.spring.boot.configuration.processor)
         kapt(libs.spring.boot.configuration.processor)
 
@@ -57,6 +59,16 @@ subprojects {
         testImplementation(libs.bundles.kotest)
         testImplementation(libs.spring.boot.starter.test)
         testImplementation(libs.spring.security.test)
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom(
+                libs.spring.modulith.bom
+                    .get()
+                    .toString(),
+            )
+        }
     }
 
     tasks.withType<KotlinCompile> {
