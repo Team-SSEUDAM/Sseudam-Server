@@ -15,7 +15,7 @@ class AuthenticationService(
         user: User,
         credentialSseudam: CredentialSseudam,
     ): Token =
-        authenticationProcessor.login(
+        authenticationProcessor.socialLogin(
             deviceId = deviceId,
             user = user,
             credentialSseudam = credentialSseudam,
@@ -25,7 +25,7 @@ class AuthenticationService(
         deviceId: String,
         socialUser: SocialUser,
     ): Token =
-        authenticationProcessor.login(
+        authenticationProcessor.socialLogin(
             deviceId = deviceId,
             socialUser = socialUser,
         )
@@ -34,7 +34,7 @@ class AuthenticationService(
 
     fun logout(token: String): String = authenticationProcessor.remove(token)
 
-    fun delete(userKey: String) {
+    fun withdrawUser(userKey: String) {
         authenticationProcessor.withdrawal(userKey)
     }
 }

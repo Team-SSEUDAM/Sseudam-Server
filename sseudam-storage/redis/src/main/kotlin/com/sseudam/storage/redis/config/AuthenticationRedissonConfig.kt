@@ -13,7 +13,13 @@ class AuthenticationRedissonConfig(
     @Bean
     fun authRedissonClient(): RedissonClient {
         val config = Config()
-        config.useSingleServer().setAddress("redis://" + authenticationRedisProperties.host + ":" + authenticationRedisProperties.port)
+        config
+            .useSingleServer()
+            .setAddress("redis://${authenticationRedisProperties.host}:${authenticationRedisProperties.port}")
+            .setConnectionMinimumIdleSize(1)
+            .setConnectionPoolSize(10)
+            .setConnectTimeout(1500)
+            .setRetryAttempts(3)
         return Redisson.create(config)
     }
 }
