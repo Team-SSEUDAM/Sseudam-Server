@@ -8,11 +8,12 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.YearMonthSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.sseudam.jwt.JwtConverter
 import com.sseudam.swagger.SwaggerProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
+import org.springframework.core.convert.converter.Converter
+import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.core.GrantedAuthorityDefaults
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
@@ -105,15 +107,13 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(
         http: HttpSecurity,
-        jwtConverter: JwtConverter,
+        jwtConverter: Converter<Jwt, out AbstractAuthenticationToken>,
     ): SecurityFilterChain {
-        http
-            .oauth2ResourceServer { oauth2 ->
-                oauth2.jwt { jwt ->
-                    jwt.jwtAuthenticationConverter(jwtConverter.apply { setPrincipalClaimName("jti") })
-                }
-                oauth2.authenticationEntryPoint(CustomAuthenticationEntryPoint(objectMapper()))
+        http.oauth2ResourceServer {
+            it.jwt { jwtConfigurer ->
+                jwtConfigurer.jwtAuthenticationConverter(jwtConverter)
             }
+        }
 
         http
             .headers { it.frameOptions { option -> option.disable() } }

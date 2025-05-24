@@ -1,5 +1,3 @@
-extra["springModulithVersion"] = "1.3.5"
-
 dependencies {
     compileOnly(libs.spring.context)
     implementation(libs.spring.tx)
@@ -16,20 +14,4 @@ dependencies {
     // Arrow Kt
     implementation(libs.arrow.fx.coroutine)
     implementation(libs.arrow.fx.stm)
-
-    // Spring Modulith (bundle 사용)
-    implementation(libs.bundles.spring.modulith)
-    runtimeOnly(libs.bundles.spring.modulith.runtime)
-
-    testImplementation(libs.spring.modulith.test)
-}
-
-dependencyManagement {
-    imports {
-        mavenBom(
-            libs.spring.modulith.bom
-                .get()
-                .toString(),
-        )
-    }
 }

@@ -10,10 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtClaimNames
-import org.springframework.stereotype.Component
 import org.springframework.util.Assert
 
-@Component
 class JwtConverter(
     private val redisTokenRepository: RedisTokenRepository,
 ) : Converter<Jwt, AbstractAuthenticationToken> {

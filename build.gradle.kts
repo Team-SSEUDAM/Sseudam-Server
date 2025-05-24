@@ -46,6 +46,12 @@ subprojects {
         implementation(libs.jackson.kotlin)
         implementation(libs.hibernate.spatial)
 
+        // Spring Modulith (bundle 사용)
+//        implementation(libs.bundles.spring.modulith)
+//        runtimeOnly(libs.bundles.spring.modulith.runtime)
+//        kapt("org.springframework.modulith:spring-modulith-docs:1.3.1")
+//        testImplementation(libs.spring.modulith.test)
+
         annotationProcessor(libs.spring.boot.configuration.processor)
         kapt(libs.spring.boot.configuration.processor)
 
@@ -54,6 +60,16 @@ subprojects {
         testImplementation(libs.spring.boot.starter.test)
         testImplementation(libs.spring.security.test)
     }
+
+//    dependencyManagement {
+//        imports {
+//            mavenBom(
+//                libs.spring.modulith.bom
+//                    .get()
+//                    .toString(),
+//            )
+//        }
+//    }
 
     tasks.withType<KotlinCompile> {
         kotlin {
@@ -82,7 +98,7 @@ subprojects {
     }
 }
 
-extra["springModulithVersion"] = "1.3.5"
+//extra["springModulithVersion"] = "1.3.1"
 
 tasks.register("addLintPreCommitHook", DefaultTask::class) {
     group = "setup"

@@ -28,6 +28,16 @@ data class SignUpRequest(
             socialType = SocialType.SSEUDAM,
         )
 
+    fun toNewUser(password: String): NewUser =
+        NewUser(
+            email = email,
+            name = name,
+            nickname = nickname,
+            password = password,
+            socialId = "",
+            socialType = SocialType.SSEUDAM,
+        )
+
     fun toNewAuthenticationSseudam(): NewAuthenticationSseudam =
         NewAuthenticationSseudam(
             loginId = email,

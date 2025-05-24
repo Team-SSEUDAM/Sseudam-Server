@@ -32,8 +32,8 @@ class AuthController(
     private val oAuthService: OAuthService,
     private val userService: UserService,
 ) {
-    @Operation(summary = "이메일 로그인", description = "로그인합니다.")
-    @PostMapping("/auth/login")
+    @Operation(summary = "테스트 로그인", description = "테스트를 위한 로그인을 합니다.")
+    @PostMapping("/auth/test-login")
     fun login(
         @RequestHeader(name = "X-DEVICE-ID") deviceId: String?,
         @RequestBody request: LoginRequest,
