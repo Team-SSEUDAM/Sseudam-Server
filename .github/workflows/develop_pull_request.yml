@@ -1,0 +1,35 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches:
+      - chore/workflows-docker-compose
+
+jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ "21" ]
+        kotlin-version: [ "2.1.0" ]
+        distribution: [ "corretto" ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java-version }}
+          kotlin-version: ${{ matrix.kotlin-version }}
+          distribution: ${{ matrix.distribution }}
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle Cache
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: :sseudam-core:core-api:build --no-daemon
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/release' }}

@@ -15,7 +15,7 @@ class AuthenticationService(
         user: User,
         credentialSseudam: CredentialSseudam,
     ): Token =
-        authenticationProcessor.socialLogin(
+        authenticationProcessor.login(
             deviceId = deviceId,
             user = user,
             credentialSseudam = credentialSseudam,
@@ -25,7 +25,7 @@ class AuthenticationService(
         deviceId: String,
         socialUser: SocialUser,
     ): Token =
-        authenticationProcessor.socialLogin(
+        authenticationProcessor.login(
             deviceId = deviceId,
             socialUser = socialUser,
         )
