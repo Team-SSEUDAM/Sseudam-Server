@@ -17,7 +17,7 @@ jobs:
 
     env:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-      DOCKERHUB_IMAGE_NAME: pida-dev
+      DOCKERHUB_IMAGE_NAME: sseudam-dev
 
     strategy:
       matrix:
@@ -44,7 +44,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
         with:
           arguments: |
-            :pida-core:core-api:build
+            :-core:core-api:build
             --scan
 
       - name: Configure AWS Credentials
@@ -52,7 +52,7 @@ jobs:
         with:
           aws-region: ap-northeast-2
           role-to-assume: ${{ secrets.OIDC_ROLE_TO_ASSUME }}
-          role-session-name: pida-server
+          role-session-name: sseudam-server
 
           # Dockerhub 로그인
       - name: Login to Dockerhub
