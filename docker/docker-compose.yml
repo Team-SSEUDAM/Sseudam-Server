@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   backend:
     image: ${IMAGE_FULL_URL}
@@ -12,7 +10,7 @@ services:
       - .env
   redis:
     image: "redis:alpine"
-    container_name: redis
+    container_name: sseudam-local-redis
     ports:
       - "6379:6379"
     environment:
