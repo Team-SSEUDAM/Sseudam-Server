@@ -1,0 +1,114 @@
+name: Development Build & Deploy
+
+on:
+  push:
+    branches:
+      - develop
+
+# permission can be added at job level or workflow level
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
+jobs:
+  deploy:
+    environment: DEV
+    name: CD
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKERHUB_USERNAME: sseudam
+      DOCKERHUB_IMAGE_NAME: sseudam-dev
+
+    strategy:
+      matrix:
+        java-version: [ "21" ]
+        kotlin-version: [ "2.1.0" ]
+        distribution: [ "corretto" ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java-version }}
+          kotlin-version: ${{ matrix.kotlin-version }}
+          distribution: ${{ matrix.distribution }}
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Setup Gradle
+        id: gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/release' }}
+
+      - name: Build with Gradle
+        run: |
+          ./gradlew build :sseudam-core:core-api:build --scan
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ap-northeast-2
+          role-to-assume: ${{ secrets.OIDC_ROLE_TO_ASSUME }}
+          role-session-name: sseudam-server
+
+          # Dockerhub 로그인
+      - name: Login to Dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: sseudam
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+          # Docker 메타데이터 추출
+      - name: Extract Docker metadata
+        id: metadata
+        uses: docker/metadata-action@v5.5.0
+        env:
+          DOCKERHUB_IMAGE_FULL_NAME: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_IMAGE_NAME }}
+        with:
+          images: ${{ env.DOCKERHUB_IMAGE_FULL_NAME }}
+          tags: |
+            type=sha,prefix=
+
+      # Docker 이미지 빌드 및 도커허브로 푸시
+      - name: Docker Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/DockerfileDev
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+
+      # docker-compose.yml 파일을 EC2에 복사
+      - name: Copy docker-compose.yml to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: "./docker/docker-compose.yml"
+          target: "/home/ec2-user"
+          overwrite: true
+
+      # EC2로 배포
+      - name: Deploy to EC2 Server
+        uses: appleboy/ssh-action@master
+        env:
+          IMAGE_FULL_URL: ${{ steps.metadata.outputs.tags }}
+          DOCKERHUB_IMAGE_NAME: ${{ env.DOCKERHUB_IMAGE_NAME }}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          envs: IMAGE_FULL_URL, DOCKERHUB_IMAGE_NAME
+          debug: true
+          script: |
+            echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
+            cd ~/app
+            docker compose up -d
+            docker image prune -a -f

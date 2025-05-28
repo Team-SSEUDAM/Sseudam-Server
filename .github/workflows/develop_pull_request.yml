@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         java-version: [ "21" ]
-        kotlin-version: [ "2.1.21" ]
+        kotlin-version: [ "2.1.0" ]
         distribution: [ "corretto" ]
     steps:
       - name: Checkout code
@@ -28,7 +28,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Build with Gradle Cache
-        uses: gradle/gradle-build-action@v3
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
-          arguments: :sseudam-core:core-api:build --no-daemon --stacktrace --info
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/release' }}
+
+      - name: Build with Gradle
+        run: |
+          ./gradlew build :sseudam-core:core-api:build --scan
