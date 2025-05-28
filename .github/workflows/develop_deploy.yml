@@ -45,7 +45,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
         with:
           arguments: |
-            :-core:core-api:build
+            :sseudam-core:core-api:build
             --scan
 
       - name: Configure AWS Credentials
