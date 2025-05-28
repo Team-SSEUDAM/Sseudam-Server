@@ -93,6 +93,7 @@ jobs:
           script: |
             whoami
             pwd
+            hostname
 
       # 서버로 docker-compose 파일 전송
       - name: Copy docker-compose file to EC2
