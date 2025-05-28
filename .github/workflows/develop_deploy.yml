@@ -42,7 +42,7 @@ jobs:
 
       - name: Build with Gradle
         id: gradle
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/actions/setup-gradle@v4
         with:
           arguments: |
             :sseudam-core:core-api:build
