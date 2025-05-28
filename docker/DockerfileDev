@@ -2,8 +2,8 @@ FROM amazoncorretto:21
 ENV TZ="Asia/Seoul"
 
 RUN mkdir -p /service/sseudam
-COPY sseudam-core/core-api/build/libs/core-api-0.0.1.jar /service/sseudam/core-api-0.0.1.jar
+COPY sseudam-core/core-api/build/libs/sseudam-api-0.1.0.jar /service/sseudam/sseudam-api-0.1.0.jar
 
 EXPOSE 8080
 
-CMD java -jar -Xmx2048m /service/sseudam/core-api-0.0.1.jar
+CMD java -jar -Xmx2048m /service/sseudam/sseudam-api-0.1.0.jar
