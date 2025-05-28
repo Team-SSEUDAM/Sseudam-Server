@@ -32,3 +32,4 @@ jobs:
         uses: gradle/gradle-build-action@v3
         with:
           arguments: :sseudam-core:core-api:build --no-daemon --stacktrace --info
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/release' }}

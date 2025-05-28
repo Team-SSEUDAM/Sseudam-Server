@@ -47,6 +47,7 @@ jobs:
           arguments: |
             :sseudam-core:core-api:build
             --scan
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/release' }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
