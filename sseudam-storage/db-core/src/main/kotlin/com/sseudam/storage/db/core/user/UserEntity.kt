@@ -20,12 +20,13 @@ class UserEntity(
     val userKey: String,
     var name: String?,
     var nickname: String?,
+    var address: String?,
     var email: String,
     val password: String?,
-    private var socialId: String?,
+    var socialId: String?,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(50)")
-    private val socialType: SocialType,
+    val socialType: SocialType,
 ) : BaseEntity() {
     constructor(
         newUser: NewUser,
@@ -35,6 +36,7 @@ class UserEntity(
         email = newUser.email,
         name = newUser.name,
         nickname = newUser.nickname,
+        address = newUser.address,
         password = newUser.password,
         socialId = newUser.socialId,
         socialType = newUser.socialType,
