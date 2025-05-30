@@ -11,9 +11,10 @@ package com.sseudam.user
  * @property socialType 소셜 타입
  */
 data class NewUser(
-    val email: String,
     val name: String?,
     val nickname: String? = null,
+    val address: String? = null,
+    val email: String,
     val password: String? = null,
     val socialId: String,
     val socialType: SocialType,

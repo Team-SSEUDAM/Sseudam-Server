@@ -6,16 +6,19 @@ spring:
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 100
-    show-sql: true
-    hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-
 ---
 spring:
   config:
     activate:
       on-profile: local
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    properties:
+      hibernate:
+        show_log: true
+        format_sql: true
 datasource:
   db:
     core:
@@ -31,12 +34,18 @@ datasource:
       max-lifetime: 600000
       data-source-properties:
         rewriteBatchedStatements: true
-
 ---
 spring:
   config:
     activate:
       on-profile: dev
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    properties:
+      hibernate:
+        show_log: true
+        format_sql: true
 datasource:
   db:
     core:
@@ -52,12 +61,17 @@ datasource:
       max-lifetime: 600000
       data-source-properties:
         rewriteBatchedStatements: true
-
 ---
 spring:
   config:
     activate:
       on-profile: prod
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    properties:
+      hibernate:
+        show_log: true
 datasource:
   db:
     core:
