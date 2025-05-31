@@ -8,9 +8,9 @@ interface UserRepository {
     ): User
 
     // Read
-    suspend fun readByUserId(id: Long): UserProfile
+    fun readByUserId(id: Long): UserProfile
 
-    suspend fun readByUserKey(userKey: String): UserProfile
+    fun readByUserKey(userKey: String): UserProfile
 
     fun readUserById(id: Long): User?
 
@@ -19,13 +19,13 @@ interface UserRepository {
         password: String,
     ): User
 
-    suspend fun readByUserIdOrNull(id: Long): UserProfile?
+    fun readByUserIdOrNull(id: Long): UserProfile?
 
-    suspend fun readAllByUserIds(userIds: List<Long>): List<UserProfile>
+    fun readAllByUserIds(userIds: List<Long>): List<UserProfile>
 
-    suspend fun existsByEmail(email: String): Boolean
+    fun existsByEmail(email: String): Boolean
 
-    suspend fun existsByNickname(nickname: String): Boolean
+    fun existsByNickname(nickname: String): Boolean
 
     fun readUserByEmail(email: String): SocialUser?
 
@@ -40,7 +40,7 @@ interface UserRepository {
         name: String,
     ): UserProfile
 
-    suspend fun updateEmail(
+    fun updateEmail(
         userKey: String,
         email: String,
     ): UserProfile

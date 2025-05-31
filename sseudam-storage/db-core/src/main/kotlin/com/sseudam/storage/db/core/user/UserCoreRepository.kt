@@ -3,9 +3,7 @@ package com.sseudam.storage.db.core.user
 import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
-import com.sseudam.support.tx.TransactionTemplates
 import com.sseudam.support.tx.TxAdvice
-import com.sseudam.support.tx.coExecute
 import com.sseudam.user.NewUser
 import com.sseudam.user.NewUserKey
 import com.sseudam.user.SocialUser
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserCoreRepository(
     private val userJpaRepository: UserJpaRepository,
-    private val tx: TransactionTemplates,
     private val txAdvice: TxAdvice,
 ) : UserRepository {
     override fun create(
@@ -43,24 +40,24 @@ class UserCoreRepository(
                 ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
         }
 
-    override suspend fun readByUserIdOrNull(id: Long): UserProfile? =
-        tx.reader.coExecute {
+    override fun readByUserIdOrNull(id: Long): UserProfile? =
+        txAdvice.readOnly {
             userJpaRepository.findByIdAndDeletedAtIsNull(id)?.toProfile()
         }
 
-    override suspend fun readAllByUserIds(userIds: List<Long>): List<UserProfile> =
-        tx.reader.coExecute {
+    override fun readAllByUserIds(userIds: List<Long>): List<UserProfile> =
+        txAdvice.readOnly {
             userJpaRepository.findAllByIdIn(userIds).map { it.toProfile() }
         }
 
-    override suspend fun readByUserKey(userKey: String): UserProfile =
-        tx.reader.coExecute {
+    override fun readByUserKey(userKey: String): UserProfile =
+        txAdvice.readOnly {
             userJpaRepository.findByUserKeyAndDeletedAtIsNull(userKey)?.toProfile()
                 ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
         }
 
-    override suspend fun readByUserId(id: Long): UserProfile =
-        tx.reader.coExecute {
+    override fun readByUserId(id: Long): UserProfile =
+        txAdvice.readOnly {
             userJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(id).toProfile()
         }
 
@@ -69,13 +66,13 @@ class UserCoreRepository(
             userJpaRepository.findByEmailAndDeletedAtIsNull(email)?.toSocialUser()
         }
 
-    override suspend fun existsByEmail(email: String): Boolean =
-        tx.reader.coExecute {
+    override fun existsByEmail(email: String): Boolean =
+        txAdvice.readOnly {
             userJpaRepository.existsByEmailAndDeletedAtIsNull(email)
         }
 
-    override suspend fun existsByNickname(nickname: String): Boolean =
-        tx.reader.coExecute {
+    override fun existsByNickname(nickname: String): Boolean =
+        txAdvice.readOnly {
             userJpaRepository.existsByNicknameAndDeletedAtIsNull(nickname)
         }
 
@@ -100,14 +97,14 @@ class UserCoreRepository(
             return@write user.toProfile()
         }
 
-    override suspend fun updateEmail(
+    override fun updateEmail(
         userKey: String,
         email: String,
     ): UserProfile =
-        tx.writer.coExecute {
+        txAdvice.readOnly {
             val user = userJpaRepository.findByUserKeyAndDeletedAtIsNull(userKey) ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
             user.updateEmail(email)
-            return@coExecute user.toProfile()
+            user.toProfile()
         }
 
     override fun delete(userKey: String) =

@@ -1,10 +1,12 @@
 package com.sseudam.storage.db.core.trashspot
 
+import com.sseudam.common.Address
 import com.sseudam.storage.db.core.support.BaseEntity
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashType
 import jakarta.persistence.Column
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -18,10 +20,10 @@ class TrashSpotEntity(
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(20)")
     val region: Region,
-    val address: String,
+    @Embedded
+    var address: Address,
     @Column(columnDefinition = "geometry(Point, 4326)")
     val point: Point,
-    val detail: String?,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(20)")
     val trashType: TrashType,
@@ -33,7 +35,6 @@ class TrashSpotEntity(
             region = region,
             address = address,
             point = point,
-            detail = detail,
             trashType = trashType,
             updatedAt = updatedAt,
         )

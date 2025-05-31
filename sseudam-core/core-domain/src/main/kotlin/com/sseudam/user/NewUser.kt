@@ -1,5 +1,7 @@
 package com.sseudam.user
 
+import com.sseudam.common.Address
+
 /**
  * NewUser
  *
@@ -13,7 +15,7 @@ package com.sseudam.user
 data class NewUser(
     val name: String?,
     val nickname: String? = null,
-    val address: String? = null,
+    val address: Address?,
     val email: String,
     val password: String? = null,
     val socialId: String,
