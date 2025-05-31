@@ -46,7 +46,7 @@ class AuthController(
 
     @Operation(summary = "이메일 회원가입", description = "회원가입합니다.")
     @PostMapping("/auth/signup")
-    suspend fun signUp(
+    fun signUp(
         @RequestBody request: SignUpRequest,
     ): SignUpResponse {
         userService.create(request.toNewUser())
@@ -55,7 +55,7 @@ class AuthController(
 
     @Operation(summary = "카카오 로그인", description = "카카오 소셜 로그인합니다.")
     @PostMapping("/auth/social-login/kakao")
-    suspend fun socialKakaoLogin(
+    fun socialKakaoLogin(
         @RequestBody request: TokenRequest,
     ): TokenResponse {
         val socialInfo = oAuthService.getKaKaoUserInfo(request.token)
@@ -76,7 +76,7 @@ class AuthController(
 
     @Operation(summary = "애플 소셜 로그인", description = "애플 소셜 로그인합니다.")
     @PostMapping("/auth/social-login/apple")
-    suspend fun socialAppleLogin(
+    fun socialAppleLogin(
         @RequestBody request: TokenRequest,
     ): TokenResponse {
         val socialInfo = oAuthService.getAppleUserInfo(request.token)
@@ -97,7 +97,7 @@ class AuthController(
 
     @Operation(summary = "소셜 회원가입", description = "소셜 회원 가입합니다.")
     @PostMapping("/auth/social-signup")
-    suspend fun socialSignUp(
+    fun socialSignUp(
         @RequestBody request: SignUpSocialRequest,
     ): SignUpResponse {
         val tempUser = userService.getSocialUserByEmail(request.email)

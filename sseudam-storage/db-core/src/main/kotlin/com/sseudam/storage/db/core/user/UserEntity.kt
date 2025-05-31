@@ -1,5 +1,6 @@
 package com.sseudam.storage.db.core.user
 
+import com.sseudam.common.Address
 import com.sseudam.storage.db.core.support.BaseEntity
 import com.sseudam.user.NewUser
 import com.sseudam.user.NewUserKey
@@ -8,6 +9,7 @@ import com.sseudam.user.SocialUser
 import com.sseudam.user.User
 import com.sseudam.user.UserProfile
 import jakarta.persistence.Column
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -20,7 +22,8 @@ class UserEntity(
     val userKey: String,
     var name: String?,
     var nickname: String?,
-    var address: String?,
+    @Embedded
+    var address: Address,
     var email: String,
     val password: String?,
     var socialId: String?,
@@ -36,7 +39,13 @@ class UserEntity(
         email = newUser.email,
         name = newUser.name,
         nickname = newUser.nickname,
-        address = newUser.address,
+        address =
+            newUser.address ?: Address(
+                zipCode = "",
+                city = "",
+                street = "",
+                detail = "",
+            ),
         password = newUser.password,
         socialId = newUser.socialId,
         socialType = newUser.socialType,

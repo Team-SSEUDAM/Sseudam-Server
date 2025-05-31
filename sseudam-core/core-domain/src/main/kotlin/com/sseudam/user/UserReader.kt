@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component
 class UserReader(
     private val userRepository: UserRepository,
 ) {
-    suspend fun readUserProfile(userId: Long): UserProfile = userRepository.readByUserId(userId)
+    fun readUserProfile(userId: Long): UserProfile = userRepository.readByUserId(userId)
 
-    suspend fun readUserProfileOrNull(userId: Long): UserProfile? = userRepository.readByUserIdOrNull(userId)
+    fun readUserProfileOrNull(userId: Long): UserProfile? = userRepository.readByUserIdOrNull(userId)
 
-    suspend fun readUserProfile(userKey: String): UserProfile = userRepository.readByUserKey(userKey)
+    fun readUserProfile(userKey: String): UserProfile = userRepository.readByUserKey(userKey)
 
     fun readUser(userId: Long): User {
         val user = userRepository.readUserById(userId) ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
@@ -24,7 +24,7 @@ class UserReader(
         password: String,
     ): User = userRepository.readUser(loginId, password)
 
-    suspend fun readAllByUserIds(userIds: List<Long>): List<UserProfile> = userRepository.readAllByUserIds(userIds)
+    fun readAllByUserIds(userIds: List<Long>): List<UserProfile> = userRepository.readAllByUserIds(userIds)
 
     fun readUserByEmail(email: String): SocialUser? = userRepository.readUserByEmail(email)
 }

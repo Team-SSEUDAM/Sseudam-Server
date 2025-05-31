@@ -21,6 +21,7 @@ data class SignUpSocialRequest(
             name = name,
             socialId = socialId,
             socialType = socialType,
+            address = null,
         )
 
     fun toNewAuthenticationSocial(

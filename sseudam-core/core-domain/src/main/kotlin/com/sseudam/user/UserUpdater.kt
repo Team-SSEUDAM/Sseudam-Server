@@ -16,7 +16,7 @@ class UserUpdater(
         name: String,
     ): UserProfile = userRepository.updateName(userKey, name)
 
-    suspend fun updateEmail(
+    fun updateEmail(
         userKey: String,
         email: String,
     ): UserProfile = userRepository.updateEmail(userKey, email)
