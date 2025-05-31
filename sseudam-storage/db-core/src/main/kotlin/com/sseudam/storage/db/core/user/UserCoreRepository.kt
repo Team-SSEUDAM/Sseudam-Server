@@ -101,7 +101,7 @@ class UserCoreRepository(
         userKey: String,
         email: String,
     ): UserProfile =
-        txAdvice.readOnly {
+        txAdvice.write {
             val user = userJpaRepository.findByUserKeyAndDeletedAtIsNull(userKey) ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
             user.updateEmail(email)
             user.toProfile()

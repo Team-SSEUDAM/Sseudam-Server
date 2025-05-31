@@ -18,7 +18,7 @@ data class TrashSpot(
     val id: Long,
     val description: String,
     val region: Region,
-    var address: Address,
+    val address: Address,
     val point: Point,
     val trashType: TrashType,
     val updatedAt: LocalDateTime? = null,
