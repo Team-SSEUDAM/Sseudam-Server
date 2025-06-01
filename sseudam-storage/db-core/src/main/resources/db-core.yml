@@ -14,7 +14,7 @@ spring:
       on-profile: local
   jpa:
     hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+      ddl-auto: update
     properties:
       hibernate:
         show_log: true
@@ -41,7 +41,7 @@ spring:
       on-profile: dev
   jpa:
     hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+      ddl-auto: update
     properties:
       hibernate:
         show_log: true
@@ -68,7 +68,7 @@ spring:
       on-profile: prod
   jpa:
     hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+      ddl-auto: none
     properties:
       hibernate:
         show_log: true
