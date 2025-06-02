@@ -1,11 +1,11 @@
-package com.sseudam.storage.db.core.suggestion
+package com.sseudam.storage.db.core.report
 
 import com.sseudam.common.Address
+import com.sseudam.report.ReportStatus
+import com.sseudam.report.ReportType
+import com.sseudam.report.SpotReport
 import com.sseudam.storage.db.core.support.BaseEntity
-import com.sseudam.suggestion.SpotSuggestion
-import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.geo.GeoJson
-import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -15,27 +15,29 @@ import jakarta.persistence.Table
 import org.locationtech.jts.geom.Point
 
 @Entity
-@Table(name = "t_spot_suggestion")
-class SpotSuggestionEntity(
+@Table(name = "t_spot_report")
+class SpotReportEntity(
+    val spotId: Long,
     val userId: Long,
+    val reportType: ReportType,
     val point: Point,
-    val region: Region,
     val address: Address,
     val trashType: TrashType,
     val imageUrl: String,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(15)")
-    val status: SuggestionStatus,
+    val status: ReportStatus,
 ) : BaseEntity() {
-    fun toSpotSuggestion(): SpotSuggestion =
-        SpotSuggestion(
+    fun toSpotReport(): SpotReport =
+        SpotReport(
             id = id!!,
+            spotId = spotId,
             userId = userId,
+            reportType = reportType,
             point = GeoJson.Point(listOf(point.x, point.y)),
-            region = region,
             address = address,
             trashType = trashType,
-            status = status,
             imageUrl = imageUrl,
+            status = status,
         )
 }
