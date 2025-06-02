@@ -1,8 +1,8 @@
 package com.sseudam.trashspot
 
 import com.sseudam.common.Address
+import com.sseudam.support.geo.GeoJson
 import com.sseudam.support.geo.Region
-import org.locationtech.jts.geom.Point
 import java.time.LocalDateTime
 
 /**
@@ -19,7 +19,7 @@ data class TrashSpot(
     val description: String,
     val region: Region,
     val address: Address,
-    val point: Point,
+    val point: GeoJson,
     val trashType: TrashType,
     val updatedAt: LocalDateTime? = null,
 )

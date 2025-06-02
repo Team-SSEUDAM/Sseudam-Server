@@ -2,6 +2,7 @@ package com.sseudam.storage.db.core.trashspot
 
 import com.sseudam.common.Address
 import com.sseudam.storage.db.core.support.BaseEntity
+import com.sseudam.support.geo.GeoJson
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashType
@@ -34,7 +35,7 @@ class TrashSpotEntity(
             description = description,
             region = region,
             address = address,
-            point = point,
+            point = GeoJson.Point(listOf(point.x, point.y)),
             trashType = trashType,
             updatedAt = updatedAt,
         )

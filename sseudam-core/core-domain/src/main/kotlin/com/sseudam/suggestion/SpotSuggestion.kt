@@ -1,13 +1,14 @@
 package com.sseudam.suggestion
 
 import com.sseudam.common.Address
+import com.sseudam.support.geo.GeoJson
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
-import org.locationtech.jts.geom.Point
 
 /**
  * SpotSuggestion
  * @property id 제보 id
+ * @property userId 제보자 id
  * @property point 제보 위치
  * @property region 제보 지역
  * @property address 제보 주소
@@ -17,10 +18,11 @@ import org.locationtech.jts.geom.Point
  */
 data class SpotSuggestion(
     val id: Long,
-    val point: Point,
+    val userId: Long,
+    val point: GeoJson,
     val region: Region,
     val address: Address,
     val trashType: TrashType,
-    val status: SuggestionStatus,
     val imageUrl: String,
+    val status: SuggestionStatus = SuggestionStatus.WAITING,
 )
