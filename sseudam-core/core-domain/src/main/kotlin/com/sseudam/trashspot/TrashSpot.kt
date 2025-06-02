@@ -3,6 +3,7 @@ package com.sseudam.trashspot
 import com.sseudam.common.Address
 import com.sseudam.support.geo.GeoJson
 import com.sseudam.support.geo.Region
+import com.sseudam.trashspot.image.TrashSpotImage
 import java.time.LocalDateTime
 
 /**
@@ -21,5 +22,6 @@ data class TrashSpot(
     val address: Address,
     val point: GeoJson,
     val trashType: TrashType,
+    val trashSpotImages: List<TrashSpotImage> = emptyList(),
     val updatedAt: LocalDateTime? = null,
 )

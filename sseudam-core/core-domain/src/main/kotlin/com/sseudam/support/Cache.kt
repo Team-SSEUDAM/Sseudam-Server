@@ -1,4 +1,4 @@
-package com.sseudam.support.cache
+package com.sseudam.support
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -15,11 +15,11 @@ class Cache(
     companion object {
         private lateinit var cacheAdvice: CacheAdvice
 
-        suspend fun <T> cache(
+        fun <T> cache(
             ttl: Long,
             key: String,
             typeReference: TypeReference<T>,
-            function: suspend () -> T,
+            function: () -> T,
         ): T = cacheAdvice.invoke(ttl, key, typeReference, function)
     }
 }
@@ -29,11 +29,11 @@ class CacheAdvice(
     private val cacheRepository: CacheRepository,
     private val objectMapper: ObjectMapper,
 ) {
-    suspend fun <T> invoke(
+    fun <T> invoke(
         ttl: Long,
         key: String,
         typeReference: TypeReference<T>,
-        function: suspend () -> T,
+        function: () -> T,
     ): T {
         val cached = cacheRepository.get(key)
         if (cached != null) {

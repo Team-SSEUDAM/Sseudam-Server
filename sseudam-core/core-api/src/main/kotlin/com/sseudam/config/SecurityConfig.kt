@@ -133,6 +133,7 @@ class SecurityConfig(
                 .requestMatchers(
                     "/api/v1/auth/**",
                     "/api/v1/auth",
+                    "/api/v1/trash-spots/**",
                 ).permitAll()
 
             // 추가로 열어줄 API

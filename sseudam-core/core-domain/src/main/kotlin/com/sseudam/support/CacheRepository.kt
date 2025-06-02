@@ -1,4 +1,4 @@
-package com.sseudam.support.cache
+package com.sseudam.support
 
 interface CacheRepository {
     fun get(key: String): String?

@@ -1,6 +1,6 @@
 package com.sseudam.storage.redis.support
 
-import com.sseudam.support.cache.CacheRepository
+import com.sseudam.support.CacheRepository
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository

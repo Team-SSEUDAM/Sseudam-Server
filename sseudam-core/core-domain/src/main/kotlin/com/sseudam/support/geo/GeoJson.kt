@@ -1,5 +1,6 @@
 package com.sseudam.support.geo
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 
@@ -10,20 +11,15 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 )
 @JsonSubTypes(
     JsonSubTypes.Type(value = GeoJson.Point::class, name = "Point"),
-    JsonSubTypes.Type(value = GeoJson.Polygon::class, name = "Polygon"),
 )
 sealed class GeoJson {
+    @get:JsonIgnore // JSON 직렬화에서 제외
     abstract val type: String
 
     data class Point(
         val coordinates: List<Double>,
     ) : GeoJson() {
+        @JsonIgnore // JSON 직렬화에서 제외
         override val type: String = "Point"
-    }
-
-    data class Polygon(
-        val coordinates: List<List<List<Double>>>,
-    ) : GeoJson() {
-        override val type: String = "Polygon"
     }
 }

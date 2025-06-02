@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface TrashSpotImageJpaRepository :
     JpaRepository<TrashSpotImageEntity, Long>,
-    KotlinJdslJpqlExecutor
+    KotlinJdslJpqlExecutor {
+    fun findAllByTrashSpotIdIn(map: List<Long>): List<TrashSpotImageEntity>
+}
