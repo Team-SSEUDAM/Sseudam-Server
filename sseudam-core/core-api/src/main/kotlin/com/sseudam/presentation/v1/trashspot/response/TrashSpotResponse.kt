@@ -15,6 +15,12 @@ data class TrashSpotResponse(
     val description: String,
     @Schema(description = "쓰레기통 장소 지역")
     val region: Region,
+    @Schema(description = "도시")
+    val city: String,
+    @Schema(description = "도로명 주소")
+    val street: String,
+    @Schema(description = "우편번호")
+    val zipCode: String,
     @Schema(
         description = "좌표 정보 (GeoJson)",
         example = """
@@ -38,6 +44,9 @@ data class TrashSpotResponse(
                 id = trashSpot.id,
                 description = trashSpot.description,
                 region = trashSpot.region,
+                city = trashSpot.address.city,
+                street = trashSpot.address.street,
+                zipCode = trashSpot.address.zipCode,
                 point = trashSpot.point,
                 trashType = trashSpot.trashType,
                 trashSpotImages = trashSpot.trashSpotImages.map { TrashSpotImageResponse.of(it) },
