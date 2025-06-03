@@ -1,3 +1,5 @@
+// build.gradle.kts
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
@@ -6,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.spring) apply false
+    alias(libs.plugins.docker.jib)             // ← Jib 플러그인 적용
     alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.spring.boot) apply false
     alias(libs.plugins.spring.dependency.management)
@@ -22,19 +25,17 @@ allprojects {
 
 subprojects {
     val libs = rootProject.libs
-    val asciidoctorExt: Configuration by configurations.creating
-    fun getPlugin(provider: Provider<PluginDependency>): String = provider.get().pluginId
 
-    apply(plugin = getPlugin(libs.plugins.kotlin.jvm))
-    apply(plugin = getPlugin(libs.plugins.kotlin.kapt))
-    apply(plugin = getPlugin(libs.plugins.kotlin.spring))
-    apply(plugin = getPlugin(libs.plugins.ktlint))
-    apply(plugin = getPlugin(libs.plugins.kotlin.jpa))
-    apply(plugin = getPlugin(libs.plugins.spring.boot))
-    apply(plugin = getPlugin(libs.plugins.spring.dependency.management))
-    apply(plugin = getPlugin(libs.plugins.asciidoctor.convert))
-    apply(plugin = getPlugin(libs.plugins.epages.restdocs.api.spec))
-    apply(plugin = getPlugin(libs.plugins.hidetake.swagger.generator))
+    apply(plugin = libs.plugins.kotlin.jvm.get().pluginId)
+    apply(plugin = libs.plugins.kotlin.kapt.get().pluginId)
+    apply(plugin = libs.plugins.kotlin.spring.get().pluginId)
+    apply(plugin = libs.plugins.ktlint.get().pluginId)
+    apply(plugin = libs.plugins.kotlin.jpa.get().pluginId)
+    apply(plugin = libs.plugins.spring.boot.get().pluginId)
+    apply(plugin = libs.plugins.spring.dependency.management.get().pluginId)
+    apply(plugin = libs.plugins.asciidoctor.convert.get().pluginId)
+    apply(plugin = libs.plugins.epages.restdocs.api.spec.get().pluginId)
+    apply(plugin = libs.plugins.hidetake.swagger.generator.get().pluginId)
 
     java {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -46,12 +47,6 @@ subprojects {
         implementation(libs.jackson.kotlin)
         implementation(libs.hibernate.spatial)
 
-        // Spring Modulith (bundle 사용)
-//        implementation(libs.bundles.spring.modulith)
-//        runtimeOnly(libs.bundles.spring.modulith.runtime)
-//        kapt("org.springframework.modulith:spring-modulith-docs:1.3.1")
-//        testImplementation(libs.spring.modulith.test)
-
         annotationProcessor(libs.spring.boot.configuration.processor)
         kapt(libs.spring.boot.configuration.processor)
 
@@ -60,16 +55,6 @@ subprojects {
         testImplementation(libs.spring.boot.starter.test)
         testImplementation(libs.spring.security.test)
     }
-
-//    dependencyManagement {
-//        imports {
-//            mavenBom(
-//                libs.spring.modulith.bom
-//                    .get()
-//                    .toString(),
-//            )
-//        }
-//    }
 
     tasks.withType<KotlinCompile> {
         kotlin {
@@ -85,21 +70,49 @@ subprojects {
         version.set(libs.versions.ktlint.version.set)
     }
 
-    tasks.getByName("bootJar") {
-        enabled = false
-    }
-
-    tasks.getByName("jar") {
+    // ─── Spring Boot 빌드 설정 ──────────────────────────────────────────────────
+    // Jib가 Spring Boot의 fat JAR을 올바르게 참조하려면 bootJar를 켜고, plain jar는 비활성화해야 한다.
+    tasks.named("bootJar") {
         enabled = true
     }
+    tasks.named("jar") {
+        enabled = false
+    }
+    // ────────────────────────────────────────────────────────────────────────────
 
     tasks.withType<Test> {
         useJUnitPlatform()
     }
 }
 
-//extra["springModulithVersion"] = "1.3.1"
+// ─── Jib 플러그인 설정 ────────────────────────────────────────────────────────
+jib {
+    val imageTag: String = System.getenv("META_TAGS") ?: "latest"
+    val dockerUser: String = System.getenv("DOCKER_USER") ?: "sseudam"
 
+    from {
+        image = "amazoncorretto:21"      // 기존 Dockerfile과 동일한 베이스 이미지
+        platforms {
+            platform {
+                architecture = "arm64"
+                os = "linux"
+            }
+        }
+    }
+    to {
+        image = "$dockerUser/$imageTag"
+        tags = setOf("latest", imageTag)
+    }
+    container {
+        creationTime = "USE_CURRENT_TIMESTAMP"
+        ports = listOf("8080")
+        user = "1000:1000"
+        jvmFlags = listOf("-Duser.timezone=Asia/Seoul")
+    }
+}
+// ────────────────────────────────────────────────────────────────────────────
+
+// Git hooks 설치 태스크
 tasks.register("addLintPreCommitHook", DefaultTask::class) {
     group = "setup"
     description = "Install git hooks"

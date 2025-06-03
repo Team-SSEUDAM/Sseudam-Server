@@ -1,14 +1,15 @@
+# deploy.yml
+
 name: Development Build & Deploy
 
 on:
   push:
     branches:
-      - develop
+      - chore/jib-image-build
 
-# permission can be added at job level or workflow level
 permissions:
-  id-token: write   # This is required for requesting the JWT
-  contents: read    # This is required for actions/checkout
+  id-token: write   # AWS OIDC Role assume 용
+  contents: read    # 코드 체크아웃을 위해
 
 jobs:
   deploy:
@@ -17,8 +18,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKERHUB_USERNAME: sseudam
-      DOCKERHUB_IMAGE_NAME: sseudam-dev
+      DOCKERHUB_USERNAME: pseudam
+      DOCKERHUB_IMAGE_NAME: pseudam-dev
 
     strategy:
       matrix:
@@ -40,15 +41,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Setup Gradle
-        id: gradle
+      - name: Setup Gradle cache
+        id: gradle-cache
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/release' }}
 
       - name: Build with Gradle
         run: |
-          ./gradlew build :sseudam-core:core-api:build --scan
+          ./gradlew clean :sseudam-core:core-api:build --scan
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -57,14 +58,12 @@ jobs:
           role-to-assume: ${{ secrets.OIDC_ROLE_TO_ASSUME }}
           role-session-name: sseudam-server
 
-          # Dockerhub 로그인
-      - name: Login to Dockerhub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: sseudam
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
-          # Docker 메타데이터 추출
       - name: Extract Docker metadata
         id: metadata
         uses: docker/metadata-action@v5.5.0
@@ -75,16 +74,14 @@ jobs:
           tags: |
             type=sha,prefix=
 
-      # Docker 이미지 빌드 및 도커허브로 푸시
-      - name: Docker Build and Push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./docker/DockerfileDev
-          push: true
-          tags: ${{ steps.metadata.outputs.tags }}
+      - name: Jib Build & Push
+        env:
+          META_TAGS: ${{ steps.metadata.outputs.tags }}
+          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: |
+          chmod +x ./gradlew
+          ./gradlew jib
 
-      # docker-compose.yml 파일을 EC2에 복사
       - name: Copy docker-compose.yml to EC2
         uses: appleboy/scp-action@master
         with:
@@ -95,7 +92,6 @@ jobs:
           target: "/home/ec2-user"
           overwrite: true
 
-      # EC2로 배포
       - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@master
         env:
@@ -105,7 +101,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          envs: IMAGE_FULL_URL, DOCKERHUB_IMAGE_NAME
+          envs: IMAGE_FULL_URL,DOCKERHUB_IMAGE_NAME
           debug: true
           script: |
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
