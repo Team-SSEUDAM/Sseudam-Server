@@ -68,7 +68,7 @@ jobs:
         with:
           images: ${{ env.DOCKERHUB_IMAGE_FULL_NAME }}
           tags: |
-            type=sha,prefix=
+            type=sha
 
       - name: Jib Build & Push
         env:
