@@ -18,8 +18,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKERHUB_USERNAME: pseudam
-      DOCKERHUB_IMAGE_NAME: pseudam-dev
+      DOCKERHUB_USERNAME: sseudam
+      DOCKERHUB_IMAGE_NAME: sseudam-dev
 
     strategy:
       matrix:
@@ -49,7 +49,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew clean :sseudam-core:core-api:build --scan
+          ./gradlew :sseudam-core:core-api:build --scan
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
