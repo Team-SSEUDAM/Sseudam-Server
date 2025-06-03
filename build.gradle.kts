@@ -93,9 +93,12 @@ subprojects {
         apply(plugin = libs.plugins.docker.jib.get().pluginId)
 
         configure<JibExtension> {
-            val imageTag: String   = System.getenv("META_TAGS") ?: "latest"
             val dockerUser: String = System.getenv("DOCKERHUB_USER") ?: "sseudam"
             val dockerImageName: String = System.getenv("DOCKERHUB_IMAGE_NAME") ?: "sseudam-dev"
+            val imageTag: String   = System.getenv("META_TAGS") ?: "$dockerUser/$dockerImageName:latest"
+
+            val metaTag: String = imageTag.split(":").last()
+
             from {
                 image = "amazoncorretto:21"
                 platforms {
@@ -107,7 +110,7 @@ subprojects {
             }
             to {
                 image = "$dockerUser/$dockerImageName"
-                tags  = setOf("latest", imageTag)
+                tags  = setOf("latest", metaTag)
             }
             container {
                 creationTime = "USE_CURRENT_TIMESTAMP"

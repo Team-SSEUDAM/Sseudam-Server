@@ -60,10 +60,15 @@ jobs:
           username: sseudam
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
-      - name: Extract Git Info
-        id: git_info
-        run: |
-          echo "full_commit=$(git rev-parse HEAD)" >> $META_TAGS
+      - name: Extract Docker metadata
+        id: metadata
+        uses: docker/metadata-action@v5.5.0
+        env:
+          DOCKERHUB_IMAGE_FULL_NAME: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_IMAGE_NAME }}
+        with:
+          images: ${{ env.DOCKERHUB_IMAGE_FULL_NAME }}
+          tags: |
+            type=sha,prefix=
 
       - name: Jib Build & Push
         env:
