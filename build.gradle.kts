@@ -86,7 +86,7 @@ subprojects {
         tasks.named<BootJar>("bootJar") {
             enabled = true
         }
-        tasks.named<org.gradle.jvm.tasks.Jar>("jar") {
+        tasks.named<Jar>("jar") {
             enabled = false
         }
 
@@ -106,7 +106,7 @@ subprojects {
                 }
             }
             to {
-                image = "$dockerUser/sseudam-dev"
+                image = "sseudam/sseudam-dev"
                 tags  = setOf("latest", imageTag)
             }
             container {

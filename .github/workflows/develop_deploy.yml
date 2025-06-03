@@ -47,10 +47,6 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/release' }}
 
-      - name: Build with Gradle
-        run: |
-          ./gradlew :sseudam-core:core-api:build --scan
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
