@@ -106,7 +106,7 @@ subprojects {
                 }
             }
             to {
-                image = "$dockerUser/sseudam-dev" // 예: Docker Hub repo 이름
+                image = "$dockerUser/sseudam-dev"
                 tags  = setOf("latest", imageTag)
             }
             container {

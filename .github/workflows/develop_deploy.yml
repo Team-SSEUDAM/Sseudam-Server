@@ -77,7 +77,7 @@ jobs:
       - name: Jib Build & Push
         env:
           META_TAGS: ${{ steps.metadata.outputs.tags }}
-          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_USER: ${{ env.DOCKERHUB_USERNAME }}
         run: |
           chmod +x ./gradlew
           ./gradlew jib
