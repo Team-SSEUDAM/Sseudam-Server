@@ -98,10 +98,9 @@ subprojects {
         configure<JibExtension> {
             val dockerUser: String = System.getenv("DOCKERHUB_USER") ?: "sseudam"
             val dockerImageName: String = System.getenv("DOCKERHUB_IMAGE_NAME") ?: "sseudam-dev"
-            val imageShaTag: String = System.getenv("META_TAGS") ?: "latest"
-            // 여기서 "latest"는 오직 디폴트값(워크플로우가 안 넘어왔을 때)일 뿐,
-            // 실제 빌드에서는 SHA가 들어오므로 SHA만 쓰이게 됩니다.
+            val imageShaTag: String = System.getenv("META_TAGS") ?: "$dockerUser/$dockerImageName:latest"
 
+            val tag = imageShaTag.split(":").last()
             from {
                 image = "amazoncorretto:21"
                 platforms {
@@ -113,7 +112,7 @@ subprojects {
             }
             to {
                 image = "$dockerUser/$dockerImageName"
-                tags  = setOf(imageShaTag) // ← latest 대신 SHA만 남김
+                tags  = setOf(tag)
             }
             container {
                 creationTime = "USE_CURRENT_TIMESTAMP"

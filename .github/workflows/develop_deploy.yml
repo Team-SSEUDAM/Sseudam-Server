@@ -68,14 +68,9 @@ jobs:
           tags: |
             type=sha,prefix=
 
-      - name: Extract only first SHA tag
-        run: |
-          FIRST_SHA="$(echo "${{ steps.metadata.outputs.tags }}" | head -n1)"
-          echo "ONLY_TAG=$FIRST_SHA" >> $GITHUB_ENV
-
       - name: Jib Build & Push (SHA-only)
         env:
-          META_TAGS: ${{ env.ONLY_TAG }}             # ex) "c881f31"
+          META_TAGS: ${{ steps.metadata.outputs.tags }}
           DOCKERHUB_USER: ${{ env.DOCKERHUB_USERNAME }}
           DOCKERHUB_IMAGE_NAME: ${{ env.DOCKERHUB_IMAGE_NAME }}
         run: |
