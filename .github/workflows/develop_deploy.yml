@@ -68,13 +68,14 @@ jobs:
           tags: |
             type=sha,prefix=
 
-      - name: Jib Build & Push (SHA-only)
+      - name: Jib Build & Push
         env:
           META_TAGS: ${{ steps.metadata.outputs.tags }}
           DOCKERHUB_USER: ${{ env.DOCKERHUB_USERNAME }}
           DOCKERHUB_IMAGE_NAME: ${{ env.DOCKERHUB_IMAGE_NAME }}
         run: |
           chmod +x ./gradlew
+          # 서브프로젝트 경로를 정확히 :sseudam-core:core-api:jib 로 호출
           ./gradlew :sseudam-core:core-api:jib
 
       - name: Copy docker-compose.yml to EC2
@@ -84,23 +85,27 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: "./docker/docker-compose.yml"
-          target: "/home/ec2-user"
+          target: "/home/ec2-user/app"
           overwrite: true
 
       - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@master
         env:
           DOCKERHUB_USERNAME: ${{ env.DOCKERHUB_USERNAME }}
-          IMAGE_TAG: ${{ env.ONLY_TAG }}   # ex) "c881f31"
+          IMAGE_TAG: ${{ steps.metadata.outputs.tags }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          envs: DOCKERHUB_USERNAME,IMAGE_TAG
+          envs: DOCKERHUB_USERNAME, IMAGE_TAG
           debug: true
           script: |
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
+
+            mkdir -p ~/app
             cd ~/app
-            docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+            # 최신 Jib 이미지를 pull
+            docker pull ${{ env.IMAGE_TAG }}
             docker-compose up -d
             docker image prune -a -f

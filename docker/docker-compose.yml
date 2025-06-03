@@ -1,7 +1,7 @@
 services:
   backend:
-    image: ${IMAGE_FULL_URL}
-    container_name: ${DOCKERHUB_IMAGE_NAME}
+    image: ${IMAGE_TAG}
+    container_name: sseudam-backend
     restart: always
     environment:
       - TZ=Asia/Seoul
@@ -15,4 +15,4 @@ services:
       - "6379:6379"
     environment:
       - TZ=Asia/Seoul
-    network_mode: "host"
+    network_mode: host

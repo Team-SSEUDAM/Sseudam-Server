@@ -82,55 +82,46 @@ subprojects {
         useJUnitPlatform()
     }
 
-    if (project.name == "core-api") {
-        // Spring Boot 실행용 JAR 활성화
-        tasks.named<BootJar>("bootJar") {
-            enabled = true
-        }
-        tasks.named<org.gradle.jvm.tasks.Jar>("jar") {
-            enabled = false
-        }
+    tasks.named<BootJar>("bootJar") {
+        enabled = true
+    }
+    tasks.named<org.gradle.jvm.tasks.Jar>("jar") {
+        enabled = false
+    }
 
-        // Jib 플러그인 적용
-        apply(plugin = libs.plugins.docker.jib.get().pluginId)
+    // ★ Jib 플러그드 적용
+    apply(plugin = libs.plugins.docker.jib.get().pluginId)
 
-        // Jib 설정: SHA만 태그로 사용
-        configure<JibExtension> {
-            val dockerUser: String = System.getenv("DOCKERHUB_USER") ?: "sseudam"
-            val dockerImageName: String = System.getenv("DOCKERHUB_IMAGE_NAME") ?: "sseudam-dev"
-            val imageShaTag: String = System.getenv("META_TAGS") ?: "$dockerUser/$dockerImageName:latest"
+    configure<JibExtension> {
+        // 도커허브 사용자명과 이미지명은 CI/CD 환경변수로 넘겨받거나 기본값 설정
+        val dockerUser: String = System.getenv("DOCKERHUB_USER") ?: "sseudam"
+        val dockerImageName: String = System.getenv("DOCKERHUB_IMAGE_NAME") ?: "sseudam-dev"
+        val imageShaTag: String = System.getenv("META_TAGS") ?: "$dockerUser/$dockerImageName:latest"
 
-            val tag = imageShaTag.split(":").last()
-            from {
-                image = "amazoncorretto:21"
-                platforms {
-                    platform {
-                        architecture = "arm64"
-                        os           = "linux"
-                    }
+        // 태그만 추출 (예: abcd1234)
+        val tag = imageShaTag.substringAfterLast(":")
+        // Jib의 from (base image)
+        from {
+            image = "amazoncorretto:21"
+            platforms {
+                platform {
+                    architecture = "arm64"
+                    os           = "linux"
                 }
             }
-            to {
-                image = "$dockerUser/$dockerImageName"
-                tags  = setOf(tag)
-            }
-            container {
-                creationTime = "USE_CURRENT_TIMESTAMP"
-                ports        = listOf("8080")
-                user         = "1000:1000"
-                jvmFlags     = listOf("-Duser.timezone=Asia/Seoul")
-            }
         }
-    } else {
-        tasks.named<BootJar>("bootJar") {
-            enabled = false
+        // Jib의 to (푸시할 레포지토리)
+        to {
+            image = "$dockerUser/$dockerImageName"
+            tags  = setOf(tag)
         }
-        tasks.named<org.gradle.jvm.tasks.Jar>("jar") {
-            enabled = true
-        }
-        // 다른 모듈은 Jib 태스크 비활성화
-        tasks.matching { it.name.startsWith("jib") }.configureEach {
-            enabled = false
+        container {
+            creationTime = "USE_CURRENT_TIMESTAMP"
+            ports        = listOf("8080")
+            user         = "1000:1000"
+            jvmFlags     = listOf("-Duser.timezone=Asia/Seoul")
+
+            entrypoint = listOf("java", "-jar", "/workspace/libs/${project.name}-${project.version}.jar", "-Xmx1024m")
         }
     }
 }
