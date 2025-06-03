@@ -83,10 +83,10 @@ subprojects {
     }
 
     tasks.named<BootJar>("bootJar") {
-        enabled = true
-    }
-    tasks.named<org.gradle.jvm.tasks.Jar>("jar") {
         enabled = false
+    }
+    tasks.named<Jar>("jar") {
+        enabled = true
     }
 
     // ★ Jib 플러그드 적용

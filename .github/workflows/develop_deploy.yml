@@ -75,7 +75,6 @@ jobs:
           DOCKERHUB_IMAGE_NAME: ${{ env.DOCKERHUB_IMAGE_NAME }}
         run: |
           chmod +x ./gradlew
-          # 서브프로젝트 경로를 정확히 :sseudam-core:core-api:jib 로 호출
           ./gradlew :sseudam-core:core-api:jib
 
       - name: Copy docker-compose.yml to EC2
