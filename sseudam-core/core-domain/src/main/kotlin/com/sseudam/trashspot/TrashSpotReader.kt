@@ -1,5 +1,7 @@
 package com.sseudam.trashspot
 
+import com.fasterxml.jackson.core.type.TypeReference
+import com.sseudam.support.Cache
 import com.sseudam.support.geo.Region
 import org.springframework.stereotype.Component
 
@@ -8,12 +10,26 @@ class TrashSpotReader(
     private val trashSpotRepository: TrashSpotRepository,
 ) {
     companion object {
-        val ALL_SPOT = "spot:all"
+        val ALL_SPOT = "trash:spot:all"
     }
 
-    fun readAll(): List<TrashSpot> = trashSpotRepository.findAll()
+    fun readAll() =
+        Cache.cache(
+            ttl = 360,
+            key = ALL_SPOT,
+            typeReference = object : TypeReference<List<TrashSpot>>() {},
+        ) {
+            trashSpotRepository.findAll()
+        }
 
-    fun readAllByRegion(region: Region): List<TrashSpot> = trashSpotRepository.findAllByRegion(region)
+    fun readAllByRegion(region: Region): List<TrashSpot> =
+        Cache.cache(
+            ttl = 360,
+            key = "$ALL_SPOT:${region.name}",
+            typeReference = object : TypeReference<List<TrashSpot>>() {},
+        ) {
+            trashSpotRepository.findAllByRegion(region)
+        }
 
     fun readAllByLocation(location: TrashSpotLocation): List<TrashSpot> = trashSpotRepository.findAllByLocation(location)
 

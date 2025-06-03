@@ -14,14 +14,6 @@ class TrashSpotFacade(
         location: TrashSpotLocation,
     ): List<TrashSpot> {
         val trashSpots = trashSpotService.findAll(region, location)
-        val images = trashSpotImageService.findAll(trashSpots)
-
-        val trashSpotImageMap = images.groupBy { it.trashSpotId }
-
-        return trashSpots.map {
-            it.copy(
-                trashSpotImages = trashSpotImageMap[it.id] ?: emptyList(),
-            )
-        }
+        return trashSpots
     }
 }

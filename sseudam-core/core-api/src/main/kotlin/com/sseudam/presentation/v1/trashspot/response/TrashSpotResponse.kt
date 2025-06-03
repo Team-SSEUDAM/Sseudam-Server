@@ -33,8 +33,6 @@ data class TrashSpotResponse(
     val point: GeoJson,
     @Schema(description = "쓰레기통 타입")
     val trashType: TrashType,
-    @Schema(description = "쓰레기통 Image List")
-    val trashSpotImages: List<TrashSpotImageResponse>,
     @Schema(description = "쓰레기통 수정 시간")
     val updatedAt: LocalDateTime?,
 ) {
@@ -49,7 +47,6 @@ data class TrashSpotResponse(
                 zipCode = trashSpot.address.zipCode,
                 point = trashSpot.point,
                 trashType = trashSpot.trashType,
-                trashSpotImages = trashSpot.trashSpotImages.map { TrashSpotImageResponse.of(it) },
                 updatedAt = trashSpot.updatedAt,
             )
     }
