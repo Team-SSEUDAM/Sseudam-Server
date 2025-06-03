@@ -21,12 +21,10 @@ class CoreRedisConfig(
     @Bean
     fun coreRedisTemplate(
         @Qualifier("coreRedisConnectionFactory") redisConnectionFactory: RedisConnectionFactory,
-    ): RedisTemplate<String, String> =
-        RedisTemplate<String, String>().apply {
+    ): RedisTemplate<*, *> =
+        RedisTemplate<Any, Any>().apply {
             connectionFactory = redisConnectionFactory
             keySerializer = StringRedisSerializer.UTF_8
             valueSerializer = StringRedisSerializer.UTF_8
-            hashKeySerializer = StringRedisSerializer.UTF_8
-            hashValueSerializer = StringRedisSerializer.UTF_8
         }
 }
