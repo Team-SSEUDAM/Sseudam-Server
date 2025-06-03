@@ -72,11 +72,12 @@ jobs:
 
       - name: Jib Build & Push
         env:
-          META_TAGS: ${{ steps.metadata.outputs.tags }}
-          DOCKER_USER: ${{ env.DOCKERHUB_USERNAME }}
+          META_TAGS: ${{ steps.metadata.outputs.tags }}     # ex) "c881f31"
+          DOCKERHUB_USER: ${{ env.DOCKERHUB_USERNAME }}         # ex) "squ⁢ash"
+          DOCKERHUB_IMAGE_NAME: ${{ env.DOCKERHUB_IMAGE_NAME }}
         run: |
           chmod +x ./gradlew
-          ./gradlew jib
+          ./gradlew :sseudam-core:core-api:jib
 
       - name: Copy docker-compose.yml to EC2
         uses: appleboy/scp-action@master

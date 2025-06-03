@@ -94,8 +94,8 @@ subprojects {
 
         configure<JibExtension> {
             val imageTag: String   = System.getenv("META_TAGS") ?: "latest"
-            val dockerUser: String = System.getenv("DOCKER_USER") ?: "sseudam"
-
+            val dockerUser: String = System.getenv("DOCKERHUB_USER") ?: "sseudam"
+            val dockerImageName: String = System.getenv("DOCKERHUB_IMAGE_NAME") ?: "sseudam-dev"
             from {
                 image = "amazoncorretto:21"
                 platforms {
@@ -106,7 +106,7 @@ subprojects {
                 }
             }
             to {
-                image = "sseudam/sseudam-dev"
+                image = "$dockerUser/$dockerImageName"
                 tags  = setOf("latest", imageTag)
             }
             container {
