@@ -1,3 +1,5 @@
+# .githooks/pre-commit
+
 #!/bin/sh
 
 # staged 파일만 가져오기

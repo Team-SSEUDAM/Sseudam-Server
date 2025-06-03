@@ -2,7 +2,7 @@
 
 # Kotlin
 kotlin = "2.1.0"
-ktlint = "12.1.2"
+ktlint = "12.3.0"
 ktlint_version_set = "1.5.0"
 
 # Arrow-kt
