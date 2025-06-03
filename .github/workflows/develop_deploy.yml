@@ -1,5 +1,3 @@
-# deploy.yml
-
 name: Development Build & Deploy
 
 on:
@@ -57,7 +55,7 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: sseudam
+          username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
       - name: Extract Docker metadata
@@ -70,14 +68,19 @@ jobs:
           tags: |
             type=sha,prefix=
 
-      - name: Jib Build & Push
+      - name: Extract only first SHA tag
+        run: |
+          FIRST_SHA="$(echo "${{ steps.metadata.outputs.tags }}" | head -n1)"
+          echo "ONLY_TAG=$FIRST_SHA" >> $GITHUB_ENV
+
+      - name: Jib Build & Push (SHA-only)
         env:
-          META_TAGS: ${{ steps.metadata.outputs.tags }}     # ex) "c881f31"
-          DOCKERHUB_USER: ${{ env.DOCKERHUB_USERNAME }}         # ex) "squ⁢ash"
+          META_TAGS: ${{ env.ONLY_TAG }}             # ex) "c881f31"
+          DOCKERHUB_USER: ${{ env.DOCKERHUB_USERNAME }}
           DOCKERHUB_IMAGE_NAME: ${{ env.DOCKERHUB_IMAGE_NAME }}
         run: |
           chmod +x ./gradlew
-          ./gradlew jib
+          ./gradlew :sseudam-core:core-api:jib
 
       - name: Copy docker-compose.yml to EC2
         uses: appleboy/scp-action@master
@@ -92,16 +95,17 @@ jobs:
       - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@master
         env:
-          IMAGE_FULL_URL: ${{ steps.metadata.outputs.tags }}
-          DOCKERHUB_IMAGE_NAME: ${{ env.DOCKERHUB_IMAGE_NAME }}
+          DOCKERHUB_USERNAME: ${{ env.DOCKERHUB_USERNAME }}
+          IMAGE_TAG: ${{ env.ONLY_TAG }}   # ex) "c881f31"
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          envs: IMAGE_FULL_URL,DOCKERHUB_IMAGE_NAME
+          envs: DOCKERHUB_USERNAME,IMAGE_TAG
           debug: true
           script: |
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
             cd ~/app
-            docker compose up -d
+            docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            docker-compose up -d
             docker image prune -a -f

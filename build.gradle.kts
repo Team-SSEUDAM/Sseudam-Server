@@ -33,7 +33,7 @@ subprojects {
     apply(plugin = libs.plugins.kotlin.jvm.get().pluginId)
     apply(plugin = libs.plugins.kotlin.kapt.get().pluginId)
     apply(plugin = libs.plugins.kotlin.spring.get().pluginId)
-    apply(plugin = libs.plugins.ktlint.get().pluginId)         // ktlint 플러그인 적용
+    apply(plugin = libs.plugins.ktlint.get().pluginId)
     apply(plugin = libs.plugins.kotlin.jpa.get().pluginId)
     apply(plugin = libs.plugins.spring.boot.get().pluginId)
     apply(plugin = libs.plugins.spring.dependency.management.get().pluginId)
@@ -83,21 +83,24 @@ subprojects {
     }
 
     if (project.name == "core-api") {
+        // Spring Boot 실행용 JAR 활성화
         tasks.named<BootJar>("bootJar") {
             enabled = true
         }
-        tasks.named<Jar>("jar") {
+        tasks.named<org.gradle.jvm.tasks.Jar>("jar") {
             enabled = false
         }
 
+        // Jib 플러그인 적용
         apply(plugin = libs.plugins.docker.jib.get().pluginId)
 
+        // Jib 설정: SHA만 태그로 사용
         configure<JibExtension> {
             val dockerUser: String = System.getenv("DOCKERHUB_USER") ?: "sseudam"
             val dockerImageName: String = System.getenv("DOCKERHUB_IMAGE_NAME") ?: "sseudam-dev"
-            val imageTag: String   = System.getenv("META_TAGS") ?: "$dockerUser/$dockerImageName:latest"
-
-            val metaTag: String = imageTag.split(":").last()
+            val imageShaTag: String = System.getenv("META_TAGS") ?: "latest"
+            // 여기서 "latest"는 오직 디폴트값(워크플로우가 안 넘어왔을 때)일 뿐,
+            // 실제 빌드에서는 SHA가 들어오므로 SHA만 쓰이게 됩니다.
 
             from {
                 image = "amazoncorretto:21"
@@ -110,7 +113,7 @@ subprojects {
             }
             to {
                 image = "$dockerUser/$dockerImageName"
-                tags  = setOf("latest", metaTag)
+                tags  = setOf(imageShaTag) // ← latest 대신 SHA만 남김
             }
             container {
                 creationTime = "USE_CURRENT_TIMESTAMP"
@@ -123,10 +126,10 @@ subprojects {
         tasks.named<BootJar>("bootJar") {
             enabled = false
         }
-        tasks.named<Jar>("jar") {
+        tasks.named<org.gradle.jvm.tasks.Jar>("jar") {
             enabled = true
         }
-
+        // 다른 모듈은 Jib 태스크 비활성화
         tasks.matching { it.name.startsWith("jib") }.configureEach {
             enabled = false
         }
