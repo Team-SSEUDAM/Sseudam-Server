@@ -9,7 +9,7 @@ cloud:
       access-key: ${AWS_ACCESS_KEY}
       secret-key: ${AWS_SECRET_KEY}
     s3:
-      bucket: ${CLOUD_AWS_S3_BUCKET}
+      bucket: ${AWS_S3_IMAGE_BUCKET}
     stack:
       auto: false
     connection-time-out: 900000
@@ -26,7 +26,7 @@ cloud:
       access-key: ${AWS_ACCESS_KEY}
       secret-key: ${AWS_SECRET_KEY}
     s3:
-      bucket: ${CLOUD_AWS_S3_BUCKET}
+      bucket: ${AWS_S3_IMAGE_BUCKET}
     stack:
       auto: false
     connection-time-out: 900000
@@ -43,7 +43,7 @@ cloud:
       access-key: ${AWS_ACCESS_KEY}
       secret-key: ${AWS_SECRET_KEY}
     s3:
-      bucket: ${CLOUD_AWS_S3_BUCKET}
+      bucket: ${AWS_S3_IMAGE_BUCKET}
     stack:
       auto: false
     connection-time-out: 900000

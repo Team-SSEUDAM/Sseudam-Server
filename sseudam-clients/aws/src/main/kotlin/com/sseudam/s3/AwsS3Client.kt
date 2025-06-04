@@ -19,11 +19,15 @@ class AwsS3Client(
     private val s3Presigner: S3Presigner,
     private val s3Client: S3Client,
 ) {
+    companion object {
+        private val profile = System.getenv("SPRING_PROFILES_ACTIVE") ?: "dev"
+    }
+
     /**
      * 파일 URL 생성
      *
      * @param bucketName [String] 버킷명
-     * @param filePath [String] 파일경로
+     * @param filePath [String] 파일 경로
      * @param fileName [String] 파일명
      */
     fun generateUrl(
@@ -36,7 +40,7 @@ class AwsS3Client(
             GetObjectRequest
                 .builder()
                 .bucket(bucketName)
-                .key("$filePath/$fileName")
+                .key("$profile/$filePath/$fileName")
                 .responseContentType("application/octet-stream")
                 .build()
         val getObjectPresignedUrlRequest =
@@ -59,7 +63,7 @@ class AwsS3Client(
             PutObjectRequest
                 .builder()
                 .bucket(bucketName)
-                .key("$filePath/$fileName")
+                .key("$profile/$filePath/$fileName")
                 .build()
 
         val putObjectPresignedUrlRequest =
@@ -113,7 +117,7 @@ class AwsS3Client(
             GetObjectRequest
                 .builder()
                 .bucket(bucketName)
-                .key("$filePath/$fileName")
+                .key("$profile/$filePath/$fileName")
                 .build()
         return s3Client.getObjectAsBytes(request).asString(Charset.defaultCharset())
     }
