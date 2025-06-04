@@ -22,6 +22,7 @@ dependencies {
     implementation(project(":sseudam-core:core-domain"))
     implementation(project(":sseudam-clients:notification"))
     implementation(project(":sseudam-clients:oauth-client"))
+    implementation(project(":sseudam-clients:aws"))
     implementation(project(":sseudam-supports:swagger"))
 
     runtimeOnly(project(":sseudam-supports:logging"))

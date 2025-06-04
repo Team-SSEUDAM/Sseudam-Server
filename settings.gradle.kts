@@ -27,7 +27,7 @@ include(
 )
 
 include(
-//    "sseudam-clients:aws-client",
+    "sseudam-clients:aws",
     "sseudam-clients:notification",
     "sseudam-clients:oauth-client",
 )
