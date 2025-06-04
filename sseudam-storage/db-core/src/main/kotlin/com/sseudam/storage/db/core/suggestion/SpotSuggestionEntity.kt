@@ -27,8 +27,8 @@ class SpotSuggestionEntity(
     @Column(columnDefinition = "varchar(15)")
     val status: SuggestionStatus,
 ) : BaseEntity() {
-    fun toSpotSuggestion(): SpotSuggestion =
-        SpotSuggestion(
+    fun toSpotSuggestion(): SpotSuggestion.Info =
+        SpotSuggestion.Info(
             id = id!!,
             userId = userId,
             point = GeoJson.Point(listOf(point.x, point.y)),
