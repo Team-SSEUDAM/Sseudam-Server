@@ -11,8 +11,7 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest
 import java.nio.charset.Charset
-import kotlin.time.Duration
-import kotlin.time.toJavaDuration
+import java.time.Duration
 
 @Component
 class AwsS3Client(
@@ -46,7 +45,7 @@ class AwsS3Client(
         val getObjectPresignedUrlRequest =
             GetObjectPresignRequest
                 .builder()
-                .signatureDuration(ttl.toJavaDuration())
+                .signatureDuration(ttl)
                 .getObjectRequest(getObjectRequest)
                 .build()
         val presignedGetObject = s3Presigner.presignGetObject(getObjectPresignedUrlRequest)
@@ -70,7 +69,7 @@ class AwsS3Client(
             PutObjectPresignRequest
                 .builder()
                 .putObjectRequest(putObjectRequest)
-                .signatureDuration(ttl.toJavaDuration())
+                .signatureDuration(ttl)
                 .build()
 
         val presignedRequest = s3Presigner.presignPutObject(putObjectPresignedUrlRequest)

@@ -9,16 +9,18 @@ class SpotSuggestion {
     /**
      * SpotSuggestion Create
      * @property userId 제보자 id
-     * @property point 제보 위치
+     * @property latitude 제보 위치 위도
+     * @property longitude 제보 위치 경도
      * @property region 제보 지역
-     * @property address 제보 주소
      * @property trashType 제보된 쓰레기통 타입
      */
     data class Create(
         val userId: Long,
-        val point: GeoJson,
+        val latitude: Double,
+        val longitude: Double,
         val region: Region,
-        val address: Address,
+        val city: String,
+        val detail: String,
         val trashType: TrashType,
     )
 

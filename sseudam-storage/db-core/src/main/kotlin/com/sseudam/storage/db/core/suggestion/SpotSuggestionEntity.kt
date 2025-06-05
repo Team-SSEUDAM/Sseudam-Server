@@ -27,6 +27,24 @@ class SpotSuggestionEntity(
     @Column(columnDefinition = "varchar(15)")
     val status: SuggestionStatus,
 ) : BaseEntity() {
+    constructor(
+        imageUrl: String,
+        point: Point,
+        createSpotSuggestion: SpotSuggestion.Create,
+    ) : this(
+        userId = createSpotSuggestion.userId,
+        point = point,
+        region = createSpotSuggestion.region,
+        address =
+            Address(
+                city = createSpotSuggestion.city,
+                detail = createSpotSuggestion.detail,
+            ),
+        trashType = createSpotSuggestion.trashType,
+        imageUrl = imageUrl,
+        status = SuggestionStatus.WAITING,
+    )
+
     fun toSpotSuggestion(): SpotSuggestion.Info =
         SpotSuggestion.Info(
             id = id!!,

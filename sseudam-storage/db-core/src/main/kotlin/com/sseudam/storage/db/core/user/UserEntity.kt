@@ -41,9 +41,7 @@ class UserEntity(
         nickname = newUser.nickname,
         address =
             newUser.address ?: Address(
-                zipCode = "",
                 city = "",
-                street = "",
                 detail = "",
             ),
         password = newUser.password,
