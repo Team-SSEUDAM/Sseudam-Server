@@ -1,3 +1,5 @@
 package com.sseudam.visit
 
-interface SpotVisitedRepository
+interface SpotVisitedRepository {
+    fun create(spotVisited: SpotVisited.Create): SpotVisited.Info
+}

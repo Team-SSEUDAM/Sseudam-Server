@@ -1,4 +1,4 @@
-package com.sseudam.suggestion
+package com.sseudam.image
 
 import org.springframework.core.env.Environment
 import org.springframework.stereotype.Component

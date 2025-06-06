@@ -145,6 +145,8 @@ class SecurityConfig(
                     "/api/v1/users/**",
                     "/api/v1/users",
                     "/api/v1/suggestions/**",
+                    "/api/v1/reports/**",
+                    "/api/v1/visited/**",
                 ).authenticated()
 
             // 나머지도 다 인증

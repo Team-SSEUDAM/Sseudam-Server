@@ -11,6 +11,11 @@ class SpotVisitedEntity(
     val userId: Long,
     val spotId: Long,
 ) : BaseEntity() {
+    constructor(spotVisitedCreate: SpotVisited.Create) : this(
+        userId = spotVisitedCreate.userId,
+        spotId = spotVisitedCreate.spotId,
+    )
+
     fun toSpotVisited(): SpotVisited.Info =
         SpotVisited.Info(
             id = id!!,
