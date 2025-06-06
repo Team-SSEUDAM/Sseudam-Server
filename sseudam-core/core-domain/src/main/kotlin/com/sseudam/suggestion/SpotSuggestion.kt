@@ -20,7 +20,7 @@ class SpotSuggestion {
         val longitude: Double,
         val region: Region,
         val city: String,
-        val detail: String,
+        val site: String,
         val trashType: TrashType,
     )
 

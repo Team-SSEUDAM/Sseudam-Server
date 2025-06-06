@@ -19,9 +19,14 @@ import org.locationtech.jts.geom.Point
 class SpotReportEntity(
     val spotId: Long,
     val userId: Long,
+    @Enumerated(value = EnumType.STRING)
+    @Column(columnDefinition = "varchar(10)")
     val reportType: ReportType,
+    @Column(columnDefinition = "geometry(Point, 4326)")
     val point: Point,
     val address: Address,
+    @Enumerated(value = EnumType.STRING)
+    @Column(columnDefinition = "varchar(15)")
     val trashType: TrashType,
     val imageUrl: String,
     @Enumerated(value = EnumType.STRING)

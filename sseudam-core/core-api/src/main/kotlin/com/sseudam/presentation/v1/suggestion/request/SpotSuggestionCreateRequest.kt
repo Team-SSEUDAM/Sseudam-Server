@@ -15,7 +15,7 @@ data class SpotSuggestionCreateRequest(
     @Schema(description = "구/군/시", example = "강남구/거창군/동두천시")
     val city: String,
     @Schema(description = "주소", example = "서울시 강남구 강남동 1-4")
-    val detail: String,
+    val site: String,
     @Schema(description = "쓰레기통 유형", example = "GENERAL")
     val trashType: TrashType,
 )

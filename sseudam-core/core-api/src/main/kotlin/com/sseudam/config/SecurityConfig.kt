@@ -144,6 +144,7 @@ class SecurityConfig(
                 .requestMatchers(
                     "/api/v1/users/**",
                     "/api/v1/users",
+                    "/api/v1/suggestions/**",
                 ).authenticated()
 
             // 나머지도 다 인증

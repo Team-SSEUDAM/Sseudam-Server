@@ -30,7 +30,7 @@ class SuggestionController(
                     request.longitude,
                     request.region,
                     request.city,
-                    request.detail,
+                    request.site,
                     request.trashType,
                 ),
             )

@@ -62,7 +62,7 @@ class AwsS3Client(
             PutObjectRequest
                 .builder()
                 .bucket(bucketName)
-                .key("$profile/$filePath/$fileName")
+                .key("$filePath/$fileName")
                 .build()
 
         val putObjectPresignedUrlRequest =

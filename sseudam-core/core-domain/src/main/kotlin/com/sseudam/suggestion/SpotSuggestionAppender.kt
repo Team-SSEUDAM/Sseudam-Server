@@ -13,7 +13,7 @@ class SpotSuggestionAppender(
         createSpotSuggestion: SpotSuggestion.Create,
     ): SpotSuggestion.Info {
         val geometryFactory = GeometryFactory()
-        val point = geometryFactory.createPoint(Coordinate(createSpotSuggestion.latitude, createSpotSuggestion.longitude))
+        val point = geometryFactory.createPoint(Coordinate(createSpotSuggestion.longitude, createSpotSuggestion.latitude))
         return spotSuggestionRepository.create(imageUrl, point, createSpotSuggestion)
     }
 }

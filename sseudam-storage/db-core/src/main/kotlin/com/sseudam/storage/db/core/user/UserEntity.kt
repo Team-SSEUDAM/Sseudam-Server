@@ -42,7 +42,7 @@ class UserEntity(
         address =
             newUser.address ?: Address(
                 city = "",
-                detail = "",
+                site = "",
             ),
         password = newUser.password,
         socialId = newUser.socialId,

@@ -18,9 +18,14 @@ import org.locationtech.jts.geom.Point
 @Table(name = "t_spot_suggestion")
 class SpotSuggestionEntity(
     val userId: Long,
+    @Column(columnDefinition = "geometry(Point, 4326)")
     val point: Point,
+    @Enumerated(value = EnumType.STRING)
+    @Column(columnDefinition = "varchar(15)")
     val region: Region,
     val address: Address,
+    @Enumerated(value = EnumType.STRING)
+    @Column(columnDefinition = "varchar(15)")
     val trashType: TrashType,
     val imageUrl: String,
     @Enumerated(value = EnumType.STRING)
@@ -38,7 +43,7 @@ class SpotSuggestionEntity(
         address =
             Address(
                 city = createSpotSuggestion.city,
-                detail = createSpotSuggestion.detail,
+                site = createSpotSuggestion.site,
             ),
         trashType = createSpotSuggestion.trashType,
         imageUrl = imageUrl,
