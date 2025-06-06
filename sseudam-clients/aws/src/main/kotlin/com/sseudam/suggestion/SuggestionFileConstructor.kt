@@ -25,16 +25,17 @@ class SuggestionFileConstructor(
         return "$profile/$SUGGESTION_IMAGE_PATH/$userId/$dateTimeToLong"
     }
 
-    private fun randomFileName(): String {
-        val leftLimit = 97
-        val rightLimit = 122
-        val targetStringLength = 24
-        val random = Random()
+    companion object {
+        const val SUGGESTION_IMAGE_PATH = "suggestion"
+        private val RANDOM = Random()
+        private const val LOWERCASE_A = 97
+        private const val LOWERCASE_Z = 122
+        private const val FILENAME_LENGTH = 24
+    }
 
-        return random
-            .ints(leftLimit, rightLimit + 1)
-            .limit(targetStringLength.toLong())
-            .collect({ StringBuilder() }, { sb, codePoint -> sb.appendCodePoint(codePoint) }, StringBuilder::append)
-            .toString()
+    private fun randomFileName(): String {
+        return (1..FILENAME_LENGTH)
+            .map { RANDOM.nextInt(LOWERCASE_A, LOWERCASE_Z + 1).toChar() }
+            .joinToString("")
     }
 }
