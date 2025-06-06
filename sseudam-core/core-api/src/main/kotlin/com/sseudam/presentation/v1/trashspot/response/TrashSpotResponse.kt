@@ -17,6 +17,8 @@ data class TrashSpotResponse(
     val region: Region,
     @Schema(description = "도시")
     val city: String,
+    @Schema(description = "주소")
+    val site: String,
     @Schema(
         description = "좌표 정보 (GeoJson)",
         example = """
@@ -39,6 +41,7 @@ data class TrashSpotResponse(
                 description = trashSpot.description,
                 region = trashSpot.region,
                 city = trashSpot.address.city,
+                site = trashSpot.address.site,
                 point = trashSpot.point,
                 trashType = trashSpot.trashType,
                 updatedAt = trashSpot.updatedAt,

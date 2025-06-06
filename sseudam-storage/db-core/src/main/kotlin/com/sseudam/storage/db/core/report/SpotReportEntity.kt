@@ -33,8 +33,27 @@ class SpotReportEntity(
     @Column(columnDefinition = "varchar(15)")
     val status: ReportStatus,
 ) : BaseEntity() {
-    fun toSpotReport(): SpotReport =
-        SpotReport(
+    constructor(
+        imageUrl: String,
+        point: Point,
+        createSpotReport: SpotReport.Create,
+    ) : this(
+        spotId = createSpotReport.spotId,
+        userId = createSpotReport.userId,
+        reportType = createSpotReport.reportType,
+        point = point,
+        address =
+            Address(
+                city = createSpotReport.city,
+                site = createSpotReport.site,
+            ),
+        trashType = createSpotReport.trashType,
+        imageUrl = imageUrl,
+        status = ReportStatus.WAITING,
+    )
+
+    fun toSpotReport(): SpotReport.Info =
+        SpotReport.Info(
             id = id!!,
             spotId = spotId,
             userId = userId,

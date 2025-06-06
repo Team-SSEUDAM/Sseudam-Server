@@ -12,6 +12,8 @@ class SpotSuggestion {
      * @property latitude 제보 위치 위도
      * @property longitude 제보 위치 경도
      * @property region 제보 지역
+     * @property city 제보 지역
+     * @property site 제보 주소
      * @property trashType 제보된 쓰레기통 타입
      */
     data class Create(
