@@ -26,7 +26,7 @@ class ReportController(
     ): ReportImageUrlResponse {
         val report =
             reportService.createSpotReport(
-                spotReport =
+                report =
                     SpotReport.Create(
                         userId = user.id,
                         spotId = spotId,

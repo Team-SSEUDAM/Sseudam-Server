@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 @Service
 class ReportService(
-    private val spotReportAppender: SpotReportAppender,
+    private val reportAppender: ReportAppender,
     private val imageS3Caller: ImageS3Caller,
 ) {
     companion object {
@@ -21,7 +21,7 @@ class ReportService(
                 LocalDateTime.now(),
                 REPORT_IMAGE_PATH,
             )
-        val spotReport = spotReportAppender.append(createUploadUrl.imageUrl, report)
+        val spotReport = reportAppender.append(createUploadUrl.imageUrl, report)
         return spotReport to createUploadUrl
     }
 }

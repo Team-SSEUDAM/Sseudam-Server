@@ -5,7 +5,7 @@ import org.locationtech.jts.geom.GeometryFactory
 import org.springframework.stereotype.Component
 
 @Component
-class SpotReportAppender(
+class ReportAppender(
     private val spotReportRepository: SpotReportRepository,
 ) {
     companion object {

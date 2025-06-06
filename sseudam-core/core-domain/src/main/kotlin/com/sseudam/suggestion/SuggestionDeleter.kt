@@ -3,6 +3,6 @@ package com.sseudam.suggestion
 import org.springframework.stereotype.Component
 
 @Component
-class SpotSuggestionDeleter(
+class SuggestionDeleter(
     private val spotSuggestionRepository: SpotSuggestionRepository,
 )
