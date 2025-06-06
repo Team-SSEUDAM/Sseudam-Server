@@ -6,7 +6,6 @@ import java.time.LocalDateTime
 @Service
 class SuggestionService(
     private val spotSuggestionAppender: SpotSuggestionAppender,
-    private val spotSuggestionUpdater: SpotSuggestionUpdater,
     private val suggestionS3Caller: SuggestionS3Caller,
 ) {
     fun createSuggestion(suggestion: SpotSuggestion.Create): Pair<SpotSuggestion.Info, SuggestionImageUrl> {

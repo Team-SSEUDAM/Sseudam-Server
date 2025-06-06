@@ -12,6 +12,10 @@ class SuggestionFileConstructor(
 ) {
     companion object {
         const val SUGGESTION_IMAGE_PATH = "suggestion"
+        private val RANDOM = Random()
+        private const val LOWERCASE_A = 97
+        private const val LOWERCASE_Z = 122
+        private const val FILENAME_LENGTH = 24
     }
 
     fun imageFileName(): String = "${randomFileName()}.png"
@@ -25,17 +29,8 @@ class SuggestionFileConstructor(
         return "$profile/$SUGGESTION_IMAGE_PATH/$userId/$dateTimeToLong"
     }
 
-    companion object {
-        const val SUGGESTION_IMAGE_PATH = "suggestion"
-        private val RANDOM = Random()
-        private const val LOWERCASE_A = 97
-        private const val LOWERCASE_Z = 122
-        private const val FILENAME_LENGTH = 24
-    }
-
-    private fun randomFileName(): String {
-        return (1..FILENAME_LENGTH)
+    private fun randomFileName(): String =
+        (1..FILENAME_LENGTH)
             .map { RANDOM.nextInt(LOWERCASE_A, LOWERCASE_Z + 1).toChar() }
             .joinToString("")
-    }
 }

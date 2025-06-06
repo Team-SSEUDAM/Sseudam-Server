@@ -8,12 +8,15 @@ import org.springframework.stereotype.Component
 class SpotSuggestionAppender(
     private val spotSuggestionRepository: SpotSuggestionRepository,
 ) {
+    companion object {
+        private val GEOMETRY_FACTORY = GeometryFactory()
+    }
+
     fun append(
         imageUrl: String,
         createSpotSuggestion: SpotSuggestion.Create,
     ): SpotSuggestion.Info {
-        val geometryFactory = GeometryFactory()
-        val point = geometryFactory.createPoint(Coordinate(createSpotSuggestion.longitude, createSpotSuggestion.latitude))
+        val point = GEOMETRY_FACTORY.createPoint(Coordinate(createSpotSuggestion.longitude, createSpotSuggestion.latitude))
         return spotSuggestionRepository.create(imageUrl, point, createSpotSuggestion)
     }
 }
