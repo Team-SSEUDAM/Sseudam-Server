@@ -6,16 +6,18 @@ import com.sseudam.presentation.v1.trashspot.response.TrashSpotResponse
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashSpotFacade
 import com.sseudam.trashspot.TrashSpotLocation
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
-@Tag(name = "🗑️Trash Spot API", description = "쓰레기통 장소 관련 API입니다.")
+@Tag(name = "🗑️ Trash Spot API", description = "쓰레기통 장소 관련 API입니다.")
 @ApiV1Controller
 class TrashSpotController(
     private val trashSpotFacade: TrashSpotFacade,
 ) {
+    @Operation(summary = "쓰레기통 장소 조회", description = "쓰레기통 장소를 조회합니다.")
     @GetMapping("/trash-spots")
     fun trashSpotFindAll(
         @RequestParam @Parameter(name = "region", description = "지역") region: Region?,

@@ -1,4 +1,4 @@
-package com.sseudam.suggestion
+package com.sseudam.image
 
 import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
