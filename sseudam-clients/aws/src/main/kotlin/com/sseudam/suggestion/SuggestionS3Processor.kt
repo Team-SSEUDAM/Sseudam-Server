@@ -21,7 +21,7 @@ class SuggestionS3Processor(
         dateTime: LocalDateTime,
     ): SuggestionImageUrl {
         val imageFilePath = suggestionFileConstructor.imageFilePath(userId, dateTime)
-        val imageFileName = suggestionFileConstructor.imageFileName(userId)
+        val imageFileName = suggestionFileConstructor.imageFileName()
 
         val presignedUrl =
             awsS3Client.generateUploadUrl(
