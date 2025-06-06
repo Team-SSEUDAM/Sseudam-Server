@@ -1,10 +1,11 @@
-package com.sseudam.suggestion
+package com.sseudam.common
 
 import java.time.LocalDateTime
 
-interface SuggestionS3Caller {
+interface ImageS3Caller {
     fun createUploadUrl(
         userId: Long,
         dateTime: LocalDateTime,
-    ): SuggestionImageUrl
+        prefix: String,
+    ): S3ImageUrl
 }

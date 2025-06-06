@@ -1,18 +1,25 @@
 package com.sseudam.suggestion
 
+import com.sseudam.common.ImageS3Caller
+import com.sseudam.common.S3ImageUrl
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
 class SuggestionService(
     private val spotSuggestionAppender: SpotSuggestionAppender,
-    private val suggestionS3Caller: SuggestionS3Caller,
+    private val imageS3Caller: ImageS3Caller,
 ) {
-    fun createSuggestion(suggestion: SpotSuggestion.Create): Pair<SpotSuggestion.Info, SuggestionImageUrl> {
+    companion object {
+        const val SUGGESTION_IMAGE_PATH = "suggestion"
+    }
+
+    fun createSpotSuggestion(suggestion: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> {
         val createUploadUrl =
-            suggestionS3Caller.createUploadUrl(
+            imageS3Caller.createUploadUrl(
                 suggestion.userId,
                 LocalDateTime.now(),
+                SUGGESTION_IMAGE_PATH,
             )
         val spotSuggestion = spotSuggestionAppender.append(createUploadUrl.imageUrl, suggestion)
         return spotSuggestion to createUploadUrl

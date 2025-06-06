@@ -1,3 +1,11 @@
 package com.sseudam.report
 
-interface SpotReportRepository
+import org.locationtech.jts.geom.Point
+
+interface SpotReportRepository {
+    fun create(
+        imageUrl: String,
+        point: Point,
+        createSpotReport: SpotReport.Create,
+    ): SpotReport.Info
+}

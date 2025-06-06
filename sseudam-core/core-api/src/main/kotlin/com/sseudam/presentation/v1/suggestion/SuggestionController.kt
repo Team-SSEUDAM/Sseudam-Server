@@ -23,7 +23,7 @@ class SuggestionController(
         @RequestBody request: SpotSuggestionCreateRequest,
     ): SuggestionImageUrlResponse {
         val suggestion =
-            suggestionService.createSuggestion(
+            suggestionService.createSpotSuggestion(
                 SpotSuggestion.Create(
                     user.id,
                     request.latitude,

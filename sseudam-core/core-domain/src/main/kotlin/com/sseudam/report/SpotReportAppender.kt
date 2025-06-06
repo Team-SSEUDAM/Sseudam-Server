@@ -1,12 +1,12 @@
-package com.sseudam.suggestion
+package com.sseudam.report
 
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.springframework.stereotype.Component
 
 @Component
-class SpotSuggestionAppender(
-    private val spotSuggestionRepository: SpotSuggestionRepository,
+class SpotReportAppender(
+    private val spotReportRepository: SpotReportRepository,
 ) {
     companion object {
         private val GEOMETRY_FACTORY = GeometryFactory()
@@ -14,12 +14,12 @@ class SpotSuggestionAppender(
 
     fun append(
         imageUrl: String,
-        createSpotSuggestion: SpotSuggestion.Create,
-    ): SpotSuggestion.Info {
+        createSpotSuggestion: SpotReport.Create,
+    ): SpotReport.Info {
         val point =
             GEOMETRY_FACTORY.createPoint(
                 Coordinate(createSpotSuggestion.longitude, createSpotSuggestion.latitude),
             )
-        return spotSuggestionRepository.create(imageUrl, point, createSpotSuggestion)
+        return spotReportRepository.create(imageUrl, point, createSpotSuggestion)
     }
 }

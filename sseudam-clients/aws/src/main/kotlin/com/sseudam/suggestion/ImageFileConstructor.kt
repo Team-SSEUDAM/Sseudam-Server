@@ -7,11 +7,10 @@ import java.time.ZoneId
 import java.util.Random
 
 @Component
-class SuggestionFileConstructor(
+class ImageFileConstructor(
     private val environment: Environment,
 ) {
     companion object {
-        const val SUGGESTION_IMAGE_PATH = "suggestion"
         private val RANDOM = Random()
         private const val LOWERCASE_A = 97
         private const val LOWERCASE_Z = 122
@@ -23,10 +22,11 @@ class SuggestionFileConstructor(
     fun imageFilePath(
         userId: Long,
         dateTime: LocalDateTime,
+        prefix: String,
     ): String {
         val profile = environment.activeProfiles.firstOrNull() ?: "dev"
         val dateTimeToLong = dateTime.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli()
-        return "$profile/$SUGGESTION_IMAGE_PATH/$userId/$dateTimeToLong"
+        return "$profile/$prefix/$userId/$dateTimeToLong"
     }
 
     private fun randomFileName(): String =
