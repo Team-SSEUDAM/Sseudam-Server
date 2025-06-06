@@ -14,7 +14,7 @@ class SuggestionFileConstructor(
         const val SUGGESTION_IMAGE_PATH = "suggestion"
     }
 
-    fun imageFileName(userId: Long): String = "${randomFileName()}.png"
+    fun imageFileName(): String = "${randomFileName()}.png"
 
     fun imageFilePath(
         userId: Long,
