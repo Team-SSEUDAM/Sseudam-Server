@@ -45,4 +45,6 @@ class TrashSpotReader(
             is FindTrashSpotPolicyCondition.ByLocation -> readAllByLocation(condition.location)
             is FindTrashSpotPolicyCondition.ByRegionAndLocation -> readAllByLocationAndRegion(condition.region, condition.location)
         }
+
+    fun readBy(spotId: Long): TrashSpot = trashSpotRepository.findById(spotId)
 }

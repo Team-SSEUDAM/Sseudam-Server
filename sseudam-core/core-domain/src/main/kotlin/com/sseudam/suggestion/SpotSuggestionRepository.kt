@@ -8,4 +8,6 @@ interface SpotSuggestionRepository {
         point: Point,
         createSpotSuggestion: SpotSuggestion.Create,
     ): SpotSuggestion.Info
+
+    fun findBySite(site: String): SpotSuggestion.Info?
 }

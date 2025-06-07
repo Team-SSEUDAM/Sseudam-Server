@@ -22,4 +22,11 @@ class SpotSuggestionCoreRepository(
                     SpotSuggestionEntity(imageUrl, point, createSpotSuggestion),
                 ).toSpotSuggestion()
         }
+
+    override fun findBySite(site: String): SpotSuggestion.Info? =
+        txAdvice.readOnly {
+            spotSuggestionJpaRepository
+                .findByAddressSite(site)
+                ?.toSpotSuggestion()
+        }
 }

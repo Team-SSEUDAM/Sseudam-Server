@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface SpotSuggestionJpaRepository :
     JpaRepository<SpotSuggestionEntity, Long>,
-    KotlinJdslJpqlExecutor
+    KotlinJdslJpqlExecutor {
+    fun findByAddressSite(site: String): SpotSuggestionEntity?
+}

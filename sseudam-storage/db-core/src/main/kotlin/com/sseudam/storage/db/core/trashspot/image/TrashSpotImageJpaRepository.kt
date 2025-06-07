@@ -7,4 +7,6 @@ interface TrashSpotImageJpaRepository :
     JpaRepository<TrashSpotImageEntity, Long>,
     KotlinJdslJpqlExecutor {
     fun findAllByTrashSpotIdIn(map: List<Long>): List<TrashSpotImageEntity>
+
+    fun findAllByTrashSpotId(spotId: Long): List<TrashSpotImageEntity>
 }

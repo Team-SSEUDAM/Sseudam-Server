@@ -1,5 +1,6 @@
 package com.sseudam.storage.db.core.trashspot
 
+import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.support.geo.Region
 import com.sseudam.support.tx.TxAdvice
 import com.sseudam.trashspot.TrashSpot
@@ -50,5 +51,12 @@ class TrashSpotCoreRepository(
                     location.neLng!!,
                     region.name,
                 ).map { it.toTrashSpot() }
+        }
+
+    override fun findById(spotId: Long): TrashSpot =
+        txAdvice.readOnly {
+            trashSpotJpaRepository
+                .findByIdOrElseThrow(spotId)
+                .toTrashSpot()
         }
 }

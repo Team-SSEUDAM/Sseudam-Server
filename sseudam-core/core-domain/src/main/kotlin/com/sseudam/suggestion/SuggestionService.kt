@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 @Service
 class SuggestionService(
     private val suggestionAppender: SuggestionAppender,
+    private val suggestionReader: SuggestionReader,
     private val imageS3Caller: ImageS3Caller,
 ) {
     companion object {
@@ -24,4 +25,6 @@ class SuggestionService(
         val spotSuggestion = suggestionAppender.append(createUploadUrl.imageUrl, suggestion)
         return spotSuggestion to createUploadUrl
     }
+
+    fun findSpotSuggestionBySite(site: String): SpotSuggestion.Info? = suggestionReader.readBySite(site)
 }
