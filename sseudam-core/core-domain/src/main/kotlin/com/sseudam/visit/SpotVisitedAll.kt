@@ -13,8 +13,10 @@ data class SpotVisitedAll(
             val spotsMap = spots.associateBy { it.id }
 
             return SpotVisitedAll(
-                spotVisited.map {
-                    it.copy(site = spotsMap[it.spotId]!!.address.site)
+                spotVisited.mapNotNull { visited ->
+                    spotsMap[visited.spotId]?.let { spot ->
+                        visited.copy(site = spot.address.site)
+                    }
                 },
             )
         }
