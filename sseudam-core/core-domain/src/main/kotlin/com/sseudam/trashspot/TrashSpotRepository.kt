@@ -13,4 +13,6 @@ interface TrashSpotRepository {
         region: Region,
         location: TrashSpotLocation,
     ): List<TrashSpot>
+
+    fun findById(spotId: Long): TrashSpot
 }

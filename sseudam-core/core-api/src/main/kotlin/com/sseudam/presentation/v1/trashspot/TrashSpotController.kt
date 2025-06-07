@@ -2,6 +2,7 @@ package com.sseudam.presentation.v1.trashspot
 
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.trashspot.response.TrashSpotAllResponse
+import com.sseudam.presentation.v1.trashspot.response.TrashSpotDetailsResponse
 import com.sseudam.presentation.v1.trashspot.response.TrashSpotResponse
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashSpotFacade
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 
 @Tag(name = "🗑️ Trash Spot API", description = "쓰레기통 장소 관련 API입니다.")
@@ -41,5 +43,14 @@ class TrashSpotController(
                 TrashSpotResponse.of(it)
             },
         )
+    }
+
+    @Operation(summary = "쓰레기통 장소 상세 조회", description = "쓰레기통 장소를 상세 조회합니다.")
+    @GetMapping("/trash-spots/{spotId}")
+    fun trashSpotFindDetails(
+        @PathVariable spotId: Long,
+    ): TrashSpotDetailsResponse {
+        val details = trashSpotFacade.findDetails(spotId)
+        return TrashSpotDetailsResponse.of(details)
     }
 }

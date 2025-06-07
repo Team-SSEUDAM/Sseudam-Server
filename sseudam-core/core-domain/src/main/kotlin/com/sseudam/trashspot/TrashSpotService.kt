@@ -20,4 +20,6 @@ class TrashSpotService(
             }
         return trashSpotReader.findByCondition(condition)
     }
+
+    fun findOne(spotId: Long): TrashSpot = trashSpotReader.readBy(spotId)
 }
