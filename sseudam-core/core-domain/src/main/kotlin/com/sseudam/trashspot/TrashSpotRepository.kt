@@ -15,4 +15,6 @@ interface TrashSpotRepository {
     ): List<TrashSpot>
 
     fun findById(spotId: Long): TrashSpot
+
+    fun findAllByIds(spotIds: List<Long>): List<TrashSpot>
 }

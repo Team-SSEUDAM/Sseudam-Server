@@ -3,8 +3,8 @@ package com.sseudam.visit
 import org.springframework.stereotype.Component
 
 @Component
-class SpotVisitedAppender(
+class SpotVisitedReader(
     private val spotVisitedRepository: SpotVisitedRepository,
 ) {
-    fun append(spotVisited: SpotVisited.Create) = spotVisitedRepository.create(spotVisited)
+    fun readByUserId(userId: Long): List<SpotVisited.Info> = spotVisitedRepository.readByUserId(userId)
 }

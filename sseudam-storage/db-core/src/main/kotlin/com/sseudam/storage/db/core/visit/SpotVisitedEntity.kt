@@ -16,11 +16,12 @@ class SpotVisitedEntity(
         spotId = spotVisitedCreate.spotId,
     )
 
-    fun toSpotVisited(): SpotVisited.Info =
+    fun toSpotVisitedInfo(): SpotVisited.Info =
         SpotVisited.Info(
             id = id!!,
             userId = userId,
             spotId = spotId,
+            site = "",
             createdAt = createdAt,
         )
 }

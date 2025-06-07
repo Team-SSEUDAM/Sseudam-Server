@@ -59,4 +59,11 @@ class TrashSpotCoreRepository(
                 .findByIdOrElseThrow(spotId)
                 .toTrashSpot()
         }
+
+    override fun findAllByIds(spotIds: List<Long>): List<TrashSpot> =
+        txAdvice.readOnly {
+            trashSpotJpaRepository
+                .findAllByIdIn(spotIds)
+                .map { it.toTrashSpot() }
+        }
 }
