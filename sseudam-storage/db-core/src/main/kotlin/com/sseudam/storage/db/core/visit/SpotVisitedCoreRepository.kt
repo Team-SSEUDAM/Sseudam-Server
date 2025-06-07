@@ -15,6 +15,13 @@ class SpotVisitedCoreRepository(
             spotVisitedJpaRepository
                 .save(
                     SpotVisitedEntity(spotVisited),
-                ).toSpotVisited()
+                ).toSpotVisitedInfo()
+        }
+
+    override fun readByUserId(userId: Long): List<SpotVisited.Info> =
+        txAdvice.readOnly {
+            spotVisitedJpaRepository
+                .findAllByUserId(userId)
+                .map { it.toSpotVisitedInfo() }
         }
 }

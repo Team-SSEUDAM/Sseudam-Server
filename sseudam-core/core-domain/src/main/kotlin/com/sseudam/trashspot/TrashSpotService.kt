@@ -22,4 +22,6 @@ class TrashSpotService(
     }
 
     fun findOne(spotId: Long): TrashSpot = trashSpotReader.readBy(spotId)
+
+    fun findAllByIds(spotIds: List<Long>): List<TrashSpot> = trashSpotReader.readAllByIds(spotIds)
 }

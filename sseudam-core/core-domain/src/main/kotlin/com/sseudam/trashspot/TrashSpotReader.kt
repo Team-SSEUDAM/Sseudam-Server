@@ -47,4 +47,6 @@ class TrashSpotReader(
         }
 
     fun readBy(spotId: Long): TrashSpot = trashSpotRepository.findById(spotId)
+
+    fun readAllByIds(spotIds: List<Long>): List<TrashSpot> = trashSpotRepository.findAllByIds(spotIds)
 }

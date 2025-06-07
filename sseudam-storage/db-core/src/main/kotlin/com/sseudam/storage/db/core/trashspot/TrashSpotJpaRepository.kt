@@ -50,4 +50,6 @@ interface TrashSpotJpaRepository :
         @Param("neLng") neLng: Double,
         @Param("region") region: String,
     ): List<TrashSpotEntity>
+
+    fun findAllByIdIn(spotIds: List<Long>): List<TrashSpotEntity>
 }
