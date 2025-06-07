@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component
 class SpotVisitedAppender(
     private val spotVisitedRepository: SpotVisitedRepository,
 ) {
-    fun append(spotVisited: SpotVisited.Create): SpotVisited.Info = spotVisitedRepository.create(spotVisited)
+    fun append(spotVisited: SpotVisited.Create) = spotVisitedRepository.create(spotVisited)
 }
