@@ -60,7 +60,7 @@ interface TrashSpotJpaRepository :
             ST_MakeEnvelope(:swLng, :swLat, :neLng, :neLat, 4326),
             point
         )
-        AND trash_type = :region
+        AND trash_type = :type
         AND deleted_at IS NULL
         """,
         nativeQuery = true,

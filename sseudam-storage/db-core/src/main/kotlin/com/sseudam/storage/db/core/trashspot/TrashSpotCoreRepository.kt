@@ -62,8 +62,8 @@ class TrashSpotCoreRepository(
         }
 
     override fun findAllByLocationAndType(
-        type: TrashType,
         location: TrashSpotLocation,
+        type: TrashType,
     ): List<TrashSpot> =
         txAdvice.readOnly {
             trashSpotJpaRepository

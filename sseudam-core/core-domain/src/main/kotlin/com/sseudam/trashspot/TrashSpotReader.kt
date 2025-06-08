@@ -48,9 +48,9 @@ class TrashSpotReader(
         }
 
     fun readAllByLocationAndType(
-        type: TrashType,
         location: TrashSpotLocation,
-    ): List<TrashSpot> = trashSpotRepository.findAllByLocationAndType(type, location)
+        type: TrashType,
+    ): List<TrashSpot> = trashSpotRepository.findAllByLocationAndType(location, type)
 
     fun findByCondition(condition: FindTrashSpotPolicyCondition): List<TrashSpot> =
         when (condition) {
@@ -59,7 +59,7 @@ class TrashSpotReader(
             is FindTrashSpotPolicyCondition.ByLocation -> readAllByLocation(condition.location)
             is FindTrashSpotPolicyCondition.ByRegionAndLocation -> readAllByLocationAndRegion(condition.region, condition.location)
             is FindTrashSpotPolicyCondition.ByType -> readAllByType(condition.type)
-            is FindTrashSpotPolicyCondition.ByTypeAndLocation -> readAllByLocationAndType(condition.type, condition.location)
+            is FindTrashSpotPolicyCondition.ByTypeAndLocation -> readAllByLocationAndType(condition.location, condition.type)
         }
 
     fun readBy(spotId: Long): TrashSpot = trashSpotRepository.findById(spotId)

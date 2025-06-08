@@ -17,8 +17,8 @@ interface TrashSpotRepository {
     fun findAllByType(type: TrashType): List<TrashSpot>
 
     fun findAllByLocationAndType(
-        type: TrashType,
         location: TrashSpotLocation,
+        type: TrashType,
     ): List<TrashSpot>
 
     fun findById(spotId: Long): TrashSpot
