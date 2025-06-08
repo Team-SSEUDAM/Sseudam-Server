@@ -60,5 +60,6 @@ class SpotSuggestionEntity(
             trashType = trashType,
             status = status,
             imageUrl = imageUrl,
+            createdAt = createdAt,
         )
 }

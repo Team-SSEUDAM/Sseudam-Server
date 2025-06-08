@@ -23,6 +23,13 @@ class SpotSuggestionCoreRepository(
                 ).toSpotSuggestion()
         }
 
+    override fun findAllByUserId(userId: Long): List<SpotSuggestion.Info> =
+        txAdvice.readOnly {
+            spotSuggestionJpaRepository
+                .findAllByUserId(userId)
+                .map { it.toSpotSuggestion() }
+        }
+
     override fun findBySite(site: String): SpotSuggestion.Info? =
         txAdvice.readOnly {
             spotSuggestionJpaRepository

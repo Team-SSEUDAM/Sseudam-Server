@@ -26,5 +26,7 @@ class SuggestionService(
         return spotSuggestion to createUploadUrl
     }
 
+    fun findAllSpotSuggestionByUser(userId: Long): List<SpotSuggestion.Info> = suggestionReader.readAllByUser(userId)
+
     fun findSpotSuggestionBySite(site: String): SpotSuggestion.Info? = suggestionReader.readBySite(site)
 }

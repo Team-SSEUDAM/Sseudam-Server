@@ -2,12 +2,14 @@ package com.sseudam.presentation.v1.suggestion
 
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.suggestion.request.SpotSuggestionCreateRequest
+import com.sseudam.presentation.v1.suggestion.response.SpotSuggestionAllResponse
 import com.sseudam.presentation.v1.suggestion.response.SuggestionImageUrlResponse
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.user.User
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
@@ -35,5 +37,13 @@ class SuggestionController(
                 ),
             )
         return SuggestionImageUrlResponse.of(suggestion.first, suggestion.second)
+    }
+
+    // TODO: cursor pagination (infinity scroll)
+    @Operation(summary = "사용자 제보 내역 조회", description = "사용자 제보 내역을 조회합니다.")
+    @GetMapping("/suggestions")
+    fun suggestionSpotFindAll(user: User): SpotSuggestionAllResponse {
+        val suggestions = suggestionService.findAllSpotSuggestionByUser(user.id)
+        return SpotSuggestionAllResponse.of(suggestions)
     }
 }

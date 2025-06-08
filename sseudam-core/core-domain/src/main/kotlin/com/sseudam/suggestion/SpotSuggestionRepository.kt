@@ -9,5 +9,7 @@ interface SpotSuggestionRepository {
         createSpotSuggestion: SpotSuggestion.Create,
     ): SpotSuggestion.Info
 
+    fun findAllByUserId(userId: Long): List<SpotSuggestion.Info>
+
     fun findBySite(site: String): SpotSuggestion.Info?
 }

@@ -4,6 +4,7 @@ import com.sseudam.common.Address
 import com.sseudam.support.geo.GeoJson
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
+import java.time.LocalDateTime
 
 class SpotSuggestion {
     /**
@@ -36,6 +37,7 @@ class SpotSuggestion {
      * @property trashType 제보된 쓰레기통 타입
      * @property status 제보 상태
      * @property imageUrl 제보된 S3 imageUrl
+     * @property createdAt 제보 시간
      */
     data class Info(
         val id: Long,
@@ -46,5 +48,6 @@ class SpotSuggestion {
         val trashType: TrashType,
         val imageUrl: String,
         val status: SuggestionStatus = SuggestionStatus.WAITING,
+        val createdAt: LocalDateTime,
     )
 }
