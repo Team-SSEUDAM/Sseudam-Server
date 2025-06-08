@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 /**
  * TrashSpot
  * @property id 쓰레기통 id
- * @property description 쓰레기통 정보
+ * @property name 쓰레기통 정보
  * @property region 쓰레기통 지역
  * @property address 쓰레기통 주소
  * @property point 쓰레기통 위치
@@ -16,7 +16,7 @@ import java.time.LocalDateTime
  */
 data class TrashSpot(
     val id: Long,
-    val description: String,
+    val name: String,
     val region: Region,
     val address: Address,
     val point: GeoJson,
