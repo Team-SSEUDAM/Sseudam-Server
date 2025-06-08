@@ -8,4 +8,6 @@ interface SpotReportRepository {
         point: Point,
         createSpotReport: SpotReport.Create,
     ): SpotReport.Info
+
+    fun findAllByUserId(userId: Long): List<SpotReport.Info>
 }

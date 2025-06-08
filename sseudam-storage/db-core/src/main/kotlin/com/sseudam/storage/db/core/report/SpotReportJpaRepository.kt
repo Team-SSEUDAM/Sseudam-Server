@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface SpotReportJpaRepository :
     JpaRepository<SpotReportEntity, Long>,
-    KotlinJdslJpqlExecutor
+    KotlinJdslJpqlExecutor {
+    fun findAllByUserId(userId: Long): List<SpotReportEntity>
+}

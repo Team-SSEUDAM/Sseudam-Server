@@ -4,6 +4,7 @@ import com.sseudam.common.Address
 import com.sseudam.support.geo.GeoJson
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
+import java.time.LocalDateTime
 
 class SpotReport {
     /** SpotReport Create
@@ -37,7 +38,9 @@ class SpotReport {
      * @property point 신고 위치
      * @property address 신고 주소
      * @property trashType 쓰레기통 타입
+     * @property imageUrl 신고된 S3 imageUrl
      * @property status 신고 상태
+     * @property createdAt 신고 시간
      */
     data class Info(
         val id: Long,
@@ -49,5 +52,6 @@ class SpotReport {
         val trashType: TrashType,
         val imageUrl: String,
         val status: ReportStatus = ReportStatus.WAITING,
+        val createdAt: LocalDateTime,
     )
 }

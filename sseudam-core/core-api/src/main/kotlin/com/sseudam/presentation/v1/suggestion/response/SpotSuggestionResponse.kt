@@ -9,7 +9,7 @@ import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
-@Schema(description = "제보하기")
+@Schema(description = "제보 내역 응답")
 data class SpotSuggestionResponse(
     @Schema(description = "제보 ID")
     val id: Long,
