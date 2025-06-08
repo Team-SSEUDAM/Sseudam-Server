@@ -3,11 +3,13 @@ package com.sseudam.presentation.v1.report
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.report.request.SpotReportCreateRequest
 import com.sseudam.presentation.v1.report.response.ReportImageUrlResponse
+import com.sseudam.presentation.v1.report.response.SpotReportAllResponse
 import com.sseudam.report.ReportService
 import com.sseudam.report.SpotReport
 import com.sseudam.user.User
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -43,5 +45,13 @@ class ReportController(
             report = report.first,
             s3ImageUrl = report.second,
         )
+    }
+
+    // TODO: cursor pagination (infinity scroll)
+    @Operation(summary = "사용자 신고 내역 조회", description = "사용자가 신고한 내역을 조회합니다.")
+    @GetMapping("/reports")
+    fun reportSpotFindAll(user: User): SpotReportAllResponse {
+        val reports = reportService.findAllReportByUserId(user.id)
+        return SpotReportAllResponse.of(reports)
     }
 }

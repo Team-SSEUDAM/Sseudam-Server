@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 @Service
 class ReportService(
     private val reportAppender: ReportAppender,
+    private val reportReader: ReportReader,
     private val imageS3Caller: ImageS3Caller,
 ) {
     companion object {
@@ -24,4 +25,6 @@ class ReportService(
         val spotReport = reportAppender.append(createUploadUrl.imageUrl, report)
         return spotReport to createUploadUrl
     }
+
+    fun findAllReportByUserId(userId: Long): List<SpotReport.Info> = reportReader.readAllByUserId(userId)
 }

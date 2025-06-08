@@ -63,5 +63,6 @@ class SpotReportEntity(
             trashType = trashType,
             imageUrl = imageUrl,
             status = status,
+            createdAt = createdAt,
         )
 }

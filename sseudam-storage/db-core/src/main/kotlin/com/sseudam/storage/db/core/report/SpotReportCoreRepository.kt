@@ -22,4 +22,11 @@ class SpotReportCoreRepository(
                     SpotReportEntity(imageUrl, point, createSpotReport),
                 ).toSpotReport()
         }
+
+    override fun findAllByUserId(userId: Long): List<SpotReport.Info> =
+        txAdvice.readOnly {
+            spotReportJpaRepository
+                .findAllByUserId(userId)
+                .map { it.toSpotReport() }
+        }
 }
