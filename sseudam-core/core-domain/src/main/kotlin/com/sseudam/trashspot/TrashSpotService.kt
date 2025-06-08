@@ -9,10 +9,13 @@ class TrashSpotService(
 ) {
     fun findAll(
         region: Region?,
+        trashType: TrashType?,
         location: TrashSpotLocation,
     ): List<TrashSpot> {
         val condition =
             when {
+                location.isNotSet() && trashType != null -> FindTrashSpotPolicyCondition.ByTypeAndLocation(trashType, location)
+                !location.isNotSet() && trashType != null -> FindTrashSpotPolicyCondition.ByType(trashType)
                 !location.isNotSet() && region == null -> FindTrashSpotPolicyCondition.All
                 !location.isNotSet() -> FindTrashSpotPolicyCondition.ByRegion(region!!)
                 region == null -> FindTrashSpotPolicyCondition.ByLocation(location)

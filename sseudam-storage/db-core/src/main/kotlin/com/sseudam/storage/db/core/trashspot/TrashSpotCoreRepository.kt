@@ -6,6 +6,7 @@ import com.sseudam.support.tx.TxAdvice
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashSpotLocation
 import com.sseudam.trashspot.TrashSpotRepository
+import com.sseudam.trashspot.TrashType
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -50,6 +51,28 @@ class TrashSpotCoreRepository(
                     location.neLat!!,
                     location.neLng!!,
                     region.name,
+                ).map { it.toTrashSpot() }
+        }
+
+    override fun findAllByType(type: TrashType): List<TrashSpot> =
+        txAdvice.readOnly {
+            trashSpotJpaRepository
+                .findAllByTrashType(type)
+                .map { it.toTrashSpot() }
+        }
+
+    override fun findAllByLocationAndType(
+        location: TrashSpotLocation,
+        type: TrashType,
+    ): List<TrashSpot> =
+        txAdvice.readOnly {
+            trashSpotJpaRepository
+                .findAllByLocationAndType(
+                    location.swLat!!,
+                    location.swLng!!,
+                    location.neLat!!,
+                    location.neLng!!,
+                    type.name,
                 ).map { it.toTrashSpot() }
         }
 
