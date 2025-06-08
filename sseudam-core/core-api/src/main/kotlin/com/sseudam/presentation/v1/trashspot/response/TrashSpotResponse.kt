@@ -1,5 +1,6 @@
 package com.sseudam.presentation.v1.trashspot.response
 
+import com.sseudam.common.Address
 import com.sseudam.support.geo.GeoJson
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashSpot
@@ -15,10 +16,8 @@ data class TrashSpotResponse(
     val name: String,
     @Schema(description = "쓰레기통 장소 지역")
     val region: Region,
-    @Schema(description = "도시")
-    val city: String,
-    @Schema(description = "주소")
-    val site: String,
+    @Schema(description = "쓰레기통 주소")
+    val address: Address,
     @Schema(
         description = "좌표 정보 (GeoJson)",
         example = """
@@ -40,8 +39,7 @@ data class TrashSpotResponse(
                 id = trashSpot.id,
                 name = trashSpot.name,
                 region = trashSpot.region,
-                city = trashSpot.address.city,
-                site = trashSpot.address.site,
+                address = trashSpot.address,
                 point = trashSpot.point,
                 trashType = trashSpot.trashType,
                 updatedAt = trashSpot.updatedAt,
