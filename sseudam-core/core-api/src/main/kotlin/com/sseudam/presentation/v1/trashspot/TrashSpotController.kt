@@ -7,6 +7,7 @@ import com.sseudam.presentation.v1.trashspot.response.TrashSpotResponse
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashSpotFacade
 import com.sseudam.trashspot.TrashSpotLocation
+import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -23,6 +24,7 @@ class TrashSpotController(
     @GetMapping("/trash-spots")
     fun trashSpotFindAll(
         @RequestParam @Parameter(name = "region", description = "지역") region: Region?,
+        @RequestParam @Parameter(name = "type", description = "쓰레기통 유형") type: TrashType?,
         @RequestParam @Parameter(name = "swLat", description = "남서쪽 위도") swLat: Double?,
         @RequestParam @Parameter(name = "swLng", description = "남서쪽 경도") swLng: Double?,
         @RequestParam @Parameter(name = "neLat", description = "북동쪽 위도") neLat: Double?,
@@ -30,13 +32,15 @@ class TrashSpotController(
     ): TrashSpotAllResponse {
         val trashSpots =
             trashSpotFacade.findAll(
-                region,
-                TrashSpotLocation(
-                    swLat,
-                    swLng,
-                    neLat,
-                    neLng,
-                ),
+                region = region,
+                trashType = type,
+                location =
+                    TrashSpotLocation(
+                        swLat,
+                        swLng,
+                        neLat,
+                        neLng,
+                    ),
             )
         return TrashSpotAllResponse.of(
             trashSpots.map {

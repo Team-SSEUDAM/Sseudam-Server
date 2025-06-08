@@ -17,4 +17,13 @@ sealed class FindTrashSpotPolicyCondition {
         val region: Region,
         val location: TrashSpotLocation,
     ) : FindTrashSpotPolicyCondition()
+
+    data class ByType(
+        val type: TrashType,
+    ) : FindTrashSpotPolicyCondition()
+
+    data class ByTypeAndLocation(
+        val type: TrashType,
+        val location: TrashSpotLocation,
+    ) : FindTrashSpotPolicyCondition()
 }

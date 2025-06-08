@@ -15,9 +15,10 @@ class TrashSpotFacade(
 ) {
     fun findAll(
         region: Region?,
+        trashType: TrashType?,
         location: TrashSpotLocation,
     ): List<TrashSpot> {
-        val trashSpots = trashSpotService.findAll(region, location)
+        val trashSpots = trashSpotService.findAll(region, trashType, location)
         return trashSpots
     }
 
