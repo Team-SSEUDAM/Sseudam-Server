@@ -17,7 +17,8 @@ import org.locationtech.jts.geom.Point
 @Entity
 @Table(name = "t_trash_spot")
 class TrashSpotEntity(
-    val description: String,
+    @Column(columnDefinition = "varchar(50)")
+    val name: String,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(20)")
     val region: Region,
@@ -32,7 +33,7 @@ class TrashSpotEntity(
     fun toTrashSpot(): TrashSpot =
         TrashSpot(
             id = id!!,
-            description = description,
+            name = name,
             region = region,
             address = address,
             point = GeoJson.Point(listOf(point.x, point.y)),

@@ -11,8 +11,8 @@ import java.time.LocalDateTime
 data class TrashSpotResponse(
     @Schema(description = "쓰레기통 장소 ID")
     val id: Long,
-    @Schema(description = "쓰레기통 장소 설명")
-    val description: String,
+    @Schema(description = "쓰레기통 장소 명")
+    val name: String,
     @Schema(description = "쓰레기통 장소 지역")
     val region: Region,
     @Schema(description = "도시")
@@ -38,7 +38,7 @@ data class TrashSpotResponse(
         fun of(trashSpot: TrashSpot) =
             TrashSpotResponse(
                 id = trashSpot.id,
-                description = trashSpot.description,
+                name = trashSpot.name,
                 region = trashSpot.region,
                 city = trashSpot.address.city,
                 site = trashSpot.address.site,

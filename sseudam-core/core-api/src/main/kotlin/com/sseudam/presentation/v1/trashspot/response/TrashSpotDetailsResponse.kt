@@ -15,8 +15,8 @@ data class TrashSpotDetailsResponse(
     val suggestionerId: Long?,
     @Schema(description = "쓰레기통 장소 제보자 이름")
     val suggestionerName: String?,
-    @Schema(description = "쓰레기통 장소 설명")
-    val description: String,
+    @Schema(description = "쓰레기통 장소 명")
+    val name: String,
     @Schema(description = "쓰레기통 장소 지역")
     val region: Region,
     @Schema(description = "도시")
@@ -46,7 +46,7 @@ data class TrashSpotDetailsResponse(
                 id = trashSpotDetail.trashSpot.id,
                 suggestionerId = trashSpotDetail.user?.id,
                 suggestionerName = trashSpotDetail.user?.nickname,
-                description = trashSpotDetail.trashSpot.description,
+                name = trashSpotDetail.trashSpot.name,
                 region = trashSpotDetail.trashSpot.region,
                 city = trashSpotDetail.trashSpot.address.city,
                 site = trashSpotDetail.trashSpot.address.site,
