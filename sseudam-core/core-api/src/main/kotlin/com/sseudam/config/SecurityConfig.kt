@@ -143,7 +143,6 @@ class SecurityConfig(
             authorize
                 .requestMatchers(
                     "/api/v1/users/**",
-                    "/api/v1/users",
                     "/api/v1/suggestions/**",
                     "/api/v1/reports/**",
                     "/api/v1/visited/**",
