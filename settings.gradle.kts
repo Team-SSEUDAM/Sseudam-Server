@@ -17,6 +17,10 @@ dependencyResolutionManagement {
 rootProject.name = "sseudam"
 
 include(
+    "sseudam-admin"
+)
+
+include(
     "sseudam-core:core-api",
     "sseudam-core:core-domain",
 )
