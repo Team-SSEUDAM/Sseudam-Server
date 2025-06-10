@@ -16,6 +16,11 @@ data class NicknameRequest(
         )
 
     fun toValidateNickname(): String {
+        // 닉네임이 비어있거나 null인 경우 예외 처리
+        if (nickname.isBlank()) {
+            throw ErrorException(ErrorType.NICKNAME_IS_BLANK)
+        }
+
         // 영어 및 숫자, 한글로만 구성된 닉네임인지 확인
         require(nickname.matches(Regex("^[a-zA-Z0-9가-힣]+$"))) {
             throw ErrorException(ErrorType.INVALID_NICKNAME_FORMAT)

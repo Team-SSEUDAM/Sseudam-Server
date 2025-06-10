@@ -26,10 +26,6 @@ class UserValidator(
     }
 
     fun verifyNickname(nickname: String) {
-        if (nickname.isBlank()) {
-            throw ErrorException(ErrorType.NICKNAME_IS_BLANK)
-        }
-
         if (userRepository.existsByNickname(nickname)) {
             throw ErrorException(ErrorType.DUPLICATE_NICKNAME)
         }
