@@ -6,6 +6,7 @@ import com.sseudam.presentation.v1.user.request.NicknameRequest
 import com.sseudam.presentation.v1.user.response.IsValidateNicknameResponse
 import com.sseudam.presentation.v1.user.response.UserProfileResponse
 import com.sseudam.presentation.v1.user.response.UserWithdrawalResponse
+import com.sseudam.support.error.ErrorException
 import com.sseudam.user.NewUserWithdrawal
 import com.sseudam.user.User
 import com.sseudam.user.UserService
@@ -62,8 +63,16 @@ class UserController(
     fun nicknameValidate(
         @RequestBody request: NicknameRequest,
     ): IsValidateNicknameResponse =
-        IsValidateNicknameResponse.of(
-            isValid = userService.validateNickname(request.toValidateNickname()),
-            message = "사용 가능한 닉네임입니다.",
-        )
+        try {
+            val isValid = userService.validateNickname(request.toValidateNickname())
+            IsValidateNicknameResponse.of(
+                isValid = isValid,
+                message = "사용 가능한 닉네임입니다.",
+            )
+        } catch (e: ErrorException) {
+            IsValidateNicknameResponse.of(
+                isValid = false,
+                message = e.errorType.message,
+            )
+        }
 }
