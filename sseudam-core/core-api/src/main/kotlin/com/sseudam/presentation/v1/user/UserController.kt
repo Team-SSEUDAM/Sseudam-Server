@@ -2,9 +2,11 @@ package com.sseudam.presentation.v1.user
 
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
-import com.sseudam.presentation.v1.user.request.UpdateNicknameRequest
+import com.sseudam.presentation.v1.user.request.NicknameRequest
+import com.sseudam.presentation.v1.user.response.IsValidateNicknameResponse
 import com.sseudam.presentation.v1.user.response.UserProfileResponse
 import com.sseudam.presentation.v1.user.response.UserWithdrawalResponse
+import com.sseudam.support.error.ErrorException
 import com.sseudam.user.NewUserWithdrawal
 import com.sseudam.user.User
 import com.sseudam.user.UserService
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 
@@ -47,11 +50,29 @@ class UserController(
 
     @Operation(summary = "닉네임 수정", description = "닉네임을 수정합니다.")
     @PutMapping("/users/nickname")
-    fun updateNickname(
+    fun nicknameUpdate(
         @Parameter(hidden = true, required = false) user: User,
-        @RequestBody request: UpdateNicknameRequest,
+        @RequestBody request: NicknameRequest,
     ): UserProfileResponse {
         val userProfile = userService.updateNickname(user.key, request.toUpdateNickname())
         return UserProfileResponse.of(userProfile)
     }
+
+    @Operation(summary = "닉네임 유효성 검사", description = "닉네임 유효성, 중복 검사를 진행합니다.")
+    @PostMapping("/users/nickname/validate")
+    fun nicknameValidate(
+        @RequestBody request: NicknameRequest,
+    ): IsValidateNicknameResponse =
+        try {
+            val isValid = userService.validateNickname(request.toValidateNickname())
+            IsValidateNicknameResponse.of(
+                isValid = isValid,
+                message = "사용 가능한 닉네임입니다.",
+            )
+        } catch (e: ErrorException) {
+            IsValidateNicknameResponse.of(
+                isValid = false,
+                message = e.errorType.message,
+            )
+        }
 }
