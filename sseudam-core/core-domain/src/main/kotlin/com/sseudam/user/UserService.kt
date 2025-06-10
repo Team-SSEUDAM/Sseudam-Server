@@ -42,6 +42,11 @@ class UserService(
         return userUpdater.updateName(userKey, name)
     }
 
+    fun validateNickname(nickname: String): Boolean {
+        userValidator.verifyNickname(nickname)
+        return true
+    }
+
     fun updateEmail(
         userKey: String,
         email: String,

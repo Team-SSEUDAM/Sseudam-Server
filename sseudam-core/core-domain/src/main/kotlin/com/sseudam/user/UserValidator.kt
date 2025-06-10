@@ -30,10 +30,6 @@ class UserValidator(
             throw ErrorException(ErrorType.NICKNAME_IS_BLANK)
         }
 
-        if (nickname.length !in 2..12) {
-            throw ErrorException(ErrorType.INVALID_NICKNAME_FORMAT)
-        }
-
         if (userRepository.existsByNickname(nickname)) {
             throw ErrorException(ErrorType.DUPLICATE_NICKNAME)
         }
