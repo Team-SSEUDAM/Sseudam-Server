@@ -10,11 +10,10 @@ dependencies {
     runtimeOnly(libs.jjwt.jackson)
     runtimeOnly(libs.jjwt.impl)
 
-    implementation(project(":sseudam-core:core-api"))
     implementation(project(":sseudam-core:core-domain"))
+    implementation(project(":sseudam-storage:db-core"))
+    implementation(project(":sseudam-storage:redis"))
     implementation(project(":sseudam-clients:notification"))
     implementation(project(":sseudam-clients:aws"))
     implementation(project(":sseudam-supports:swagger"))
-    runtimeOnly(project(":sseudam-storage:db-core"))
-    runtimeOnly(project(":sseudam-storage:redis"))
 }

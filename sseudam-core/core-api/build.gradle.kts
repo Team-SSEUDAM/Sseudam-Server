@@ -19,6 +19,7 @@ dependencies {
     runtimeOnly(libs.jjwt.jackson)
     runtimeOnly(libs.jjwt.impl)
 
+    implementation(project(":sseudam-admin"))
     implementation(project(":sseudam-core:core-domain"))
     implementation(project(":sseudam-clients:notification"))
     implementation(project(":sseudam-clients:oauth-client"))
