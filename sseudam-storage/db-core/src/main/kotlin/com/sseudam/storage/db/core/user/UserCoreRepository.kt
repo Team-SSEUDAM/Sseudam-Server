@@ -8,6 +8,7 @@ import com.sseudam.user.NewUser
 import com.sseudam.user.NewUserKey
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User
+import com.sseudam.user.UserCredentials
 import com.sseudam.user.UserProfile
 import com.sseudam.user.UserRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -37,6 +38,12 @@ class UserCoreRepository(
     ): User =
         txAdvice.readOnly {
             userJpaRepository.findByEmailAndPasswordAndDeletedAtIsNull(loginId, password)?.toUser()
+                ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
+        }
+
+    override fun readUserCredentials(loginId: String): UserCredentials =
+        txAdvice.readOnly {
+            userJpaRepository.findByEmailAndDeletedAtIsNull(loginId)?.toUserCredentials()
                 ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
         }
 

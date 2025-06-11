@@ -18,7 +18,7 @@ data class SignUpRequest(
     @Schema(description = "이름", example = "닉네임이야")
     val nickname: String?,
 ) {
-    fun toNewUser(): NewUser =
+    fun toNewUser(password: String): NewUser =
         NewUser(
             email = email,
             name = name,

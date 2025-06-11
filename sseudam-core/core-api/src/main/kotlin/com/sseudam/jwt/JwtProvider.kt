@@ -110,6 +110,39 @@ class JwtProvider(
         }
     }
 
+    override fun create(
+        adminId: Long,
+        grantedAuthorities: List<GrantedAuthority>,
+    ): Token {
+        val accessToken =
+            issueAccessToken(
+                adminId.toString(),
+                grantedAuthorities,
+            )
+        val refreshToken = issueRefreshToken(adminId.toString())
+        return Token(
+            accessToken = accessToken,
+            refreshToken = refreshToken,
+        ).apply {
+            redisTokenRepository.create(
+                accessToken = this.accessToken,
+                refreshToken = this.refreshToken,
+                deviceId = null,
+                providerDetail =
+                    ProviderDetail(
+                        adminId,
+                        adminId.toString(),
+                        grantedAuthorities =
+                            grantedAuthorities.map {
+                                it.authorityType.name
+                            },
+                    ),
+                accessTokenExpiration = authenticationProperties.accessTokenExpirationSeconds,
+                refreshTokenExpiration = authenticationProperties.refreshTokenExpirationSeconds,
+            )
+        }
+    }
+
     override fun renew(refreshToken: String): Token {
         val jwt = validateToken(refreshToken)
         val tokenWithAuthentication = redisTokenRepository.findByToken(jwt.tokenValue)

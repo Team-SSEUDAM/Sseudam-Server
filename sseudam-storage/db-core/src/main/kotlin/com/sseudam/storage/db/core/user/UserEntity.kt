@@ -7,6 +7,7 @@ import com.sseudam.user.NewUserKey
 import com.sseudam.user.SocialType
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User
+import com.sseudam.user.UserCredentials
 import com.sseudam.user.UserProfile
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
@@ -72,6 +73,14 @@ class UserEntity(
             name = name,
             nickname = nickname ?: "",
             createdAt = createdAt,
+        )
+
+    fun toUserCredentials(): UserCredentials =
+        UserCredentials(
+            id = id!!,
+            key = userKey,
+            loginId = email,
+            password = password!!,
         )
 
     fun updateNickname(nickname: String) {

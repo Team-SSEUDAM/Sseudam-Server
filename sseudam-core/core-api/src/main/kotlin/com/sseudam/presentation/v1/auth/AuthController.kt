@@ -20,6 +20,7 @@ import com.sseudam.user.User
 import com.sseudam.user.UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 @Tag(name = "\uD83D\uDD11 Auth API", description = "인증 관련 API")
 @ApiV1Controller
 class AuthController(
+    private val passwordEncoder: PasswordEncoder,
     private val authenticationService: AuthenticationService,
     private val authenticationFacade: AuthenticationFacade,
     private val oAuthService: OAuthService,
@@ -38,9 +40,11 @@ class AuthController(
         @RequestHeader(name = "X-DEVICE-ID") deviceId: String?,
         @RequestBody request: LoginRequest,
     ): TokenResponse {
-        // TODO: 이메일 로그인 도입 시 password Encoder 적용 및 validation 추가
-        val findUser = userService.getUser(request.loginId, request.password)
-        val token = authenticationService.login(deviceId, User(findUser.id, findUser.key), request.toCredentialSseudam())
+        val userCredentials = userService.getUserCredential(request.loginId)
+        if (!passwordEncoder.matches(request.password, userCredentials.password)) {
+            throw ErrorException(ErrorType.INVALID_PASSWORD)
+        }
+        val token = authenticationService.login(deviceId, User(userCredentials.id, userCredentials.key), request.toCredentialSseudam())
         return TokenResponse.toResponse(false, token)
     }
 
@@ -49,7 +53,7 @@ class AuthController(
     fun signUp(
         @RequestBody request: SignUpRequest,
     ): SignUpResponse {
-        userService.create(request.toNewUser())
+        userService.create(request.toNewUser(passwordEncoder.encode(request.password)))
         return SignUpResponse("회원가입에 성공했습니다.")
     }
 

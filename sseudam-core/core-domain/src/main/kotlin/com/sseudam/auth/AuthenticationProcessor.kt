@@ -65,4 +65,9 @@ class AuthenticationProcessor(
     fun withdrawal(userKey: String) {
         tokenRepository.removeByUserKey(userKey)
     }
+
+    fun adminLogin(
+        adminId: Long,
+        grantedAuthorities: List<GrantedAuthority>,
+    ): Token = tokenRepository.create(adminId, grantedAuthorities)
 }

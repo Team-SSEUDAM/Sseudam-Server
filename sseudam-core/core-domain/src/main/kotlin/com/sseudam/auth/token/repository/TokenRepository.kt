@@ -1,5 +1,6 @@
 package com.sseudam.auth.token.repository
 
+import com.sseudam.auth.GrantedAuthority
 import com.sseudam.auth.Provider
 import com.sseudam.auth.token.Token
 import com.sseudam.user.SocialUser
@@ -14,6 +15,11 @@ interface TokenRepository {
     fun create(
         deviceId: String?,
         socialUser: SocialUser,
+    ): Token
+
+    fun create(
+        adminId: Long,
+        grantedAuthorities: List<GrantedAuthority>,
     ): Token
 
     fun renew(refreshToken: String): Token

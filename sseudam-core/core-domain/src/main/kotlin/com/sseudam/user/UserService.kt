@@ -26,6 +26,8 @@ class UserService(
         password: String,
     ): User = userReader.readUser(loginId, password)
 
+    fun getUserCredential(loginId: String): UserCredentials = userReader.readUserCredentials(loginId)
+
     fun updateNickname(
         userKey: String,
         updateNickname: UpdateNickname,

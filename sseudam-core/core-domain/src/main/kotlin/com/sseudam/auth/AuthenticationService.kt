@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service
 class AuthenticationService(
     private val authenticationProcessor: AuthenticationProcessor,
 ) {
+    fun adminLogin(adminId: Long): Token = authenticationProcessor.adminLogin(adminId, listOf(GrantedAuthority(AuthorityType.ADMIN)))
+
     fun login(
         deviceId: String?,
         user: User,
