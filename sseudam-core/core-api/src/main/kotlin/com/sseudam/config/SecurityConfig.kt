@@ -134,6 +134,7 @@ class SecurityConfig(
                     "/api/v1/auth/**",
                     "/api/v1/auth",
                     "/api/v1/trash-spots/**",
+                    "/api/v1/admin/**",
                 ).permitAll()
 
             // 추가로 열어줄 API
