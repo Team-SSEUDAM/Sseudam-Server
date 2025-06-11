@@ -19,6 +19,7 @@ class AdminEntity(
             id = id!!,
             name = name,
             loginId = loginId,
+            password = password,
             createdAt = createdAt,
         )
 }

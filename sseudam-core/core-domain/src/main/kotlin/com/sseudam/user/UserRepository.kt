@@ -19,6 +19,8 @@ interface UserRepository {
         password: String,
     ): User
 
+    fun readUserCredentials(loginId: String): UserCredentials
+
     fun readByUserIdOrNull(id: Long): UserProfile?
 
     fun readAllByUserIds(userIds: List<Long>): List<UserProfile>

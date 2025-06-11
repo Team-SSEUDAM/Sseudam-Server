@@ -10,11 +10,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 @EntityScan(
     basePackages = [
         "com.sseudam.storage.db.core",
+        "com.sseudam.admin.infrastructure",
     ],
 )
 @EnableJpaRepositories(
     basePackages = [
         "com.sseudam.storage.db.core",
+        "com.sseudam.admin.infrastructure",
     ],
 )
 class CoreJpaConfig

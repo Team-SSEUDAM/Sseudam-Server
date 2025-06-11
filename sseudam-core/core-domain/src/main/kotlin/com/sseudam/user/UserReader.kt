@@ -24,6 +24,8 @@ class UserReader(
         password: String,
     ): User = userRepository.readUser(loginId, password)
 
+    fun readUserCredentials(loginId: String): UserCredentials = userRepository.readUserCredentials(loginId)
+
     fun readAllByUserIds(userIds: List<Long>): List<UserProfile> = userRepository.readAllByUserIds(userIds)
 
     fun readUserByEmail(email: String): SocialUser? = userRepository.readUserByEmail(email)

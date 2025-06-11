@@ -7,6 +7,7 @@ class Admin {
         val id: Long,
         val name: String,
         val loginId: String,
+        val password: String,
         val createdAt: LocalDateTime,
     )
 }
