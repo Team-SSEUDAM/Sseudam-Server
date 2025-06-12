@@ -31,5 +31,7 @@ class AdminFacade(
         return AdminToken(token.accessToken, token.refreshToken)
     }
 
+    fun findOneUser(userId: Long): UserProfile = userService.getProfile(userId)
+
     fun findUsers(offsetPageRequest: OffsetPageRequest): List<UserProfile> = userService.findUserProfileBy(offsetPageRequest)
 }

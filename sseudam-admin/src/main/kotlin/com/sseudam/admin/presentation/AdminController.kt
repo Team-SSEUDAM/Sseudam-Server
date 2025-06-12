@@ -9,6 +9,7 @@ import com.sseudam.support.cursor.OffsetPageRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -32,11 +33,17 @@ class AdminController(
 
     @Operation(summary = "사용자 리스트 조회", description = "사용자 리스트를 조회합니다.")
     @GetMapping("/users")
-    fun findUsers(
+    fun findUsersByPage(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "20") size: Int,
     ): UserAllResponse =
         UserAllResponse.of(
             adminFacade.findUsers(OffsetPageRequest(page, size)).map { UserResponse.of(it) },
         )
+
+    @Operation(summary = "사용자 정보 조회", description = "사용자 정보를 조회합니다.")
+    @GetMapping("/users/{userId}")
+    fun findOneUser(
+        @PathVariable("userId") userId: Long,
+    ): UserResponse = UserResponse.of(adminFacade.findOneUser(userId))
 }
