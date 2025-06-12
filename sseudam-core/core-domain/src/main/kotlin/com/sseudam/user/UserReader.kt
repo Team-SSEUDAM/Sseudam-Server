@@ -1,5 +1,6 @@
 package com.sseudam.user
 
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import org.springframework.stereotype.Component
@@ -29,4 +30,6 @@ class UserReader(
     fun readAllByUserIds(userIds: List<Long>): List<UserProfile> = userRepository.readAllByUserIds(userIds)
 
     fun readUserByEmail(email: String): SocialUser? = userRepository.readUserByEmail(email)
+
+    fun readAllBy(offsetPageRequest: OffsetPageRequest): List<UserProfile> = userRepository.readAllBy(offsetPageRequest)
 }

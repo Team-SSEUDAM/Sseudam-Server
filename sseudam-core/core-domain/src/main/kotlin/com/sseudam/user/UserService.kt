@@ -1,5 +1,6 @@
 package com.sseudam.user
 
+import com.sseudam.support.cursor.OffsetPageRequest
 import org.springframework.stereotype.Service
 
 @Service
@@ -63,4 +64,6 @@ class UserService(
     fun deleteUser(newUserWithdrawal: NewUserWithdrawal) {
         userDeleter.deleteUser(newUserWithdrawal.user.key)
     }
+
+    fun findUserProfileBy(offsetPageRequest: OffsetPageRequest): List<UserProfile> = userReader.readAllBy(offsetPageRequest)
 }
