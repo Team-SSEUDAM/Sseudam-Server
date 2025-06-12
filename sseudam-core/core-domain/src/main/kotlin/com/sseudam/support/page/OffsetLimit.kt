@@ -7,8 +7,8 @@ data class OffsetLimit(
     val sort: Sort? = Sort.DESC,
 ) {
     init {
-        require(offset >= 0) { "offset must be >= 0" }
-        require(limit > 0) { "limit must be > 0" }
+        require(offset >= 0) { "offset은 0보다 커야 합니다. " }
+        require(limit > 0) { "limit은 0보다 커야 합니다. " }
     }
 
     companion object {

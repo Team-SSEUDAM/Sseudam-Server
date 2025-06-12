@@ -8,7 +8,7 @@ data class Page<T>(
         content: List<T>,
         totalCount: Long,
     ): Page<T> {
-        require(totalCount >= 0) { "totalCount must be non-negative" }
+        require(totalCount >= 0) { "totalCount ($totalCount) cannot be negative" }
         require(totalCount >= content.size) {
             "totalCount ($totalCount) cannot be smaller than content.size (${content.size})"
         }
