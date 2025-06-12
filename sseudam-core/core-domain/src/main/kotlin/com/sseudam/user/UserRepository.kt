@@ -1,5 +1,7 @@
 package com.sseudam.user
 
+import com.sseudam.support.cursor.OffsetPageRequest
+
 interface UserRepository {
     // Create
     fun create(
@@ -26,6 +28,8 @@ interface UserRepository {
     fun readAllByUserIds(userIds: List<Long>): List<UserProfile>
 
     fun existsByEmail(email: String): Boolean
+
+    fun readAllBy(offsetPageRequest: OffsetPageRequest): List<UserProfile>
 
     fun existsByNickname(nickname: String): Boolean
 

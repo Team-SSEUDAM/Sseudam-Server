@@ -2,14 +2,18 @@ package com.sseudam.admin.application
 
 import com.sseudam.admin.domain.AdminToken
 import com.sseudam.auth.AuthenticationService
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
+import com.sseudam.user.UserProfile
+import com.sseudam.user.UserService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class AdminFacade(
     private val adminService: AdminService,
+    private val userService: UserService,
     private val authService: AuthenticationService,
     private val passwordEncoder: PasswordEncoder,
 ) {
@@ -26,4 +30,6 @@ class AdminFacade(
         val token = authService.adminLogin(admin.id)
         return AdminToken(token.accessToken, token.refreshToken)
     }
+
+    fun findUsers(offsetPageRequest: OffsetPageRequest): List<UserProfile> = userService.findUserProfileBy(offsetPageRequest)
 }

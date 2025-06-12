@@ -1,6 +1,7 @@
 package com.sseudam.storage.db.core.user
 
 import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.tx.TxAdvice
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserCoreRepository(
     private val userJpaRepository: UserJpaRepository,
+    private val userCustomRepository: UserCustomRepository,
     private val txAdvice: TxAdvice,
 ) : UserRepository {
     override fun create(
@@ -76,6 +78,11 @@ class UserCoreRepository(
     override fun existsByEmail(email: String): Boolean =
         txAdvice.readOnly {
             userJpaRepository.existsByEmailAndDeletedAtIsNull(email)
+        }
+
+    override fun readAllBy(offsetPageRequest: OffsetPageRequest): List<UserProfile> =
+        txAdvice.readOnly {
+            userCustomRepository.readAllBy(offsetPageRequest)
         }
 
     override fun existsByNickname(nickname: String): Boolean =
