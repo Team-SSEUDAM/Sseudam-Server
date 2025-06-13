@@ -7,6 +7,7 @@ import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionAllRespo
 import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionResponse
 import com.sseudam.admin.presentation.response.user.UserAllResponse
 import com.sseudam.admin.presentation.response.user.UserResponse
+import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -54,9 +55,10 @@ class AdminController(
     fun findSuggestionsByPage(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "20") size: Int,
+        @RequestParam searchStatus: SuggestionStatus?,
     ): SpotSuggestionAllResponse =
         SpotSuggestionAllResponse.of(
-            adminFacade.findSuggestions(OffsetPageRequest(page, size)).map {
+            adminFacade.findSuggestions(OffsetPageRequest(page, size), searchStatus).map {
                 SpotSuggestionResponse.of(it)
             },
         )

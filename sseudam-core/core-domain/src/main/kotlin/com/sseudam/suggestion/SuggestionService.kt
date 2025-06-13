@@ -31,7 +31,10 @@ class SuggestionService(
 
     fun findSpotSuggestionBySite(site: String): SpotSuggestion.Info? = suggestionReader.readBySite(site)
 
-    fun findSuggestionsBy(offsetPageRequest: OffsetPageRequest): List<SpotSuggestion.Info> = suggestionReader.readAllBy(offsetPageRequest)
+    fun findSuggestionsBy(
+        offsetPageRequest: OffsetPageRequest,
+        searchStatus: SuggestionStatus?,
+    ): List<SpotSuggestion.Info> = suggestionReader.readAllBy(offsetPageRequest, searchStatus)
 
     fun findSpotSuggestionById(suggestionId: Long): SpotSuggestion.Info = suggestionReader.readBy(suggestionId)
 }

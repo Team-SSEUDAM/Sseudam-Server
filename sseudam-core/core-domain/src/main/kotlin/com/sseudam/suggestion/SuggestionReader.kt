@@ -13,5 +13,8 @@ class SuggestionReader(
 
     fun readBySite(site: String): SpotSuggestion.Info? = spotSuggestionRepository.findBySite(site)
 
-    fun readAllBy(offsetPageRequest: OffsetPageRequest): List<SpotSuggestion.Info> = spotSuggestionRepository.findAllBy(offsetPageRequest)
+    fun readAllBy(
+        offsetPageRequest: OffsetPageRequest,
+        searchStatus: SuggestionStatus?,
+    ): List<SpotSuggestion.Info> = spotSuggestionRepository.findAllBy(offsetPageRequest, searchStatus)
 }

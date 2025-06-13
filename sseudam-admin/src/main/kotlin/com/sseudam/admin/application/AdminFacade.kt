@@ -4,6 +4,7 @@ import com.sseudam.admin.domain.AdminToken
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
+import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
@@ -38,8 +39,10 @@ class AdminFacade(
 
     fun findUsers(offsetPageRequest: OffsetPageRequest): List<UserProfile> = userService.findUserProfileBy(offsetPageRequest)
 
-    fun findSuggestions(offsetPageRequest: OffsetPageRequest): List<SpotSuggestion.Info> =
-        suggestionService.findSuggestionsBy(offsetPageRequest)
+    fun findSuggestions(
+        offsetPageRequest: OffsetPageRequest,
+        searchStatus: SuggestionStatus?,
+    ): List<SpotSuggestion.Info> = suggestionService.findSuggestionsBy(offsetPageRequest, searchStatus)
 
     fun findSuggestionDetails(suggestionId: Long): SpotSuggestion.Info = suggestionService.findSpotSuggestionById(suggestionId)
 }

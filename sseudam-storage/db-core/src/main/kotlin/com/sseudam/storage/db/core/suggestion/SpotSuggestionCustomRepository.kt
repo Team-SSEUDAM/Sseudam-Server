@@ -1,6 +1,8 @@
 package com.sseudam.storage.db.core.suggestion
 
+import com.sseudam.storage.db.core.support.JDSLExtensions
 import com.sseudam.suggestion.SpotSuggestion
+import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -10,7 +12,10 @@ import org.springframework.stereotype.Repository
 class SpotSuggestionCustomRepository(
     private val spotSuggestionJpaRepository: SpotSuggestionJpaRepository,
 ) {
-    fun findAllBy(offsetPageRequest: OffsetPageRequest): List<SpotSuggestion.Info> {
+    fun findAllBy(
+        offsetPageRequest: OffsetPageRequest,
+        searchStatus: SuggestionStatus?,
+    ): List<SpotSuggestion.Info> {
         val pageable =
             PageRequest.of(
                 offsetPageRequest.page,
@@ -19,11 +24,14 @@ class SpotSuggestionCustomRepository(
             )
 
         val suggestions =
-            spotSuggestionJpaRepository.findPage(pageable) {
+            spotSuggestionJpaRepository.findPage(JDSLExtensions, pageable) {
                 select(entity(SpotSuggestionEntity::class))
                     .from(entity(SpotSuggestionEntity::class))
                     .whereAnd(
                         path(SpotSuggestionEntity::deletedAt).isNull(),
+                        searchStatus?.let {
+                            path(SpotSuggestionEntity::status).eq(it)
+                        },
                     )
             }
         return suggestions.map { it!!.toSpotSuggestion() }.toList()
