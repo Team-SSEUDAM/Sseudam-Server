@@ -3,8 +3,11 @@ package com.sseudam.admin.presentation
 import com.sseudam.admin.application.AdminFacade
 import com.sseudam.admin.presentation.request.AdminLoginRequest
 import com.sseudam.admin.presentation.response.AdminTokenResponse
+import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionAllResponse
+import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionResponse
 import com.sseudam.admin.presentation.response.user.UserAllResponse
 import com.sseudam.admin.presentation.response.user.UserResponse
+import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -46,4 +49,23 @@ class AdminController(
     fun findOneUser(
         @PathVariable("userId") userId: Long,
     ): UserResponse = UserResponse.of(adminFacade.findOneUser(userId))
+
+    @Operation(summary = "제보 리스트 조회", description = "제보 리스트를 조회합니다.")
+    @GetMapping("/suggestions")
+    fun findSuggestionsByPage(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "20") size: Int,
+        @RequestParam searchStatus: SuggestionStatus?,
+    ): SpotSuggestionAllResponse =
+        SpotSuggestionAllResponse.of(
+            adminFacade.findSuggestions(OffsetPageRequest(page, size), searchStatus).map {
+                SpotSuggestionResponse.of(it)
+            },
+        )
+
+    @Operation(summary = "제보 내역 상세 조회", description = "제보 내역을 상세 조회합니다.")
+    @GetMapping("/suggestions/{suggestionId}")
+    fun findSuggestionDetails(
+        @PathVariable suggestionId: Long,
+    ): SpotSuggestionResponse = SpotSuggestionResponse.of(adminFacade.findSuggestionDetails(suggestionId))
 }

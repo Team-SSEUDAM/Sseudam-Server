@@ -82,7 +82,7 @@ class UserCoreRepository(
 
     override fun readAllBy(offsetPageRequest: OffsetPageRequest): List<UserProfile> =
         txAdvice.readOnly {
-            userCustomRepository.readAllBy(offsetPageRequest)
+            userCustomRepository.findAllBy(offsetPageRequest)
         }
 
     override fun existsByNickname(nickname: String): Boolean =
