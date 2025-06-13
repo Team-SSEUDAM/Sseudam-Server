@@ -34,6 +34,8 @@ class SpotSuggestionCustomRepository(
                         },
                     )
             }
-        return suggestions.map { it!!.toSpotSuggestion() }.toList()
+        return suggestions
+            .filterNotNull()
+            .map { it.toSpotSuggestion() }
     }
 }
