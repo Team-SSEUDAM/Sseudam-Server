@@ -2,6 +2,9 @@ package com.sseudam.admin.application
 
 import com.sseudam.admin.domain.AdminToken
 import com.sseudam.auth.AuthenticationService
+import com.sseudam.report.ReportService
+import com.sseudam.report.ReportType
+import com.sseudam.report.SpotReport
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
@@ -19,6 +22,7 @@ class AdminFacade(
     private val userService: UserService,
     private val authService: AuthenticationService,
     private val suggestionService: SuggestionService,
+    private val reportService: ReportService,
     private val passwordEncoder: PasswordEncoder,
 ) {
     fun login(
@@ -45,4 +49,11 @@ class AdminFacade(
     ): List<SpotSuggestion.Info> = suggestionService.findSuggestionsBy(offsetPageRequest, searchStatus)
 
     fun findSuggestionDetails(suggestionId: Long): SpotSuggestion.Info = suggestionService.findSpotSuggestionById(suggestionId)
+
+    fun findReports(
+        offsetPageRequest: OffsetPageRequest,
+        searchType: ReportType?,
+    ): List<SpotReport.Info> = reportService.findReportsBy(offsetPageRequest, searchType)
+
+    fun findReportDetails(reportId: Long): SpotReport.Info = reportService.findSpotReportById(reportId)
 }
