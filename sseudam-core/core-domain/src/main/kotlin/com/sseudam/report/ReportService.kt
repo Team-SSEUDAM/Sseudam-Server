@@ -2,6 +2,7 @@ package com.sseudam.report
 
 import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.support.cursor.OffsetPageRequest
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -27,4 +28,11 @@ class ReportService(
     }
 
     fun findAllReportByUserId(userId: Long): List<SpotReport.Info> = reportReader.readAllByUserId(userId)
+
+    fun findReportsBy(
+        offsetPageRequest: OffsetPageRequest,
+        searchType: ReportType?,
+    ): List<SpotReport.Info> = reportReader.readAllBy(offsetPageRequest, searchType)
+
+    fun findSpotReportById(reportId: Long): SpotReport.Info = reportReader.readById(reportId)
 }

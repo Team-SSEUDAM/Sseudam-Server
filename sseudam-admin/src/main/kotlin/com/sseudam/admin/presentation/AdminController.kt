@@ -3,10 +3,13 @@ package com.sseudam.admin.presentation
 import com.sseudam.admin.application.AdminFacade
 import com.sseudam.admin.presentation.request.AdminLoginRequest
 import com.sseudam.admin.presentation.response.AdminTokenResponse
+import com.sseudam.admin.presentation.response.report.SpotReportAllResponse
+import com.sseudam.admin.presentation.response.report.SpotReportResponse
 import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionAllResponse
 import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionResponse
 import com.sseudam.admin.presentation.response.user.UserAllResponse
 import com.sseudam.admin.presentation.response.user.UserResponse
+import com.sseudam.report.ReportType
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
 import io.swagger.v3.oas.annotations.Operation
@@ -58,9 +61,7 @@ class AdminController(
         @RequestParam searchStatus: SuggestionStatus?,
     ): SpotSuggestionAllResponse =
         SpotSuggestionAllResponse.of(
-            adminFacade.findSuggestions(OffsetPageRequest(page, size), searchStatus).map {
-                SpotSuggestionResponse.of(it)
-            },
+            adminFacade.findSuggestions(OffsetPageRequest(page, size), searchStatus),
         )
 
     @Operation(summary = "제보 내역 상세 조회", description = "제보 내역을 상세 조회합니다.")
@@ -68,4 +69,21 @@ class AdminController(
     fun findSuggestionDetails(
         @PathVariable suggestionId: Long,
     ): SpotSuggestionResponse = SpotSuggestionResponse.of(adminFacade.findSuggestionDetails(suggestionId))
+
+    @Operation(summary = "신고 리스트 조회", description = "신고 리스트를 조회합니다.")
+    @GetMapping("/reports")
+    fun findReportsByPage(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "20") size: Int,
+        @RequestParam searchType: ReportType?,
+    ): SpotReportAllResponse =
+        SpotReportAllResponse.of(
+            adminFacade.findReports(OffsetPageRequest(page, size), searchType),
+        )
+
+    @Operation(summary = "신고 내역 상세 조회", description = "신고 내역을 상세 조회합니다.")
+    @GetMapping("/reports/{reportId}")
+    fun findReportDetails(
+        @PathVariable reportId: Long,
+    ): SpotReportResponse = SpotReportResponse.of(adminFacade.findReportDetails(reportId))
 }

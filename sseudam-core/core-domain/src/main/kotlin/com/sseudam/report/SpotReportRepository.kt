@@ -1,5 +1,6 @@
 package com.sseudam.report
 
+import com.sseudam.support.cursor.OffsetPageRequest
 import org.locationtech.jts.geom.Point
 
 interface SpotReportRepository {
@@ -9,5 +10,12 @@ interface SpotReportRepository {
         createSpotReport: SpotReport.Create,
     ): SpotReport.Info
 
+    fun findById(reportId: Long): SpotReport.Info
+
     fun findAllByUserId(userId: Long): List<SpotReport.Info>
+
+    fun findAllBy(
+        offsetPageRequest: OffsetPageRequest,
+        searchType: ReportType?,
+    ): List<SpotReport.Info>
 }
