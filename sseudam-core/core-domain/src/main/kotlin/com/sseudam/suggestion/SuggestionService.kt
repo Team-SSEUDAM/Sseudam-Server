@@ -2,6 +2,7 @@ package com.sseudam.suggestion
 
 import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.support.cursor.OffsetPageRequest
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -29,4 +30,8 @@ class SuggestionService(
     fun findAllSpotSuggestionByUser(userId: Long): List<SpotSuggestion.Info> = suggestionReader.readAllByUser(userId)
 
     fun findSpotSuggestionBySite(site: String): SpotSuggestion.Info? = suggestionReader.readBySite(site)
+
+    fun findSuggestionsBy(offsetPageRequest: OffsetPageRequest): List<SpotSuggestion.Info> = suggestionReader.readAllBy(offsetPageRequest)
+
+    fun findSpotSuggestionById(suggestionId: Long): SpotSuggestion.Info = suggestionReader.readBy(suggestionId)
 }

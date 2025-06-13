@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository
 class UserCustomRepository(
     private val userJpaRepository: UserJpaRepository,
 ) {
-    fun readAllBy(offsetPageRequest: OffsetPageRequest): List<UserProfile> {
+    fun findAllBy(offsetPageRequest: OffsetPageRequest): List<UserProfile> {
         val pageable =
             PageRequest.of(
                 offsetPageRequest.page,

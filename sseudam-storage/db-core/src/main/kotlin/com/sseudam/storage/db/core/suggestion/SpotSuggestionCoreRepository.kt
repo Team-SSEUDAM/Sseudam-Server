@@ -1,7 +1,9 @@
 package com.sseudam.storage.db.core.suggestion
 
+import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SpotSuggestionRepository
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.tx.TxAdvice
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Repository
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class SpotSuggestionCoreRepository(
     private val spotSuggestionJpaRepository: SpotSuggestionJpaRepository,
+    private val spotSuggestionCustomRepository: SpotSuggestionCustomRepository,
     private val txAdvice: TxAdvice,
 ) : SpotSuggestionRepository {
     override fun create(
@@ -23,6 +26,13 @@ class SpotSuggestionCoreRepository(
                 ).toSpotSuggestion()
         }
 
+    override fun findBy(suggestionId: Long): SpotSuggestion.Info =
+        txAdvice.readOnly {
+            spotSuggestionJpaRepository
+                .findByIdOrElseThrow(suggestionId)
+                .toSpotSuggestion()
+        }
+
     override fun findAllByUserId(userId: Long): List<SpotSuggestion.Info> =
         txAdvice.readOnly {
             spotSuggestionJpaRepository
@@ -35,5 +45,10 @@ class SpotSuggestionCoreRepository(
             spotSuggestionJpaRepository
                 .findByAddressSite(site)
                 ?.toSpotSuggestion()
+        }
+
+    override fun findAllBy(offsetPageRequest: OffsetPageRequest): List<SpotSuggestion.Info> =
+        txAdvice.readOnly {
+            spotSuggestionCustomRepository.findAllBy(offsetPageRequest)
         }
 }

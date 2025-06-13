@@ -2,6 +2,8 @@ package com.sseudam.admin.application
 
 import com.sseudam.admin.domain.AdminToken
 import com.sseudam.auth.AuthenticationService
+import com.sseudam.suggestion.SpotSuggestion
+import com.sseudam.suggestion.SuggestionService
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
@@ -15,6 +17,7 @@ class AdminFacade(
     private val adminService: AdminService,
     private val userService: UserService,
     private val authService: AuthenticationService,
+    private val suggestionService: SuggestionService,
     private val passwordEncoder: PasswordEncoder,
 ) {
     fun login(
@@ -34,4 +37,9 @@ class AdminFacade(
     fun findOneUser(userId: Long): UserProfile = userService.getProfile(userId)
 
     fun findUsers(offsetPageRequest: OffsetPageRequest): List<UserProfile> = userService.findUserProfileBy(offsetPageRequest)
+
+    fun findSuggestions(offsetPageRequest: OffsetPageRequest): List<SpotSuggestion.Info> =
+        suggestionService.findSuggestionsBy(offsetPageRequest)
+
+    fun findSuggestionDetails(suggestionId: Long): SpotSuggestion.Info = suggestionService.findSpotSuggestionById(suggestionId)
 }
