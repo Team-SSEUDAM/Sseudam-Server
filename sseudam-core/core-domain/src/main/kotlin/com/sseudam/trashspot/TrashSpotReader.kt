@@ -17,32 +17,32 @@ class TrashSpotReader(
         Cache.cache(
             ttl = 360,
             key = ALL_SPOT,
-            typeReference = object : TypeReference<List<TrashSpot>>() {},
+            typeReference = object : TypeReference<List<TrashSpot.Info>>() {},
         ) {
             trashSpotRepository.findAll()
         }
 
-    fun readAllByRegion(region: Region): List<TrashSpot> =
+    fun readAllByRegion(region: Region): List<TrashSpot.Info> =
         Cache.cache(
             ttl = 360,
             key = "$ALL_SPOT:${region.name}",
-            typeReference = object : TypeReference<List<TrashSpot>>() {},
+            typeReference = object : TypeReference<List<TrashSpot.Info>>() {},
         ) {
             trashSpotRepository.findAllByRegion(region)
         }
 
-    fun readAllByLocation(location: TrashSpotLocation): List<TrashSpot> = trashSpotRepository.findAllByLocation(location)
+    fun readAllByLocation(location: TrashSpotLocation): List<TrashSpot.Info> = trashSpotRepository.findAllByLocation(location)
 
     fun readAllByLocationAndRegion(
         region: Region,
         location: TrashSpotLocation,
-    ): List<TrashSpot> = trashSpotRepository.findAllByLocationAndRegion(region, location)
+    ): List<TrashSpot.Info> = trashSpotRepository.findAllByLocationAndRegion(region, location)
 
-    fun readAllByType(type: TrashType): List<TrashSpot> =
+    fun readAllByType(type: TrashType): List<TrashSpot.Info> =
         Cache.cache(
             ttl = 360,
             key = "$ALL_SPOT:${type.name}",
-            typeReference = object : TypeReference<List<TrashSpot>>() {},
+            typeReference = object : TypeReference<List<TrashSpot.Info>>() {},
         ) {
             trashSpotRepository.findAllByType(type)
         }
@@ -50,9 +50,9 @@ class TrashSpotReader(
     fun readAllByLocationAndType(
         location: TrashSpotLocation,
         type: TrashType,
-    ): List<TrashSpot> = trashSpotRepository.findAllByLocationAndType(location, type)
+    ): List<TrashSpot.Info> = trashSpotRepository.findAllByLocationAndType(location, type)
 
-    fun findByCondition(condition: FindTrashSpotPolicyCondition): List<TrashSpot> =
+    fun findByCondition(condition: FindTrashSpotPolicyCondition): List<TrashSpot.Info> =
         when (condition) {
             FindTrashSpotPolicyCondition.All -> readAll()
             is FindTrashSpotPolicyCondition.ByRegion -> readAllByRegion(condition.region)
@@ -62,7 +62,7 @@ class TrashSpotReader(
             is FindTrashSpotPolicyCondition.ByTypeAndLocation -> readAllByLocationAndType(condition.location, condition.type)
         }
 
-    fun readBy(spotId: Long): TrashSpot = trashSpotRepository.findById(spotId)
+    fun readBy(spotId: Long): TrashSpot.Info = trashSpotRepository.findById(spotId)
 
-    fun readAllByIds(spotIds: List<Long>): List<TrashSpot> = trashSpotRepository.findAllByIds(spotIds)
+    fun readAllByIds(spotIds: List<Long>): List<TrashSpot.Info> = trashSpotRepository.findAllByIds(spotIds)
 }

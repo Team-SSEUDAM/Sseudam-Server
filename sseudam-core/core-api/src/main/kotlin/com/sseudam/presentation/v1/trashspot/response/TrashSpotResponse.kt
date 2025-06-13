@@ -34,7 +34,7 @@ data class TrashSpotResponse(
     val updatedAt: LocalDateTime?,
 ) {
     companion object {
-        fun of(trashSpot: TrashSpot) =
+        fun of(trashSpot: TrashSpot.Info) =
             TrashSpotResponse(
                 id = trashSpot.id,
                 name = trashSpot.name,

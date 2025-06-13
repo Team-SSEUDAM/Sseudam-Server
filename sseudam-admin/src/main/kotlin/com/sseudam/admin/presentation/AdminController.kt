@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -69,6 +70,13 @@ class AdminController(
     fun findSuggestionDetails(
         @PathVariable suggestionId: Long,
     ): SpotSuggestionResponse = SpotSuggestionResponse.of(adminFacade.findSuggestionDetails(suggestionId))
+
+    @Operation(summary = "제보 반영", description = "제보 상태 변경과 생성을 합니다.")
+    @PutMapping("/suggestions/{suggestionId}")
+    fun updateSuggestionStatus(
+        @PathVariable suggestionId: Long,
+        @RequestParam status: SuggestionStatus,
+    ) = adminFacade.updateSuggestionStatus(suggestionId, status)
 
     @Operation(summary = "신고 리스트 조회", description = "신고 리스트를 조회합니다.")
     @GetMapping("/reports")

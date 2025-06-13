@@ -13,7 +13,7 @@ data class TrashSpotImageResponse(
     val imageUrl: String,
 ) {
     companion object {
-        fun of(trashSpotImage: TrashSpotImage) =
+        fun of(trashSpotImage: TrashSpotImage.Info) =
             TrashSpotImageResponse(
                 imageId = trashSpotImage.id,
                 trashSpotId = trashSpotImage.trashSpotId,

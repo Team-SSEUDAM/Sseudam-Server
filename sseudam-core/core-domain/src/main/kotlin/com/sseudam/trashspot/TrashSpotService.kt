@@ -1,17 +1,33 @@
 package com.sseudam.trashspot
 
+import com.sseudam.common.GeoConverter
+import com.sseudam.suggestion.SpotSuggestion
+import com.sseudam.support.geo.GeoJson
 import com.sseudam.support.geo.Region
 import org.springframework.stereotype.Service
 
 @Service
 class TrashSpotService(
     private val trashSpotReader: TrashSpotReader,
+    private val trashSpotAppender: TrashSpotAppender,
+    private val geoConverter: GeoConverter,
 ) {
+    fun createTrashSpotBySuggestion(suggestionInfo: SpotSuggestion.Info): TrashSpot.Info =
+        trashSpotAppender.append(
+            TrashSpot.Create(
+                name = suggestionInfo.spotName,
+                region = suggestionInfo.region,
+                trashType = suggestionInfo.trashType,
+                address = suggestionInfo.address,
+                point = geoConverter.geoJsonPointToJtsPoint(suggestionInfo.point as GeoJson.Point),
+            ),
+        )
+
     fun findAll(
         region: Region?,
         trashType: TrashType?,
         location: TrashSpotLocation,
-    ): List<TrashSpot> {
+    ): List<TrashSpot.Info> {
         val condition =
             when {
                 location.isNotSet() && trashType != null -> FindTrashSpotPolicyCondition.ByTypeAndLocation(trashType, location)
@@ -24,7 +40,7 @@ class TrashSpotService(
         return trashSpotReader.findByCondition(condition)
     }
 
-    fun findOne(spotId: Long): TrashSpot = trashSpotReader.readBy(spotId)
+    fun findOne(spotId: Long): TrashSpot.Info = trashSpotReader.readBy(spotId)
 
-    fun findAllByIds(spotIds: List<Long>): List<TrashSpot> = trashSpotReader.readAllByIds(spotIds)
+    fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> = trashSpotReader.readAllByIds(spotIds)
 }

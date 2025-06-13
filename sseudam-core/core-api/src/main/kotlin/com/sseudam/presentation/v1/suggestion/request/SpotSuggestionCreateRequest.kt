@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "제보하기 요청 Json")
 data class SpotSuggestionCreateRequest(
+    @Schema(description = "쓰레기통 이름", example = "우리집 앞")
+    val spotName: String,
     @Schema(description = "위도", example = "37.566535")
     val latitude: Double,
     @Schema(description = "경도", example = "126.977969")

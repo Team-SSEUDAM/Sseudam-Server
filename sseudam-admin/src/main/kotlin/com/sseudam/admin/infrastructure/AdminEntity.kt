@@ -6,10 +6,10 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
 
-@Table(name = "t_admin")
 @Entity
+@Table(name = "t_admin")
 class AdminEntity(
-    @Column(columnDefinition = "varchar(15) not null")
+    @Column(columnDefinition = "varchar(15)")
     val name: String,
     val loginId: String,
     val password: String,

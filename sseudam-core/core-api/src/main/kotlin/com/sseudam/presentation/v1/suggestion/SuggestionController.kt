@@ -27,13 +27,14 @@ class SuggestionController(
         val suggestion =
             suggestionService.createSpotSuggestion(
                 SpotSuggestion.Create(
-                    user.id,
-                    request.latitude,
-                    request.longitude,
-                    request.region,
-                    request.city,
-                    request.site,
-                    request.trashType,
+                    userId = user.id,
+                    spotName = request.spotName,
+                    latitude = request.latitude,
+                    longitude = request.longitude,
+                    region = request.region,
+                    city = request.city,
+                    site = request.site,
+                    trashType = request.trashType,
                 ),
             )
         return SuggestionImageUrlResponse.of(suggestion.first, suggestion.second)

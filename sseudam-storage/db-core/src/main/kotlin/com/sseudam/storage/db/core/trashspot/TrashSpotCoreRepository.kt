@@ -14,21 +14,29 @@ class TrashSpotCoreRepository(
     private val trashSpotJpaRepository: TrashSpotJpaRepository,
     private val txAdvice: TxAdvice,
 ) : TrashSpotRepository {
-    override fun findAll(): List<TrashSpot> =
+    override fun save(createTrashSpot: TrashSpot.Create): TrashSpot.Info =
+        txAdvice.write {
+            trashSpotJpaRepository
+                .save(
+                    TrashSpotEntity(createTrashSpot),
+                ).toTrashSpot()
+        }
+
+    override fun findAll(): List<TrashSpot.Info> =
         txAdvice.readOnly {
             trashSpotJpaRepository
                 .findAll()
                 .map { it.toTrashSpot() }
         }
 
-    override fun findAllByRegion(region: Region): List<TrashSpot> =
+    override fun findAllByRegion(region: Region): List<TrashSpot.Info> =
         txAdvice.readOnly {
             trashSpotJpaRepository
                 .findAllByRegion(region)
                 .map { it.toTrashSpot() }
         }
 
-    override fun findAllByLocation(location: TrashSpotLocation): List<TrashSpot> =
+    override fun findAllByLocation(location: TrashSpotLocation): List<TrashSpot.Info> =
         txAdvice.readOnly {
             trashSpotJpaRepository
                 .findAllByLocation(
@@ -42,7 +50,7 @@ class TrashSpotCoreRepository(
     override fun findAllByLocationAndRegion(
         region: Region,
         location: TrashSpotLocation,
-    ): List<TrashSpot> =
+    ): List<TrashSpot.Info> =
         txAdvice.readOnly {
             trashSpotJpaRepository
                 .findAllByLocationAndRegion(
@@ -54,7 +62,7 @@ class TrashSpotCoreRepository(
                 ).map { it.toTrashSpot() }
         }
 
-    override fun findAllByType(type: TrashType): List<TrashSpot> =
+    override fun findAllByType(type: TrashType): List<TrashSpot.Info> =
         txAdvice.readOnly {
             trashSpotJpaRepository
                 .findAllByTrashType(type)
@@ -64,7 +72,7 @@ class TrashSpotCoreRepository(
     override fun findAllByLocationAndType(
         location: TrashSpotLocation,
         type: TrashType,
-    ): List<TrashSpot> =
+    ): List<TrashSpot.Info> =
         txAdvice.readOnly {
             trashSpotJpaRepository
                 .findAllByLocationAndType(
@@ -76,14 +84,14 @@ class TrashSpotCoreRepository(
                 ).map { it.toTrashSpot() }
         }
 
-    override fun findById(spotId: Long): TrashSpot =
+    override fun findById(spotId: Long): TrashSpot.Info =
         txAdvice.readOnly {
             trashSpotJpaRepository
                 .findByIdOrElseThrow(spotId)
                 .toTrashSpot()
         }
 
-    override fun findAllByIds(spotIds: List<Long>): List<TrashSpot> =
+    override fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> =
         txAdvice.readOnly {
             trashSpotJpaRepository
                 .findAllByIdIn(spotIds)

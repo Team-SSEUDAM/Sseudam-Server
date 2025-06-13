@@ -3,25 +3,27 @@ package com.sseudam.trashspot
 import com.sseudam.support.geo.Region
 
 interface TrashSpotRepository {
-    fun findAll(): List<TrashSpot>
+    fun save(createTrashSpot: TrashSpot.Create): TrashSpot.Info
 
-    fun findAllByRegion(region: Region): List<TrashSpot>
+    fun findAll(): List<TrashSpot.Info>
 
-    fun findAllByLocation(location: TrashSpotLocation): List<TrashSpot>
+    fun findAllByRegion(region: Region): List<TrashSpot.Info>
+
+    fun findAllByLocation(location: TrashSpotLocation): List<TrashSpot.Info>
 
     fun findAllByLocationAndRegion(
         region: Region,
         location: TrashSpotLocation,
-    ): List<TrashSpot>
+    ): List<TrashSpot.Info>
 
-    fun findAllByType(type: TrashType): List<TrashSpot>
+    fun findAllByType(type: TrashType): List<TrashSpot.Info>
 
     fun findAllByLocationAndType(
         location: TrashSpotLocation,
         type: TrashType,
-    ): List<TrashSpot>
+    ): List<TrashSpot.Info>
 
-    fun findById(spotId: Long): TrashSpot
+    fun findById(spotId: Long): TrashSpot.Info
 
-    fun findAllByIds(spotIds: List<Long>): List<TrashSpot>
+    fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info>
 }

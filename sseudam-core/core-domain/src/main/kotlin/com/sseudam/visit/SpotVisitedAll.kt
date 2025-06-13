@@ -8,7 +8,7 @@ data class SpotVisitedAll(
     companion object {
         fun of(
             spotVisited: List<SpotVisited.Info>,
-            spots: List<TrashSpot>,
+            spots: List<TrashSpot.Info>,
         ): SpotVisitedAll {
             val spotsMap = spots.associateBy { it.id }
 
