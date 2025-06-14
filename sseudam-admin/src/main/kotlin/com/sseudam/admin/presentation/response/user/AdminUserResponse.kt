@@ -1,7 +1,7 @@
 package com.sseudam.admin.presentation.response.user
 
 import com.sseudam.admin.domain.AdminUserProfile
-import com.sseudam.visit.SpotVisited
+import com.sseudam.trashspot.TrashSpot
 import java.time.LocalDateTime
 
 data class AdminUserResponse(
@@ -9,7 +9,7 @@ data class AdminUserResponse(
     val email: String,
     val nickname: String,
     val createdAt: LocalDateTime,
-    val visited: MutableList<SpotVisited.Info>,
+    val visitedSpot: MutableList<TrashSpot.Info>,
 ) {
     companion object {
         fun of(user: AdminUserProfile): AdminUserResponse =
@@ -18,7 +18,7 @@ data class AdminUserResponse(
                 email = user.email,
                 nickname = user.nickname,
                 createdAt = user.createdAt,
-                visited = user.visited,
+                visitedSpot = user.visitedSpot,
             )
     }
 }

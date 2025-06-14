@@ -12,6 +12,7 @@ import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
+import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.UserProfile
 import com.sseudam.user.UserService
 import com.sseudam.visit.SpotVisitedService
@@ -26,6 +27,7 @@ class AdminFacade(
     private val suggestionService: SuggestionService,
     private val reportService: ReportService,
     private val spotVisitedService: SpotVisitedService,
+    private val trashSpotService: TrashSpotService,
     private val passwordEncoder: PasswordEncoder,
 ) {
     fun login(
@@ -45,7 +47,11 @@ class AdminFacade(
     fun findByUser(userId: Long): AdminUserProfile {
         val profile = userService.getProfile(userId)
         val visitedByUser = spotVisitedService.findAllByUser(userId)
-        return AdminUserProfile.of(profile, visitedByUser)
+
+        val spotIds = visitedByUser.map { it.spotId }
+        val trashSpots = trashSpotService.findAllByIds(spotIds)
+
+        return AdminUserProfile.of(profile, trashSpots)
     }
 
     fun findUsers(offsetPageRequest: OffsetPageRequest): List<UserProfile> = userService.findUserProfileBy(offsetPageRequest)

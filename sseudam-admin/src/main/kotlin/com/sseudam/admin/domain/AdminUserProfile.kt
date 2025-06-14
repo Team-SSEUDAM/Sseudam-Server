@@ -1,7 +1,7 @@
 package com.sseudam.admin.domain
 
+import com.sseudam.trashspot.TrashSpot
 import com.sseudam.user.UserProfile
-import com.sseudam.visit.SpotVisited
 import java.time.LocalDateTime
 
 data class AdminUserProfile(
@@ -11,12 +11,12 @@ data class AdminUserProfile(
     val name: String?,
     val nickname: String,
     val createdAt: LocalDateTime,
-    val visited: MutableList<SpotVisited.Info>,
+    val visitedSpot: MutableList<TrashSpot.Info>,
 ) {
     companion object {
         fun of(
             profile: UserProfile,
-            visited: List<SpotVisited.Info>,
+            visited: List<TrashSpot.Info>,
         ): AdminUserProfile =
             AdminUserProfile(
                 id = profile.id,
@@ -25,7 +25,7 @@ data class AdminUserProfile(
                 name = profile.name,
                 nickname = profile.nickname,
                 createdAt = profile.createdAt,
-                visited = visited.toMutableList(),
+                visitedSpot = visited.toMutableList(),
             )
     }
 }
