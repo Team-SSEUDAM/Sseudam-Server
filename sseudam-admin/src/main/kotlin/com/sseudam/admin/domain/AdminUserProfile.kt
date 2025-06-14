@@ -11,12 +11,12 @@ data class AdminUserProfile(
     val name: String?,
     val nickname: String,
     val createdAt: LocalDateTime,
-    val visitedSpot: MutableList<TrashSpot.Info>,
+    val visitedSpot: List<TrashSpot.Info>,
 ) {
     companion object {
         fun of(
             profile: UserProfile,
-            visited: List<TrashSpot.Info>,
+            visitedSpot: List<TrashSpot.Info>,
         ): AdminUserProfile =
             AdminUserProfile(
                 id = profile.id,
@@ -25,7 +25,7 @@ data class AdminUserProfile(
                 name = profile.name,
                 nickname = profile.nickname,
                 createdAt = profile.createdAt,
-                visitedSpot = visited.toMutableList(),
+                visitedSpot = visitedSpot,
             )
     }
 }

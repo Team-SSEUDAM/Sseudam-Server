@@ -9,7 +9,7 @@ data class AdminUserResponse(
     val email: String,
     val nickname: String,
     val createdAt: LocalDateTime,
-    val visitedSpot: MutableList<TrashSpot.Info>,
+    val visitedSpot: List<TrashSpot.Info>,
 ) {
     companion object {
         fun of(user: AdminUserProfile): AdminUserResponse =

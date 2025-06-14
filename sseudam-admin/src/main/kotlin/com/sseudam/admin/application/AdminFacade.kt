@@ -48,6 +48,8 @@ class AdminFacade(
         val profile = userService.getProfile(userId)
         val visitedByUser = spotVisitedService.findAllByUser(userId)
 
+        if (visitedByUser.isEmpty()) return AdminUserProfile.of(profile, emptyList())
+
         val spotIds = visitedByUser.map { it.spotId }
         val trashSpots = trashSpotService.findAllByIds(spotIds)
 
