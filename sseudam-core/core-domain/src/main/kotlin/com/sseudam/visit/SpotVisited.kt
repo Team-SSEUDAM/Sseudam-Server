@@ -17,13 +17,13 @@ class SpotVisited {
      * @property userId 방문한 사용자 ID
      * @property spotId 방문한 쓰레기통 장소 ID
      * @property site 방문한 쓰레기통 주소
-     * @property createdAt 방문 시간
+     * @property visitedAt 방문 시간
      */
     data class Info(
         val id: Long,
         val spotId: Long,
         val userId: Long,
         val site: String,
-        val createdAt: LocalDateTime,
+        val visitedAt: LocalDateTime,
     )
 }

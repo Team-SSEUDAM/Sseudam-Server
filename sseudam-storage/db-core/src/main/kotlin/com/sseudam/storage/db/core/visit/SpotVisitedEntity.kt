@@ -22,6 +22,6 @@ class SpotVisitedEntity(
             userId = userId,
             spotId = spotId,
             site = "",
-            createdAt = createdAt,
+            visitedAt = createdAt,
         )
 }

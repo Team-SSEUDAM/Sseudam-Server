@@ -13,6 +13,7 @@ class SpotReport {
      * @property reportType 신고 타입
      * @property latitude 제보 위치 위도
      * @property longitude 제보 위치 경도
+     * @property spotName 쓰레기통 이름
      * @property region 제보 지역
      * @property city 제보 지역
      * @property site 제보 주소
@@ -24,6 +25,7 @@ class SpotReport {
         val reportType: ReportType,
         val latitude: Double,
         val longitude: Double,
+        val spotName: String,
         val region: Region,
         val city: String,
         val site: String,

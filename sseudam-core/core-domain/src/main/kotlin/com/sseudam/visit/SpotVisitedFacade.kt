@@ -9,7 +9,7 @@ class SpotVisitedFacade(
     private val trashSpotService: TrashSpotService,
 ) {
     fun findSpotVisitedByUserId(userId: Long): SpotVisitedAll {
-        val spotVisited = spotVisitedService.findAll(userId)
+        val spotVisited = spotVisitedService.findAllByUser(userId)
         if (spotVisited.isEmpty()) return SpotVisitedAll(emptyList())
 
         val spotIds = spotVisited.map { it.spotId }

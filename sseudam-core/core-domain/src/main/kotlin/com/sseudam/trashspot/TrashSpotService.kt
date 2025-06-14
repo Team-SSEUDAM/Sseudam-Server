@@ -40,7 +40,7 @@ class TrashSpotService(
         return trashSpotReader.findByCondition(condition)
     }
 
-    fun findOne(spotId: Long): TrashSpot.Info = trashSpotReader.readBy(spotId)
+    fun findBy(spotId: Long): TrashSpot.Info = trashSpotReader.readBy(spotId)
 
     fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> = trashSpotReader.readAllByIds(spotIds)
 }

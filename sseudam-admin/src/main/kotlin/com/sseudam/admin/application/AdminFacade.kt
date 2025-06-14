@@ -1,6 +1,7 @@
 package com.sseudam.admin.application
 
 import com.sseudam.admin.domain.AdminToken
+import com.sseudam.admin.domain.AdminUserProfile
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportType
@@ -13,6 +14,7 @@ import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.user.UserProfile
 import com.sseudam.user.UserService
+import com.sseudam.visit.SpotVisitedService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -23,6 +25,7 @@ class AdminFacade(
     private val authService: AuthenticationService,
     private val suggestionService: SuggestionService,
     private val reportService: ReportService,
+    private val spotVisitedService: SpotVisitedService,
     private val passwordEncoder: PasswordEncoder,
 ) {
     fun login(
@@ -39,7 +42,11 @@ class AdminFacade(
         return AdminToken(token.accessToken, token.refreshToken)
     }
 
-    fun findOneUser(userId: Long): UserProfile = userService.getProfile(userId)
+    fun findByUser(userId: Long): AdminUserProfile {
+        val profile = userService.getProfile(userId)
+        val visitedByUser = spotVisitedService.findAllByUser(userId)
+        return AdminUserProfile.of(profile, visitedByUser)
+    }
 
     fun findUsers(offsetPageRequest: OffsetPageRequest): List<UserProfile> = userService.findUserProfileBy(offsetPageRequest)
 

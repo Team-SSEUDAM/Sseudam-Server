@@ -35,6 +35,7 @@ class ReportController(
                         reportType = request.reportType,
                         latitude = request.latitude,
                         longitude = request.longitude,
+                        spotName = request.spotName,
                         region = request.region,
                         city = request.city,
                         site = request.site,
