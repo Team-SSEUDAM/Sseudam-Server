@@ -23,7 +23,7 @@ class TrashSpotFacade(
     }
 
     fun findDetails(spotId: Long): TrashSpotDetail {
-        val spot = trashSpotService.findOne(spotId)
+        val spot = trashSpotService.findBy(spotId)
         val image = trashSpotImageService.findBySpotId(spotId).lastOrNull()
         val suggestioner = suggestionService.findSpotSuggestionBySite(spot.address.site)
         val user = suggestioner?.let { userService.getProfile(it.userId) }

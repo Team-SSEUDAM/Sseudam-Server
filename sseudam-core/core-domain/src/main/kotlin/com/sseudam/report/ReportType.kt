@@ -6,4 +6,5 @@ enum class ReportType(
     POINT("쓰레기통 위치"),
     KIND("쓰레기통 종류"),
     PHOTO("쓰레기통 사진"),
+    NAME("쓰레기통 이름"),
 }

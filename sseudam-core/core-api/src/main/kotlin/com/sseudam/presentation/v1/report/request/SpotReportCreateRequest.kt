@@ -15,6 +15,8 @@ data class SpotReportCreateRequest(
     val latitude: Double,
     @Schema(description = "경도", example = "126.977969")
     val longitude: Double,
+    @Schema(description = "쓰레기통 이름", example = "우리집앞")
+    val spotName: String,
     @Schema(description = "지역", example = "SEOUL")
     val region: Region,
     @Schema(description = "구/군/시", example = "강남구/거창군/동두천시")

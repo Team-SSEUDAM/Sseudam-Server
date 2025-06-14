@@ -7,6 +7,7 @@ import com.sseudam.admin.presentation.response.report.SpotReportAllResponse
 import com.sseudam.admin.presentation.response.report.SpotReportResponse
 import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionAllResponse
 import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionResponse
+import com.sseudam.admin.presentation.response.user.AdminUserResponse
 import com.sseudam.admin.presentation.response.user.UserAllResponse
 import com.sseudam.admin.presentation.response.user.UserResponse
 import com.sseudam.report.ReportType
@@ -53,7 +54,7 @@ class AdminController(
     @GetMapping("/users/{userId}")
     fun findOneUser(
         @PathVariable("userId") userId: Long,
-    ): UserResponse = UserResponse.of(adminFacade.findOneUser(userId))
+    ): AdminUserResponse = AdminUserResponse.of(adminFacade.findByUser(userId))
 
     /** 어드민 제보 API */
     @Operation(summary = "제보 리스트 조회", description = "제보 리스트를 조회합니다.")

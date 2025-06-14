@@ -25,6 +25,8 @@ class SpotReportEntity(
     @Column(columnDefinition = "geometry(Point, 4326)")
     val point: Point,
     val address: Address,
+    @Column(columnDefinition = "varchar(50)")
+    val spotName: String,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(15)")
     val trashType: TrashType,
@@ -47,6 +49,7 @@ class SpotReportEntity(
                 city = createSpotReport.city,
                 site = createSpotReport.site,
             ),
+        spotName = createSpotReport.spotName,
         trashType = createSpotReport.trashType,
         imageUrl = imageUrl,
         status = ReportStatus.WAITING,
