@@ -18,6 +18,8 @@ import org.locationtech.jts.geom.Point
 @Table(name = "t_spot_suggestion")
 class SpotSuggestionEntity(
     val userId: Long,
+    @Column(columnDefinition = "varchar(50)")
+    val spotName: String,
     @Column(columnDefinition = "geometry(Point, 4326)")
     val point: Point,
     @Enumerated(value = EnumType.STRING)
@@ -30,7 +32,7 @@ class SpotSuggestionEntity(
     val imageUrl: String,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(15)")
-    val status: SuggestionStatus,
+    var status: SuggestionStatus,
 ) : BaseEntity() {
     constructor(
         imageUrl: String,
@@ -38,6 +40,7 @@ class SpotSuggestionEntity(
         createSpotSuggestion: SpotSuggestion.Create,
     ) : this(
         userId = createSpotSuggestion.userId,
+        spotName = createSpotSuggestion.spotName,
         point = point,
         region = createSpotSuggestion.region,
         address =
@@ -54,6 +57,7 @@ class SpotSuggestionEntity(
         SpotSuggestion.Info(
             id = id!!,
             userId = userId,
+            spotName = spotName,
             point = GeoJson.Point(listOf(point.x, point.y)),
             region = region,
             address = address,
@@ -62,4 +66,9 @@ class SpotSuggestionEntity(
             imageUrl = imageUrl,
             createdAt = createdAt,
         )
+
+    fun updateStatus(status: SuggestionStatus): SpotSuggestionEntity {
+        this.status = status
+        return this
+    }
 }

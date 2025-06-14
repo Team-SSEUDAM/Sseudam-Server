@@ -11,8 +11,13 @@ class TrashSpotImageEntity(
     val trashSpotId: Long,
     val imageUrl: String,
 ) : BaseEntity() {
-    fun toTrashSpotImage(): TrashSpotImage =
-        TrashSpotImage(
+    constructor(createTrashSpotImage: TrashSpotImage.Create) : this(
+        createTrashSpotImage.trashSpotId,
+        createTrashSpotImage.imageUrl,
+    )
+
+    fun toTrashSpotImage(): TrashSpotImage.Info =
+        TrashSpotImage.Info(
             id = id!!,
             trashSpotId = trashSpotId,
             imageUrl = imageUrl,

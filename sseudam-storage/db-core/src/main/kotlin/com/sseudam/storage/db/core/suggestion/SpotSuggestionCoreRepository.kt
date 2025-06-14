@@ -55,4 +55,13 @@ class SpotSuggestionCoreRepository(
         txAdvice.readOnly {
             spotSuggestionCustomRepository.findAllBy(offsetPageRequest, searchStatus)
         }
+
+    override fun update(
+        suggestionId: Long,
+        status: SuggestionStatus,
+    ): SpotSuggestion.Info =
+        txAdvice.write {
+            val suggestion = spotSuggestionJpaRepository.findByIdOrElseThrow(suggestionId)
+            return@write suggestion.updateStatus(status).toSpotSuggestion()
+        }
 }

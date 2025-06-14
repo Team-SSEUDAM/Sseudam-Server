@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -37,6 +38,7 @@ class AdminController(
         return AdminTokenResponse.of(token)
     }
 
+    /** 어드민 사용자 API */
     @Operation(summary = "사용자 리스트 조회", description = "사용자 리스트를 조회합니다.")
     @GetMapping("/users")
     fun findUsersByPage(
@@ -53,6 +55,7 @@ class AdminController(
         @PathVariable("userId") userId: Long,
     ): UserResponse = UserResponse.of(adminFacade.findOneUser(userId))
 
+    /** 어드민 제보 API */
     @Operation(summary = "제보 리스트 조회", description = "제보 리스트를 조회합니다.")
     @GetMapping("/suggestions")
     fun findSuggestionsByPage(
@@ -70,6 +73,14 @@ class AdminController(
         @PathVariable suggestionId: Long,
     ): SpotSuggestionResponse = SpotSuggestionResponse.of(adminFacade.findSuggestionDetails(suggestionId))
 
+    @Operation(summary = "제보 반영", description = "제보 상태 변경과 생성을 합니다.")
+    @PutMapping("/suggestions/{suggestionId}")
+    fun updateSuggestionStatus(
+        @PathVariable suggestionId: Long,
+        @RequestParam status: SuggestionStatus,
+    ) = adminFacade.updateSuggestionStatus(suggestionId, status)
+
+    /** 어드민 신고 API */
     @Operation(summary = "신고 리스트 조회", description = "신고 리스트를 조회합니다.")
     @GetMapping("/reports")
     fun findReportsByPage(

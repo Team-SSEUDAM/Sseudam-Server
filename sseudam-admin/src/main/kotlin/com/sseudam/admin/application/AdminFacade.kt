@@ -56,4 +56,9 @@ class AdminFacade(
     ): List<SpotReport.Info> = reportService.findReportsBy(offsetPageRequest, searchType)
 
     fun findReportDetails(reportId: Long): SpotReport.Info = reportService.findSpotReportById(reportId)
+
+    fun updateSuggestionStatus(
+        suggestionId: Long,
+        status: SuggestionStatus,
+    ): SpotSuggestion.Info = suggestionService.updateSuggestion(suggestionId, status)
 }

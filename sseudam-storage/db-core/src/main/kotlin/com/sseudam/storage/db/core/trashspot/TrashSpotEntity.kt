@@ -30,8 +30,16 @@ class TrashSpotEntity(
     @Column(columnDefinition = "varchar(20)")
     val trashType: TrashType,
 ) : BaseEntity() {
-    fun toTrashSpot(): TrashSpot =
-        TrashSpot(
+    constructor(createTrashSpot: TrashSpot.Create) : this(
+        name = createTrashSpot.name,
+        region = createTrashSpot.region,
+        address = createTrashSpot.address,
+        point = createTrashSpot.point,
+        trashType = createTrashSpot.trashType,
+    )
+
+    fun toTrashSpot(): TrashSpot.Info =
+        TrashSpot.Info(
             id = id!!,
             name = name,
             region = region,

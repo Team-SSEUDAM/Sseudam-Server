@@ -20,4 +20,9 @@ interface SpotSuggestionRepository {
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
     ): List<SpotSuggestion.Info>
+
+    fun update(
+        suggestionId: Long,
+        status: SuggestionStatus,
+    ): SpotSuggestion.Info
 }
