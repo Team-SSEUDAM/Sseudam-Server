@@ -50,6 +50,7 @@ class SpotReport {
         val userId: Long,
         val reportType: ReportType,
         val point: GeoJson,
+        val spotName: String,
         val address: Address,
         val trashType: TrashType,
         val imageUrl: String,

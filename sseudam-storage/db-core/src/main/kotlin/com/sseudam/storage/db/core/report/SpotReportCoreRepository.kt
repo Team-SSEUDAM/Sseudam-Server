@@ -1,5 +1,6 @@
 package com.sseudam.storage.db.core.report
 
+import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.report.SpotReportRepository
@@ -47,5 +48,16 @@ class SpotReportCoreRepository(
     ): List<SpotReport.Info> =
         txAdvice.readOnly {
             spotReportCustomRepository.findAllBy(offsetPageRequest, searchType)
+        }
+
+    override fun update(
+        reportId: Long,
+        reportStatus: ReportStatus,
+    ): SpotReport.Info =
+        txAdvice.write {
+            val report =
+                spotReportJpaRepository
+                    .findByIdOrElseThrow(reportId)
+            report.updateStatus(reportStatus).toSpotReport()
         }
 }

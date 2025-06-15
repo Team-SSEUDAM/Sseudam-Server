@@ -18,17 +18,36 @@ class TrashSpotImageCoreRepository(
                 ).toTrashSpotImage()
         }
 
-    override fun findAllByTrashSpotIds(map: List<Long>): List<TrashSpotImage.Info> =
+    override fun findAllByTrashSpotIds(spotIds: List<Long>): List<TrashSpotImage.Info> =
         txAdvice.readOnly {
             trashSpotImageJpaRepository
-                .findAllByTrashSpotIdIn(map)
+                .findAllByTrashSpotIdIn(spotIds)
+                .filter { it.deletedAt == null }
                 .map { it.toTrashSpotImage() }
         }
 
-    override fun findBySpotId(spotId: Long): List<TrashSpotImage.Info> =
+    override fun findAllBySpotId(spotId: Long): List<TrashSpotImage.Info> =
         txAdvice.readOnly {
             trashSpotImageJpaRepository
                 .findAllByTrashSpotId(spotId)
+                .filter { it.deletedAt == null }
                 .map { it.toTrashSpotImage() }
         }
+
+    // TODO: 다중 이미지 처리
+    override fun updateImage(
+        spotId: Long,
+        imageUrl: String,
+    ) = txAdvice.write {
+        val trashSpotImages =
+            trashSpotImageJpaRepository
+                .findAllByTrashSpotId(spotId)
+                .filter { it.deletedAt == null }
+        trashSpotImages.forEach { it.softDelete() }
+
+        trashSpotImageJpaRepository
+            .save(
+                TrashSpotImageEntity(spotId, imageUrl),
+            ).toTrashSpotImage()
+    }
 }

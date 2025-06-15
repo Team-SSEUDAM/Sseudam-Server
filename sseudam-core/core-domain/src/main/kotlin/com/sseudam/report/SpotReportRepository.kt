@@ -18,4 +18,9 @@ interface SpotReportRepository {
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
     ): List<SpotReport.Info>
+
+    fun update(
+        reportId: Long,
+        reportStatus: ReportStatus,
+    ): SpotReport.Info
 }

@@ -18,17 +18,17 @@ import org.locationtech.jts.geom.Point
 @Table(name = "t_trash_spot")
 class TrashSpotEntity(
     @Column(columnDefinition = "varchar(50)")
-    val name: String,
+    var name: String,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(20)")
     val region: Region,
     @Embedded
     var address: Address,
     @Column(columnDefinition = "geometry(Point, 4326)")
-    val point: Point,
+    var point: Point,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(20)")
-    val trashType: TrashType,
+    var trashType: TrashType,
 ) : BaseEntity() {
     constructor(createTrashSpot: TrashSpot.Create) : this(
         name = createTrashSpot.name,
@@ -48,4 +48,16 @@ class TrashSpotEntity(
             trashType = trashType,
             updatedAt = updatedAt,
         )
+
+    fun updateName(name: String) {
+        this.name = name
+    }
+
+    fun updateType(type: TrashType) {
+        this.trashType = type
+    }
+
+    fun updateLocation(point: Point) {
+        this.point = point
+    }
 }

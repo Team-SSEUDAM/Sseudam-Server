@@ -6,6 +6,7 @@ import com.sseudam.auth.AuthenticationService
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
+import com.sseudam.report.UpdateReport
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
@@ -72,8 +73,10 @@ class AdminFacade(
 
     fun findReportDetails(reportId: Long): SpotReport.Info = reportService.findSpotReportById(reportId)
 
-    fun updateSuggestionStatus(
+    fun updateSpotSuggestionStatus(
         suggestionId: Long,
         status: SuggestionStatus,
     ): SpotSuggestion.Info = suggestionService.updateSuggestion(suggestionId, status)
+
+    fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info = reportService.updateSpotReport(updateReport)
 }
