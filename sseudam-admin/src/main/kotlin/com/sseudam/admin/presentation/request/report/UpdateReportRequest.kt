@@ -4,11 +4,10 @@ import com.sseudam.report.ReportStatus
 import com.sseudam.report.UpdateReport
 
 data class UpdateReportRequest(
-    val reportId: Long,
     val spotId: Long,
     val status: ReportStatus,
 ) {
-    fun toUpdateReport() =
+    fun toUpdateReport(reportId: Long) =
         UpdateReport(
             reportId = reportId,
             spotId = spotId,

@@ -101,8 +101,9 @@ class AdminController(
     ): SpotReportResponse = SpotReportResponse.of(adminFacade.findReportDetails(reportId))
 
     @Operation(summary = "신고 반영", description = "신고 상태 변경과 생성을 합니다.")
-    @PutMapping("/reports")
+    @PutMapping("/reports/{reportId}")
     fun updateReportStatus(
+        @PathVariable reportId: Long,
         @RequestBody request: UpdateReportRequest,
-    ) = adminFacade.updateSpotReportStatus(request.toUpdateReport())
+    ) = adminFacade.updateSpotReportStatus(request.toUpdateReport(reportId))
 }
