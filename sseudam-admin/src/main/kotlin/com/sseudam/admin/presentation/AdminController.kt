@@ -2,6 +2,7 @@ package com.sseudam.admin.presentation
 
 import com.sseudam.admin.application.AdminFacade
 import com.sseudam.admin.presentation.request.AdminLoginRequest
+import com.sseudam.admin.presentation.request.report.UpdateReportRequest
 import com.sseudam.admin.presentation.response.AdminTokenResponse
 import com.sseudam.admin.presentation.response.report.SpotReportAllResponse
 import com.sseudam.admin.presentation.response.report.SpotReportResponse
@@ -79,7 +80,7 @@ class AdminController(
     fun updateSuggestionStatus(
         @PathVariable suggestionId: Long,
         @RequestParam status: SuggestionStatus,
-    ) = adminFacade.updateSuggestionStatus(suggestionId, status)
+    ) = adminFacade.updateSpotSuggestionStatus(suggestionId, status)
 
     /** 어드민 신고 API */
     @Operation(summary = "신고 리스트 조회", description = "신고 리스트를 조회합니다.")
@@ -98,4 +99,10 @@ class AdminController(
     fun findReportDetails(
         @PathVariable reportId: Long,
     ): SpotReportResponse = SpotReportResponse.of(adminFacade.findReportDetails(reportId))
+
+    @Operation(summary = "신고 반영", description = "신고 상태 변경과 생성을 합니다.")
+    @PutMapping("/reports")
+    fun updateReportStatus(
+        @RequestBody request: UpdateReportRequest,
+    ) = adminFacade.updateSpotReportStatus(request.toUpdateReport())
 }

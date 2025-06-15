@@ -46,7 +46,9 @@ class SuggestionService(
         status: SuggestionStatus,
     ): SpotSuggestion.Info {
         val suggestion = suggestionUpdater.update(suggestionId, status)
-        suggestionEventPublisher.publish(suggestion)
+        if (suggestion.status == SuggestionStatus.APPROVE) {
+            suggestionEventPublisher.publish(suggestion)
+        }
         return suggestion
     }
 }

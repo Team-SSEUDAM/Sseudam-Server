@@ -33,7 +33,7 @@ class SpotReportEntity(
     val imageUrl: String,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(15)")
-    val status: ReportStatus,
+    var status: ReportStatus,
 ) : BaseEntity() {
     constructor(
         imageUrl: String,
@@ -62,10 +62,16 @@ class SpotReportEntity(
             userId = userId,
             reportType = reportType,
             point = GeoJson.Point(listOf(point.x, point.y)),
+            spotName = spotName,
             address = address,
             trashType = trashType,
             imageUrl = imageUrl,
             status = status,
             createdAt = createdAt,
         )
+
+    fun updateStatus(status: ReportStatus): SpotReportEntity {
+        this.status = status
+        return this
+    }
 }

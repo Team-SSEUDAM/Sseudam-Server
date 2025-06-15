@@ -9,7 +9,7 @@ import jakarta.persistence.Table
 @Table(name = "t_trash_spot_image")
 class TrashSpotImageEntity(
     val trashSpotId: Long,
-    val imageUrl: String,
+    var imageUrl: String,
 ) : BaseEntity() {
     constructor(createTrashSpotImage: TrashSpotImage.Create) : this(
         createTrashSpotImage.trashSpotId,
@@ -22,4 +22,8 @@ class TrashSpotImageEntity(
             trashSpotId = trashSpotId,
             imageUrl = imageUrl,
         )
+
+    fun updateImageUrl(imageUrl: String) {
+        this.imageUrl = imageUrl
+    }
 }
