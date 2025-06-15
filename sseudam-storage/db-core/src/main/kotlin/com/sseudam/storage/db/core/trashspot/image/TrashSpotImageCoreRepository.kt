@@ -22,6 +22,7 @@ class TrashSpotImageCoreRepository(
         txAdvice.readOnly {
             trashSpotImageJpaRepository
                 .findAllByTrashSpotIdIn(spotIds)
+                .filter { it.deletedAt == null }
                 .map { it.toTrashSpotImage() }
         }
 
