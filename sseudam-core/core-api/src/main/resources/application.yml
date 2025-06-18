@@ -17,6 +17,7 @@ spring:
       - swagger.yml
       - rsa.yml
       - aws.yml
+      - notification.yml
   web.resources.add-mappings: false
 
 server:
