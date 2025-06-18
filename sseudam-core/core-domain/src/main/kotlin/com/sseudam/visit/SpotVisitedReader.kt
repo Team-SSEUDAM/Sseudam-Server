@@ -7,4 +7,6 @@ class SpotVisitedReader(
     private val spotVisitedRepository: SpotVisitedRepository,
 ) {
     fun readByUserId(userId: Long): List<SpotVisited.Info> = spotVisitedRepository.readByUserId(userId)
+
+    fun countBySpotId(spotId: Long): Long = spotVisitedRepository.countBySpotId(spotId)
 }

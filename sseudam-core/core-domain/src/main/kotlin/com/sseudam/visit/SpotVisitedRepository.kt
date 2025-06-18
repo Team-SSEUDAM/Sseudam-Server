@@ -4,4 +4,6 @@ interface SpotVisitedRepository {
     fun create(spotVisited: SpotVisited.Create): SpotVisited.Info
 
     fun readByUserId(userId: Long): List<SpotVisited.Info>
+
+    fun countBySpotId(spotId: Long): Long
 }

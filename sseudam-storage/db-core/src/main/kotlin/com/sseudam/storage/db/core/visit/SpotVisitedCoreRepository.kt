@@ -24,4 +24,10 @@ class SpotVisitedCoreRepository(
                 .findAllByUserId(userId)
                 .map { it.toSpotVisitedInfo() }
         }
+
+    override fun countBySpotId(spotId: Long): Long =
+        txAdvice.readOnly {
+            spotVisitedJpaRepository
+                .countBySpotId(spotId)
+        }
 }
