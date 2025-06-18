@@ -7,4 +7,6 @@ interface SpotVisitedJpaRepository :
     JpaRepository<SpotVisitedEntity, Long>,
     KotlinJdslJpqlExecutor {
     fun findAllByUserId(userId: Long): List<SpotVisitedEntity>
+
+    fun countBySpotId(spotId: Long): Long
 }

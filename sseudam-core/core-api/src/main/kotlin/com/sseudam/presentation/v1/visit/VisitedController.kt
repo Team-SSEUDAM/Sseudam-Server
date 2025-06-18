@@ -2,6 +2,7 @@ package com.sseudam.presentation.v1.visit
 
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.visit.response.SpotVisitedAllResponse
+import com.sseudam.presentation.v1.visit.response.SpotVisitedCountResponse
 import com.sseudam.presentation.v1.visit.response.SpotVisitedCreateResponse
 import com.sseudam.user.User
 import com.sseudam.visit.SpotVisited
@@ -34,5 +35,18 @@ class VisitedController(
     fun visitedSpotFindAll(user: User): SpotVisitedAllResponse {
         val visitedSpots = spotVisitedFacade.findSpotVisitedByUserId(user.id)
         return SpotVisitedAllResponse.of(visitedSpots)
+    }
+
+    @Operation(summary = "장소 방문자 수 조회", description = "장소의 방문자 수를 조회합니다.")
+    @GetMapping("/visited/count/{spotId}")
+    fun visitedSpotCountBySpot(
+        @PathVariable spotId: Long,
+    ): SpotVisitedCountResponse {
+        val count = spotVisitedService.countBySpotId(spotId)
+
+        return SpotVisitedCountResponse.of(
+            visitedCount = count,
+            spotId = spotId,
+        )
     }
 }

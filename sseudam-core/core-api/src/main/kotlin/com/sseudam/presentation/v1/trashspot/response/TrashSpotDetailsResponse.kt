@@ -34,6 +34,8 @@ data class TrashSpotDetailsResponse(
     val point: GeoJson,
     @Schema(description = "쓰레기통 타입")
     val trashType: TrashType,
+    @Schema(description = "쓰레기통 방문 횟수")
+    val visitedCount: Long = 0,
     @Schema(description = "쓰레기통 이미지 URL")
     val imageUrl: String?,
     @Schema(description = "쓰레기통 수정 시간")
@@ -50,6 +52,7 @@ data class TrashSpotDetailsResponse(
                 address = trashSpotDetail.trashSpot.address,
                 point = trashSpotDetail.trashSpot.point,
                 trashType = trashSpotDetail.trashSpot.trashType,
+                visitedCount = trashSpotDetail.visitedCount,
                 imageUrl = trashSpotDetail.image?.imageUrl,
                 updatedAt = trashSpotDetail.trashSpot.updatedAt,
             )
