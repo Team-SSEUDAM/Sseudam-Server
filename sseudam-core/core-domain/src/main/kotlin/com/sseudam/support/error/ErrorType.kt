@@ -52,4 +52,7 @@ enum class ErrorType(
     INVALID_NEW_LOGIN_ID(400, ErrorKind.CLIENT_ERROR, "새로 입력한 아이디와 기존 아이디는 같을 수 없습니다.", ErrorLevel.WARN),
     FAIL_TO_TRANSACTION_TEMPLATE_EXECUTE_ERROR(400, ErrorKind.CLIENT_ERROR, "트랜잭션 템플릿 실행에 실패하였습니다.", ErrorLevel.ERROR),
     DUPLICATED_EMAIL(409, ErrorKind.CLIENT_ERROR, "이미 존재하는 이메일입니다.", ErrorLevel.WARN),
+
+    /** Pet */
+    INVALID_CUMULATIVE_POINT(400, ErrorKind.CLIENT_ERROR, "잘못된 누적 포인트입니다.", ErrorLevel.INFO),
 }
