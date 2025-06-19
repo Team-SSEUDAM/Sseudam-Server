@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserPetJpaRepository :
     JpaRepository<UserPetEntity, Long>,
-    KotlinJdslJpqlExecutor
+    KotlinJdslJpqlExecutor {
+    fun findByUserIdAndDeletedAtIsNull(userId: Long): UserPetEntity?
+}
