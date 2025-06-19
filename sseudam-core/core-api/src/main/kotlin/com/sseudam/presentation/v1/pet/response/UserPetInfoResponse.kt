@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 data class UserPetInfoResponse(
     val userId: Long,
     val petId: Long,
-    val name: String,
+    val nickname: String,
     val point: Long,
     val levelType: Pet.LevelType,
     val maxLevelStandard: Long,
@@ -22,7 +22,7 @@ data class UserPetInfoResponse(
             UserPetInfoResponse(
                 userId = userPetInfo.userId,
                 petId = userPetInfo.petId,
-                name = levelType.description,
+                nickname = levelType.defaultName,
                 point = userPetInfo.point,
                 levelType = levelType,
                 maxLevelStandard = maxLevelStandard,

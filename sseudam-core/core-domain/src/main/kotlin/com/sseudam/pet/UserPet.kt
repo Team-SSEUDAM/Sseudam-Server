@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 class UserPet {
     data class Create(
         val userId: Long,
-        val name: String,
+        val nickname: String,
         val petId: Long,
         val point: Long,
     )
@@ -13,7 +13,7 @@ class UserPet {
     data class Info(
         val id: Long,
         val userId: Long,
-        val name: String,
+        val nickname: String,
         val petId: Long,
         val point: Long,
         val createdAt: LocalDateTime,
