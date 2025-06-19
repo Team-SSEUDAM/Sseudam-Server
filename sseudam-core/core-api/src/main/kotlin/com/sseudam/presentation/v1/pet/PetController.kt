@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 
 @Tag(name = "😽 Pet API", description = "펫 관련 API")
 @ApiV1Controller
@@ -30,6 +31,7 @@ class PetController(
     @PutMapping("/pets/name")
     fun updateUserPetName(
         user: User,
+        @RequestBody
         request: UpdateUserPetNameRequest,
     ): UserPetInfoResponse {
         val updatedPetInfo = userPetService.updatePetName(user.id, request.nickname)
