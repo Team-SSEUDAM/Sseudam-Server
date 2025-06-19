@@ -12,23 +12,20 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "t_pet_level_up_history")
 class PetLevelUpHistoryEntity(
-    val petId: Long,
-    val userId: Long,
+    val userPetId: Long,
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(15)")
     val levelType: Pet.LevelType,
 ) : BaseEntity() {
     constructor(create: PetLevelUpHistory.Create) : this(
-        petId = create.petId,
-        userId = create.userId,
+        userPetId = create.userPetId,
         levelType = create.levelType,
     )
 
     fun toPetLevelUpHistoryInfo() =
         PetLevelUpHistory.Info(
             id = id!!,
-            petId = petId,
-            userId = userId,
+            userPetId = userPetId,
             levelType = levelType,
             createdAt = createdAt,
             updatedAt = updatedAt,

@@ -10,13 +10,13 @@ import jakarta.persistence.Table
 class UserPetEntity(
     val userId: Long,
     val petId: Long,
-    val name: String,
+    var nickname: String,
     val point: Long,
 ) : BaseEntity() {
     constructor(userPetCreate: UserPet.Create) : this(
         userId = userPetCreate.userId,
         petId = userPetCreate.petId,
-        name = userPetCreate.name,
+        nickname = userPetCreate.nickname,
         point = userPetCreate.point,
     )
 
@@ -25,8 +25,13 @@ class UserPetEntity(
             id = id!!,
             userId = userId,
             petId = petId,
-            name = name,
+            nickname = nickname,
             point = point,
             createdAt = createdAt,
         )
+
+    fun updateNickname(nickname: String): UserPetEntity {
+        this.nickname = nickname
+        return this
+    }
 }

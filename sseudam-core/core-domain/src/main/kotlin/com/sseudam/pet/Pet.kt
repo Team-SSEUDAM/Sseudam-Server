@@ -21,7 +21,7 @@ class Pet {
 
     enum class LevelType(
         val level: Int,
-        val description: String,
+        val defaultName: String,
     ) {
         LEVEL_1(1, "작고 소중한 냥이"),
         LEVEL_2(2, "호기심 가득한 냥이"),

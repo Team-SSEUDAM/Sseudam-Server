@@ -11,7 +11,7 @@ class UserPetAppender(
             UserPet.Create(
                 userId = userId,
                 petId = 1L,
-                name = Pet.LevelType.LEVEL_1.description,
+                nickname = Pet.LevelType.LEVEL_1.defaultName,
                 point = 0L,
             ),
         )
