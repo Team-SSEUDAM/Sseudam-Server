@@ -14,7 +14,7 @@ class PetEventListener(
     private val petPointHistoryService: PetPointHistoryService,
     private val petLevelUpHistoryService: PetLevelUpHistoryService,
 ) {
-    /** 포인트 히스토리 저장 */
+    /** 포인트 지급 기록 저장 */
     @Async
     @EventListener
     fun addPetPointHistory(event: PetPointEvent) {
