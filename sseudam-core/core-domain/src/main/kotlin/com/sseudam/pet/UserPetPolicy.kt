@@ -24,4 +24,13 @@ class UserPetPolicy {
             Pet.LevelType.LEVEL_4 -> LevelStandard.LEVEL_4_MAX.toLong()
             Pet.LevelType.SPECIAL -> Long.MAX_VALUE
         }
+
+    fun getMinLevelStandard(levelType: Pet.LevelType): Long =
+        when (levelType) {
+            Pet.LevelType.LEVEL_1 -> LevelStandard.LEVEL_1_MIN.toLong()
+            Pet.LevelType.LEVEL_2 -> LevelStandard.LEVEL_2_MIN.toLong()
+            Pet.LevelType.LEVEL_3 -> LevelStandard.LEVEL_3_MIN.toLong()
+            Pet.LevelType.LEVEL_4 -> LevelStandard.LEVEL_4_MIN.toLong()
+            Pet.LevelType.SPECIAL -> LevelStandard.SPECIAL_MIN.toLong()
+        }
 }
