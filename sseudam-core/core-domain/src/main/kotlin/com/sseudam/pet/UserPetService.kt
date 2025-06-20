@@ -29,5 +29,8 @@ class UserPetService(
         nickname: String,
     ): UserPet.Info = userPetUpdater.updatePetName(userId, nickname)
 
-    fun updatePetId(petId: Long): UserPet.Info = userPetUpdater.updatePetId(petId)
+    fun updatePetId(
+        userPetId: Long,
+        petId: Long,
+    ): UserPet.Info = userPetUpdater.updatePetId(userPetId, petId)
 }

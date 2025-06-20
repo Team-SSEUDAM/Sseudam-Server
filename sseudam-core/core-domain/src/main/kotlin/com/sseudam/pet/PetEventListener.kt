@@ -46,14 +46,14 @@ class PetEventListener(
         val nextLevelPetInfo =
             petInfos
                 .firstOrNull { it.levelType.level == nextLevelTypeValue }
+                ?: return
 
         val levelUpType = userPetPolicy.levelUp(userPet = userPet)
-
         if (levelUpType.level > currentPetInfo.levelType.level) {
             userPetService.updatePetId(
-                petId = nextLevelPetInfo!!.id,
+                userPetId = userPet.id,
+                petId = nextLevelPetInfo.id,
             )
-
             petLevelUpHistoryService.append(
                 userPet = userPet,
                 petInfo = nextLevelPetInfo,

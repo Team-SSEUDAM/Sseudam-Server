@@ -40,11 +40,14 @@ class UserPetCoreRepository(
             userPet.updateNickname(nickname).toUserPetInfo()
         }
 
-    override fun updatePetId(petId: Long): UserPet.Info =
+    override fun updatePetId(
+        userPetId: Long,
+        petId: Long,
+    ): UserPet.Info =
         txAdvice.write {
             val userPet =
                 userPetJpaRepository
-                    .findByIdOrElseThrow(petId)
+                    .findByIdOrElseThrow(userPetId)
             userPet.updatePetId(petId).toUserPetInfo()
         }
 

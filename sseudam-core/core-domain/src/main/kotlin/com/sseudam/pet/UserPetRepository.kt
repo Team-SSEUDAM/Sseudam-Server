@@ -10,7 +10,10 @@ interface UserPetRepository {
         nickname: String,
     ): UserPet.Info
 
-    fun updatePetId(petId: Long): UserPet.Info
+    fun updatePetId(
+        userPetId: Long,
+        petId: Long,
+    ): UserPet.Info
 
     fun updatePoint(
         userPetId: Long,

@@ -11,7 +11,10 @@ class UserPetUpdater(
         nickname: String,
     ): UserPet.Info = userPetRepository.updateNickname(userId, nickname)
 
-    fun updatePetId(petId: Long): UserPet.Info = userPetRepository.updatePetId(petId)
+    fun updatePetId(
+        userPetId: Long,
+        petId: Long,
+    ): UserPet.Info = userPetRepository.updatePetId(userPetId, petId)
 
     fun updatePoint(
         userPetId: Long,
