@@ -6,6 +6,7 @@ import java.time.Month
 /** 펫 성장 히스토리 */
 class PetLevelUpHistory {
     data class Create(
+        val userId: Long,
         val userPetId: Long,
         val pointHistoryId: Long,
         val nickname: String,
@@ -16,6 +17,7 @@ class PetLevelUpHistory {
 
     data class Info(
         val id: Long,
+        val userId: Long,
         val userPetId: Long,
         val pointHistoryId: Long,
         val nickname: String,

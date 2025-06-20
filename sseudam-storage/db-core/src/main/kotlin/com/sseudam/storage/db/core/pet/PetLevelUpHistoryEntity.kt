@@ -13,6 +13,7 @@ import java.time.Month
 @Entity
 @Table(name = "t_pet_level_up_history")
 class PetLevelUpHistoryEntity(
+    val userId: Long,
     val userPetId: Long,
     val pointHistoryId: Long,
     val nickname: String,
@@ -25,6 +26,7 @@ class PetLevelUpHistoryEntity(
     val levelType: Pet.LevelType,
 ) : BaseEntity() {
     constructor(create: PetLevelUpHistory.Create) : this(
+        userId = create.userId,
         userPetId = create.userPetId,
         pointHistoryId = create.pointHistoryId,
         nickname = create.nickname,
@@ -36,6 +38,7 @@ class PetLevelUpHistoryEntity(
     fun toPetLevelUpHistoryInfo() =
         PetLevelUpHistory.Info(
             id = id!!,
+            userId = userId,
             userPetId = userPetId,
             pointHistoryId = pointHistoryId,
             nickname = nickname,

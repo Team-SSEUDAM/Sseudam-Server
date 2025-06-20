@@ -12,4 +12,8 @@ interface PetLevelUpHistoryJpaRepository :
         monthly: Month,
         userPetId: Long,
     ): List<PetLevelUpHistoryEntity>
+
+    fun findAllByUserPetId(userPetId: Long): List<PetLevelUpHistoryEntity>
+
+    fun findAllByUserId(userId: Long): MutableList<PetLevelUpHistoryEntity>
 }

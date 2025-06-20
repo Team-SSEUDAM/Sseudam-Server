@@ -2,18 +2,22 @@ package com.sseudam.storage.db.core.pet
 
 import com.sseudam.pet.Pet
 import com.sseudam.pet.PetRepository
+import com.sseudam.support.tx.TxAdvice
 import org.springframework.stereotype.Repository
 import java.time.Month
 
 @Repository
 class PetCoreRepository(
     private val petJpaRepository: PetJpaRepository,
+    private val txAdvice: TxAdvice,
 ) : PetRepository {
     override fun findAllLatestSeasonPets(
         currentYear: Int,
         currentMonth: Month,
     ): List<Pet.Info> =
-        petJpaRepository
-            .findAllByYearAndMonthly(currentYear, currentMonth)
-            .map { it.toPetInfo() }
+        txAdvice.readOnly {
+            petJpaRepository
+                .findAllByYearAndMonthly(currentYear, currentMonth)
+                .map { it.toPetInfo() }
+        }
 }

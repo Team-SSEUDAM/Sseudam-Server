@@ -49,4 +49,11 @@ class PetController(
         val histories = userPetFacade.findCurrentSeasonPetHistory(user.id)
         return UserPetLevelHistoryAllResponse.of(histories)
     }
+
+    @Operation(summary = "사용자 전체 펫 성장 기록 조회", description = "사용자의 전체 펫 성장 기록을 조회합니다.")
+    @GetMapping("/pets/history")
+    fun findUserPetHistory(user: User): UserPetLevelHistoryAllResponse {
+        val histories = userPetFacade.findAllPetHistory(user.id)
+        return UserPetLevelHistoryAllResponse.of(histories)
+    }
 }

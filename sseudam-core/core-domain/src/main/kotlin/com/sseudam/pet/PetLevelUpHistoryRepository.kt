@@ -8,4 +8,8 @@ interface PetLevelUpHistoryRepository {
         currentMonth: Month,
         userPetId: Long,
     ): List<PetLevelUpHistory.Info>
+
+    fun findAllBy(userPetId: Long): List<PetLevelUpHistory.Info>
+
+    fun findAllByUserId(userId: Long): List<PetLevelUpHistory.Info>
 }

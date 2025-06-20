@@ -17,4 +17,11 @@ class PetLevelUpHistoryReader(
             currentMonth = currentMonth,
             userPetId = userPetId,
         )
+
+    fun readBy(userPetId: Long): List<PetLevelUpHistory.Info> =
+        petLevelUpHistoryRepository.findAllBy(
+            userPetId = userPetId,
+        )
+
+    fun readByUser(userId: Long): List<PetLevelUpHistory.Info> = petLevelUpHistoryRepository.findAllByUserId(userId)
 }
