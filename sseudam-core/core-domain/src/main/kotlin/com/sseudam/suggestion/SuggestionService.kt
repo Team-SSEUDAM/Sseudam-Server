@@ -2,6 +2,8 @@ package com.sseudam.suggestion
 
 import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.pet.PetPointAction
+import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.suggestion.event.SuggestionEventPublisher
 import com.sseudam.support.cursor.OffsetPageRequest
 import org.springframework.stereotype.Service
@@ -13,21 +15,18 @@ class SuggestionService(
     private val suggestionReader: SuggestionReader,
     private val suggestionUpdater: SuggestionUpdater,
     private val suggestionEventPublisher: SuggestionEventPublisher,
+    private val petEventPublisher: PetEventPublisher,
     private val imageS3Caller: ImageS3Caller,
 ) {
     companion object {
-        const val SUGGESTION_IMAGE_PATH = "suggestion"
+        private const val SUGGESTION_IMAGE_PATH = "suggestion"
     }
 
     fun createSpotSuggestion(suggestion: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> {
-        val createUploadUrl =
-            imageS3Caller.createUploadUrl(
-                suggestion.userId,
-                LocalDateTime.now(),
-                SUGGESTION_IMAGE_PATH,
-            )
-        val spotSuggestion = suggestionAppender.append(createUploadUrl.imageUrl, suggestion)
-        return spotSuggestion to createUploadUrl
+        val uploadUrl = imageS3Caller.createUploadUrl(suggestion.userId, LocalDateTime.now(), SUGGESTION_IMAGE_PATH)
+        val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, suggestion)
+        petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION)
+        return spotSuggestion to uploadUrl
     }
 
     fun findAllSpotSuggestionByUser(userId: Long): List<SpotSuggestion.Info> = suggestionReader.readAllByUser(userId)
@@ -48,6 +47,7 @@ class SuggestionService(
         val suggestion = suggestionUpdater.update(suggestionId, status)
         if (suggestion.status == SuggestionStatus.APPROVE) {
             suggestionEventPublisher.publish(suggestion)
+            petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
         }
         return suggestion
     }

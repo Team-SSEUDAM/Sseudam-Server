@@ -8,6 +8,8 @@ class PetService(
     private val petReader: PetReader,
     private val petAppender: PetAppender,
 ) {
+    fun findBy(petId: Long): Pet.Info = petReader.readBy(petId)
+
     fun findAllLatestSeasonPets(
         currentYear: Int,
         currentMonth: Month,

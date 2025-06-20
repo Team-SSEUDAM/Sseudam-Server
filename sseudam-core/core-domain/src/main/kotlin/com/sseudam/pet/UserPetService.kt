@@ -15,8 +15,22 @@ class UserPetService(
         pet: Pet.Info,
     ): UserPet.Info = userPetAppender.append(userId, pet)
 
+    fun updatePoint(
+        userPet: UserPet.Info,
+        action: PetPointAction,
+    ): UserPet.Info =
+        userPetUpdater.updatePoint(
+            userPetId = userPet.id,
+            action = action,
+        )
+
     fun updatePetName(
         userId: Long,
         nickname: String,
     ): UserPet.Info = userPetUpdater.updatePetName(userId, nickname)
+
+    fun updatePetId(
+        userPetId: Long,
+        petId: Long,
+    ): UserPet.Info = userPetUpdater.updatePetId(userPetId, petId)
 }

@@ -15,7 +15,6 @@ import java.time.Month
 class PetLevelUpHistoryEntity(
     val userId: Long,
     val userPetId: Long,
-    val pointHistoryId: Long,
     val nickname: String,
     val year: Int,
     @Enumerated(EnumType.STRING)
@@ -28,7 +27,6 @@ class PetLevelUpHistoryEntity(
     constructor(create: PetLevelUpHistory.Create) : this(
         userId = create.userId,
         userPetId = create.userPetId,
-        pointHistoryId = create.pointHistoryId,
         nickname = create.nickname,
         year = create.year,
         monthly = create.monthly,
@@ -40,7 +38,6 @@ class PetLevelUpHistoryEntity(
             id = id!!,
             userId = userId,
             userPetId = userPetId,
-            pointHistoryId = pointHistoryId,
             nickname = nickname,
             year = year,
             monthly = monthly,

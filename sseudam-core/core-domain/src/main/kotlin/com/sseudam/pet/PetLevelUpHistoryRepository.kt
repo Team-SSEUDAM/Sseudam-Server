@@ -3,6 +3,8 @@ package com.sseudam.pet
 import java.time.Month
 
 interface PetLevelUpHistoryRepository {
+    fun save(petLevelUpHistory: PetLevelUpHistory.Create): PetLevelUpHistory.Info
+
     fun findAllBy(
         currentYear: Int,
         currentMonth: Month,
