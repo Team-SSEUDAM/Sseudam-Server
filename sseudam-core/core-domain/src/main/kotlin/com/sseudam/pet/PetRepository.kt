@@ -1,3 +1,10 @@
 package com.sseudam.pet
 
-interface PetRepository
+import java.time.Month
+
+interface PetRepository {
+    fun findAllLatestSeasonPets(
+        currentYear: Int,
+        currentMonth: Month,
+    ): List<Pet.Info>
+}

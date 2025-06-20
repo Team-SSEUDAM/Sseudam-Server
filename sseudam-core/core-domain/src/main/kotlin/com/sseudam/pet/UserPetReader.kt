@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component
 class UserPetReader(
     private val userPetRepository: UserPetRepository,
 ) {
-    fun findPetInfo(userId: Long): UserPet.Info? = userPetRepository.findByUserId(userId)
+    fun readPetInfoByUser(userId: Long): UserPet.Info? = userPetRepository.findByUserId(userId)
 }

@@ -5,18 +5,18 @@ import java.time.LocalDateTime
 /** 펫 포인트 히스토리 */
 class PetPointHistory {
     data class Create(
-        val userId: Long,
-        val petId: Long,
+        val userPetId: Long,
         val event: PointEvent,
-        val point: Long,
+        val previousPoint: Long,
+        val additionalPoint: Long,
     )
 
     data class Info(
         val id: Long,
-        val userId: Long,
-        val petId: Long,
+        val userPetId: Long,
         val event: PointEvent,
-        val point: Long,
+        val previousPoint: Long,
+        val additionalPoint: Long,
         val createdAt: LocalDateTime,
     )
 

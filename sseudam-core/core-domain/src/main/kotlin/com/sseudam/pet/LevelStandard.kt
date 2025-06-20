@@ -9,7 +9,7 @@ object LevelStandard {
     const val LEVEL_3_MAX = 220
     const val LEVEL_4_MIN = 221
     const val LEVEL_4_MAX = 300
-    const val LEVEL_5_MIN = 301
+    const val SPECIAL_MIN = 301
 
     val LEVEL_1_RANGE = LEVEL_1_MIN..LEVEL_1_MAX
     val LEVEL_2_RANGE = LEVEL_2_MIN..LEVEL_2_MAX

@@ -22,7 +22,7 @@ data class UserPetInfoResponse(
             UserPetInfoResponse(
                 userId = userPetInfo.userId,
                 petId = userPetInfo.petId,
-                nickname = levelType.defaultName,
+                nickname = levelType.adjective + userPetInfo.nickname,
                 point = userPetInfo.point,
                 levelType = levelType,
                 maxLevelStandard = maxLevelStandard,

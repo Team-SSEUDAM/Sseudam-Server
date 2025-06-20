@@ -4,11 +4,12 @@ import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpql
 import org.springframework.data.jpa.repository.JpaRepository
 import java.time.Month
 
-interface PetJpaRepository :
-    JpaRepository<PetEntity, Long>,
+interface PetLevelUpHistoryJpaRepository :
+    JpaRepository<PetLevelUpHistoryEntity, Long>,
     KotlinJdslJpqlExecutor {
-    fun findAllByYearAndMonthly(
+    fun findAllByYearAndMonthlyAndUserPetId(
         year: Int,
         monthly: Month,
-    ): MutableList<PetEntity>
+        userPetId: Long,
+    ): List<PetLevelUpHistoryEntity>
 }
