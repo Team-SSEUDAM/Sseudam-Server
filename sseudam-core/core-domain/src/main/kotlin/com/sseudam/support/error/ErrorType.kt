@@ -54,5 +54,7 @@ enum class ErrorType(
     DUPLICATED_EMAIL(409, ErrorKind.CLIENT_ERROR, "이미 존재하는 이메일입니다.", ErrorLevel.WARN),
 
     /** Pet */
-    INVALID_CUMULATIVE_POINT(400, ErrorKind.CLIENT_ERROR, "잘못된 누적 포인트입니다.", ErrorLevel.INFO),
+    INVALID_CUMULATIVE_POINT(400, ErrorKind.CLIENT_ERROR, "잘못된 누적 포인트입니다.", ErrorLevel.WARN),
+    NOT_BLANK_NICKNAME(400, ErrorKind.CLIENT_ERROR, "펫 이름은 비워둘 수 없습니다.", ErrorLevel.WARN),
+    INVALID_PET_NICKNAME(400, ErrorKind.CLIENT_ERROR, "펫 이름은 2자 이상 12자 이하로 입력해주세요.", ErrorLevel.WARN),
 }
