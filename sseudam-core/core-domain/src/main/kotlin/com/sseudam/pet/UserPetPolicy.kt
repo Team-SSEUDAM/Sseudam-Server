@@ -12,7 +12,7 @@ class UserPetPolicy {
             cumulativePoint in LevelStandard.LEVEL_2_RANGE -> Pet.LevelType.LEVEL_2
             cumulativePoint in LevelStandard.LEVEL_3_RANGE -> Pet.LevelType.LEVEL_3
             cumulativePoint in LevelStandard.LEVEL_4_RANGE -> Pet.LevelType.LEVEL_4
-            LevelStandard.LEVEL_5_MIN <= cumulativePoint -> Pet.LevelType.LEVEL_5
+            LevelStandard.SPECIAL_MIN <= cumulativePoint -> Pet.LevelType.SPECIAL
             else -> throw ErrorException(ErrorType.INVALID_CUMULATIVE_POINT)
         }
 
@@ -22,6 +22,15 @@ class UserPetPolicy {
             Pet.LevelType.LEVEL_2 -> LevelStandard.LEVEL_2_MAX.toLong()
             Pet.LevelType.LEVEL_3 -> LevelStandard.LEVEL_3_MAX.toLong()
             Pet.LevelType.LEVEL_4 -> LevelStandard.LEVEL_4_MAX.toLong()
-            Pet.LevelType.LEVEL_5 -> Long.MAX_VALUE
+            Pet.LevelType.SPECIAL -> Long.MAX_VALUE
+        }
+
+    fun getMinLevelStandard(levelType: Pet.LevelType): Long =
+        when (levelType) {
+            Pet.LevelType.LEVEL_1 -> LevelStandard.LEVEL_1_MIN.toLong()
+            Pet.LevelType.LEVEL_2 -> LevelStandard.LEVEL_2_MIN.toLong()
+            Pet.LevelType.LEVEL_3 -> LevelStandard.LEVEL_3_MIN.toLong()
+            Pet.LevelType.LEVEL_4 -> LevelStandard.LEVEL_4_MIN.toLong()
+            Pet.LevelType.SPECIAL -> LevelStandard.SPECIAL_MIN.toLong()
         }
 }

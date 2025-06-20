@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface PetPointHistoryJpaRepository :
     JpaRepository<PetPointHistoryEntity, Long>,
-    KotlinJdslJpqlExecutor
+    KotlinJdslJpqlExecutor {
+    fun findAllByUserPetId(userPetId: Long): MutableList<PetPointHistoryEntity>
+}

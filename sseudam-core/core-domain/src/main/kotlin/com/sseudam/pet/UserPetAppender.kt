@@ -6,12 +6,15 @@ import org.springframework.stereotype.Component
 class UserPetAppender(
     private val userPetRepository: UserPetRepository,
 ) {
-    fun append(userId: Long): UserPet.Info =
+    fun append(
+        userId: Long,
+        pet: Pet.Info,
+    ): UserPet.Info =
         userPetRepository.save(
             UserPet.Create(
                 userId = userId,
-                petId = 1L,
-                nickname = Pet.LevelType.LEVEL_1.defaultName,
+                petId = pet.id,
+                nickname = "냥이",
                 point = 0L,
             ),
         )

@@ -11,27 +11,27 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "t_pet_point_history")
 class PetPointHistoryEntity(
-    val userId: Long,
-    val petId: Long,
+    val userPetId: Long,
+    val previousPoint: Long,
+    val additionalPoint: Long,
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(50)")
     val event: PetPointHistory.PointEvent,
-    val point: Long,
 ) : BaseEntity() {
     constructor(create: PetPointHistory.Create) : this(
-        userId = create.userId,
-        petId = create.petId,
+        userPetId = create.userPetId,
+        previousPoint = create.previousPoint,
+        additionalPoint = create.additionalPoint,
         event = create.event,
-        point = create.point,
     )
 
     fun toPetPointHistoryInfo() =
         PetPointHistory.Info(
             id = id!!,
-            userId = userId,
-            petId = petId,
+            userPetId = userPetId,
             event = event,
-            point = point,
+            previousPoint = previousPoint,
+            additionalPoint = additionalPoint,
             createdAt = createdAt,
         )
 }
