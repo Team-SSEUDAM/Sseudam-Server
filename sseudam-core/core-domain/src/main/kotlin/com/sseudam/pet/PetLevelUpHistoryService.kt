@@ -5,8 +5,25 @@ import java.time.Month
 
 @Service
 class PetLevelUpHistoryService(
+    private val petLevelUpHistoryAppender: PetLevelUpHistoryAppender,
     private val petLevelUpHistoryReader: PetLevelUpHistoryReader,
 ) {
+    fun append(
+        userPet: UserPet.Info,
+        petInfo: Pet.Info,
+    ) {
+        petLevelUpHistoryAppender.append(
+            PetLevelUpHistory.Create(
+                userId = userPet.userId,
+                userPetId = userPet.id,
+                nickname = userPet.nickname,
+                year = petInfo.year,
+                monthly = petInfo.monthly,
+                levelType = petInfo.levelType,
+            ),
+        )
+    }
+
     fun findAllBy(
         currentYear: Int,
         currentMonth: Month,

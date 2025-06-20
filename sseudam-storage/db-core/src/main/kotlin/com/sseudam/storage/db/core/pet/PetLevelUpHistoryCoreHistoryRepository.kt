@@ -11,6 +11,16 @@ class PetLevelUpHistoryCoreHistoryRepository(
     private val petLevelUpHistoryJpaRepository: PetLevelUpHistoryJpaRepository,
     private val txAdvice: TxAdvice,
 ) : PetLevelUpHistoryRepository {
+    override fun save(petLevelUpHistory: PetLevelUpHistory.Create): PetLevelUpHistory.Info =
+        txAdvice.write {
+            petLevelUpHistoryJpaRepository
+                .save(
+                    PetLevelUpHistoryEntity(
+                        petLevelUpHistory,
+                    ),
+                ).toPetLevelUpHistoryInfo()
+        }
+
     override fun findAllBy(
         currentYear: Int,
         currentMonth: Month,

@@ -7,6 +7,8 @@ import java.time.Month
 class PetReader(
     private val petRepository: PetRepository,
 ) {
+    fun readBy(petId: Long): Pet.Info = petRepository.findBy(petId)
+
     fun readAllLatestSeasonPets(
         currentYear: Int,
         currentMonth: Month,

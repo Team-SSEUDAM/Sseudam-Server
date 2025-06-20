@@ -1,5 +1,6 @@
 package com.sseudam.storage.db.core.pet
 
+import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.PetPointHistory
 import com.sseudam.storage.db.core.support.BaseEntity
 import jakarta.persistence.Column
@@ -16,20 +17,20 @@ class PetPointHistoryEntity(
     val additionalPoint: Long,
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(50)")
-    val event: PetPointHistory.PointEvent,
+    val action: PetPointAction,
 ) : BaseEntity() {
     constructor(create: PetPointHistory.Create) : this(
         userPetId = create.userPetId,
         previousPoint = create.previousPoint,
         additionalPoint = create.additionalPoint,
-        event = create.event,
+        action = create.action,
     )
 
     fun toPetPointHistoryInfo() =
         PetPointHistory.Info(
             id = id!!,
             userPetId = userPetId,
-            event = event,
+            action = action,
             previousPoint = previousPoint,
             additionalPoint = additionalPoint,
             createdAt = createdAt,

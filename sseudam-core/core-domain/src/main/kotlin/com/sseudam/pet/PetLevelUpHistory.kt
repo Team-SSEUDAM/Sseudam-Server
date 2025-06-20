@@ -8,7 +8,6 @@ class PetLevelUpHistory {
     data class Create(
         val userId: Long,
         val userPetId: Long,
-        val pointHistoryId: Long,
         val nickname: String,
         val year: Int,
         val monthly: Month,
@@ -19,7 +18,6 @@ class PetLevelUpHistory {
         val id: Long,
         val userId: Long,
         val userPetId: Long,
-        val pointHistoryId: Long,
         val nickname: String,
         val year: Int,
         val monthly: Month,
