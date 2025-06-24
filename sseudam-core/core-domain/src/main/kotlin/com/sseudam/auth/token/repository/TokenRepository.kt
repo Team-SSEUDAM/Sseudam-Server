@@ -26,6 +26,8 @@ interface TokenRepository {
 
     fun adminRefresh(refreshToken: String): Token
 
+    fun adminTokenRemove(accessToken: String)
+
     fun remove(token: String): String
 
     fun removeByUserKey(userKey: String)

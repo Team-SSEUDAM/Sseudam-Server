@@ -240,6 +240,11 @@ class JwtProvider(
         return jwt.id
     }
 
+    override fun adminTokenRemove(accessToken: String) {
+        validateToken(accessToken)
+        redisTokenRepository.deleteAllToken(accessToken)
+    }
+
     override fun removeByUserKey(userKey: String) {
         authenticationHistoryUpdater.removeToken(userKey).map {
             redisTokenRepository.deleteAllToken(it)
