@@ -46,6 +46,8 @@ class AdminFacade(
         return AdminToken(token.accessToken, token.refreshToken)
     }
 
+    fun logout(accessToken: String) = authService.adminLogout(accessToken)
+
     fun reissue(refreshToken: RefreshToken): AdminToken {
         val token = authService.adminReissue(refreshToken)
         return AdminToken(token.accessToken, token.refreshToken)

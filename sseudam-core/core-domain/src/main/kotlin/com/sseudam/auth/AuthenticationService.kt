@@ -41,4 +41,6 @@ class AuthenticationService(
     fun adminLogin(adminId: Long): Token = authenticationProcessor.adminLogin(adminId, listOf(GrantedAuthority(AuthorityType.ADMIN)))
 
     fun adminReissue(refreshToken: RefreshToken): Token = authenticationProcessor.adminRenew(refreshToken.token)
+
+    fun adminLogout(accessToken: String) = authenticationProcessor.adminLogout(accessToken)
 }
