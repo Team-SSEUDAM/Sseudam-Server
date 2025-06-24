@@ -24,6 +24,8 @@ interface TokenRepository {
 
     fun renew(refreshToken: String): Token
 
+    fun adminRefresh(refreshToken: String): Token
+
     fun remove(token: String): String
 
     fun removeByUserKey(userKey: String)
