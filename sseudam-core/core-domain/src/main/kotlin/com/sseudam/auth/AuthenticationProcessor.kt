@@ -70,4 +70,8 @@ class AuthenticationProcessor(
         adminId: Long,
         grantedAuthorities: List<GrantedAuthority>,
     ): Token = tokenRepository.create(adminId, grantedAuthorities)
+
+    fun adminRenew(refreshToken: String): Token = tokenRepository.adminRefresh(refreshToken)
+
+    fun adminLogout(accessToken: String) = tokenRepository.adminTokenRemove(accessToken)
 }

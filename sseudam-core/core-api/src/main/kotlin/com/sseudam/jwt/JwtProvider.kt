@@ -199,12 +199,50 @@ class JwtProvider(
         }
     }
 
+    override fun adminRefresh(refreshToken: String): Token {
+        val jwt = validateToken(refreshToken)
+        val tokenWithAuthentication = redisTokenRepository.findByToken(jwt.tokenValue)
+        removeRotationToken(tokenWithAuthentication.accessToken, tokenWithAuthentication.refreshToken)
+
+        val newAccessToken =
+            issueAccessToken(
+                jwtId = tokenWithAuthentication.provider.userId.toString(),
+                grantedAuthorities =
+                    tokenWithAuthentication.provider.grantedAuthorities.map {
+                        GrantedAuthority(AuthorityType.valueOf(it))
+                    },
+            )
+        val newRefreshToken =
+            issueRefreshToken(
+                jwtId = tokenWithAuthentication.provider.userId.toString(),
+            )
+
+        return Token(
+            accessToken = newAccessToken,
+            refreshToken = newRefreshToken,
+        ).apply {
+            redisTokenRepository.create(
+                accessToken = this.accessToken,
+                refreshToken = this.refreshToken,
+                deviceId = tokenWithAuthentication.deviceId,
+                providerDetail = tokenWithAuthentication.provider,
+                accessTokenExpiration = authenticationProperties.accessTokenExpirationSeconds,
+                refreshTokenExpiration = authenticationProperties.refreshTokenExpirationSeconds,
+            )
+        }
+    }
+
     override fun remove(token: String): String {
         val jwt = validateToken(token)
         authenticationHistoryUpdater.remove(token).apply {
             redisTokenRepository.deleteAllToken(this)
         }
         return jwt.id
+    }
+
+    override fun adminTokenRemove(accessToken: String) {
+        validateToken(accessToken)
+        redisTokenRepository.deleteAllToken(accessToken)
     }
 
     override fun removeByUserKey(userKey: String) {
