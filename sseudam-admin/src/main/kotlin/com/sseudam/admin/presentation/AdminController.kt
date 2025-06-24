@@ -1,6 +1,7 @@
 package com.sseudam.admin.presentation
 
 import com.sseudam.admin.application.AdminFacade
+import com.sseudam.admin.domain.AdminRefreshToken
 import com.sseudam.admin.presentation.request.AdminLoginRequest
 import com.sseudam.admin.presentation.request.report.UpdateReportRequest
 import com.sseudam.admin.presentation.response.AdminTokenResponse
@@ -37,6 +38,15 @@ class AdminController(
         @RequestBody request: AdminLoginRequest,
     ): AdminTokenResponse {
         val token = adminFacade.login(request.loginId, request.password)
+        return AdminTokenResponse.of(token)
+    }
+
+    @Operation(summary = "어드민 토큰 재발급", description = "어드민 토큰을 재발급합니다.")
+    @PostMapping("/reissue")
+    fun reissueToken(
+        @RequestBody request: AdminRefreshToken,
+    ): AdminTokenResponse {
+        val token = adminFacade.reissue(request.toRefreshToken())
         return AdminTokenResponse.of(token)
     }
 

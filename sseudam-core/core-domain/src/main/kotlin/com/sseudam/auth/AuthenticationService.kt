@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service
 class AuthenticationService(
     private val authenticationProcessor: AuthenticationProcessor,
 ) {
-    fun adminLogin(adminId: Long): Token = authenticationProcessor.adminLogin(adminId, listOf(GrantedAuthority(AuthorityType.ADMIN)))
-
     fun login(
         deviceId: String?,
         user: User,
@@ -39,4 +37,8 @@ class AuthenticationService(
     fun withdrawUser(userKey: String) {
         authenticationProcessor.withdrawal(userKey)
     }
+
+    fun adminLogin(adminId: Long): Token = authenticationProcessor.adminLogin(adminId, listOf(GrantedAuthority(AuthorityType.ADMIN)))
+
+    fun adminReissue(refreshToken: RefreshToken): Token = authenticationProcessor.adminRenew(refreshToken.token)
 }
