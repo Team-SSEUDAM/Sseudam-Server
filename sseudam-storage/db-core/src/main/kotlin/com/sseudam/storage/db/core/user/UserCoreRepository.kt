@@ -1,5 +1,6 @@
 package com.sseudam.storage.db.core.user
 
+import com.sseudam.common.Address
 import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
@@ -109,6 +110,16 @@ class UserCoreRepository(
             user.updateName(name)
             user.updateNickname(name)
             return@write user.toProfile()
+        }
+
+    override fun updateAddress(
+        userKey: String,
+        address: Address,
+    ): UserProfile =
+        txAdvice.write {
+            val user = userJpaRepository.findByUserKeyAndDeletedAtIsNull(userKey) ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
+            user.updateAddress(address)
+            user.toProfile()
         }
 
     override fun updateEmail(

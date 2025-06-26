@@ -1,5 +1,6 @@
 package com.sseudam.user
 
+import com.sseudam.common.Address
 import com.sseudam.support.cursor.OffsetPageRequest
 
 interface UserRepository {
@@ -44,6 +45,11 @@ interface UserRepository {
     fun updateName(
         userKey: String,
         name: String,
+    ): UserProfile
+
+    fun updateAddress(
+        userKey: String,
+        address: Address,
     ): UserProfile
 
     fun updateEmail(

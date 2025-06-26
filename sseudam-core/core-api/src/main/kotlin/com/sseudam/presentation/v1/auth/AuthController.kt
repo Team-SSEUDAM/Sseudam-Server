@@ -4,6 +4,7 @@ import com.sseudam.auth.AuthenticationFacade
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.auth.CredentialSocial
 import com.sseudam.client.oauth.OAuthService
+import com.sseudam.common.Address
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.auth.request.LoginRequest
 import com.sseudam.presentation.v1.auth.request.RefreshTokenRequest
@@ -109,6 +110,13 @@ class AuthController(
             throw ErrorException(ErrorType.NOT_FOUND_DATA)
         } else {
             userService.updateName(tempUser.key, request.name)
+            userService.updateAddress(
+                tempUser.key,
+                Address(
+                    city = request.address.split(" ")[1],
+                    site = request.address,
+                ),
+            )
         }
         return SignUpResponse("회원가입에 성공했습니다.")
     }

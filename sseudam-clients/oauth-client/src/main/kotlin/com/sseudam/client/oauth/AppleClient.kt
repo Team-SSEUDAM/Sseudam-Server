@@ -1,8 +1,6 @@
 package com.sseudam.client.oauth
 
-import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nimbusds.jose.JOSEException
 import com.nimbusds.jose.crypto.RSASSAVerifier
 import com.nimbusds.jose.jwk.JWK
 import com.nimbusds.jose.jwk.RSAKey
@@ -65,19 +63,11 @@ class AppleClient internal constructor(
     private fun isSignatureValid(signedJWT: SignedJWT): Boolean {
         val appleKeys = appleApi.getApplePublicKeys().keys
         for (key in appleKeys) {
-            try {
-                val rsaKey = JWK.parse(objectMapper.writeValueAsString(key)) as RSAKey
-                val publicKey = rsaKey.toRSAPublicKey()
-                val verifier = RSASSAVerifier(publicKey)
-                if (signedJWT.verify(verifier)) {
-                    return true
-                }
-            } catch (e: JsonProcessingException) {
-                throw AuthenticationErrorException(AuthenticationErrorType.INVALID_APPLE_TOKEN)
-            } catch (e: ParseException) {
-                throw AuthenticationErrorException(AuthenticationErrorType.INVALID_APPLE_TOKEN)
-            } catch (e: JOSEException) {
-                throw AuthenticationErrorException(AuthenticationErrorType.INVALID_APPLE_TOKEN)
+            val rsaKey = JWK.parse(objectMapper.writeValueAsString(key)) as RSAKey
+            val publicKey = rsaKey.toRSAPublicKey()
+            val verifier = RSASSAVerifier(publicKey)
+            if (signedJWT.verify(verifier)) {
+                return true
             }
         }
         return false

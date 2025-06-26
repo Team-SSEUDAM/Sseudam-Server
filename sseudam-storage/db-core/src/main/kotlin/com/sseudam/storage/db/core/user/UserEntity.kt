@@ -94,4 +94,8 @@ class UserEntity(
     fun updateEmail(email: String) {
         this.email = email
     }
+
+    fun updateAddress(address: Address) {
+        this.address = address
+    }
 }
