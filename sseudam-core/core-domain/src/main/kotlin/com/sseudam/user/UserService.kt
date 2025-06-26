@@ -1,5 +1,6 @@
 package com.sseudam.user
 
+import com.sseudam.common.Address
 import com.sseudam.support.cursor.OffsetPageRequest
 import org.springframework.stereotype.Service
 
@@ -44,6 +45,11 @@ class UserService(
         userValidator.verifyNickname(name)
         return userUpdater.updateName(userKey, name)
     }
+
+    fun updateAddress(
+        userKey: String,
+        address: Address,
+    ): UserProfile = userUpdater.updateAddress(userKey, address)
 
     fun validateNickname(nickname: String): Boolean {
         userValidator.verifyNickname(nickname)
