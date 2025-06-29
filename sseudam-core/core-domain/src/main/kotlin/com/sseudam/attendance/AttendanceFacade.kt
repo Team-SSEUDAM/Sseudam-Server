@@ -19,15 +19,14 @@ class AttendanceFacade(
         txAdvice.write {
             val attendance = attendanceService.attendance(userId)
 
-            if (attendance.second.continuity == 5) {
-                // 5일 연속 출석 시 포인트 추가
-                val bonusAction = PetPointAction.BONUS_ATTENDANCE
-                val userPet = userPetService.findByUser(userId)
-                userPetService.updatePoint(userPet!!, bonusAction)
-                petPointHistoryService.append(userPet, bonusAction)
-            }
-
             if (!attendance.second.isToday) {
+                if (attendance.second.continuity == 5) {
+                    val bonusAction = PetPointAction.BONUS_ATTENDANCE
+                    val userPet = userPetService.findByUser(userId)
+                    userPetService.updatePoint(userPet!!, bonusAction)
+                    petPointHistoryService.append(userPet, bonusAction)
+                }
+
                 petEventPublisher.publish(userId, PetPointAction.ATTENDANCE)
             }
 
