@@ -16,21 +16,12 @@ class UserPetUpdater(
         petId: Long,
     ): UserPet.Info = userPetRepository.updatePetId(userPetId, petId)
 
-    fun updatePoint(
+    fun updatePointByAction(
         userPetId: Long,
         action: PetPointAction,
     ): UserPet.Info =
         userPetRepository.updatePointByAction(
             userPetId = userPetId,
             action = action,
-        )
-
-    fun addPoint(
-        userPet: UserPet.Info,
-        point: Long,
-    ): UserPet.Info =
-        userPetRepository.updatePoint(
-            userPetId = userPet.id,
-            point = userPet.point.plus(point),
         )
 }

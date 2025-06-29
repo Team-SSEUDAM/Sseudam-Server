@@ -23,8 +23,10 @@ class AttendanceFacade(
                 if (attendance.second.continuity == 5) {
                     val bonusAction = PetPointAction.BONUS_ATTENDANCE
                     val userPet = userPetService.findByUser(userId)
-                    userPetService.updatePoint(userPet!!, bonusAction)
-                    petPointHistoryService.append(userPet, bonusAction)
+                    userPet?.let {
+                        userPetService.updatePointByAction(it, bonusAction)
+                        petPointHistoryService.append(it, bonusAction)
+                    }
                 }
 
                 petEventPublisher.publish(userId, PetPointAction.ATTENDANCE)

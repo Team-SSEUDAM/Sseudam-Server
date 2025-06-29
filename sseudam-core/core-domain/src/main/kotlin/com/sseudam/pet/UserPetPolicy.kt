@@ -16,16 +16,6 @@ class UserPetPolicy {
             else -> throw ErrorException(ErrorType.INVALID_CUMULATIVE_POINT)
         }
 
-    fun levelUp(userPet: UserPet.Info): Pet.LevelType {
-        val levelType = getLevelType(userPet.point)
-
-        val nextLevelType =
-            Pet.LevelType.entries.find { it.level == levelType.level }
-                ?: return levelType
-
-        return nextLevelType
-    }
-
     fun getMaxLevelStandard(levelType: Pet.LevelType): Long =
         when (levelType) {
             Pet.LevelType.LEVEL_1 -> LevelStandard.LEVEL_1_MAX.toLong()

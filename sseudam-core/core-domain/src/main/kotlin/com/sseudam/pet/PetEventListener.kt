@@ -30,7 +30,7 @@ class PetEventListener(
     fun addUserPetPoint(event: PetPointEvent) {
         val (currentYear, currentMonth) = LocalDateTime.now().let { it.year to it.month }
         val userPet =
-            userPetService.updatePoint(
+            userPetService.updatePointByAction(
                 userPet = event.userPet,
                 action = event.petPointAction,
             )
@@ -47,7 +47,8 @@ class PetEventListener(
                 .firstOrNull { it.levelType.level == levelType.level }
                 ?: return
 
-        val levelUpType = userPetPolicy.levelUp(userPet = userPet)
+        val levelUpType = userPetPolicy.getLevelType(userPet.point)
+
         if (levelUpType.level > currentPetInfo.levelType.level) {
             userPetService.updatePetId(
                 userPetId = userPet.id,
