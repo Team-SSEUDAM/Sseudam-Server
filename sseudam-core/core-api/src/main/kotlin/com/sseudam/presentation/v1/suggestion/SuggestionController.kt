@@ -1,11 +1,11 @@
 package com.sseudam.presentation.v1.suggestion
 
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
-import com.sseudam.presentation.v1.report.response.ReportValidationResponse
 import com.sseudam.presentation.v1.suggestion.request.SpotSuggestionCreateRequest
 import com.sseudam.presentation.v1.suggestion.request.SuggestionValidationRequest
 import com.sseudam.presentation.v1.suggestion.response.SpotSuggestionAllResponse
 import com.sseudam.presentation.v1.suggestion.response.SuggestionImageUrlResponse
+import com.sseudam.presentation.v1.suggestion.response.SuggestionValidationResponse
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionFacade
 import com.sseudam.suggestion.SuggestionService
@@ -54,11 +54,11 @@ class SuggestionController(
 
     @Operation(summary = "제보 시 쓰레기통 검증", description = "제보 시 쓰레기통을 검증합니다.")
     @GetMapping("/suggestions/validate")
-    fun validateSpotReport(
+    fun suggestionSpotValidate(
         user: User,
         @RequestBody request: SuggestionValidationRequest,
-    ): ReportValidationResponse {
-        val isValid = suggestionFacade.validateSpotReport(request.name)
-        return ReportValidationResponse.of(isValid)
+    ): SuggestionValidationResponse {
+        val isValid = suggestionFacade.validateSpotSuggestion(request.name)
+        return SuggestionValidationResponse.of(isValid)
     }
 }

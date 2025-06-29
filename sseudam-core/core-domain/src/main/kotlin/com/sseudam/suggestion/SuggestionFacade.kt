@@ -8,7 +8,7 @@ class SuggestionFacade(
     private val suggestionService: SuggestionService,
     private val trashSpotService: TrashSpotService,
 ) {
-    fun validateSpotReport(name: String): Boolean {
+    fun validateSpotSuggestion(name: String): Boolean {
         suggestionService.validateSpotSuggestionName(name)
         trashSpotService.validateSpotName(name)
 
