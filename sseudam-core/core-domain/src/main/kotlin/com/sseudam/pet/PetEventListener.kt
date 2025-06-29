@@ -27,28 +27,28 @@ class PetEventListener(
     /** 레벨업 여부 결정 및 성장 기록 저장 */
     @Async
     @EventListener
-    fun levelUpPet(event: PetPointEvent) {
+    fun addUserPetPoint(event: PetPointEvent) {
         val (currentYear, currentMonth) = LocalDateTime.now().let { it.year to it.month }
         val userPet =
-            userPetService.updatePoint(
+            userPetService.updatePointByAction(
                 userPet = event.userPet,
                 action = event.petPointAction,
             )
 
         val petInfos = petService.findAllLatestSeasonPets(currentYear, currentMonth)
-
         val currentPetInfo = petService.findBy(userPet.petId)
-        val currentLevelType = userPetPolicy.getLevelType(userPet.point)
-        val nextLevelTypeValue = currentLevelType.level + 1
 
-        if (nextLevelTypeValue >= Pet.LevelType.SPECIAL.level) return
+        val levelType = userPetPolicy.getLevelType(userPet.point)
+
+        if (levelType.level >= Pet.LevelType.SPECIAL.level) return
 
         val nextLevelPetInfo =
             petInfos
-                .firstOrNull { it.levelType.level == nextLevelTypeValue }
+                .firstOrNull { it.levelType.level == levelType.level }
                 ?: return
 
-        val levelUpType = userPetPolicy.levelUp(userPet = userPet)
+        val levelUpType = userPetPolicy.getLevelType(userPet.point)
+
         if (levelUpType.level > currentPetInfo.levelType.level) {
             userPetService.updatePetId(
                 userPetId = userPet.id,

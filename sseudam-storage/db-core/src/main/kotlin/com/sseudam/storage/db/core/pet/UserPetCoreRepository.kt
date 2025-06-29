@@ -51,7 +51,7 @@ class UserPetCoreRepository(
             userPet.updatePetId(petId).toUserPetInfo()
         }
 
-    override fun updatePoint(
+    override fun updatePointByAction(
         userPetId: Long,
         action: PetPointAction,
     ): UserPet.Info =
@@ -60,5 +60,16 @@ class UserPetCoreRepository(
                 userPetJpaRepository
                     .findByIdOrElseThrow(userPetId)
             userPet.updatePoint(userPet.point + action.point).toUserPetInfo()
+        }
+
+    override fun updatePoint(
+        userPetId: Long,
+        point: Long,
+    ): UserPet.Info =
+        txAdvice.write {
+            val userPet =
+                userPetJpaRepository
+                    .findByIdOrElseThrow(userPetId)
+            userPet.updatePoint(point).toUserPetInfo()
         }
 }

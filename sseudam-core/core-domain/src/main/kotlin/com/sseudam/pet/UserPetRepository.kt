@@ -15,8 +15,13 @@ interface UserPetRepository {
         petId: Long,
     ): UserPet.Info
 
-    fun updatePoint(
+    fun updatePointByAction(
         userPetId: Long,
         action: PetPointAction,
+    ): UserPet.Info
+
+    fun updatePoint(
+        userPetId: Long,
+        point: Long,
     ): UserPet.Info
 }

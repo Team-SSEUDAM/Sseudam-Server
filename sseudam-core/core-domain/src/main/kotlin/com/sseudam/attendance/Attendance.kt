@@ -26,7 +26,16 @@ class Attendance {
         val id: Long,
         val userId: Long,
         val date: LocalDate,
-        val continuity: Int,
+        val continuity: Int = 1,
+        val createdAt: LocalDateTime,
+    )
+
+    data class Complete(
+        val id: Long,
+        val userId: Long,
+        val date: LocalDate,
+        val continuity: Int = 1,
+        val isToday: Boolean,
         val createdAt: LocalDateTime,
     )
 }

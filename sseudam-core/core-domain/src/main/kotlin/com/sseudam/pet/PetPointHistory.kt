@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 class PetPointHistory {
     data class Create(
         val userPetId: Long,
-        val action: PetPointAction,
+        val pointAction: PetPointAction,
         val previousPoint: Long,
         val additionalPoint: Long,
     )
@@ -14,7 +14,7 @@ class PetPointHistory {
     data class Info(
         val id: Long,
         val userPetId: Long,
-        val action: PetPointAction,
+        val pointAction: PetPointAction,
         val previousPoint: Long,
         val additionalPoint: Long,
         val createdAt: LocalDateTime,

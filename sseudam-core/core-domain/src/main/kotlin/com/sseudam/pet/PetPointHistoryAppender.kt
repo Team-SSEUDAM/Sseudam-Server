@@ -13,7 +13,7 @@ class PetPointHistoryAppender(
         petPointHistoryRepository.save(
             PetPointHistory.Create(
                 userPetId = userPet.id,
-                action = action,
+                pointAction = action,
                 previousPoint = userPet.point,
                 additionalPoint = action.point,
             ),

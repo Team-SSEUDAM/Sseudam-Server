@@ -15,11 +15,11 @@ class UserPetService(
         pet: Pet.Info,
     ): UserPet.Info = userPetAppender.append(userId, pet)
 
-    fun updatePoint(
+    fun updatePointByAction(
         userPet: UserPet.Info,
         action: PetPointAction,
     ): UserPet.Info =
-        userPetUpdater.updatePoint(
+        userPetUpdater.updatePointByAction(
             userPetId = userPet.id,
             action = action,
         )

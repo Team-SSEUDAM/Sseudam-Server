@@ -17,20 +17,20 @@ class PetPointHistoryEntity(
     val additionalPoint: Long,
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(50)")
-    val action: PetPointAction,
+    val pointAction: PetPointAction,
 ) : BaseEntity() {
     constructor(create: PetPointHistory.Create) : this(
         userPetId = create.userPetId,
         previousPoint = create.previousPoint,
         additionalPoint = create.additionalPoint,
-        action = create.action,
+        pointAction = create.pointAction,
     )
 
     fun toPetPointHistoryInfo() =
         PetPointHistory.Info(
             id = id!!,
             userPetId = userPetId,
-            action = action,
+            pointAction = pointAction,
             previousPoint = previousPoint,
             additionalPoint = additionalPoint,
             createdAt = createdAt,

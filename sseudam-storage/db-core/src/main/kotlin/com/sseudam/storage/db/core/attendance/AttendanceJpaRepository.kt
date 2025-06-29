@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface AttendanceJpaRepository :
     JpaRepository<AttendanceEntity, Long>,
-    KotlinJdslJpqlExecutor
+    KotlinJdslJpqlExecutor {
+    fun findFirstByUserIdOrderByDateDesc(userId: Long): AttendanceEntity?
+}
