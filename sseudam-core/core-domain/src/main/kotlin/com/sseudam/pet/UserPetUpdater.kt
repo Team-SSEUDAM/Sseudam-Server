@@ -20,8 +20,17 @@ class UserPetUpdater(
         userPetId: Long,
         action: PetPointAction,
     ): UserPet.Info =
-        userPetRepository.updatePoint(
+        userPetRepository.updatePointByAction(
             userPetId = userPetId,
             action = action,
+        )
+
+    fun addPoint(
+        userPet: UserPet.Info,
+        point: Long,
+    ): UserPet.Info =
+        userPetRepository.updatePoint(
+            userPetId = userPet.id,
+            point = userPet.point.plus(point),
         )
 }

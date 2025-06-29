@@ -17,7 +17,7 @@ class ImageFileConstructor(
         private const val FILENAME_LENGTH = 24
     }
 
-    fun imageFileName(): String = "${randomFileName()}.png"
+    fun imageFileName(): String = "${randomFileName()}.jpeg"
 
     fun imageFilePath(
         userId: Long,

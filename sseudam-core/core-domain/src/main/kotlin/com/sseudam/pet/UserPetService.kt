@@ -24,6 +24,17 @@ class UserPetService(
             action = action,
         )
 
+    fun addPointUserPet(
+        userId: Long,
+        point: Long,
+    ): UserPet.Info {
+        val userPet = userPetReader.readPetInfoByUser(userId)
+        return userPetUpdater.addPoint(
+            userPet = userPet!!,
+            point = point,
+        )
+    }
+
     fun updatePetName(
         userId: Long,
         nickname: String,

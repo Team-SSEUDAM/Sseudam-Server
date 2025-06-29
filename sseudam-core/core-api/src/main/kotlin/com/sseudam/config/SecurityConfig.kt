@@ -152,6 +152,8 @@ class SecurityConfig(
                     "/api/v1/suggestions/**",
                     "/api/v1/reports/**",
                     "/api/v1/visited/**",
+                    "/api/v1/pets/**",
+                    "/api/v1/attendance/**",
                 ).hasRole("USER")
 
             // 나머지도 다 인증

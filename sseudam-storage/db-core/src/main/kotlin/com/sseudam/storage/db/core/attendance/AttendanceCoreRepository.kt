@@ -19,4 +19,11 @@ class AttendanceCoreRepository(
                     ),
                 ).toAttendanceInfo()
         }
+
+    override fun findByUserId(userId: Long): Attendance.Info? =
+        txAdvice.readOnly {
+            attendanceJpaRepository
+                .findFirstByUserIdOrderByDateDesc(userId)
+                ?.toAttendanceInfo()
+        }
 }

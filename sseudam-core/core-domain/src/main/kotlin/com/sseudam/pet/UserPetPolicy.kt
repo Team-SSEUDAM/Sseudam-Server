@@ -17,12 +17,11 @@ class UserPetPolicy {
         }
 
     fun levelUp(userPet: UserPet.Info): Pet.LevelType {
-        val currentLevelType = getLevelType(userPet.point)
-        val nextLevelTypeValue = currentLevelType.level + 1
+        val levelType = getLevelType(userPet.point)
 
         val nextLevelType =
-            Pet.LevelType.entries.find { it.level == nextLevelTypeValue }
-                ?: return currentLevelType
+            Pet.LevelType.entries.find { it.level == levelType.level }
+                ?: return levelType
 
         return nextLevelType
     }

@@ -20,4 +20,5 @@ enum class PetPointAction(
 
     /** 출석 체크 */
     ATTENDANCE(2),
+    BONUS_ATTENDANCE(5),
 }
