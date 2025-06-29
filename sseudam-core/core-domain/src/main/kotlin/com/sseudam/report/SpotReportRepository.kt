@@ -23,4 +23,6 @@ interface SpotReportRepository {
         reportId: Long,
         reportStatus: ReportStatus,
     ): SpotReport.Info
+
+    fun existsByName(name: String): Boolean
 }

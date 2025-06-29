@@ -17,4 +17,6 @@ class SuggestionReader(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
     ): List<SpotSuggestion.Info> = spotSuggestionRepository.findAllBy(offsetPageRequest, searchStatus)
+
+    fun existsByName(name: String): Boolean = spotSuggestionRepository.existsByName(name)
 }

@@ -76,4 +76,6 @@ interface TrashSpotJpaRepository :
     fun findAllByTrashType(type: TrashType): List<TrashSpotEntity>
 
     fun findAllByIdIn(spotIds: List<Long>): List<TrashSpotEntity>
+
+    fun existsByName(name: String): Boolean
 }

@@ -6,6 +6,8 @@ import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.suggestion.event.SuggestionEventPublisher
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.error.ErrorException
+import com.sseudam.support.error.ErrorType
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -50,5 +52,11 @@ class SuggestionService(
             petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
         }
         return suggestion
+    }
+
+    fun validateSpotSuggestionName(name: String) {
+        if (suggestionReader.existsByName(name)) {
+            throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
+        }
     }
 }

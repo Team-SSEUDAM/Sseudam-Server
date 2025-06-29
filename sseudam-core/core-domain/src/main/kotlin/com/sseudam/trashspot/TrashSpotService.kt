@@ -4,6 +4,8 @@ import com.sseudam.common.GeoConverter
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.suggestion.SpotSuggestion
+import com.sseudam.support.error.ErrorException
+import com.sseudam.support.error.ErrorType
 import com.sseudam.support.geo.GeoJson
 import com.sseudam.support.geo.Region
 import org.springframework.stereotype.Service
@@ -60,6 +62,12 @@ class TrashSpotService(
                 trashSpotUpdater.updateLocation(report.spotId, jtsPoint)
             }
             else -> {}
+        }
+    }
+
+    fun validateSpotName(name: String) {
+        if (trashSpotReader.existsByName(name)) {
+            throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
         }
     }
 }
