@@ -57,4 +57,10 @@ enum class ErrorType(
     INVALID_CUMULATIVE_POINT(400, ErrorKind.CLIENT_ERROR, "잘못된 누적 포인트입니다.", ErrorLevel.WARN),
     NOT_BLANK_NICKNAME(400, ErrorKind.CLIENT_ERROR, "펫 이름은 비워둘 수 없습니다.", ErrorLevel.WARN),
     INVALID_PET_NICKNAME(400, ErrorKind.CLIENT_ERROR, "펫 이름은 2자 이상 12자 이하로 입력해주세요.", ErrorLevel.WARN),
+
+    INVALID_TRASH_SPOT_NAME_TWO(400, ErrorKind.CLIENT_ERROR, "쓰레기통 이름은 2자 이상 입력해주세요.", ErrorLevel.WARN),
+    INVALID_TRASH_SPOT_NAME_TWELVE(400, ErrorKind.CLIENT_ERROR, "쓰레기통 이름은 12자 이하로 입력해주세요.", ErrorLevel.WARN),
+
+    SPOT_NAME_IS_BLANK(400, ErrorKind.CLIENT_ERROR, "쓰레기통 이름은 비워둘 수 없습니다.", ErrorLevel.WARN),
+    DUPLICATE_SPOT_NAME(409, ErrorKind.CLIENT_ERROR, "이미 존재하는 쓰레기통 이름입니다.", ErrorLevel.WARN),
 }

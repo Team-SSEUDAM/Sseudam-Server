@@ -6,6 +6,8 @@ import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.report.event.ReportEventPublisher
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.error.ErrorException
+import com.sseudam.support.error.ErrorType
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -46,5 +48,11 @@ class ReportService(
             petEventPublisher.publish(report.userId, PetPointAction.REPORT_APPROVED)
         }
         return report
+    }
+
+    fun validateSpotReportName(name: String) {
+        if (reportReader.existsByName(name)) {
+            throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
+        }
     }
 }

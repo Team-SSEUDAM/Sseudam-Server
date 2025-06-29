@@ -64,4 +64,9 @@ class SpotSuggestionCoreRepository(
             val suggestion = spotSuggestionJpaRepository.findByIdOrElseThrow(suggestionId)
             return@write suggestion.updateStatus(status).toSpotSuggestion()
         }
+
+    override fun existsByName(name: String): Boolean =
+        txAdvice.readOnly {
+            spotSuggestionJpaRepository.existsBySpotName(name)
+        }
 }

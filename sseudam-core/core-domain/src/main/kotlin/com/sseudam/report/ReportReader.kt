@@ -15,4 +15,6 @@ class ReportReader(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
     ): List<SpotReport.Info> = reportRepository.findAllBy(offsetPageRequest, searchType)
+
+    fun existsByName(name: String): Boolean = reportRepository.existsByName(name)
 }

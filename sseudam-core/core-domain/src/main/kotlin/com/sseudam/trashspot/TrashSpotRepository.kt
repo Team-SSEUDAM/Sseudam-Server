@@ -42,4 +42,6 @@ interface TrashSpotRepository {
         spotId: Long,
         point: Point,
     )
+
+    fun existsByName(name: String): Boolean
 }

@@ -60,4 +60,9 @@ class SpotReportCoreRepository(
                     .findByIdOrElseThrow(reportId)
             report.updateStatus(reportStatus).toSpotReport()
         }
+
+    override fun existsByName(name: String): Boolean =
+        txAdvice.readOnly {
+            spotReportJpaRepository.existsBySpotName(name)
+        }
 }

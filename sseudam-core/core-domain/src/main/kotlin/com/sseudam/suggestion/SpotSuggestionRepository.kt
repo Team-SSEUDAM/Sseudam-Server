@@ -25,4 +25,6 @@ interface SpotSuggestionRepository {
         suggestionId: Long,
         status: SuggestionStatus,
     ): SpotSuggestion.Info
+
+    fun existsByName(name: String): Boolean
 }

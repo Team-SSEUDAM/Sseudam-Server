@@ -127,4 +127,9 @@ class TrashSpotCoreRepository(
                 .updateLocation(point)
         }
     }
+
+    override fun existsByName(name: String): Boolean =
+        txAdvice.readOnly {
+            trashSpotJpaRepository.existsByName(name)
+        }
 }
