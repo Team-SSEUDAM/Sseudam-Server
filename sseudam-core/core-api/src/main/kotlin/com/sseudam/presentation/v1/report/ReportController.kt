@@ -61,7 +61,7 @@ class ReportController(
     }
 
     @Operation(summary = "신고 시 쓰레기통 검증", description = "신고 시 쓰레기통을 검증합니다.")
-    @GetMapping("/reports/validate")
+    @PostMapping("/reports/validate")
     fun reportSpotValidate(
         user: User,
         @RequestBody request: ReportValidationRequest,
