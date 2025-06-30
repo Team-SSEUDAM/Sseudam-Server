@@ -53,7 +53,7 @@ class SuggestionController(
     }
 
     @Operation(summary = "제보 시 쓰레기통 검증", description = "제보 시 쓰레기통을 검증합니다.")
-    @GetMapping("/suggestions/validate")
+    @PostMapping("/suggestions/validate")
     fun suggestionSpotValidate(
         user: User,
         @RequestBody request: SuggestionValidationRequest,
