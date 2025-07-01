@@ -20,7 +20,7 @@ class NotificationStoredCoreRepository(
                 ).toNotificationStoredInfo()
         }
 
-    override fun findById(notificationStoredId: Long): NotificationStored.Info? =
+    override fun findById(notificationStoredId: Long): NotificationStored.Info =
         txAdvice.readOnly {
             notificationStoredJpaRepository
                 .findByIdOrElseThrow(notificationStoredId)
