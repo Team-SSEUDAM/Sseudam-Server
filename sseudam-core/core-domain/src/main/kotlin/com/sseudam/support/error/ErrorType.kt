@@ -63,4 +63,7 @@ enum class ErrorType(
 
     SPOT_NAME_IS_BLANK(400, ErrorKind.CLIENT_ERROR, "쓰레기통 이름은 비워둘 수 없습니다.", ErrorLevel.WARN),
     DUPLICATE_SPOT_NAME(409, ErrorKind.CLIENT_ERROR, "이미 존재하는 쓰레기통 이름입니다.", ErrorLevel.WARN),
+
+    /** Notification */
+    NOT_FOUND_FCM_CREDENTIALS(500, ErrorKind.INTERNAL_SERVER_ERROR, "FCM 인증 정보가 없습니다.", ErrorLevel.ERROR),
 }
