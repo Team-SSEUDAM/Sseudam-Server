@@ -1,8 +1,9 @@
 package com.sseudam.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.sseudam.support.error.AuthenticationErrorMessage
 import com.sseudam.support.error.AuthenticationErrorType
+import com.sseudam.support.error.ErrorResponse
+import com.sseudam.support.response.ApiResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
@@ -23,7 +24,14 @@ class CustomAuthenticationEntryPoint(
             contentType = MediaType.APPLICATION_JSON_VALUE
             writer.write(
                 objectMapper.writeValueAsString(
-                    AuthenticationErrorMessage(AuthenticationErrorType.UNAUTHORIZED_TOKEN),
+                    ApiResponse.fail(
+                        status = HttpStatus.UNAUTHORIZED.value(),
+                        errorResponse =
+                            ErrorResponse(
+                                errorClassName = AuthenticationErrorType.UNAUTHORIZED_TOKEN::class.java.simpleName,
+                                message = AuthenticationErrorType.UNAUTHORIZED_TOKEN.message,
+                            ),
+                    ),
                 ),
             )
         }
