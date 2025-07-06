@@ -23,9 +23,9 @@ class UserDeviceCoreRepository(
     override fun findByUserId(userId: Long): UserDevice.Info? =
         txAdvice.readOnly {
             userDeviceJpaRepository
-                .findByUserId(userId)
-                .last()
-                .toUserDevice()
+                .findByUserIdAndDeletedAtIsNull(userId)
+                .lastOrNull()
+                ?.toUserDevice()
         }
 
     override fun findAllByUserKey(userKey: String): List<UserDevice.Info> =
