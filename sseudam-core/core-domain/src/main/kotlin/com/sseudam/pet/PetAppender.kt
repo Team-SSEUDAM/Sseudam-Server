@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 class PetAppender(
     private val petRepository: PetRepository,
 ) {
-    fun appendSeasonPet() {
-        // TODO: LastDay Scheduler Append
+    fun appendSeasonPet(create: Pet.Create) {
+        petRepository.save(create)
     }
 }
