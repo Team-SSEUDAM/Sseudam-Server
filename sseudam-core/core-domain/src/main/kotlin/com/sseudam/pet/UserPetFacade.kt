@@ -3,6 +3,7 @@ package com.sseudam.pet
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Service
@@ -13,13 +14,17 @@ class UserPetFacade(
     private val userPetPolicy: UserPetPolicy,
 ) {
     fun findPetInfo(userId: Long): UserPet.Info {
-        val (currentYear, currentMonth) = LocalDateTime.now().let { it.year to it.month }
+        val (currentYear, currentMonth) = LocalDate.now().let { it.year to it.month }
         val pets = petService.findAllLatestSeasonPets(currentYear, currentMonth)
-        return userPetService.findByUser(userId) ?: userPetService.append(userId, pets.first())
+        return userPetService.findByUser(userId)
+            ?: userPetService.append(
+                userId,
+                pets.find { it.levelType == Pet.LevelType.LEVEL_1 }!!,
+            )
     }
 
     fun findCurrentSeasonPetHistory(userId: Long): List<UserPetLevelUpHistoryInfo> {
-        val (currentYear, currentMonth) = LocalDateTime.now().let { it.year to it.month }
+        val (currentYear, currentMonth) = LocalDate.now().let { it.year to it.month }
         val userPetInfo = userPetService.findByUser(userId) ?: return emptyList()
         return petLevelUpHistoryService
             .findAllBy(currentYear, currentMonth, userPetInfo.id)
