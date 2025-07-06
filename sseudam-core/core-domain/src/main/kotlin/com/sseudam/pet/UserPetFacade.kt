@@ -17,10 +17,12 @@ class UserPetFacade(
         val (currentYear, currentMonth) = LocalDate.now().let { it.year to it.month }
         val pets = petService.findAllLatestSeasonPets(currentYear, currentMonth)
         return userPetService.findByUser(userId)
-            ?: userPetService.append(
-                userId,
-                pets.find { it.levelType == Pet.LevelType.LEVEL_1 }!!,
-            )
+            ?: run {
+                val level1Pet =
+                    pets.find { it.levelType == Pet.LevelType.LEVEL_1 }
+                        ?: throw ErrorException(ErrorType.INVALID_PET_LEVEL_TYPE)
+                userPetService.append(userId, level1Pet)
+            }
     }
 
     fun findCurrentSeasonPetHistory(userId: Long): List<UserPetLevelUpHistoryInfo> {
