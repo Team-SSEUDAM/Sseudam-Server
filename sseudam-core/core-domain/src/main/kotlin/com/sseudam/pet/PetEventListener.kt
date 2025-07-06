@@ -1,5 +1,6 @@
 package com.sseudam.pet
 
+import com.sseudam.notification.NotificationFacade
 import com.sseudam.pet.event.PetPointEvent
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
@@ -11,6 +12,7 @@ class PetEventListener(
     private val petService: PetService,
     private val userPetPolicy: UserPetPolicy,
     private val userPetService: UserPetService,
+    private val notificationFacade: NotificationFacade,
     private val petPointHistoryService: PetPointHistoryService,
     private val petLevelUpHistoryService: PetLevelUpHistoryService,
 ) {
@@ -21,6 +23,25 @@ class PetEventListener(
         petPointHistoryService.append(
             userPet = event.userPet,
             action = event.petPointAction,
+        )
+    }
+
+    @Async
+    @EventListener
+    fun sendPetPointNotification(event: PetPointEvent) {
+        val (currentYear, currentMonth) = LocalDateTime.now().let { it.year to it.month }
+        val userPet = event.userPet
+        val petInfo = petService.findBy(userPet.petId)
+
+        if (petInfo.levelType.level >= Pet.LevelType.SPECIAL.level) return
+
+        notificationFacade.sendPetPointNotification(
+            userId = userPet.userId,
+            petName = petInfo.name,
+            point = userPet.point,
+            levelType = petInfo.levelType,
+            currentYear = currentYear,
+            currentMonth = currentMonth,
         )
     }
 
