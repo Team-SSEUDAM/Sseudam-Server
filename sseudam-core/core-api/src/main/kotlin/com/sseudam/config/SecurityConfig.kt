@@ -116,6 +116,7 @@ class SecurityConfig(
         }
 
         http
+            .cors { }
             .headers { it.frameOptions { option -> option.disable() } }
             .csrf { it.disable() }
             .formLogin { it.disable() }
