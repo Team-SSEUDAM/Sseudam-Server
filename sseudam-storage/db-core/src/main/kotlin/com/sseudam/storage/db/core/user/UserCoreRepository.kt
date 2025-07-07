@@ -5,6 +5,7 @@ import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
+import com.sseudam.support.page.Page
 import com.sseudam.support.tx.TxAdvice
 import com.sseudam.user.NewUser
 import com.sseudam.user.NewUserKey
@@ -81,7 +82,7 @@ class UserCoreRepository(
             userJpaRepository.existsByEmailAndDeletedAtIsNull(email)
         }
 
-    override fun readAllBy(offsetPageRequest: OffsetPageRequest): List<UserProfile> =
+    override fun readAllBy(offsetPageRequest: OffsetPageRequest): Page<UserProfile> =
         txAdvice.readOnly {
             userCustomRepository.findAllBy(offsetPageRequest)
         }

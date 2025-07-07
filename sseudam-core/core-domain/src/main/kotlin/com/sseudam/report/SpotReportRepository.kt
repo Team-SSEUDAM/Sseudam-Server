@@ -1,6 +1,7 @@
 package com.sseudam.report
 
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.Page
 import org.locationtech.jts.geom.Point
 
 interface SpotReportRepository {
@@ -17,7 +18,7 @@ interface SpotReportRepository {
     fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): List<SpotReport.Info>
+    ): Page<SpotReport.Info>
 
     fun update(
         reportId: Long,
