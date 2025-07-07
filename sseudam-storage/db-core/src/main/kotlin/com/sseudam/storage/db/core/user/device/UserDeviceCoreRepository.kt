@@ -42,6 +42,13 @@ class UserDeviceCoreRepository(
                 .map { it.toUserDevice() }
         }
 
+    override fun findAllByUserId(userId: Long): List<UserDevice.Info> =
+        txAdvice.readOnly {
+            userDeviceJpaRepository
+                .findByUserIdAndDeletedAtIsNull(userId)
+                .map { it.toUserDevice() }
+        }
+
     override fun softDeleteBy(id: Long) {
         txAdvice.write {
             userDeviceJpaRepository.findById(id).ifPresent { entity ->

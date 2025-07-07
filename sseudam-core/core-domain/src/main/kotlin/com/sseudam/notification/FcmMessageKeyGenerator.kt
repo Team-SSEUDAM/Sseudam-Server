@@ -16,11 +16,6 @@ class FcmMessageKeyGenerator {
             key = "${generateDate()}_FCMK_${generateUUID()}",
         )
 
-    fun generateFcmUserKey(): FcmToUserKey =
-        FcmToUserKey(
-            key = "${generateDate()}_FCMTUK_${generateUUID()}",
-        )
-
     private fun generateUUID(): String = UUID.randomUUID().toString().replace("-", "")
 
     private fun generateDate(): String = FORMAT_YYYYMMDD.format(LocalDate.now())

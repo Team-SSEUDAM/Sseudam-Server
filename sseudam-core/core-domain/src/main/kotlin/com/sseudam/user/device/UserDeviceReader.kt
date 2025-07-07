@@ -10,5 +10,7 @@ class UserDeviceReader(
 
     fun readAllByUserKey(userKey: String): List<UserDevice.Info> = userDeviceRepository.findAllByUserKey(userKey)
 
+    fun readAllByUserId(userId: Long): List<UserDevice.Info> = userDeviceRepository.findAllByUserId(userId)
+
     fun readAll(): List<UserDevice.Info> = userDeviceRepository.findAll()
 }

@@ -12,5 +12,5 @@ interface UserDeviceJpaRepository :
 
     fun findAllByUserKey(userKey: String): MutableList<UserDeviceEntity>
 
-    fun findByUserIdAndDeletedAtIsNull(userId: Long): List<UserDeviceEntity>
+    fun findByUserIdAndDeletedAtIsNull(userId: Long): MutableList<UserDeviceEntity>
 }

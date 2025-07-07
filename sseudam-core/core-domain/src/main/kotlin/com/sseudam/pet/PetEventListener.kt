@@ -26,25 +26,6 @@ class PetEventListener(
         )
     }
 
-    @Async
-    @EventListener
-    fun sendPetPointNotification(event: PetPointEvent) {
-        val (currentYear, currentMonth) = LocalDateTime.now().let { it.year to it.month }
-        val userPet = event.userPet
-        val petInfo = petService.findBy(userPet.petId)
-
-        if (petInfo.levelType.level >= Pet.LevelType.SPECIAL.level) return
-
-        notificationFacade.sendPetPointNotification(
-            userId = userPet.userId,
-            petName = petInfo.name,
-            point = userPet.point,
-            levelType = petInfo.levelType,
-            currentYear = currentYear,
-            currentMonth = currentMonth,
-        )
-    }
-
     /** 레벨업 여부 결정 및 성장 기록 저장 */
     @Async
     @EventListener

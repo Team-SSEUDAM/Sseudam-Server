@@ -9,5 +9,7 @@ interface UserDeviceRepository {
 
     fun findAllByUserKey(userKey: String): List<UserDevice.Info>
 
+    fun findAllByUserId(userId: Long): List<UserDevice.Info>
+
     fun softDeleteBy(id: Long)
 }

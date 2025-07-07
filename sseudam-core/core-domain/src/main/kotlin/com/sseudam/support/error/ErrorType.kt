@@ -72,4 +72,16 @@ enum class ErrorType(
 
     /** Notification */
     NOT_FOUND_FCM_CREDENTIALS(500, ErrorKind.INTERNAL_SERVER_ERROR, "FCM 인증 정보가 없습니다.", ErrorLevel.ERROR),
+    INVALID_UPDATE_SUGGESTION_STATUS(
+        400,
+        ErrorKind.CLIENT_ERROR,
+        "잘못된 제안 상태입니다.",
+        ErrorLevel.WARN,
+    ),
+    INVALID_UPDATE_REPORT_STATUS(
+        400,
+        ErrorKind.CLIENT_ERROR,
+        "잘못된 신고 상태입니다.",
+        ErrorLevel.WARN,
+    ),
 }

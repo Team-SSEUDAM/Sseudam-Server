@@ -4,7 +4,12 @@ import com.sseudam.admin.domain.AdminToken
 import com.sseudam.admin.domain.AdminUserProfile
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.auth.token.RefreshToken
+import com.sseudam.notification.FcmMessageKeyGenerator
+import com.sseudam.notification.FcmSender
+import com.sseudam.notification.NotificationMessages
+import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.report.ReportService
+import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.report.UpdateReport
@@ -17,6 +22,7 @@ import com.sseudam.support.error.ErrorType
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.UserProfile
 import com.sseudam.user.UserService
+import com.sseudam.user.device.UserDeviceService
 import com.sseudam.visit.SpotVisitedService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -25,11 +31,14 @@ import org.springframework.stereotype.Service
 class AdminFacade(
     private val adminService: AdminService,
     private val userService: UserService,
+    private val userDeviceService: UserDeviceService,
     private val authService: AuthenticationService,
     private val suggestionService: SuggestionService,
     private val reportService: ReportService,
     private val spotVisitedService: SpotVisitedService,
     private val trashSpotService: TrashSpotService,
+    private val fcmMessageKeyGenerator: FcmMessageKeyGenerator,
+    private val fcmSender: FcmSender,
     private val passwordEncoder: PasswordEncoder,
 ) {
     fun login(
@@ -84,7 +93,51 @@ class AdminFacade(
     fun updateSpotSuggestionStatus(
         suggestionId: Long,
         status: SuggestionStatus,
-    ): SpotSuggestion.Info = suggestionService.updateSuggestion(suggestionId, status)
+    ): SpotSuggestion.Info {
+        val suggestion = suggestionService.updateSuggestion(suggestionId, status)
+        sendUpdateNotification(
+            userId = suggestion.userId,
+            body =
+                when (status) {
+                    SuggestionStatus.APPROVE -> NotificationMessages.APPROVE_SUGGESTION_CONTENTS
+                    SuggestionStatus.REJECT -> NotificationMessages.REJECT_SUGGESTION_CONTENTS
+                    else -> throw ErrorException(ErrorType.INVALID_UPDATE_SUGGESTION_STATUS)
+                },
+        )
+        return suggestion
+    }
 
-    fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info = reportService.updateSpotReport(updateReport)
+    fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info {
+        val report = reportService.updateSpotReport(updateReport)
+        sendUpdateNotification(
+            userId = report.userId,
+            body =
+                when (updateReport.status) {
+                    ReportStatus.APPROVE -> NotificationMessages.APPROVE_REPORT_CONTENTS
+                    ReportStatus.REJECT -> NotificationMessages.REJECT_REPORT_CONTENTS
+                    else -> throw ErrorException(ErrorType.INVALID_UPDATE_REPORT_STATUS)
+                },
+        )
+        return report
+    }
+
+    private fun sendUpdateNotification(
+        userId: Long,
+        body: String,
+    ) {
+        val userDevice = userDeviceService.findByUserId(userId)
+        val userProfile = userService.getProfile(userId)
+        userDevice
+            ?.let {
+                SendNotificationMessage(
+                    userId = it.userId,
+                    title = NotificationMessages.DEFAULT_TITLE,
+                    body = userProfile.nickname + body,
+                )
+            }?.let {
+                fcmSender.send(
+                    it,
+                )
+            }
+    }
 }

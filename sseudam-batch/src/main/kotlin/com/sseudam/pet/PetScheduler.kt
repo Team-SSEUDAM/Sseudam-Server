@@ -19,8 +19,9 @@ class PetScheduler(
 ) {
     @Scheduled(cron = "0 59 23 L * *")
     fun createPetSeason() {
-        val currentYear = LocalDate.now().plusDays(1).year
-        val currentMonth = Month.from(LocalDate.now().plusDays(1))
+        val nextDay = LocalDate.now().plusDays(1)
+        val currentYear = nextDay.year
+        val currentMonth = Month.from(nextDay)
         petService
             .createPetSeason(currentYear, currentMonth)
             .apply {
