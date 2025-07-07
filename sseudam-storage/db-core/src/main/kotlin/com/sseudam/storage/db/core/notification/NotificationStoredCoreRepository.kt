@@ -20,6 +20,14 @@ class NotificationStoredCoreRepository(
                 ).toNotificationStoredInfo()
         }
 
+    override fun saveAll(createAll: List<NotificationStored.Create>) =
+        txAdvice.write {
+            notificationStoredJpaRepository
+                .saveAll(
+                    createAll.map { NotificationStoredEntity(it) },
+                ).map { it.toNotificationStoredInfo() }
+        }
+
     override fun findById(notificationStoredId: Long): NotificationStored.Info =
         txAdvice.readOnly {
             notificationStoredJpaRepository

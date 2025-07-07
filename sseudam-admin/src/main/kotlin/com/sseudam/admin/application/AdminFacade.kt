@@ -4,9 +4,11 @@ import com.sseudam.admin.domain.AdminToken
 import com.sseudam.admin.domain.AdminUserProfile
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.auth.token.RefreshToken
-import com.sseudam.notification.FcmMessageKeyGenerator
 import com.sseudam.notification.FcmSender
 import com.sseudam.notification.NotificationMessages
+import com.sseudam.notification.NotificationService
+import com.sseudam.notification.NotificationStored
+import com.sseudam.notification.ReadStatus
 import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportStatus
@@ -38,8 +40,8 @@ class AdminFacade(
     private val reportService: ReportService,
     private val spotVisitedService: SpotVisitedService,
     private val trashSpotService: TrashSpotService,
-    private val fcmMessageKeyGenerator: FcmMessageKeyGenerator,
     private val fcmSender: FcmSender,
+    private val notificationService: NotificationService,
     private val passwordEncoder: PasswordEncoder,
 ) {
     fun login(
@@ -98,6 +100,8 @@ class AdminFacade(
         val suggestion = suggestionService.updateSuggestion(suggestionId, status)
         sendUpdateNotification(
             userId = suggestion.userId,
+            type = "SUGGESTION",
+            targetId = suggestion.id,
             body =
                 when (status) {
                     SuggestionStatus.APPROVE -> NotificationMessages.APPROVE_SUGGESTION_CONTENTS
@@ -112,6 +116,8 @@ class AdminFacade(
         val report = reportService.updateSpotReport(updateReport)
         sendUpdateNotification(
             userId = report.userId,
+            type = "REPORT",
+            targetId = report.id,
             body =
                 when (updateReport.status) {
                     ReportStatus.APPROVE -> NotificationMessages.APPROVE_REPORT_CONTENTS
@@ -124,6 +130,8 @@ class AdminFacade(
 
     private fun sendUpdateNotification(
         userId: Long,
+        type: String,
+        targetId: Long,
         body: String,
     ) {
         val userDevice = userDeviceService.findByUserId(userId)
@@ -138,6 +146,17 @@ class AdminFacade(
             }?.let {
                 fcmSender.send(
                     it,
+                )
+                notificationService.append(
+                    NotificationStored.Create(
+                        userId = it.userId,
+                        notificationStoredKey = "",
+                        type = type,
+                        parameterValue = targetId.toString(),
+                        topic = it.title,
+                        contents = it.body,
+                        readStatus = ReadStatus.UNREAD,
+                    ),
                 )
             }
     }

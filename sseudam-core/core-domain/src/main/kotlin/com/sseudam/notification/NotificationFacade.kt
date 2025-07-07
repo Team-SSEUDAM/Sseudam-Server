@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service
 class NotificationFacade(
     private val userDeviceService: UserDeviceService,
     private val userService: UserService,
-    private val notificationStoredAppender: NotificationStoredAppender,
     private val notificationStoredKeyGenerator: NotificationStoredKeyGenerator,
+    private val notificationService: NotificationService,
 ) {
     fun createWeeklyNotificationMessages(): List<NewFirebaseCloudMessage> {
         val userDevices = userDeviceService.findAll().filter { it.fcmToken.isNotBlank() }
@@ -31,7 +31,7 @@ class NotificationFacade(
                 )
             }
 
-        notificationStoredAppender.appendAll(
+        notificationService.appendAll(
             messages
                 .map { message ->
                     NotificationStored.Create(
