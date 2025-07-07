@@ -1,6 +1,7 @@
 package com.sseudam.suggestion
 
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.Page
 import org.locationtech.jts.geom.Point
 
 interface SpotSuggestionRepository {
@@ -19,7 +20,7 @@ interface SpotSuggestionRepository {
     fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): List<SpotSuggestion.Info>
+    ): Page<SpotSuggestion.Info>
 
     fun update(
         suggestionId: Long,

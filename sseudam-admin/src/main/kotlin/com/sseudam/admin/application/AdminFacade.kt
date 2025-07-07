@@ -19,6 +19,7 @@ import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
+import com.sseudam.support.page.Page
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.UserProfile
 import com.sseudam.user.UserService
@@ -74,19 +75,19 @@ class AdminFacade(
         return AdminUserProfile.of(profile, trashSpots)
     }
 
-    fun findUsers(offsetPageRequest: OffsetPageRequest): List<UserProfile> = userService.findUserProfileBy(offsetPageRequest)
+    fun findUsers(offsetPageRequest: OffsetPageRequest): Page<UserProfile> = userService.findUserProfileBy(offsetPageRequest)
 
     fun findSuggestions(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): List<SpotSuggestion.Info> = suggestionService.findSuggestionsBy(offsetPageRequest, searchStatus)
+    ): Page<SpotSuggestion.Info> = suggestionService.findSuggestionsBy(offsetPageRequest, searchStatus)
 
     fun findSuggestionDetails(suggestionId: Long): SpotSuggestion.Info = suggestionService.findSpotSuggestionById(suggestionId)
 
     fun findReports(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): List<SpotReport.Info> = reportService.findReportsBy(offsetPageRequest, searchType)
+    ): Page<SpotReport.Info> = reportService.findReportsBy(offsetPageRequest, searchType)
 
     fun findReportDetails(reportId: Long): SpotReport.Info = reportService.findSpotReportById(reportId)
 

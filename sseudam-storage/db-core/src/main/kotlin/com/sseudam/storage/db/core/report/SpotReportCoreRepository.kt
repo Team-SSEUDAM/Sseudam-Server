@@ -6,6 +6,7 @@ import com.sseudam.report.SpotReport
 import com.sseudam.report.SpotReportRepository
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.Page
 import com.sseudam.support.tx.TxAdvice
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Repository
@@ -45,7 +46,7 @@ class SpotReportCoreRepository(
     override fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): List<SpotReport.Info> =
+    ): Page<SpotReport.Info> =
         txAdvice.readOnly {
             spotReportCustomRepository.findAllBy(offsetPageRequest, searchType)
         }

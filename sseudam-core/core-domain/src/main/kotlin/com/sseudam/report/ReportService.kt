@@ -8,6 +8,7 @@ import com.sseudam.report.event.ReportEventPublisher
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
+import com.sseudam.support.page.Page
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -37,7 +38,7 @@ class ReportService(
     fun findReportsBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): List<SpotReport.Info> = reportReader.readAllBy(offsetPageRequest, searchType)
+    ): Page<SpotReport.Info> = reportReader.readAllBy(offsetPageRequest, searchType)
 
     fun findSpotReportById(reportId: Long): SpotReport.Info = reportReader.readById(reportId)
 
