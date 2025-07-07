@@ -5,6 +5,7 @@ import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SpotSuggestionRepository
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.Page
 import com.sseudam.support.tx.TxAdvice
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Repository
@@ -51,7 +52,7 @@ class SpotSuggestionCoreRepository(
     override fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): List<SpotSuggestion.Info> =
+    ): Page<SpotSuggestion.Info> =
         txAdvice.readOnly {
             spotSuggestionCustomRepository.findAllBy(offsetPageRequest, searchStatus)
         }

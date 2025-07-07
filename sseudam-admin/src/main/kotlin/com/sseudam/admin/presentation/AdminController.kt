@@ -12,8 +12,7 @@ import com.sseudam.admin.presentation.response.report.SpotReportResponse
 import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionAllResponse
 import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionResponse
 import com.sseudam.admin.presentation.response.user.AdminUserResponse
-import com.sseudam.admin.presentation.response.user.UserAllResponse
-import com.sseudam.admin.presentation.response.user.UserResponse
+import com.sseudam.admin.presentation.response.user.UserPageResponse
 import com.sseudam.report.ReportType
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
@@ -69,9 +68,9 @@ class AdminController(
     fun findUsersByPage(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "20") size: Int,
-    ): UserAllResponse =
-        UserAllResponse.of(
-            adminFacade.findUsers(OffsetPageRequest(page, size)).map { UserResponse.of(it) },
+    ): UserPageResponse =
+        UserPageResponse.of(
+            adminFacade.findUsers(OffsetPageRequest(page, size)),
         )
 
     @Operation(summary = "사용자 정보 조회", description = "사용자 정보를 조회합니다.")

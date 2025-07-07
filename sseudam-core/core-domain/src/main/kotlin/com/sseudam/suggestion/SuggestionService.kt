@@ -8,6 +8,7 @@ import com.sseudam.suggestion.event.SuggestionEventPublisher
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
+import com.sseudam.support.page.Page
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -38,7 +39,7 @@ class SuggestionService(
     fun findSuggestionsBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): List<SpotSuggestion.Info> = suggestionReader.readAllBy(offsetPageRequest, searchStatus)
+    ): Page<SpotSuggestion.Info> = suggestionReader.readAllBy(offsetPageRequest, searchStatus)
 
     fun findSpotSuggestionById(suggestionId: Long): SpotSuggestion.Info = suggestionReader.readBy(suggestionId)
 
