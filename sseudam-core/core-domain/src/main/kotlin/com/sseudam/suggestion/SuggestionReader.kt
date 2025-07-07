@@ -14,6 +14,8 @@ class SuggestionReader(
 
     fun readBySite(site: String): SpotSuggestion.Info? = spotSuggestionRepository.findBySite(site)
 
+    fun readLastBySpotId(spotId: Long): SpotSuggestion.Info? = spotSuggestionRepository.findLastBySpotId(spotId)
+
     fun readAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,

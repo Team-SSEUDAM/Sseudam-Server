@@ -5,7 +5,6 @@ import com.sseudam.presentation.v1.visit.response.SpotVisitedAllResponse
 import com.sseudam.presentation.v1.visit.response.SpotVisitedCountResponse
 import com.sseudam.presentation.v1.visit.response.SpotVisitedCreateResponse
 import com.sseudam.user.User
-import com.sseudam.visit.SpotVisited
 import com.sseudam.visit.SpotVisitedFacade
 import com.sseudam.visit.SpotVisitedService
 import io.swagger.v3.oas.annotations.Operation
@@ -26,7 +25,7 @@ class VisitedController(
         user: User,
         @PathVariable spotId: Long,
     ): SpotVisitedCreateResponse {
-        spotVisitedService.append(SpotVisited.Create(user.id, spotId))
+        spotVisitedFacade.visitSpot(user.id, spotId)
         return SpotVisitedCreateResponse("방문 인증이 완료되었어요")
     }
 
