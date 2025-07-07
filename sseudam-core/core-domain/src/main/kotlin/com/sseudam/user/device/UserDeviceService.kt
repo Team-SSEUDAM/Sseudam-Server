@@ -5,13 +5,15 @@ import org.springframework.stereotype.Service
 @Service
 class UserDeviceService(
     private val userDeviceAppender: UserDeviceAppender,
-    private val userDeviceRepository: UserDeviceRepository,
+    private val userDeviceReader: UserDeviceReader,
 ) {
     fun append(create: UserDevice.Create) {
         userDeviceAppender.append(create)
     }
 
-    fun findByUserId(userId: Long): UserDevice.Info? = userDeviceRepository.findByUserId(userId)
+    fun findAll(): List<UserDevice.Info> = userDeviceReader.readAll()
 
-    fun findAllByUserKey(userKey: String): List<UserDevice.Info> = userDeviceRepository.findAllByUserKey(userKey)
+    fun findByUserId(userId: Long): UserDevice.Info? = userDeviceReader.readByUserId(userId)
+
+    fun findAllByUserKey(userKey: String): List<UserDevice.Info> = userDeviceReader.readAllByUserKey(userKey)
 }
