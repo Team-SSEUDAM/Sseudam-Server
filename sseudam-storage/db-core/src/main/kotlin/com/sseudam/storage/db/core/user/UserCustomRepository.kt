@@ -28,7 +28,7 @@ class UserCustomRepository(
                     )
             }
         return Page.of(
-            content = users.content.map { it.toProfile() },
+            content = users.content.mapNotNull { it?.toProfile() },
             totalCount = users.totalElements,
         )
     }
