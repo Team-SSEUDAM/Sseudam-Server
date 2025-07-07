@@ -8,15 +8,18 @@ import org.springframework.stereotype.Service
 class NotificationFacade(
     private val userDeviceService: UserDeviceService,
     private val userService: UserService,
-    private val fcmSender: FcmSender,
+    private val notificationStoredAppender: NotificationStoredAppender,
+    private val notificationStoredKeyGenerator: NotificationStoredKeyGenerator,
 ) {
-    fun sendWeeklyNotification() {
+    fun createWeeklyNotificationMessages(): List<NewFirebaseCloudMessage> {
         val userDevices = userDeviceService.findAll().filter { it.fcmToken.isNotBlank() }
-        if (userDevices.isEmpty()) return
+        if (userDevices.isEmpty()) {
+            return listOf()
+        }
 
         val userIds = userDevices.map { it.userId }.distinct()
         val users = userService.findAllBy(userIds)
-        val (title, bodySuffix) = NotificationRegularMessage.randomMessage()
+        val (title, bodySuffix) = NotificationMessages.randomMessage()
 
         val userDevicesMap = userDevices.associateBy { it.userId }
         val messages =
@@ -28,6 +31,26 @@ class NotificationFacade(
                 )
             }
 
-        fcmSender.sendAll(messages.toSet())
+        notificationStoredAppender.appendAll(
+            messages
+                .map { message ->
+                    NotificationStored.Create(
+                        userId =
+                            userDevicesMap.entries
+                                .find { it.value.fcmToken == message.fcmToken }
+                                ?.value
+                                ?.userId
+                                ?: return@map null,
+                        notificationStoredKey = notificationStoredKeyGenerator.generate(),
+                        type = "REGULAR",
+                        parameterValue = "",
+                        topic = message.title,
+                        contents = message.body,
+                        readStatus = ReadStatus.UNREAD,
+                    )
+                }.filterNotNull(),
+        )
+
+        return messages
     }
 }
