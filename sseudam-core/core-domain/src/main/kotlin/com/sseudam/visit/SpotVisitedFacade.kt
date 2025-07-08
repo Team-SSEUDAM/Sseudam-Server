@@ -30,11 +30,14 @@ class SpotVisitedFacade(
         val suggestion = suggestionService.findSpotSuggestionBySite(spot.address.site) ?: return
         val profile = userService.getProfile(suggestion.userId)
         fcmSender.send(
-            SendNotificationMessage(
-                userId = suggestion.userId,
-                title = NotificationMessages.DEFAULT_TITLE,
-                body = NotificationMessages.anonymousVisitedSpotContents(profile.nickname),
-            ),
+            sendNotificationMessage =
+                SendNotificationMessage(
+                    userId = suggestion.userId,
+                    title = NotificationMessages.DEFAULT_TITLE,
+                    body = NotificationMessages.anonymousVisitedSpotContents(profile.nickname),
+                ),
+            type = "SPOT_VISITED",
+            parameterValue = spot.id.toString(),
         )
     }
 

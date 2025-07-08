@@ -3,6 +3,10 @@ package com.sseudam.pet
 import com.sseudam.notification.FcmSender
 import com.sseudam.notification.NewFirebaseCloudMessage
 import com.sseudam.notification.NotificationMessages
+import com.sseudam.notification.NotificationService
+import com.sseudam.notification.NotificationStored
+import com.sseudam.notification.NotificationStoredKeyGenerator
+import com.sseudam.notification.ReadStatus
 import com.sseudam.user.UserService
 import com.sseudam.user.device.UserDeviceService
 import org.springframework.scheduling.annotation.Scheduled
@@ -16,6 +20,8 @@ class PetScheduler(
     private val userDeviceService: UserDeviceService,
     private val fcmSender: FcmSender,
     private val userService: UserService,
+    private val notificationService: NotificationService,
+    private val notificationStoredKeyGenerator: NotificationStoredKeyGenerator,
 ) {
     @Scheduled(cron = "0 59 23 L * *")
     fun createPetSeason() {
@@ -40,6 +46,25 @@ class PetScheduler(
                             body = NotificationMessages.newPetContents(userProfiles[device.userId]?.nickname ?: "사용자"),
                         )
                     }
+
+                notificationService.appendAll(
+                    messages
+                        .map { message ->
+                            NotificationStored.Create(
+                                userId =
+                                    userDevices
+                                        .find { it.fcmToken == message.fcmToken }
+                                        ?.userId
+                                        ?: return@map null,
+                                notificationStoredKey = notificationStoredKeyGenerator.generate(),
+                                type = "PET_SEASON",
+                                parameterValue = "",
+                                topic = message.title,
+                                contents = message.body,
+                                readStatus = ReadStatus.UNREAD,
+                            )
+                        }.filterNotNull(),
+                )
                 fcmSender.sendAll(messages.toSet())
             }
     }

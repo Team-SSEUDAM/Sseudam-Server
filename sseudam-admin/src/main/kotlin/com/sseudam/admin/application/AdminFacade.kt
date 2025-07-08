@@ -7,8 +7,6 @@ import com.sseudam.auth.token.RefreshToken
 import com.sseudam.notification.FcmSender
 import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.NotificationService
-import com.sseudam.notification.NotificationStored
-import com.sseudam.notification.ReadStatus
 import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportStatus
@@ -145,18 +143,9 @@ class AdminFacade(
                 )
             }?.let {
                 fcmSender.send(
-                    it,
-                )
-                notificationService.append(
-                    NotificationStored.Create(
-                        userId = it.userId,
-                        notificationStoredKey = "",
-                        type = type,
-                        parameterValue = targetId.toString(),
-                        topic = it.title,
-                        contents = it.body,
-                        readStatus = ReadStatus.UNREAD,
-                    ),
+                    sendNotificationMessage = it,
+                    type = type,
+                    parameterValue = targetId.toString(),
                 )
             }
     }
