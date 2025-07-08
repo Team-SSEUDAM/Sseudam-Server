@@ -17,8 +17,6 @@ interface SpotSuggestionRepository {
 
     fun findBySite(site: String): SpotSuggestion.Info?
 
-    fun findLastBySpotId(spotId: Long): SpotSuggestion.Info?
-
     fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,

@@ -6,7 +6,6 @@ import com.sseudam.auth.AuthenticationService
 import com.sseudam.auth.token.RefreshToken
 import com.sseudam.notification.FcmSender
 import com.sseudam.notification.NotificationMessages
-import com.sseudam.notification.NotificationService
 import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportStatus
@@ -19,6 +18,7 @@ import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
+import com.sseudam.support.extension.logger
 import com.sseudam.support.page.Page
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.UserProfile
@@ -39,9 +39,12 @@ class AdminFacade(
     private val spotVisitedService: SpotVisitedService,
     private val trashSpotService: TrashSpotService,
     private val fcmSender: FcmSender,
-    private val notificationService: NotificationService,
     private val passwordEncoder: PasswordEncoder,
 ) {
+    companion object {
+        private val log by logger()
+    }
+
     fun login(
         loginId: String,
         password: String,
@@ -132,21 +135,23 @@ class AdminFacade(
         targetId: Long,
         body: String,
     ) {
-        val userDevice = userDeviceService.findByUserId(userId)
+        val userDevice = userDeviceService.findByUserId(userId) ?: return
+
         val userProfile = userService.getProfile(userId)
-        userDevice
-            ?.let {
-                SendNotificationMessage(
-                    userId = it.userId,
-                    title = NotificationMessages.DEFAULT_TITLE,
-                    body = userProfile.nickname + body,
-                )
-            }?.let {
-                fcmSender.send(
-                    sendNotificationMessage = it,
-                    type = type,
-                    parameterValue = targetId.toString(),
-                )
-            }
+
+        try {
+            fcmSender.send(
+                sendNotificationMessage =
+                    SendNotificationMessage(
+                        userId = userDevice.userId,
+                        title = NotificationMessages.DEFAULT_TITLE,
+                        body = userProfile.nickname + body,
+                    ),
+                type = type,
+                parameterValue = targetId.toString(),
+            )
+        } catch (e: Exception) {
+            log.warn("Failed to send notification for user $userId", e)
+        }
     }
 }

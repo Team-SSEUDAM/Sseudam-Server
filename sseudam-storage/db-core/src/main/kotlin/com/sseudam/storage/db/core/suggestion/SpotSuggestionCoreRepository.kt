@@ -49,13 +49,6 @@ class SpotSuggestionCoreRepository(
                 ?.toSpotSuggestion()
         }
 
-    override fun findLastBySpotId(spotId: Long): SpotSuggestion.Info? =
-        txAdvice.readOnly {
-            spotSuggestionJpaRepository
-                .findLastBySpotId(spotId)
-                ?.toSpotSuggestion()
-        }
-
     override fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,

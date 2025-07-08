@@ -28,44 +28,55 @@ class PetScheduler(
         val nextDay = LocalDate.now().plusDays(1)
         val currentYear = nextDay.year
         val currentMonth = Month.from(nextDay)
-        petService
-            .createPetSeason(currentYear, currentMonth)
-            .apply {
-                val userDevices = userDeviceService.findAll().filter { it.fcmToken.isNotBlank() }
-                if (userDevices.isEmpty()) return
+        petService.createPetSeason(currentYear, currentMonth)
+        sendNewPetNotifications()
+    }
 
-                val userProfiles =
-                    userService
-                        .findAllBy(userDevices.map { it.userId }.distinct())
-                        .associateBy { it.id }
-                val messages =
-                    userDevices.map { device ->
-                        NewFirebaseCloudMessage(
-                            fcmToken = device.fcmToken,
-                            title = NotificationMessages.DEFAULT_TITLE,
-                            body = NotificationMessages.newPetContents(userProfiles[device.userId]?.nickname ?: "사용자"),
-                        )
-                    }
-
-                notificationService.appendAll(
-                    messages
-                        .map { message ->
-                            NotificationStored.Create(
-                                userId =
-                                    userDevices
-                                        .find { it.fcmToken == message.fcmToken }
-                                        ?.userId
-                                        ?: return@map null,
-                                notificationStoredKey = notificationStoredKeyGenerator.generate(),
-                                type = "PET_SEASON",
-                                parameterValue = "",
-                                topic = message.title,
-                                contents = message.body,
-                                readStatus = ReadStatus.UNREAD,
-                            )
-                        }.filterNotNull(),
+    private fun sendNewPetNotifications() {
+        val userDevices =
+            userDeviceService
+                .findAll()
+                .filter { it.fcmToken.isNotBlank() }
+        if (userDevices.isEmpty()) return
+        val userProfiles =
+            userService
+                .findAllBy(userDevices.map { it.userId }.distinct())
+                .associateBy { it.id }
+        val messages =
+            userDevices.map { device ->
+                NewFirebaseCloudMessage(
+                    fcmToken = device.fcmToken,
+                    title = NotificationMessages.DEFAULT_TITLE,
+                    body =
+                        NotificationMessages.newPetContents(
+                            userProfiles[device.userId]?.nickname
+                                ?: DEFAULT_USER_NICKNAME,
+                        ),
                 )
-                fcmSender.sendAll(messages.toSet())
             }
+        fcmSender.sendAll(messages.toSet()).apply {
+            notificationService.appendAll(
+                messages
+                    .map { message ->
+                        NotificationStored.Create(
+                            userId =
+                                userDevices
+                                    .find { it.fcmToken == message.fcmToken }
+                                    ?.userId
+                                    ?: return@map null,
+                            notificationStoredKey = notificationStoredKeyGenerator.generate(),
+                            type = "PET_SEASON",
+                            parameterValue = "",
+                            topic = message.title,
+                            contents = message.body,
+                            readStatus = ReadStatus.UNREAD,
+                        )
+                    }.filterNotNull(),
+            )
+        }
+    }
+
+    companion object {
+        private const val DEFAULT_USER_NICKNAME = "사용자"
     }
 }

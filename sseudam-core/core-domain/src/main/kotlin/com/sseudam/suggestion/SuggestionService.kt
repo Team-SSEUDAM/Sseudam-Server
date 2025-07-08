@@ -60,6 +60,4 @@ class SuggestionService(
             throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
         }
     }
-
-    fun findSpotSuggestionBySpotId(spotId: Long): SpotSuggestion.Info? = suggestionReader.readLastBySpotId(spotId)
 }

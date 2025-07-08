@@ -19,7 +19,7 @@ class FcmSender(
         parameterValue: String,
     ) {
         val mobileDevices = userDeviceReader.readAllByUserId(sendNotificationMessage.userId)
-        val mobileDevice = mobileDevices.last()
+        val mobileDevice = mobileDevices.lastOrNull() ?: return
         val messages =
             FirebaseCloudMessage(
                 fcmKey = fcmMessageKeyGenerator.generateFcmKey(),

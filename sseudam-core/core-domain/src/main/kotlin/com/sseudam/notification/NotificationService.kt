@@ -15,5 +15,11 @@ class NotificationService(
         )
 
     fun appendAll(createAll: List<NotificationStored.Create>): List<NotificationStored.Info> =
-        notificationStoredAppender.appendAll(createAll)
+        notificationStoredAppender.appendAll(
+            createAll.map { notification ->
+                notification.copy(
+                    notificationStoredKey = notificationStoredKeyGenerator.generate(),
+                )
+            },
+        )
 }

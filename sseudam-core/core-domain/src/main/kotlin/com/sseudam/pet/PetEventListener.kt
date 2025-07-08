@@ -1,6 +1,5 @@
 package com.sseudam.pet
 
-import com.sseudam.notification.NotificationFacade
 import com.sseudam.pet.event.PetPointEvent
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
@@ -12,7 +11,6 @@ class PetEventListener(
     private val petService: PetService,
     private val userPetPolicy: UserPetPolicy,
     private val userPetService: UserPetService,
-    private val notificationFacade: NotificationFacade,
     private val petPointHistoryService: PetPointHistoryService,
     private val petLevelUpHistoryService: PetLevelUpHistoryService,
 ) {
