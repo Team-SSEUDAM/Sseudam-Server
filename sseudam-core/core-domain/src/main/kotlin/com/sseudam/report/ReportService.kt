@@ -44,8 +44,8 @@ class ReportService(
 
     fun updateSpotReport(updateReport: UpdateReport): SpotReport.Info {
         val report = reportUpdater.update(updateReport.reportId, updateReport.status)
+        reportEventPublisher.publish(report)
         if (report.status == ReportStatus.APPROVE) {
-            reportEventPublisher.publish(report)
             petEventPublisher.publish(report.userId, PetPointAction.REPORT_APPROVED)
         }
         return report
