@@ -48,8 +48,8 @@ class SuggestionService(
         status: SuggestionStatus,
     ): SpotSuggestion.Info {
         val suggestion = suggestionUpdater.update(suggestionId, status)
+        suggestionEventPublisher.publish(suggestion)
         if (suggestion.status == SuggestionStatus.APPROVE) {
-            suggestionEventPublisher.publish(suggestion)
             petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
         }
         return suggestion
