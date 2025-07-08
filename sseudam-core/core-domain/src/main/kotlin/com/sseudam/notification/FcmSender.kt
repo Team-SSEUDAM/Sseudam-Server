@@ -1,5 +1,6 @@
 package com.sseudam.notification
 
+import com.sseudam.user.device.UserDeviceReader
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 
@@ -7,7 +8,41 @@ import org.springframework.stereotype.Component
 class FcmSender(
     private val fcmRepository: FcmRepository,
     private val fcmMessageKeyGenerator: FcmMessageKeyGenerator,
+    private val notificationStoredKeyGenerator: NotificationStoredKeyGenerator,
+    private val userDeviceReader: UserDeviceReader,
+    private val notificationStoredAppender: NotificationStoredAppender,
 ) {
+    @Async
+    fun send(
+        sendNotificationMessage: SendNotificationMessage,
+        type: String,
+        parameterValue: String,
+    ) {
+        val mobileDevices = userDeviceReader.readAllByUserId(sendNotificationMessage.userId)
+        val mobileDevice = mobileDevices.lastOrNull() ?: return
+        val messages =
+            FirebaseCloudMessage(
+                fcmKey = fcmMessageKeyGenerator.generateFcmKey(),
+                fcmToken = mobileDevice.fcmToken,
+                title = sendNotificationMessage.title,
+                body = sendNotificationMessage.body,
+                tryCount = 0,
+                sent = false,
+            )
+        fcmRepository.send(messages)
+        notificationStoredAppender.append(
+            NotificationStored.Create(
+                notificationStoredKey = notificationStoredKeyGenerator.generate(),
+                userId = sendNotificationMessage.userId,
+                type = type,
+                parameterValue = parameterValue,
+                topic = sendNotificationMessage.title,
+                contents = sendNotificationMessage.body,
+                readStatus = ReadStatus.UNREAD,
+            ),
+        )
+    }
+
     fun sendAll(
         newMessages: Set<NewFirebaseCloudMessage>,
         maxTry: Int = 3,

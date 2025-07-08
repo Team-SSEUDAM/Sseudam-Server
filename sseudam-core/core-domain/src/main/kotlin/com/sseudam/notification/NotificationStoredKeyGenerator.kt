@@ -1,20 +1,16 @@
 package com.sseudam.notification
-
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 @Component
-class FcmMessageKeyGenerator {
+class NotificationStoredKeyGenerator {
     companion object {
         private val FORMAT_YYYYMMDD = DateTimeFormatter.ofPattern("yyyyMMdd")
     }
 
-    fun generateFcmKey(): FcmKey =
-        FcmKey(
-            key = "${generateDate()}_FCMK_${generateUUID()}",
-        )
+    fun generate(): String = "${generateDate()}_NHK_${generateUUID()}"
 
     private fun generateUUID(): String = UUID.randomUUID().toString().replace("-", "")
 

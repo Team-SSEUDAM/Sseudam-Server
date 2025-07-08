@@ -20,6 +20,13 @@ class UserDeviceCoreRepository(
                 ).toUserDevice()
         }
 
+    override fun findAll(): List<UserDevice.Info> =
+        txAdvice.readOnly {
+            userDeviceJpaRepository
+                .findAllByDeletedAtIsNull()
+                .map { it.toUserDevice() }
+        }
+
     override fun findByUserId(userId: Long): UserDevice.Info? =
         txAdvice.readOnly {
             userDeviceJpaRepository
@@ -32,6 +39,13 @@ class UserDeviceCoreRepository(
         txAdvice.readOnly {
             userDeviceJpaRepository
                 .findAllByUserKey(userKey)
+                .map { it.toUserDevice() }
+        }
+
+    override fun findAllByUserId(userId: Long): List<UserDevice.Info> =
+        txAdvice.readOnly {
+            userDeviceJpaRepository
+                .findByUserIdAndDeletedAtIsNull(userId)
                 .map { it.toUserDevice() }
         }
 

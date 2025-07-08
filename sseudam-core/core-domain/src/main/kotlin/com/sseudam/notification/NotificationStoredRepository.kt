@@ -3,6 +3,8 @@ package com.sseudam.notification
 interface NotificationStoredRepository {
     fun save(notificationStored: NotificationStored.Create): NotificationStored.Info
 
+    fun saveAll(createAll: List<NotificationStored.Create>): List<NotificationStored.Info>
+
     fun findById(notificationStoredId: Long): NotificationStored.Info
 
     fun findByUserIdAndReadStatus(

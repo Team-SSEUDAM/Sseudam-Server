@@ -62,7 +62,7 @@ class UserService(
         email: String,
     ): UserProfile = userUpdater.updateEmail(userKey, email)
 
-    fun getAllUserProfile(userIds: List<Long>): List<UserProfile> = userReader.readAllByUserIds(userIds)
+    fun findAllBy(userIds: List<Long>): List<UserProfile> = userReader.readAllByUserIds(userIds)
 
     fun checkEmail(email: String) {
         userValidator.verifyEmail(email)
