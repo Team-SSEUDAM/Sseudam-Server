@@ -33,9 +33,11 @@ class SpotVisitedFacade(
         userId: Long,
         spotId: Long,
     ): SpotVisited.Info {
-        val todayVisits = spotVisitedService.findTodaySpotVisitedByUser(userId, spotId)
+        val todayVisits = spotVisitedService.findTodaySpotVisitedByUserAndSpot(userId, spotId)
+
         if (todayVisits.isNotEmpty()) {
-            if (todayVisits.maxBy { it.visitedAt }.visitedAt <= LocalDateTime.now().plusMinutes(5)) {
+            val lastVisitTime = todayVisits.maxBy { it.visitedAt }.visitedAt
+            if (lastVisitTime.isAfter(LocalDateTime.now().minusMinutes(5))) {
                 throw ErrorException(ErrorType.SPOT_VISITED_ALREADY)
             }
             if (todayVisits.size >= 5) {

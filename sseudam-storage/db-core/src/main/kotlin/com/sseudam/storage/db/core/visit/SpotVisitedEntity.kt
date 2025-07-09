@@ -15,8 +15,8 @@ class SpotVisitedEntity(
 ) : BaseEntity() {
     constructor(spotVisitedCreate: SpotVisited.Create) : this(
         userId = spotVisitedCreate.userId,
-        date = spotVisitedCreate.date,
         spotId = spotVisitedCreate.spotId,
+        date = spotVisitedCreate.date,
     )
 
     fun toSpotVisitedInfo(): SpotVisited.Info =
@@ -24,6 +24,7 @@ class SpotVisitedEntity(
             id = id!!,
             userId = userId,
             spotId = spotId,
+            date = date,
             site = "",
             visitedAt = createdAt,
         )
