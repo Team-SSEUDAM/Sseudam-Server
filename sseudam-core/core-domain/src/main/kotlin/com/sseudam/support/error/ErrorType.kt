@@ -78,10 +78,26 @@ enum class ErrorType(
         "잘못된 제안 상태입니다.",
         ErrorLevel.WARN,
     ),
+
+    /** Report */
     INVALID_UPDATE_REPORT_STATUS(
         400,
         ErrorKind.CLIENT_ERROR,
         "잘못된 신고 상태입니다.",
+        ErrorLevel.WARN,
+    ),
+
+    /** Visited */
+    SPOT_VISITED_ALREADY(
+        409,
+        ErrorKind.CLIENT_ERROR,
+        "이미 방문한 쓰레기통입니다.",
+        ErrorLevel.WARN,
+    ),
+    SPOT_VISITED_LIMIT_EXCEEDED(
+        429,
+        ErrorKind.CLIENT_ERROR,
+        "오늘 쓰레기통 방문 횟수를 초과했습니다.",
         ErrorLevel.WARN,
     ),
 }

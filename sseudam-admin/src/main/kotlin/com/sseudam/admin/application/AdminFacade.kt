@@ -14,7 +14,6 @@ import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
-import com.sseudam.support.extension.logger
 import com.sseudam.support.page.Page
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.UserProfile
@@ -34,10 +33,6 @@ class AdminFacade(
     private val trashSpotService: TrashSpotService,
     private val passwordEncoder: PasswordEncoder,
 ) {
-    companion object {
-        private val log by logger()
-    }
-
     fun login(
         loginId: String,
         password: String,
