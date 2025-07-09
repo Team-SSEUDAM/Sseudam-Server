@@ -38,6 +38,8 @@ data class TrashSpotDetailsResponse(
     val visitedCount: Long = 0,
     @Schema(description = "쓰레기통 이미지 URL")
     val imageUrl: String?,
+    @Schema(description = "최근 쓰레기통 방문 시간")
+    val lastVisitedAt: LocalDateTime? = null,
     @Schema(description = "쓰레기통 수정 시간")
     val updatedAt: LocalDateTime?,
 ) {

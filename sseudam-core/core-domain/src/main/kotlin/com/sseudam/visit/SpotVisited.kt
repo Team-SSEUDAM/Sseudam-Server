@@ -1,5 +1,6 @@
 package com.sseudam.visit
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 class SpotVisited {
@@ -10,6 +11,7 @@ class SpotVisited {
     data class Create(
         val userId: Long,
         val spotId: Long,
+        val date: LocalDate = LocalDate.now(),
     )
 
     /** SpotVisited Info

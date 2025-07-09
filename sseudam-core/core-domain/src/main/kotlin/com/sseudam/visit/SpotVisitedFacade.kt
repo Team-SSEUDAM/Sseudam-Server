@@ -6,11 +6,15 @@ import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.suggestion.SuggestionService
+import com.sseudam.support.error.ErrorException
+import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.UserService
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Service
 class SpotVisitedFacade(
@@ -28,12 +32,24 @@ class SpotVisitedFacade(
     fun visitSpot(
         userId: Long,
         spotId: Long,
-    ) {
+    ): SpotVisited.Info {
+        val todayVisits = spotVisitedService.findTodaySpotVisitedByUser(userId, spotId)
+        if (todayVisits.isNotEmpty()) {
+            if (todayVisits.maxBy { it.visitedAt }.visitedAt <= LocalDateTime.now().plusMinutes(5)) {
+                throw ErrorException(ErrorType.SPOT_VISITED_ALREADY)
+            }
+            if (todayVisits.size >= 5) {
+                throw ErrorException(ErrorType.SPOT_VISITED_LIMIT_EXCEEDED)
+            }
+        }
+
         val spot = trashSpotService.findBy(spotId)
-        val visited = spotVisitedService.append(SpotVisited.Create(userId, spot.id))
+        val visited = spotVisitedService.append(SpotVisited.Create(userId, spotId, LocalDate.now()))
+
         petEventPublisher.publish(visited.userId, PetPointAction.SPOT_VISITED)
 
         sendVisitNotificationAsync(spot)
+        return visited
     }
 
     private fun sendVisitNotificationAsync(spot: TrashSpot.Info) {
