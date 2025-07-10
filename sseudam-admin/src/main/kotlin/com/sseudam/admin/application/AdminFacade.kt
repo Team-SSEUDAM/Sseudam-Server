@@ -4,6 +4,11 @@ import com.sseudam.admin.domain.AdminToken
 import com.sseudam.admin.domain.AdminUserProfile
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.auth.token.RefreshToken
+import com.sseudam.notification.FcmSender
+import com.sseudam.notification.NewFirebaseCloudMessage
+import com.sseudam.notification.NotificationService
+import com.sseudam.notification.NotificationStored
+import com.sseudam.notification.ReadStatus
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
@@ -18,6 +23,7 @@ import com.sseudam.support.page.Page
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.UserProfile
 import com.sseudam.user.UserService
+import com.sseudam.user.device.UserDeviceService
 import com.sseudam.visit.SpotVisitedService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -26,11 +32,14 @@ import org.springframework.stereotype.Service
 class AdminFacade(
     private val adminService: AdminService,
     private val userService: UserService,
+    private val userDeviceService: UserDeviceService,
     private val authService: AuthenticationService,
     private val suggestionService: SuggestionService,
     private val reportService: ReportService,
     private val spotVisitedService: SpotVisitedService,
     private val trashSpotService: TrashSpotService,
+    private val fcmSender: FcmSender,
+    private val notificationService: NotificationService,
     private val passwordEncoder: PasswordEncoder,
 ) {
     fun login(
@@ -88,4 +97,38 @@ class AdminFacade(
     ): SpotSuggestion.Info = suggestionService.updateSuggestion(suggestionId, status)
 
     fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info = reportService.updateSpotReport(updateReport)
+
+    fun pushToAllUsers(
+        topic: String,
+        contents: String,
+    ) {
+        val userDevices = userDeviceService.findAll()
+        if (userDevices.isEmpty()) return
+
+        val messages =
+            userDevices
+                .filter { it.fcmToken.isNotBlank() }
+                .map { device ->
+                    NewFirebaseCloudMessage(
+                        fcmToken = device.fcmToken,
+                        title = topic,
+                        body = contents,
+                    )
+                }.toSet()
+        fcmSender.sendAll(messages)
+        notificationService.appendAll(
+            messages
+                .map { message ->
+                    NotificationStored.Create(
+                        userId = userDevices.find { it.fcmToken == message.fcmToken }?.userId ?: return@map null,
+                        notificationStoredKey = "",
+                        type = "ADMIN_PUSH",
+                        parameterValue = "/",
+                        topic = message.title,
+                        contents = message.body,
+                        readStatus = ReadStatus.UNREAD,
+                    )
+                }.filterNotNull(),
+        )
+    }
 }
