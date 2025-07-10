@@ -2,6 +2,7 @@ package com.sseudam.admin.presentation
 
 import com.sseudam.admin.application.AdminFacade
 import com.sseudam.admin.presentation.request.AdminLoginRequest
+import com.sseudam.admin.presentation.request.AdminPushNotificationRequest
 import com.sseudam.admin.presentation.request.AdminRefreshTokenRequest
 import com.sseudam.admin.presentation.request.AdminTokenRequest
 import com.sseudam.admin.presentation.request.report.UpdateReportRequest
@@ -128,4 +129,12 @@ class AdminController(
         @PathVariable reportId: Long,
         @RequestBody request: UpdateReportRequest,
     ) = adminFacade.updateSpotReportStatus(request.toUpdateReport(reportId))
+
+    @Operation(summary = "푸시 알림", description = "전체 사용자에게 푸시 알림을 보냅니다.")
+    @PostMapping("/push-all")
+    fun pushToAllUsers(
+        @RequestBody request: AdminPushNotificationRequest,
+    ) {
+        adminFacade.pushToAllUsers(request.topic, request.contents)
+    }
 }

@@ -78,6 +78,24 @@ enum class ErrorType(
         "잘못된 제안 상태입니다.",
         ErrorLevel.WARN,
     ),
+    PUSH_NOTIFICATION_CONTENTS_EMPTY(
+        400,
+        ErrorKind.CLIENT_ERROR,
+        "푸시 알림 내용이 비어있습니다.",
+        ErrorLevel.WARN,
+    ),
+    PUSH_NOTIFICATION_TOPIC_EMPTY(
+        400,
+        ErrorKind.CLIENT_ERROR,
+        "푸시 알림 제목이 비어있습니다.",
+        ErrorLevel.WARN,
+    ),
+    PUSH_NOTIFICATION_CONTENTS_TOO_LONG(
+        400,
+        ErrorKind.CLIENT_ERROR,
+        "푸시 알림 내용은 60자 이하로 입력해주세요.",
+        ErrorLevel.WARN,
+    ),
 
     /** Report */
     INVALID_UPDATE_REPORT_STATUS(
