@@ -105,6 +105,7 @@ class AdminFacade(
         val userDevices = userDeviceService.findAll()
         if (userDevices.isEmpty()) return
 
+        val deviceTokenMap = userDevices.associateBy { it.fcmToken }
         val messages =
             userDevices
                 .filter { it.fcmToken.isNotBlank() }
@@ -118,9 +119,9 @@ class AdminFacade(
         fcmSender.sendAll(messages)
         notificationService.appendAll(
             messages
-                .map { message ->
+                .mapNotNull { message ->
                     NotificationStored.Create(
-                        userId = userDevices.find { it.fcmToken == message.fcmToken }?.userId ?: return@map null,
+                        userId = deviceTokenMap[message.fcmToken]?.userId ?: return@mapNotNull null,
                         notificationStoredKey = "",
                         type = "ADMIN_PUSH",
                         parameterValue = "/",
@@ -128,7 +129,7 @@ class AdminFacade(
                         contents = message.body,
                         readStatus = ReadStatus.UNREAD,
                     )
-                }.filterNotNull(),
+                },
         )
     }
 }

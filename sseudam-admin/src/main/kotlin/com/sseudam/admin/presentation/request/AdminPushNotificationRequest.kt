@@ -8,8 +8,8 @@ data class AdminPushNotificationRequest(
     val contents: String,
 ) {
     init {
-        require(topic.isEmpty()) { throw ErrorException(ErrorType.PUSH_NOTIFICATION_TOPIC_EMPTY) }
-        require(contents.isEmpty()) { throw ErrorException(ErrorType.PUSH_NOTIFICATION_CONTENTS_EMPTY) }
-        require(contents.length > 100) { throw ErrorException(ErrorType.PUSH_NOTIFICATION_CONTENTS_TOO_LONG) }
+        require(topic.isNotEmpty()) { throw ErrorException(ErrorType.PUSH_NOTIFICATION_TOPIC_EMPTY) }
+        require(contents.isNotEmpty()) { throw ErrorException(ErrorType.PUSH_NOTIFICATION_CONTENTS_EMPTY) }
+        require(contents.length <= 60) { throw ErrorException(ErrorType.PUSH_NOTIFICATION_CONTENTS_TOO_LONG) }
     }
 }

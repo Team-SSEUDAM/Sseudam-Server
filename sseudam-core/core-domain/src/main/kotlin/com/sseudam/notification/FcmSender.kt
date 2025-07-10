@@ -43,7 +43,6 @@ class FcmSender(
         )
     }
 
-    @Async
     fun sendAll(
         newMessages: Set<NewFirebaseCloudMessage>,
         maxTry: Int = 3,

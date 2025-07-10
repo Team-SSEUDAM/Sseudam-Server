@@ -1,9 +1,10 @@
 package com.sseudam.aspect.logging
 
-import com.sseudam.support.extension.logger
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
@@ -12,11 +13,11 @@ import org.springframework.web.context.request.ServletRequestAttributes
 @Component
 class LoggingStopWatchAdvice {
     companion object {
-        private val log by logger()
+        val log: Logger = LoggerFactory.getLogger(this::class.java)
         const val MAX_AFFORDABLE_TIME: Long = 3000
     }
 
-    @Around("execution(* com.sseudam.*Controller.*(..))")
+    @Around("execution(* com.sseudam.presentation..*Controller.*(..))")
     fun stopWatchTarget(joinPoint: ProceedingJoinPoint): Any? {
         val startAt = System.currentTimeMillis()
         val proceed = joinPoint.proceed()
