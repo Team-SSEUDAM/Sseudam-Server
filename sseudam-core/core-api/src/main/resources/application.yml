@@ -5,6 +5,9 @@ spring:
   threads:
     virtual:
       enabled: true
+  modulith:
+    events:
+      completion-mode: archive
   config:
     import:
       - db-core.yml

@@ -11,8 +11,7 @@ import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.image.TrashSpotImage
 import com.sseudam.trashspot.image.TrashSpotImageService
 import com.sseudam.user.UserService
-import org.springframework.context.event.EventListener
-import org.springframework.scheduling.annotation.Async
+import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 
 @Component
@@ -26,8 +25,7 @@ class SuggestionEventListener(
         private val log by logger()
     }
 
-    @Async
-    @EventListener
+    @ApplicationModuleListener
     fun createSuggestionListener(event: SuggestionUpdateEvent) {
         if (event.suggestion.status != SuggestionStatus.APPROVE) return
         val trashSpot = trashSpotService.createTrashSpotBySuggestion(event.suggestion)
@@ -39,8 +37,7 @@ class SuggestionEventListener(
         )
     }
 
-    @Async
-    @EventListener
+    @ApplicationModuleListener
     fun suggestionUpdateNotificationListener(event: SuggestionUpdateEvent) {
         try {
             val userId = event.suggestion.userId

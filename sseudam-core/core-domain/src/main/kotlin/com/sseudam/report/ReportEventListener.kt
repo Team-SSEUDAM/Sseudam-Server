@@ -8,8 +8,7 @@ import com.sseudam.support.extension.logger
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.image.TrashSpotImageService
 import com.sseudam.user.UserService
-import org.springframework.context.event.EventListener
-import org.springframework.scheduling.annotation.Async
+import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 
 @Component
@@ -23,8 +22,7 @@ class ReportEventListener(
         private val log by logger()
     }
 
-    @Async
-    @EventListener
+    @ApplicationModuleListener
     fun updateReportListener(event: ReportUpdateEvent) {
         when (event.report.reportType) {
             ReportType.PHOTO -> {
@@ -39,8 +37,7 @@ class ReportEventListener(
         }
     }
 
-    @Async
-    @EventListener
+    @ApplicationModuleListener
     fun reportUpdateNotificationListener(event: ReportUpdateEvent) {
         try {
             val userId = event.report.userId

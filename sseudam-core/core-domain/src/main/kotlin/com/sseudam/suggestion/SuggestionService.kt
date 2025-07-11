@@ -9,6 +9,7 @@ import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
+import com.sseudam.support.tx.TxAdvice
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -17,6 +18,7 @@ class SuggestionService(
     private val suggestionAppender: SuggestionAppender,
     private val suggestionReader: SuggestionReader,
     private val suggestionUpdater: SuggestionUpdater,
+    private val txAdvice: TxAdvice,
     private val suggestionEventPublisher: SuggestionEventPublisher,
     private val petEventPublisher: PetEventPublisher,
     private val imageS3Caller: ImageS3Caller,
@@ -46,14 +48,15 @@ class SuggestionService(
     fun updateSuggestion(
         suggestionId: Long,
         status: SuggestionStatus,
-    ): SpotSuggestion.Info {
-        val suggestion = suggestionUpdater.update(suggestionId, status)
-        suggestionEventPublisher.publish(suggestion)
-        if (suggestion.status == SuggestionStatus.APPROVE) {
-            petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
+    ): SpotSuggestion.Info =
+        txAdvice.write {
+            val suggestion = suggestionUpdater.update(suggestionId, status)
+            suggestionEventPublisher.publish(suggestion)
+            if (suggestion.status == SuggestionStatus.APPROVE) {
+                petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
+            }
+            return@write suggestion
         }
-        return suggestion
-    }
 
     fun validateSpotSuggestionName(name: String) {
         if (suggestionReader.existsByName(name)) {
