@@ -1,8 +1,7 @@
 package com.sseudam.pet
 
 import com.sseudam.pet.event.PetPointEvent
-import org.springframework.context.event.EventListener
-import org.springframework.scheduling.annotation.Async
+import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
@@ -15,8 +14,9 @@ class PetEventListener(
     private val petLevelUpHistoryService: PetLevelUpHistoryService,
 ) {
     /** 포인트 지급 기록 저장 */
-    @Async
-    @EventListener
+    @ApplicationModuleListener(
+        condition = "#event.petPointAction != null",
+    )
     fun addPetPointHistory(event: PetPointEvent) {
         petPointHistoryService.append(
             userPet = event.userPet,
@@ -25,8 +25,9 @@ class PetEventListener(
     }
 
     /** 레벨업 여부 결정 및 성장 기록 저장 */
-    @Async
-    @EventListener
+    @ApplicationModuleListener(
+        condition = "#event.petPointAction != null",
+    )
     fun addUserPetPoint(event: PetPointEvent) {
         val (currentYear, currentMonth) = LocalDateTime.now().let { it.year to it.month }
         val userPet =

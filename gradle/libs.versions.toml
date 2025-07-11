@@ -16,7 +16,7 @@ spring_boot = "3.4.5"
 spring_dependency_management = "1.1.7"
 spring_cloud_dependencies = "2024.0.0"
 jakartaAnnotation = "3.0.0"
-spring_modulith = "1.3.1"
+spring_modulith = "1.4.1"
 
 # Redis version
 redisson = "3.30.0"
@@ -111,11 +111,12 @@ bouncycastle_bcpkix = { module = "org.bouncycastle:bcpkix-jdk15on", version.ref 
 
 # Spring Modulith Libraries
 spring_modulith_events_api = { group = "org.springframework.modulith", name = "spring-modulith-events-api", version.ref = "spring_modulith" }
+spring_modulith_events_jpa = { group = "org.springframework.modulith", name = "spring-modulith-events-jpa", version.ref = "spring_modulith" }
 spring_modulith_events_core = { group = "org.springframework.modulith", name = "spring-modulith-events-core", version.ref = "spring_modulith" }
 spring_modulith_starter_core = { group = "org.springframework.modulith", name = "spring-modulith-starter-core", version.ref = "spring_modulith" }
 spring_modulith_starter_jpa = { group = "org.springframework.modulith", name = "spring-modulith-starter-jpa", version.ref = "spring_modulith" }
 spring_modulith_starter_jdbc = { group = "org.springframework.modulith", name = "spring-modulith-starter-jdbc", version.ref = "spring_modulith" }
-spring_modulith_test = { group = "org.springframework.modulith", name = "spring-modulith-test", version.ref = "spring_modulith" }
+spring_modulith_test = { group = "org.springframework.modulith", name = "spring-modulith-starter-test", version.ref = "spring_modulith" }
 spring_modulith_docs = { group = "org.springframework.modulith", name = "spring-modulith-docs", version.ref = "spring_modulith" }
 spring_modulith_actuator = { group = "org.springframework.modulith", name = "spring-modulith-actuator", version.ref = "spring_modulith" }
 spring_modulith_events_kafka = { group = "org.springframework.modulith", name = "spring-modulith-events-kafka", version.ref = "spring_modulith" }
@@ -215,12 +216,17 @@ kotest = ["kotest_assertions", "kotest_property", "kotest_extensions"]
 
 spring_modulith = [
     "spring_modulith_events_api",
+    "spring_modulith_events_jpa",
     "spring_modulith_events_core",
     "spring_modulith_starter_core",
     "spring_modulith_starter_jpa",
-    "spring_modulith_test",
     "spring_modulith_docs"
 ]
+
+spring_modulith_tests = [
+    "spring_modulith_test"
+]
+
 spring_modulith_runtime = [
     "spring_modulith_actuator",
     "spring_modulith_events_kafka",

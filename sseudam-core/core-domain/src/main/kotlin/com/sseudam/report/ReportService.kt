@@ -9,6 +9,7 @@ import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
+import com.sseudam.support.tx.TxAdvice
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -17,6 +18,7 @@ class ReportService(
     private val reportAppender: ReportAppender,
     private val reportReader: ReportReader,
     private val reportUpdater: ReportUpdater,
+    private val txAdvice: TxAdvice,
     private val reportEventPublisher: ReportEventPublisher,
     private val petEventPublisher: PetEventPublisher,
     private val imageS3Caller: ImageS3Caller,
@@ -42,14 +44,15 @@ class ReportService(
 
     fun findSpotReportById(reportId: Long): SpotReport.Info = reportReader.readById(reportId)
 
-    fun updateSpotReport(updateReport: UpdateReport): SpotReport.Info {
-        val report = reportUpdater.update(updateReport.reportId, updateReport.status)
-        reportEventPublisher.publish(report)
-        if (report.status == ReportStatus.APPROVE) {
-            petEventPublisher.publish(report.userId, PetPointAction.REPORT_APPROVED)
+    fun updateSpotReport(updateReport: UpdateReport): SpotReport.Info =
+        txAdvice.write {
+            val report = reportUpdater.update(updateReport.reportId, updateReport.status)
+            reportEventPublisher.publish(report)
+            if (report.status == ReportStatus.APPROVE) {
+                petEventPublisher.publish(report.userId, PetPointAction.REPORT_APPROVED)
+            }
+            return@write report
         }
-        return report
-    }
 
     fun validateSpotReportName(name: String) {
         if (reportReader.existsByName(name)) {

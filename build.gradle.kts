@@ -61,16 +61,6 @@ subprojects {
         testImplementation(libs.spring.security.test)
     }
 
-//    dependencyManagement {
-//        imports {
-//            mavenBom(
-//                libs.spring.modulith.bom
-//                    .get()
-//                    .toString(),
-//            )
-//        }
-//    }
-
     tasks.withType<KotlinCompile> {
         kotlin {
             compilerOptions {
