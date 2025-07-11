@@ -11,14 +11,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
     basePackages = [
         "com.sseudam.storage.db.core",
         "com.sseudam.admin.infrastructure",
-        "org.springframework.modulith.events.jpa.*",
+        "org.springframework.modulith.events.jpa",
     ],
 )
 @EnableJpaRepositories(
     basePackages = [
         "com.sseudam.storage.db.core",
         "com.sseudam.admin.infrastructure",
-        "org.springframework.modulith.events.jpa.*",
+        "org.springframework.modulith.events.jpa",
     ],
 )
 class CoreJpaConfig
