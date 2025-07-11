@@ -1,7 +1,7 @@
 services:
   backend:
-    image: ${IMAGE_FULL_URL}
-    container_name: ${DOCKERHUB_IMAGE_NAME}
+    image: sseudam-dev:latest
+    container_name: sseudam-dev
     restart: always
     environment:
       - TZ=Asia/Seoul

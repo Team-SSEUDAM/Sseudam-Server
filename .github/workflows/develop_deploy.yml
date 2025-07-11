@@ -57,23 +57,12 @@ jobs:
           role-to-assume: ${{ secrets.OIDC_ROLE_TO_ASSUME }}
           role-session-name: sseudam-server
 
-          # Dockerhub 로그인
+      # Dockerhub 로그인
       - name: Login to Dockerhub
         uses: docker/login-action@v3
         with:
           username: sseudam
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-
-          # Docker 메타데이터 추출
-      - name: Extract Docker metadata
-        id: metadata
-        uses: docker/metadata-action@v5.5.0
-        env:
-          DOCKERHUB_IMAGE_FULL_NAME: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_IMAGE_NAME }}
-        with:
-          images: ${{ env.DOCKERHUB_IMAGE_FULL_NAME }}
-          tags: |
-            type=sha,prefix=
 
       # Docker 이미지 빌드 및 도커허브로 푸시
       - name: Docker Build and Push
@@ -82,7 +71,7 @@ jobs:
           context: .
           file: ./docker/DockerfileDev
           push: true
-          tags: ${{ steps.metadata.outputs.tags }}
+          tags: latest
 
       # docker-compose.yml 파일을 EC2에 복사
       - name: Copy docker-compose.yml to EC2
@@ -98,14 +87,10 @@ jobs:
       # EC2로 배포
       - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@master
-        env:
-          IMAGE_FULL_URL: ${{ steps.metadata.outputs.tags }}
-          DOCKERHUB_IMAGE_NAME: ${{ env.DOCKERHUB_IMAGE_NAME }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          envs: IMAGE_FULL_URL, DOCKERHUB_IMAGE_NAME
           debug: true
           script: |
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
