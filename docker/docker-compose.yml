@@ -1,13 +1,13 @@
 services:
   backend:
-    image: sseudam-dev:latest
+    image: sseudam/sseudam-dev:latest
     container_name: sseudam-dev
     restart: always
     environment:
       - TZ=Asia/Seoul
     network_mode: host
     env_file:
-      - .env
+      - /home/ec2-user/.env
   redis:
     image: "redis:alpine"
     container_name: sseudam-local-redis

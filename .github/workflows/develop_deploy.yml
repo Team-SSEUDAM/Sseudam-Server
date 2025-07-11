@@ -71,7 +71,7 @@ jobs:
           context: .
           file: ./docker/DockerfileDev
           push: true
-          tags: latest
+          tags: sseudam/sseudam-dev:latest
 
       # docker-compose.yml 파일을 EC2에 복사
       - name: Copy docker-compose.yml to EC2
