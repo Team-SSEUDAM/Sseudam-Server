@@ -25,7 +25,7 @@ class PetService(
                     ),
                 )
             }
-        return petInfos.firstOrNull() ?: throw ErrorException(ErrorType.FAILED_PET_CREATION)
+        return petInfos.find { it.levelType == Pet.LevelType.LEVEL_1 } ?: throw ErrorException(ErrorType.FAILED_PET_CREATION)
     }
 
     fun findBy(petId: Long): Pet.Info = petReader.readBy(petId)
