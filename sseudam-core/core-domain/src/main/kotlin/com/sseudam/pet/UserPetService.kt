@@ -33,4 +33,8 @@ class UserPetService(
         userPetId: Long,
         petId: Long,
     ): UserPet.Info = userPetUpdater.updatePetId(userPetId, petId)
+
+    fun initPointForAllUsers(petId: Long) {
+        userPetUpdater.initPoint(petId)
+    }
 }

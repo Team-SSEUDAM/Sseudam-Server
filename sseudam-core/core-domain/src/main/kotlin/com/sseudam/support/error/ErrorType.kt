@@ -118,4 +118,12 @@ enum class ErrorType(
         "오늘 쓰레기통 방문 횟수를 초과했습니다.",
         ErrorLevel.WARN,
     ),
+
+    /** Pet */
+    FAILED_PET_CREATION(
+        500,
+        ErrorKind.INTERNAL_SERVER_ERROR,
+        "펫 생성에 실패했습니다.",
+        ErrorLevel.ERROR,
+    ),
 }
