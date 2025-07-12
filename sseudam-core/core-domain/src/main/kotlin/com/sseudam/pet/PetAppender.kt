@@ -6,7 +6,5 @@ import org.springframework.stereotype.Component
 class PetAppender(
     private val petRepository: PetRepository,
 ) {
-    fun appendSeasonPet(create: Pet.Create) {
-        petRepository.save(create)
-    }
+    fun appendSeasonPet(create: Pet.Create): Pet.Info = petRepository.save(create)
 }

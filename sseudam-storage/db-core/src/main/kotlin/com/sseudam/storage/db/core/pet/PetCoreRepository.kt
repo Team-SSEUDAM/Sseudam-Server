@@ -12,11 +12,10 @@ class PetCoreRepository(
     private val petJpaRepository: PetJpaRepository,
     private val txAdvice: TxAdvice,
 ) : PetRepository {
-    override fun save(create: Pet.Create) {
+    override fun save(create: Pet.Create): Pet.Info =
         txAdvice.write {
-            petJpaRepository.save(PetEntity(create))
+            petJpaRepository.save(PetEntity(create)).toPetInfo()
         }
-    }
 
     override fun findBy(petId: Long): Pet.Info =
         txAdvice.readOnly {

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class UserPetCoreRepository(
+    private val userPetCustomRepository: UserPetCustomRepository,
     private val userPetJpaRepository: UserPetJpaRepository,
     private val txAdvice: TxAdvice,
 ) : UserPetRepository {
@@ -72,4 +73,8 @@ class UserPetCoreRepository(
                     .findByIdOrElseThrow(userPetId)
             userPet.updatePoint(point).toUserPetInfo()
         }
+
+    override fun initPoint(petId: Long) {
+        userPetCustomRepository.resetSeasonUserPetPoint(petId)
+    }
 }

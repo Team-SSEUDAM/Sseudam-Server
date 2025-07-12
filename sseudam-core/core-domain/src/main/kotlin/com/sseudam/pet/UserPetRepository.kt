@@ -24,4 +24,6 @@ interface UserPetRepository {
         userPetId: Long,
         point: Long,
     ): UserPet.Info
+
+    fun initPoint(petId: Long)
 }

@@ -3,7 +3,7 @@ package com.sseudam.pet
 import java.time.Month
 
 interface PetRepository {
-    fun save(create: Pet.Create)
+    fun save(create: Pet.Create): Pet.Info
 
     fun findBy(petId: Long): Pet.Info
 

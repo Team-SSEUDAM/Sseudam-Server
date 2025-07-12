@@ -24,4 +24,8 @@ class UserPetUpdater(
             userPetId = userPetId,
             action = action,
         )
+
+    fun initPoint(petId: Long) {
+        userPetRepository.initPoint(petId)
+    }
 }

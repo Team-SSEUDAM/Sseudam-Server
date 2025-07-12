@@ -20,6 +20,7 @@ class PetScheduler(
     private val userDeviceService: UserDeviceService,
     private val fcmSender: FcmSender,
     private val userService: UserService,
+    private val userPetService: UserPetService,
     private val notificationService: NotificationService,
     private val notificationStoredKeyGenerator: NotificationStoredKeyGenerator,
 ) {
@@ -28,7 +29,8 @@ class PetScheduler(
         val nextDay = LocalDate.now().plusDays(1)
         val currentYear = nextDay.year
         val currentMonth = Month.from(nextDay)
-        petService.createPetSeason(currentYear, currentMonth)
+        val createLevelOnePet = petService.createPetSeason(currentYear, currentMonth)
+        userPetService.initPointForAllUsers(createLevelOnePet.id)
         sendNewPetNotifications()
     }
 
