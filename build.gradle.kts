@@ -46,12 +46,6 @@ subprojects {
         implementation(libs.jackson.kotlin)
         implementation(libs.hibernate.spatial)
 
-        // Spring Modulith (bundle 사용)
-//        implementation(libs.bundles.spring.modulith)
-//        runtimeOnly(libs.bundles.spring.modulith.runtime)
-//        kapt("org.springframework.modulith:spring-modulith-docs:1.3.1")
-//        testImplementation(libs.spring.modulith.test)
-
         annotationProcessor(libs.spring.boot.configuration.processor)
         kapt(libs.spring.boot.configuration.processor)
 
@@ -87,8 +81,6 @@ subprojects {
         useJUnitPlatform()
     }
 }
-
-//extra["springModulithVersion"] = "1.3.1"
 
 tasks.register("addLintPreCommitHook", DefaultTask::class) {
     group = "setup"
