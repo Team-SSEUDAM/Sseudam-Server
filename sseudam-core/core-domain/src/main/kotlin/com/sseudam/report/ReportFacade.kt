@@ -4,6 +4,8 @@ import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
+import com.sseudam.support.error.ErrorException
+import com.sseudam.support.error.ErrorType
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.image.TrashSpotImageService
 import org.springframework.stereotype.Service
@@ -30,7 +32,13 @@ class ReportFacade(
 
     fun createSpotReport(report: SpotReport.Create): Pair<SpotReport.Info, String> {
         val presignedUrl: String?
-        var imageUrl = trashSpotImageService.findBySpotId(report.spotId).maxBy { it.updatedAt!! }.imageUrl
+        val images = trashSpotImageService.findBySpotId(report.spotId)
+        var imageUrl =
+            images
+                .filter { it.updatedAt != null }
+                .maxByOrNull { it.updatedAt!! }
+                ?.imageUrl
+                ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
         if (report.reportType == ReportType.PHOTO) {
             val s3ImageUrl: S3ImageUrl = imageS3Caller.createUploadUrl(report.userId, LocalDateTime.now(), REPORT_IMAGE_PATH)
             presignedUrl = s3ImageUrl.presignedUrl
