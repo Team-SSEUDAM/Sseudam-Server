@@ -21,6 +21,7 @@ class TrashSpotImageEntity(
             id = id!!,
             trashSpotId = trashSpotId,
             imageUrl = imageUrl,
+            updatedAt = updatedAt,
         )
 
     fun updateImageUrl(imageUrl: String) {

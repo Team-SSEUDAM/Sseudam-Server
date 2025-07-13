@@ -1,5 +1,7 @@
 package com.sseudam.trashspot.image
 
+import java.time.LocalDateTime
+
 class TrashSpotImage {
     /** TrashSpotImage Create
      * @property trashSpotId 쓰레기통 id
@@ -19,5 +21,6 @@ class TrashSpotImage {
         val id: Long,
         val trashSpotId: Long,
         val imageUrl: String,
+        val updatedAt: LocalDateTime?,
     )
 }
