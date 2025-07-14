@@ -31,7 +31,7 @@ class ReportController(
         @RequestBody request: SpotReportCreateRequest,
     ): ReportImageUrlResponse {
         val report =
-            reportService.createSpotReport(
+            reportFacade.createSpotReport(
                 report =
                     SpotReport.Create(
                         userId = user.id,
@@ -48,7 +48,7 @@ class ReportController(
             )
         return ReportImageUrlResponse.of(
             report = report.first,
-            s3ImageUrl = report.second,
+            presignedUrl = report.second,
         )
     }
 

@@ -1,7 +1,5 @@
 package com.sseudam.report
 
-import com.sseudam.common.ImageS3Caller
-import com.sseudam.common.S3ImageUrl
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.report.event.ReportEventPublisher
@@ -11,7 +9,6 @@ import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
 import com.sseudam.support.tx.TxAdvice
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class ReportService(
@@ -21,19 +18,11 @@ class ReportService(
     private val txAdvice: TxAdvice,
     private val reportEventPublisher: ReportEventPublisher,
     private val petEventPublisher: PetEventPublisher,
-    private val imageS3Caller: ImageS3Caller,
 ) {
-    companion object {
-        private const val REPORT_IMAGE_PATH = "report"
-    }
-
-    fun createSpotReport(report: SpotReport.Create): Pair<SpotReport.Info, S3ImageUrl> {
-        val uploadUrl = imageS3Caller.createUploadUrl(report.userId, LocalDateTime.now(), REPORT_IMAGE_PATH)
-        val spotReport = reportAppender.append(uploadUrl.imageUrl, report)
-
-        petEventPublisher.publish(report.userId, PetPointAction.REPORT)
-        return spotReport to uploadUrl
-    }
+    fun appendReport(
+        imageUrl: String,
+        report: SpotReport.Create,
+    ): SpotReport.Info = reportAppender.append(imageUrl, report)
 
     fun findAllReportByUserId(userId: Long): List<SpotReport.Info> = reportReader.readAllByUserId(userId)
 
