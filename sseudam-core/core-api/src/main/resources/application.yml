@@ -7,7 +7,7 @@ spring:
       enabled: true
   modulith:
     events:
-      completion-mode: archive
+      completion-mode: update
   config:
     import:
       - db-core.yml

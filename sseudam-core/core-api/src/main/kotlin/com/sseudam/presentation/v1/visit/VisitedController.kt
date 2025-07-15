@@ -27,7 +27,10 @@ class VisitedController(
         @PathVariable spotId: Long,
     ): SpotVisitedResponse {
         val visited = spotVisitedFacade.visitSpot(user.id, spotId)
-        return SpotVisitedResponse.of(visited)
+        return SpotVisitedResponse.of(
+            isToday = visited.first,
+            visited = visited.second,
+        )
     }
 
     @Operation(summary = "방문 내역 조회", description = "방문한 기록들을 조회합니다.")

@@ -16,15 +16,21 @@ data class SpotVisitedResponse(
     val site: String,
     @Schema(description = "방문 시간", example = "2023-10-01T12:00:00")
     val visitedAt: LocalDateTime,
+    @Schema(description = "오늘 첫 방문 여부", example = "true")
+    val isToday: Boolean,
 ) {
     companion object {
-        fun of(visited: SpotVisited.Info): SpotVisitedResponse =
+        fun of(
+            isToday: Boolean,
+            visited: SpotVisited.Info,
+        ): SpotVisitedResponse =
             SpotVisitedResponse(
                 id = visited.id,
                 spotId = visited.spotId,
                 userId = visited.userId,
                 site = visited.site,
                 visitedAt = visited.visitedAt,
+                isToday = isToday,
             )
     }
 }
