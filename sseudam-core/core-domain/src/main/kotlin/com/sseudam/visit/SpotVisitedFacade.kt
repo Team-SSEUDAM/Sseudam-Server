@@ -32,10 +32,11 @@ class SpotVisitedFacade(
     fun visitSpot(
         userId: Long,
         spotId: Long,
-    ): SpotVisited.Info {
-        val todayVisits = spotVisitedService.findTodaySpotVisitedByUserAndSpot(userId, spotId)
+    ): Pair<Boolean, SpotVisited.Info> {
+        val todayVisits = spotVisitedService.findTodaySpotVisitedByUser(userId)
+        val todayVisitedSpot = todayVisits.find { it.visitedAt.toLocalDate() == LocalDate.now() && it.spotId == spotId }
 
-        if (todayVisits.isNotEmpty()) {
+        if (todayVisitedSpot != null) {
             val lastVisitTime = todayVisits.maxBy { it.visitedAt }.visitedAt
             if (lastVisitTime.isAfter(LocalDateTime.now().minusMinutes(5))) {
                 throw ErrorException(ErrorType.SPOT_VISITED_ALREADY)
@@ -45,13 +46,15 @@ class SpotVisitedFacade(
             }
         }
 
+        val isToday = todayVisitedSpot == null && todayVisits.isEmpty()
         val spot = trashSpotService.findBy(spotId)
         val visited = spotVisitedService.append(SpotVisited.Create(userId, spotId, LocalDate.now()))
 
-        petEventPublisher.publish(visited.userId, PetPointAction.SPOT_VISITED)
+        val action = if (isToday) PetPointAction.TODAY_FIRST_SPOT_VISITED else PetPointAction.SPOT_VISITED
+        petEventPublisher.publish(visited.userId, action)
 
         sendVisitNotificationAsync(spot)
-        return visited
+        return Pair(isToday, visited)
     }
 
     private fun sendVisitNotificationAsync(spot: TrashSpot.Info) {

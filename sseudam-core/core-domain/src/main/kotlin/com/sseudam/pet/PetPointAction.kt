@@ -5,6 +5,7 @@ enum class PetPointAction(
 ) {
     /** 방문 인증 */
     SPOT_VISITED(5),
+    TODAY_FIRST_SPOT_VISITED(7),
 
     /** 신고하기 */
     REPORT(5),

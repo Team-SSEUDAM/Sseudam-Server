@@ -12,7 +12,7 @@ class SpotVisitedService(
 
     fun findAllByUser(userId: Long): List<SpotVisited.Info> = spotVisitedReader.readByUserId(userId)
 
-    fun findTodaySpotVisitedByUserAndSpot(userId: Long): List<SpotVisited.Info> = spotVisitedReader.readTodayAllBy(userId, LocalDate.now())
+    fun findTodaySpotVisitedByUser(userId: Long): List<SpotVisited.Info> = spotVisitedReader.readTodayAllBy(userId, LocalDate.now())
 
     fun findTodaySpotVisitedByUserAndSpot(
         userId: Long,
