@@ -30,7 +30,7 @@ class ReportFacade(
         return true
     }
 
-    fun createSpotReport(report: SpotReport.Create): Pair<SpotReport.Info, String> {
+    fun createSpotReport(report: SpotReport.Create): Pair<SpotReport.Info, String?> {
         val presignedUrl: String?
         val images = trashSpotImageService.findBySpotId(report.spotId)
         var imageUrl =
@@ -50,6 +50,6 @@ class ReportFacade(
         val spotReport = reportService.appendReport(imageUrl, report)
         petEventPublisher.publish(report.userId, PetPointAction.REPORT)
 
-        return spotReport to (presignedUrl ?: imageUrl)
+        return spotReport to presignedUrl
     }
 }
