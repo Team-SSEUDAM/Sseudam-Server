@@ -60,7 +60,7 @@ spring_cloud_openfeign = "4.2.0"
 openfeign_hc5 = "13.1"
 openfeign_micrometer = "13.1"
 
-micrometer = "1.5.2"
+micrometer = "1.14.6"
 [plugins]
 # Kotlin Plugins
 kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

@@ -34,7 +34,7 @@ class SpotVisitedFacade(
         spotId: Long,
     ): Pair<Boolean, SpotVisited.Info> {
         val todayVisits = spotVisitedService.findTodaySpotVisitedByUser(userId)
-        val todayVisitedSpot = todayVisits.find { it.visitedAt.toLocalDate() == LocalDate.now() && it.spotId == spotId }
+        val todayVisitedSpot = todayVisits.find { it.spotId == spotId }
 
         if (todayVisitedSpot != null) {
             val lastVisitTime = todayVisits.maxBy { it.visitedAt }.visitedAt
