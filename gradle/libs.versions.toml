@@ -201,7 +201,6 @@ epages_restdocs_api_spec_restassured = { module = "com.epages:restdocs-api-spec-
 
 # Monitoring & Logging Libraries
 micrometer_tracing_bridge_brave = { module = "io.micrometer:micrometer-tracing-bridge-brave", version.ref = "micrometer" }
-micrometer_tracing = { module = "io.micrometer:micrometer-tracing", version.ref = "micrometer" }
 micrometer_registry_prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer-registry-prometheus" }
 slf4j = { module = "org.slf4j:slf4j-api", version = "2.0.9" }
 
