@@ -18,6 +18,7 @@ class SuggestionService(
     private val suggestionAppender: SuggestionAppender,
     private val suggestionReader: SuggestionReader,
     private val suggestionUpdater: SuggestionUpdater,
+    private val suggestionDeleter: SuggestionDeleter,
     private val suggestionValidator: SuggestionValidator,
     private val suggestionEventPublisher: SuggestionEventPublisher,
     private val txAdvice: TxAdvice,
@@ -56,6 +57,7 @@ class SuggestionService(
             val suggestion = suggestionUpdater.update(suggestionId, status)
             suggestionEventPublisher.publish(suggestion)
             if (suggestion.status == SuggestionStatus.APPROVE) {
+                suggestionDeleter.deleteBy(suggestionId)
                 petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
             }
             return@write suggestion

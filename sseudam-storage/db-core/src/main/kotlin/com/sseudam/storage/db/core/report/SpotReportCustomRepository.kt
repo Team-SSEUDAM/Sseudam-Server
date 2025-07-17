@@ -28,7 +28,7 @@ class SpotReportCustomRepository(
                 select(entity(SpotReportEntity::class))
                     .from(entity(SpotReportEntity::class))
                     .whereAnd(
-                        path(SpotReportEntity::deletedAt).isNull(),
+//                        path(SpotReportEntity::deletedAt).isNull(),
                         searchType?.let {
                             path(SpotReportEntity::reportType).eq(it)
                         },

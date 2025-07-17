@@ -1,5 +1,6 @@
 package com.sseudam.storage.db.core.suggestion
 
+import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SpotSuggestionRepository
@@ -45,7 +46,7 @@ class SpotSuggestionCoreRepository(
     override fun findBySite(site: String): SpotSuggestion.Info? =
         txAdvice.readOnly {
             spotSuggestionJpaRepository
-                .findByAddressSite(site)
+                .findByAddressSiteAndDeletedAtIsNull(site)
                 ?.toSpotSuggestion()
         }
 
@@ -69,5 +70,11 @@ class SpotSuggestionCoreRepository(
     override fun existsByName(name: String): Boolean =
         txAdvice.readOnly {
             spotSuggestionJpaRepository.existsBySpotName(name)
+        }
+
+    override fun deleteBy(suggestionId: Long) =
+        txAdvice.write {
+            val suggestion = spotSuggestionJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(suggestionId)
+            suggestion.softDelete()
         }
 }
