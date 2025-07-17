@@ -18,8 +18,10 @@ class SuggestionService(
     private val suggestionAppender: SuggestionAppender,
     private val suggestionReader: SuggestionReader,
     private val suggestionUpdater: SuggestionUpdater,
-    private val txAdvice: TxAdvice,
+    private val suggestionDeleter: SuggestionDeleter,
+    private val suggestionValidator: SuggestionValidator,
     private val suggestionEventPublisher: SuggestionEventPublisher,
+    private val txAdvice: TxAdvice,
     private val petEventPublisher: PetEventPublisher,
     private val imageS3Caller: ImageS3Caller,
 ) {
@@ -27,10 +29,12 @@ class SuggestionService(
         private const val SUGGESTION_IMAGE_PATH = "suggestion"
     }
 
-    fun createSpotSuggestion(suggestion: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> {
-        val uploadUrl = imageS3Caller.createUploadUrl(suggestion.userId, LocalDateTime.now(), SUGGESTION_IMAGE_PATH)
-        val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, suggestion)
-        petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION)
+    fun append(create: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> {
+        suggestionValidator.verifySite(create.site)
+
+        val uploadUrl = imageS3Caller.createUploadUrl(create.userId, LocalDateTime.now(), SUGGESTION_IMAGE_PATH)
+        val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)
+        petEventPublisher.publish(create.userId, PetPointAction.SUGGESTION)
         return spotSuggestion to uploadUrl
     }
 
@@ -53,6 +57,7 @@ class SuggestionService(
             val suggestion = suggestionUpdater.update(suggestionId, status)
             suggestionEventPublisher.publish(suggestion)
             if (suggestion.status == SuggestionStatus.APPROVE) {
+                suggestionDeleter.deleteBy(suggestionId)
                 petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
             }
             return@write suggestion

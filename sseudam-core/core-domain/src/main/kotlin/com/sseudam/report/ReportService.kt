@@ -15,6 +15,7 @@ class ReportService(
     private val reportAppender: ReportAppender,
     private val reportReader: ReportReader,
     private val reportUpdater: ReportUpdater,
+    private val reportDeleter: ReportDeleter,
     private val txAdvice: TxAdvice,
     private val reportEventPublisher: ReportEventPublisher,
     private val petEventPublisher: PetEventPublisher,
@@ -38,6 +39,7 @@ class ReportService(
             val report = reportUpdater.update(updateReport.reportId, updateReport.status)
             reportEventPublisher.publish(report)
             if (report.status == ReportStatus.APPROVE) {
+                reportDeleter.deleteBy(updateReport.reportId)
                 petEventPublisher.publish(report.userId, PetPointAction.REPORT_APPROVED)
             }
             return@write report

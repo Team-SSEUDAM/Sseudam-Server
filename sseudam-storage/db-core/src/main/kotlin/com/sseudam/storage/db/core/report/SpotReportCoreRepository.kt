@@ -4,6 +4,7 @@ import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.report.SpotReportRepository
+import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
@@ -65,5 +66,11 @@ class SpotReportCoreRepository(
     override fun existsByName(name: String): Boolean =
         txAdvice.readOnly {
             spotReportJpaRepository.existsBySpotName(name)
+        }
+
+    override fun deleteBy(reportId: Long) =
+        txAdvice.write {
+            val report = spotReportJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(reportId)
+            report.softDelete()
         }
 }

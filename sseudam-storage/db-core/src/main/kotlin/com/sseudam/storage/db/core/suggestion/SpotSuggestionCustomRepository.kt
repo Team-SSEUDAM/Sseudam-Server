@@ -29,7 +29,7 @@ class SpotSuggestionCustomRepository(
                 select(entity(SpotSuggestionEntity::class))
                     .from(entity(SpotSuggestionEntity::class))
                     .whereAnd(
-                        path(SpotSuggestionEntity::deletedAt).isNull(),
+//                        path(SpotSuggestionEntity::deletedAt).isNull(),
                         searchStatus?.let {
                             path(SpotSuggestionEntity::status).eq(it)
                         },

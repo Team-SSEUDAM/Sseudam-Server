@@ -28,4 +28,6 @@ interface SpotSuggestionRepository {
     ): SpotSuggestion.Info
 
     fun existsByName(name: String): Boolean
+
+    fun deleteBy(suggestionId: Long)
 }

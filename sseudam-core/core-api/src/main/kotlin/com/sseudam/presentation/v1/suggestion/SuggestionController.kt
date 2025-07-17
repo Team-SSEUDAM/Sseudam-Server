@@ -29,7 +29,7 @@ class SuggestionController(
         @RequestBody request: SpotSuggestionCreateRequest,
     ): SuggestionImageUrlResponse {
         val suggestion =
-            suggestionService.createSpotSuggestion(
+            suggestionFacade.createSpotSuggestion(
                 SpotSuggestion.Create(
                     userId = user.id,
                     spotName = request.spotName,

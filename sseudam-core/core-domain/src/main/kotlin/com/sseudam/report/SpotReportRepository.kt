@@ -26,4 +26,6 @@ interface SpotReportRepository {
     ): SpotReport.Info
 
     fun existsByName(name: String): Boolean
+
+    fun deleteBy(reportId: Long)
 }

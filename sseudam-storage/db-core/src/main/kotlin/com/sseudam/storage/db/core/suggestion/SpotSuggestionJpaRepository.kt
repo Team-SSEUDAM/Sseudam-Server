@@ -8,7 +8,7 @@ interface SpotSuggestionJpaRepository :
     KotlinJdslJpqlExecutor {
     fun findAllByUserId(userId: Long): List<SpotSuggestionEntity>
 
-    fun findByAddressSite(site: String): SpotSuggestionEntity?
+    fun findByAddressSiteAndDeletedAtIsNull(site: String): SpotSuggestionEntity?
 
     fun existsBySpotName(name: String): Boolean
 }
