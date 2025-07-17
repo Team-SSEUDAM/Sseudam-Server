@@ -233,6 +233,5 @@ spring_modulith_tests = [
 spring_modulith_runtime = [
     "spring_modulith_actuator",
     "spring_modulith_events_kafka",
-    "spring_modulith_observability",
     "spring_modulith_runtime"
 ]

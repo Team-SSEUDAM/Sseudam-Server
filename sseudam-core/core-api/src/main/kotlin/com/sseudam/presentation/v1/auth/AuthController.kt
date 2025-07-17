@@ -42,7 +42,14 @@ class AuthController(
         @RequestBody request: LoginRequest,
     ): TokenResponse {
         val userCredentials = userService.getUserCredential(request.loginId)
-        if (!passwordEncoder.matches(request.password, userCredentials.password)) {
+        val storedPassword =
+            if (!userCredentials.password.startsWith("{")) {
+                "{noop}${userCredentials.password}"
+            } else {
+                userCredentials.password
+            }
+
+        if (!passwordEncoder.matches(request.password, storedPassword)) {
             throw ErrorException(ErrorType.INVALID_PASSWORD)
         }
         val token = authenticationService.login(deviceId, User(userCredentials.id, userCredentials.key), request.toCredentialSseudam())

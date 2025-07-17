@@ -41,7 +41,7 @@ class UserCoreRepository(
         password: String,
     ): User =
         txAdvice.readOnly {
-            userJpaRepository.findByEmailAndPasswordAndDeletedAtIsNull(loginId, password)?.toUser()
+            userJpaRepository.findByEmailAndDeletedAtIsNull(loginId)?.toUser()
                 ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
         }
 
