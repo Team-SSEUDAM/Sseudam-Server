@@ -99,6 +99,20 @@ class TrashSpotCoreRepository(
                 .map { it.toTrashSpot() }
         }
 
+    override fun findBySite(site: String): TrashSpot.Info? =
+        txAdvice.readOnly {
+            trashSpotJpaRepository
+                .findByAddressSite(site)
+                ?.toTrashSpot()
+        }
+
+    override fun findByPoint(point: Point): TrashSpot.Info? =
+        txAdvice.readOnly {
+            trashSpotJpaRepository
+                .findByPoint(point)
+                ?.toTrashSpot()
+        }
+
     override fun updateName(
         spotId: Long,
         name: String,

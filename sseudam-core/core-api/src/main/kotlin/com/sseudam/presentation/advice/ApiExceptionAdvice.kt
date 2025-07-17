@@ -1,5 +1,7 @@
 package com.sseudam.presentation.advice
 
+import com.sseudam.support.error.AuthenticationErrorException
+import com.sseudam.support.error.AuthenticationErrorType
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorResponse
 import com.sseudam.support.error.ErrorType
@@ -94,6 +96,15 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
         val errorResponse = ErrorResponse.of(errorCode.name, errorCode.message)
         val apiResponse = ApiResponse.fail(errorCode.status, errorResponse)
         return ResponseEntity.status(errorCode.status).body(apiResponse)
+    }
+
+    @ExceptionHandler(AuthenticationErrorException::class)
+    fun handleAuthenticationCustomException(e: AuthenticationErrorException): ResponseEntity<ApiResponse<ErrorResponse>> {
+        log.error("sseudam CustomException : {}", e.message, e)
+        val errorCode: AuthenticationErrorType = e.authenticationErrorType
+        val errorResponse = ErrorResponse.of(errorCode.name, errorCode.message)
+        val apiResponse = ApiResponse.fail(401, errorResponse)
+        return ResponseEntity.status(401).body(apiResponse)
     }
 
     @ExceptionHandler(Exception::class)

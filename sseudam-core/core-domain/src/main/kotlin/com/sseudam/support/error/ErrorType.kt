@@ -126,4 +126,26 @@ enum class ErrorType(
         "펫 생성에 실패했습니다.",
         ErrorLevel.ERROR,
     ),
+
+    /** Suggestion */
+    ALREADY_EXIST_SUGGESTION_SPOT_SITE(
+        409,
+        ErrorKind.CLIENT_ERROR,
+        "이미 존재하는 쓰레기통 장소입니다.",
+        ErrorLevel.WARN,
+    ),
+
+    /** SPOT */
+    ALREADY_EXIST_SPOT_SITE(
+        409,
+        ErrorKind.CLIENT_ERROR,
+        "이미 존재하는 쓰레기통 주소입니다.",
+        ErrorLevel.WARN,
+    ),
+    ALREADY_EXIST_SPOT_POINT(
+        409,
+        ErrorKind.CLIENT_ERROR,
+        "이미 존재하는 쓰레기통 좌표입니다.",
+        ErrorLevel.WARN,
+    ),
 }
