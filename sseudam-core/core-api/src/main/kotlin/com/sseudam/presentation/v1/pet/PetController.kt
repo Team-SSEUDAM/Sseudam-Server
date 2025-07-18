@@ -48,7 +48,12 @@ class PetController(
     @GetMapping("/pets/season")
     fun findUserPetSeasonInfo(user: User): UserPetLevelHistoryCurrentSeasonAllResponse {
         val seasonHistory = userPetFacade.findCurrentSeasonPetHistory(user.id)
-        return UserPetLevelHistoryCurrentSeasonAllResponse.of(seasonHistory.first, seasonHistory.second)
+        val petLevel = userPetPolicy.getLevelType(seasonHistory.first.point)
+        val maxLevelStandard = userPetPolicy.getMaxLevelStandard(petLevel)
+        return UserPetLevelHistoryCurrentSeasonAllResponse.of(
+            UserPetInfoResponse.of(seasonHistory.first, petLevel, maxLevelStandard),
+            seasonHistory.second,
+        )
     }
 
     @Operation(summary = "사용자 전체 펫 성장 기록 조회", description = "사용자의 전체 펫 성장 기록을 조회합니다.")
