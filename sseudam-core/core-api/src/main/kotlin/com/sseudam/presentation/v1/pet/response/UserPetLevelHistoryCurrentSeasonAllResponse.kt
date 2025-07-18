@@ -1,15 +1,14 @@
 package com.sseudam.presentation.v1.pet.response
 
-import com.sseudam.pet.UserPet
 import com.sseudam.pet.UserPetLevelUpCurrentSeasonHistoryInfo
 
 data class UserPetLevelHistoryCurrentSeasonAllResponse(
-    val userPetInfo: UserPet.Info,
+    val userPetInfo: UserPetInfoResponse,
     val list: List<UserPetLevelHistoryCurrentResponse>,
 ) {
     companion object {
         fun of(
-            userPetInfo: UserPet.Info,
+            userPetInfo: UserPetInfoResponse,
             histories: List<UserPetLevelUpCurrentSeasonHistoryInfo>,
         ): UserPetLevelHistoryCurrentSeasonAllResponse =
             UserPetLevelHistoryCurrentSeasonAllResponse(
