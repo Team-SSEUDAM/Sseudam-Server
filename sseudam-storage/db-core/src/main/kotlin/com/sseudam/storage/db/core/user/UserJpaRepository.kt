@@ -22,4 +22,6 @@ interface UserJpaRepository :
     fun existsByNicknameAndDeletedAtIsNull(nickname: String): Boolean
 
     fun findByEmailAndDeletedAtIsNull(email: String): UserEntity?
+
+    fun findAllByDeletedAtIsNull(): List<UserEntity>
 }

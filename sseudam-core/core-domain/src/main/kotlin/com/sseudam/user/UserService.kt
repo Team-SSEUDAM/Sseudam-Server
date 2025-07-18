@@ -31,6 +31,16 @@ class UserService(
 
     fun getUserCredential(loginId: String): UserCredentials = userReader.readUserCredentials(loginId)
 
+    fun findAllBy(userIds: List<Long>): List<UserProfile> = userReader.readAllByUserIds(userIds)
+
+    fun checkEmail(email: String) {
+        userValidator.verifyEmail(email)
+    }
+
+    fun findUserProfileBy(offsetPageRequest: OffsetPageRequest): Page<UserProfile> = userReader.readAllBy(offsetPageRequest)
+
+    fun findAll(): List<UserProfile> = userReader.readAll()
+
     fun updateNickname(
         userKey: String,
         updateNickname: UpdateNickname,
@@ -62,15 +72,7 @@ class UserService(
         email: String,
     ): UserProfile = userUpdater.updateEmail(userKey, email)
 
-    fun findAllBy(userIds: List<Long>): List<UserProfile> = userReader.readAllByUserIds(userIds)
-
-    fun checkEmail(email: String) {
-        userValidator.verifyEmail(email)
-    }
-
     fun deleteUser(newUserWithdrawal: NewUserWithdrawal) {
         userDeleter.deleteUser(newUserWithdrawal.user.key)
     }
-
-    fun findUserProfileBy(offsetPageRequest: OffsetPageRequest): Page<UserProfile> = userReader.readAllBy(offsetPageRequest)
 }

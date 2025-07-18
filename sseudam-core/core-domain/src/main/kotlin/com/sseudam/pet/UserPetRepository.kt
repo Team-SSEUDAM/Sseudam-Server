@@ -3,7 +3,11 @@ package com.sseudam.pet
 interface UserPetRepository {
     fun save(createUserPet: UserPet.Create): UserPet.Info
 
+    fun saveAll(createUserPets: List<UserPet.Create>): List<UserPet.Info>
+
     fun findByUserId(userId: Long): UserPet.Info?
+
+    fun findAll(): List<UserPet.Info>
 
     fun updateNickname(
         userId: Long,
@@ -26,4 +30,6 @@ interface UserPetRepository {
     ): UserPet.Info
 
     fun initPoint(petId: Long)
+
+    fun deleteAllByUserIds(userIds: List<Long>)
 }

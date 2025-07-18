@@ -25,5 +25,6 @@ class UserPetCustomRepository(
             update(entity(UserPetEntity::class))
                 .set(path(UserPetEntity::point), 0)
                 .set(path(UserPetEntity::petId), petId)
+                .where(path(UserPetEntity::deletedAt).isNull())
         }
 }
