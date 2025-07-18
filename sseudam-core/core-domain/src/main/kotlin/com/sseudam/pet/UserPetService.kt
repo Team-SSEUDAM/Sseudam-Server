@@ -45,4 +45,8 @@ class UserPetService(
         userPetDeleter.deleteAllByUserIds(userIds)
         userPetAppender.appendAll(userPets, petId)
     }
+
+    fun deleteByUser(userId: Long) {
+        userPetDeleter.deleteByUser(userId)
+    }
 }

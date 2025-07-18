@@ -98,4 +98,12 @@ class UserPetCoreRepository(
             userPetCustomRepository.softDeleteAllByUserIds(userIds)
         }
     }
+
+    override fun deleteByUserId(userId: Long) =
+        txAdvice.write {
+            val userPet =
+                userPetJpaRepository.findByUserIdAndDeletedAtIsNull(userId)
+                    ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
+            userPet.softDelete()
+        }
 }

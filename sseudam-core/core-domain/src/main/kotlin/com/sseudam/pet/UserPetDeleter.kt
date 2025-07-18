@@ -9,4 +9,8 @@ class UserPetDeleter(
     fun deleteAllByUserIds(userIds: List<Long>) {
         userPetRepository.deleteAllByUserIds(userIds)
     }
+
+    fun deleteByUser(userId: Long) {
+        userPetRepository.deleteByUserId(userId)
+    }
 }
