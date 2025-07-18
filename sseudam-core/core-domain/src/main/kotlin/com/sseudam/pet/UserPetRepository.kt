@@ -32,4 +32,6 @@ interface UserPetRepository {
     fun initPoint(petId: Long)
 
     fun deleteAllByUserIds(userIds: List<Long>)
+
+    fun deleteByUserId(userId: Long)
 }

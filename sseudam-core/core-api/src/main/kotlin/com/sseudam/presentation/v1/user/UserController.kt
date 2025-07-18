@@ -1,6 +1,5 @@
 package com.sseudam.presentation.v1.user
 
-import com.sseudam.auth.AuthenticationService
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.user.request.NicknameRequest
 import com.sseudam.presentation.v1.user.request.UserMobileDeviceRequest
@@ -9,8 +8,8 @@ import com.sseudam.presentation.v1.user.response.UserMobileDeviceResponse
 import com.sseudam.presentation.v1.user.response.UserProfileResponse
 import com.sseudam.presentation.v1.user.response.UserWithdrawalResponse
 import com.sseudam.support.error.ErrorException
-import com.sseudam.user.NewUserWithdrawal
 import com.sseudam.user.User
+import com.sseudam.user.UserFacade
 import com.sseudam.user.UserService
 import com.sseudam.user.device.UserDeviceService
 import io.swagger.v3.oas.annotations.Operation
@@ -27,8 +26,8 @@ import org.springframework.web.bind.annotation.RequestHeader
 @ApiV1Controller
 class UserController(
     private val userService: UserService,
+    private val userFacade: UserFacade,
     private val userDeviceService: UserDeviceService,
-    private val authenticationService: AuthenticationService,
 ) {
     @Operation(summary = "내 정보 조회", description = "내 정보를 조회합니다.")
     @GetMapping("/users/me")
@@ -44,12 +43,7 @@ class UserController(
     fun withdrawal(
         @Parameter(hidden = true, required = false) user: User,
     ): UserWithdrawalResponse {
-        userService.deleteUser(
-            NewUserWithdrawal(
-                user = user,
-            ),
-        )
-        authenticationService.withdrawUser(user.key)
+        userFacade.withdrawalUser(user)
         return UserWithdrawalResponse("회원탈퇴가 완료되었습니다.")
     }
 
