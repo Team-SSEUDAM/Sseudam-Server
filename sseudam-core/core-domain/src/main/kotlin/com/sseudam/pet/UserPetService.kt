@@ -41,7 +41,7 @@ class UserPetService(
         userPets: List<UserPet.Info>,
         petId: Long,
     ) {
-        val userIds = userPets.map { it.id }
+        val userIds = userPets.map { it.userId }
         userPetDeleter.deleteAllByUserIds(userIds)
         userPetAppender.appendAll(userPets, petId)
     }

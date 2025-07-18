@@ -9,6 +9,7 @@ import com.linecorp.kotlinjdsl.support.spring.data.jpa.extension.createQuery
 import com.sseudam.storage.db.core.support.JDSLExtensions
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 class UserPetCustomRepository(
@@ -26,5 +27,16 @@ class UserPetCustomRepository(
                 .set(path(UserPetEntity::point), 0)
                 .set(path(UserPetEntity::petId), petId)
                 .where(path(UserPetEntity::deletedAt).isNull())
+        }
+
+    fun softDeleteAllByUserIds(userIds: List<Long>): Int =
+        updateAll {
+            update(entity(UserPetEntity::class))
+                .set(path(UserPetEntity::deletedAt), LocalDateTime.now())
+                .where(
+                    path(UserPetEntity::deletedAt)
+                        .isNull()
+                        .and(path(UserPetEntity::userId).`in`(userIds)),
+                )
         }
 }

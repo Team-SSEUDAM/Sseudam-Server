@@ -95,11 +95,7 @@ class UserPetCoreRepository(
 
     override fun deleteAllByUserIds(userIds: List<Long>) {
         txAdvice.write {
-            userPetJpaRepository
-                .findAllByUserIdInAndDeletedAtIsNull(userIds)
-                .forEach { userPet ->
-                    userPet.softDelete()
-                }
+            userPetCustomRepository.softDeleteAllByUserIds(userIds)
         }
     }
 }
