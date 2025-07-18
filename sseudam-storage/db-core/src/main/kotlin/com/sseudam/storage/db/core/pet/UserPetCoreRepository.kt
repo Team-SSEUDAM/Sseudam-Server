@@ -3,7 +3,7 @@ package com.sseudam.storage.db.core.pet
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.UserPet
 import com.sseudam.pet.UserPetRepository
-import com.sseudam.storage.db.core.support.findByIdOrElseThrow
+import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.tx.TxAdvice
@@ -25,9 +25,24 @@ class UserPetCoreRepository(
                 ).toUserPetInfo()
         }
 
+    override fun saveAll(createUserPets: List<UserPet.Create>): List<UserPet.Info> =
+        txAdvice.write {
+            userPetJpaRepository
+                .saveAll(
+                    createUserPets.map { UserPetEntity(it) },
+                ).map { it.toUserPetInfo() }
+        }
+
     override fun findByUserId(userId: Long): UserPet.Info? =
         txAdvice.readOnly {
             userPetJpaRepository.findByUserIdAndDeletedAtIsNull(userId)?.toUserPetInfo()
+        }
+
+    override fun findAll(): List<UserPet.Info> =
+        txAdvice.readOnly {
+            userPetJpaRepository
+                .findAllByDeletedAtIsNull()
+                .map { it.toUserPetInfo() }
         }
 
     override fun updateNickname(
@@ -48,7 +63,7 @@ class UserPetCoreRepository(
         txAdvice.write {
             val userPet =
                 userPetJpaRepository
-                    .findByIdOrElseThrow(userPetId)
+                    .findByIdAndDeletedAtIsNullOrElseThrow(userPetId)
             userPet.updatePetId(petId).toUserPetInfo()
         }
 
@@ -59,7 +74,7 @@ class UserPetCoreRepository(
         txAdvice.write {
             val userPet =
                 userPetJpaRepository
-                    .findByIdOrElseThrow(userPetId)
+                    .findByIdAndDeletedAtIsNullOrElseThrow(userPetId)
             userPet.updatePoint(userPet.point + action.point).toUserPetInfo()
         }
 
@@ -70,11 +85,17 @@ class UserPetCoreRepository(
         txAdvice.write {
             val userPet =
                 userPetJpaRepository
-                    .findByIdOrElseThrow(userPetId)
+                    .findByIdAndDeletedAtIsNullOrElseThrow(userPetId)
             userPet.updatePoint(point).toUserPetInfo()
         }
 
     override fun initPoint(petId: Long) {
         userPetCustomRepository.resetSeasonUserPetPoint(petId)
+    }
+
+    override fun deleteAllByUserIds(userIds: List<Long>) {
+        txAdvice.write {
+            userPetCustomRepository.softDeleteAllByUserIds(userIds)
+        }
     }
 }

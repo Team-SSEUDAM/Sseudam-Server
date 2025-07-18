@@ -18,4 +18,20 @@ class UserPetAppender(
                 point = 0L,
             ),
         )
+
+    fun appendAll(
+        userPets: List<UserPet.Info>,
+        petId: Long,
+    ) {
+        userPetRepository.saveAll(
+            userPets.map {
+                UserPet.Create(
+                    userId = it.userId,
+                    petId = petId,
+                    nickname = it.nickname,
+                    point = 0L,
+                )
+            },
+        )
+    }
 }

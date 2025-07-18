@@ -37,6 +37,8 @@ interface UserRepository {
 
     fun readUserByEmail(email: String): SocialUser?
 
+    fun findAll(): List<UserProfile>
+
     // Update
     fun updateNickname(
         userKey: String,

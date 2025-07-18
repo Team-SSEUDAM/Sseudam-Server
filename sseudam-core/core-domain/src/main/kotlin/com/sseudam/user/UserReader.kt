@@ -33,4 +33,6 @@ class UserReader(
     fun readUserByEmail(email: String): SocialUser? = userRepository.readUserByEmail(email)
 
     fun readAllBy(offsetPageRequest: OffsetPageRequest): Page<UserProfile> = userRepository.readAllBy(offsetPageRequest)
+
+    fun readAll(): List<UserProfile> = userRepository.findAll()
 }

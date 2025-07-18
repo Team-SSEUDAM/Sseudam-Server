@@ -77,6 +77,11 @@ class UserCoreRepository(
             userJpaRepository.findByEmailAndDeletedAtIsNull(email)?.toSocialUser()
         }
 
+    override fun findAll(): List<UserProfile> =
+        txAdvice.readOnly {
+            userJpaRepository.findAllByDeletedAtIsNull().map { it.toProfile() }
+        }
+
     override fun existsByEmail(email: String): Boolean =
         txAdvice.readOnly {
             userJpaRepository.existsByEmailAndDeletedAtIsNull(email)

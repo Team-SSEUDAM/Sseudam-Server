@@ -7,6 +7,7 @@ import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.pet.request.UpdateUserPetNameRequest
 import com.sseudam.presentation.v1.pet.response.UserPetInfoResponse
 import com.sseudam.presentation.v1.pet.response.UserPetLevelHistoryAllResponse
+import com.sseudam.presentation.v1.pet.response.UserPetLevelHistoryCurrentSeasonAllResponse
 import com.sseudam.user.User
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -45,9 +46,9 @@ class PetController(
 
     @Operation(summary = "현 시즌 펫 성장 기록 조회", description = "사용자의 현 시즌 펫 성장 기록을 조회합니다.")
     @GetMapping("/pets/season")
-    fun findUserPetSeasonInfo(user: User): UserPetLevelHistoryAllResponse {
-        val histories = userPetFacade.findCurrentSeasonPetHistory(user.id)
-        return UserPetLevelHistoryAllResponse.of(histories)
+    fun findUserPetSeasonInfo(user: User): UserPetLevelHistoryCurrentSeasonAllResponse {
+        val seasonHistory = userPetFacade.findCurrentSeasonPetHistory(user.id)
+        return UserPetLevelHistoryCurrentSeasonAllResponse.of(seasonHistory.first, seasonHistory.second)
     }
 
     @Operation(summary = "사용자 전체 펫 성장 기록 조회", description = "사용자의 전체 펫 성장 기록을 조회합니다.")

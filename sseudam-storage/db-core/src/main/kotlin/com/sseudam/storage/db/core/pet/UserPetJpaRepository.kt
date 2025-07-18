@@ -7,4 +7,8 @@ interface UserPetJpaRepository :
     JpaRepository<UserPetEntity, Long>,
     KotlinJdslJpqlExecutor {
     fun findByUserIdAndDeletedAtIsNull(userId: Long): UserPetEntity?
+
+    fun findAllByDeletedAtIsNull(): List<UserPetEntity>
+
+    fun findAllByUserIdInAndDeletedAtIsNull(userIds: List<Long>): List<UserPetEntity>
 }

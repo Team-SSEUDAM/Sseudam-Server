@@ -7,8 +7,11 @@ class UserPetService(
     private val userPetAppender: UserPetAppender,
     private val userPetReader: UserPetReader,
     private val userPetUpdater: UserPetUpdater,
+    private val userPetDeleter: UserPetDeleter,
 ) {
     fun findByUser(userId: Long): UserPet.Info? = userPetReader.readPetInfoByUser(userId)
+
+    fun findAll(): List<UserPet.Info> = userPetReader.readAll()
 
     fun append(
         userId: Long,
@@ -34,7 +37,12 @@ class UserPetService(
         petId: Long,
     ): UserPet.Info = userPetUpdater.updatePetId(userPetId, petId)
 
-    fun initPointForAllUsers(petId: Long) {
-        userPetUpdater.initPoint(petId)
+    fun initPointForAllUsers(
+        userPets: List<UserPet.Info>,
+        petId: Long,
+    ) {
+        val userIds = userPets.map { it.userId }
+        userPetDeleter.deleteAllByUserIds(userIds)
+        userPetAppender.appendAll(userPets, petId)
     }
 }

@@ -30,7 +30,8 @@ class PetScheduler(
         val currentYear = nextDay.year
         val currentMonth = Month.from(nextDay)
         val createLevelOnePet = petService.createPetSeason(currentYear, currentMonth)
-        userPetService.initPointForAllUsers(createLevelOnePet.id)
+        val allUserPet = userPetService.findAll()
+        userPetService.initPointForAllUsers(allUserPet, createLevelOnePet.id)
         sendNewPetNotifications()
     }
 
