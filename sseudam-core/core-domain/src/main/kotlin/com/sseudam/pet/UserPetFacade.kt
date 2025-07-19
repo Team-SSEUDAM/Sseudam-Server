@@ -50,8 +50,7 @@ class UserPetFacade(
                     levelType = petInfo.levelType,
                     point = pointStandard,
                     isLocked = userPetInfo.point <= pointStandard,
-                    year = currentYear,
-                    month = currentMonth,
+                    season = userPetPolicy.getSeasonByYearMonth(history?.year ?: currentYear, history?.monthly ?: currentMonth),
                     createdAt =
                         if (petInfo.levelType == Pet.LevelType.LEVEL_1) {
                             LocalDateTime.of(currentYear, currentMonth, 1, 0, 0)
@@ -83,8 +82,7 @@ class UserPetFacade(
                     nickname = history.levelType.adjective + history.nickname,
                     levelType = history.levelType,
                     point = userPetPolicy.getMinLevelStandard(history.levelType),
-                    year = history.year,
-                    month = history.monthly,
+                    season = userPetPolicy.getSeasonByYearMonth(history.year, history.monthly),
                     createdAt = history.createdAt,
                 )
             }

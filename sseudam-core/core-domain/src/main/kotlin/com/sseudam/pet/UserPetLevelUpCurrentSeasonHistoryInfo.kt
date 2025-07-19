@@ -1,7 +1,6 @@
 package com.sseudam.pet
 
 import java.time.LocalDateTime
-import java.time.Month
 
 data class UserPetLevelUpCurrentSeasonHistoryInfo(
     val userId: Long,
@@ -9,7 +8,6 @@ data class UserPetLevelUpCurrentSeasonHistoryInfo(
     val levelType: Pet.LevelType,
     val point: Long,
     val isLocked: Boolean,
-    val year: Int,
-    val month: Month,
+    val season: String,
     val createdAt: LocalDateTime,
 )

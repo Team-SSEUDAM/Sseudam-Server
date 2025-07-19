@@ -3,6 +3,7 @@ package com.sseudam.pet
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import org.springframework.stereotype.Component
+import java.time.Month
 
 @Component
 class UserPetPolicy {
@@ -33,4 +34,11 @@ class UserPetPolicy {
             Pet.LevelType.LEVEL_4 -> LevelStandard.LEVEL_4_MIN.toLong()
             Pet.LevelType.SPECIAL -> LevelStandard.SPECIAL_MIN.toLong()
         }
+
+    fun getSeasonByPetInfo(petInfo: Pet.Info): String = "%04d-%02d".format(petInfo.year, petInfo.monthly.value)
+
+    fun getSeasonByYearMonth(
+        year: Int,
+        month: Month,
+    ): String = "%04d-%02d".format(year, month.value)
 }
