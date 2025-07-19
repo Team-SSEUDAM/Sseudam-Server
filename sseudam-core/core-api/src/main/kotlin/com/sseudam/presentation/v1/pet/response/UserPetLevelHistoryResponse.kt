@@ -19,7 +19,7 @@ data class UserPetLevelHistoryResponse(
                 nickname = history.nickname,
                 point = history.point,
                 levelType = history.levelType,
-                season = "%04d-%02d".format(history.year, history.month.value),
+                season = history.season,
                 createdAt = history.createdAt,
             )
     }

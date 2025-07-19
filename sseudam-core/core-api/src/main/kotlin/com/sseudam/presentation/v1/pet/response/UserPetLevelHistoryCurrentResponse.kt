@@ -21,7 +21,7 @@ data class UserPetLevelHistoryCurrentResponse(
                 point = history.point,
                 levelType = history.levelType,
                 isLocked = history.isLocked,
-                season = "%04d-%02d".format(history.year, history.month.value),
+                season = history.season,
                 createdAt = history.createdAt,
             )
     }

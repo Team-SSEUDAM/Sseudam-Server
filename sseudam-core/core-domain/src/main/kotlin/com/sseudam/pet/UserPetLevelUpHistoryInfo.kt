@@ -1,14 +1,12 @@
 package com.sseudam.pet
 
 import java.time.LocalDateTime
-import java.time.Month
 
 data class UserPetLevelUpHistoryInfo(
     val userId: Long,
     val nickname: String,
     val levelType: Pet.LevelType,
     val point: Long,
-    val year: Int,
-    val month: Month,
+    val season: String,
     val createdAt: LocalDateTime,
 )
