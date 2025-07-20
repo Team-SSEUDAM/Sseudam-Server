@@ -18,7 +18,6 @@ class CoreRedissonConfig(
             .setAddress("redis://${redisProperties.host}:${redisProperties.port}")
             .setConnectionMinimumIdleSize(1)
             .setConnectionPoolSize(5)
-            .setConnectionPoolSize(5)
             .setConnectTimeout(3000)
             .setRetryAttempts(3)
         return Redisson.create(config)
