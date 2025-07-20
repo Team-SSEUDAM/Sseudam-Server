@@ -8,26 +8,32 @@ class AttendanceService(
     private val attendanceAppender: AttendanceAppender,
     private val attendanceReader: AttendanceReader,
 ) {
-    fun attendance(userId: Long): Pair<Boolean, Attendance.Complete> {
-        val attendance =
-            attendanceReader.readByUser(userId)
-                ?: attendanceAppender.append(
-                    Attendance.Create(
-                        userId = userId,
-                        date = LocalDate.now(),
-                        continuity = 1,
-                    ),
-                )
-
-        val attendanceDate = attendance.date
+    fun attendance(userId: Long): Triple<Boolean, Attendance.Complete, Boolean> {
         val currentDate = LocalDate.now()
+        val attendance = attendanceReader.readByUser(userId)
+        val isFirstAttendanceToday = attendance?.date != currentDate
 
-        var isContinuity =
-            attendanceDate.plusDays(1) == currentDate ||
-                attendance.continuity > 1
-        return if (attendanceDate == currentDate) {
-            Pair(
-                isContinuity,
+        return if (attendance == null || isFirstAttendanceToday) {
+            val continuity = if (attendance?.date?.plusDays(1) == currentDate) ((attendance?.continuity ?: 0) + 1).coerceAtMost(5) else 1
+            val newAttendance =
+                attendanceAppender.append(
+                    Attendance.Create(userId, currentDate, continuity),
+                )
+            Triple(
+                continuity > 1,
+                Attendance.Complete(
+                    id = newAttendance.id,
+                    userId = newAttendance.userId,
+                    date = newAttendance.date,
+                    continuity = newAttendance.continuity,
+                    isToday = true,
+                    createdAt = newAttendance.createdAt,
+                ),
+                true,
+            )
+        } else {
+            Triple(
+                attendance.continuity > 1,
                 Attendance.Complete(
                     id = attendance.id,
                     userId = attendance.userId,
@@ -36,58 +42,8 @@ class AttendanceService(
                     isToday = true,
                     createdAt = attendance.createdAt,
                 ),
+                false,
             )
-        } else {
-            if (attendance.continuity > 5) {
-                val newAttendance =
-                    attendanceAppender.append(
-                        Attendance.Create(
-                            userId = userId,
-                            date = LocalDate.now(),
-                            continuity = 1,
-                        ),
-                    )
-                Pair(
-                    false,
-                    Attendance.Complete(
-                        id = newAttendance.id,
-                        userId = newAttendance.userId,
-                        date = newAttendance.date,
-                        continuity = newAttendance.continuity,
-                        isToday = false,
-                        createdAt = newAttendance.createdAt,
-                    ),
-                )
-            } else {
-                var additionalContinuity = attendance.continuity
-                if (attendanceDate.plusDays(1) == currentDate) {
-                    additionalContinuity += 1
-                    isContinuity = true
-                } else {
-                    additionalContinuity = 1
-                    isContinuity = false
-                }
-
-                val append =
-                    attendanceAppender.append(
-                        Attendance.Create(
-                            userId = userId,
-                            date = currentDate,
-                            continuity = additionalContinuity,
-                        ),
-                    )
-                Pair(
-                    isContinuity,
-                    Attendance.Complete(
-                        id = append.id,
-                        userId = append.userId,
-                        date = append.date,
-                        continuity = append.continuity,
-                        isToday = false,
-                        createdAt = append.createdAt,
-                    ),
-                )
-            }
         }
     }
 }

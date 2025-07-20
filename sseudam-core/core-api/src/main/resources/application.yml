@@ -8,13 +8,14 @@ spring:
   modulith:
     events:
       completion-mode: update
+    metrics:
+      enabled: false
   config:
     import:
       - db-core.yml
       - redis.yml
       - logging.yml
       - monitoring.yml
-      - authentication-redis.yml
       - authentication.yml
       - oauth.yml
       - swagger.yml

@@ -7,14 +7,12 @@ import com.sseudam.auth.RedisTokenRepository
 import com.sseudam.auth.TokenWithAuthentication
 import com.sseudam.support.error.AuthenticationErrorException
 import com.sseudam.support.error.AuthenticationErrorType
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 import java.time.Duration
 
 @Repository
 class RedisTokenCoreRepository(
-    @Qualifier("authenticationRedisTemplate")
     private val redisTemplate: RedisTemplate<String, String>,
     private val objectMapper: ObjectMapper,
 ) : RedisTokenRepository {

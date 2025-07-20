@@ -12,6 +12,10 @@ dependencies {
     implementation(libs.spring.boot.starter.validation)
     implementation(libs.jakarta.validation)
 
+    // modulith
+    implementation(libs.bundles.spring.modulith)
+    runtimeOnly(libs.bundles.spring.modulith.runtime)
+
     // Security
     implementation(libs.spring.boot.starter.security)
     testImplementation(libs.spring.security.test)
@@ -37,4 +41,14 @@ dependencies {
     testImplementation(project(":sseudam-storage:redis"))
     testImplementation(project(":sseudam-tests:test-helper"))
     testImplementation(testFixtures(project(":sseudam-tests:test-container")))
+}
+
+dependencyManagement {
+    imports {
+        mavenBom(
+            libs.spring.modulith.bom
+                .get()
+                .toString(),
+        )
+    }
 }

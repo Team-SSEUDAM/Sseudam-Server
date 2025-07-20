@@ -7,15 +7,15 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class AuthenticationRedissonConfig(
-    private val authenticationRedisProperties: AuthenticationRedisProperties,
+class StorageRedissonConfig(
+    private val redisProperties: RedisProperties,
 ) {
     @Bean
-    fun authRedissonClient(): RedissonClient {
+    fun redissonClient(): RedissonClient {
         val config = Config()
         config
             .useSingleServer()
-            .setAddress("redis://${authenticationRedisProperties.host}:${authenticationRedisProperties.port}")
+            .setAddress("redis://${redisProperties.host}:${redisProperties.port}")
             .setConnectionMinimumIdleSize(1)
             .setConnectionPoolSize(5)
             .setConnectTimeout(3000)

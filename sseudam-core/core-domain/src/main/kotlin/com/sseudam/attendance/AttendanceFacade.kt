@@ -13,8 +13,10 @@ class AttendanceFacade(
 ) {
     fun todayAttendance(userId: Long): Pair<Boolean, Attendance.Complete> =
         txAdvice.write {
-            val (isContinuity, complete) = attendanceService.attendance(userId)
-            if (!complete.isToday) {
+            val (isContinuity, complete, isFirstAttendanceToday) = attendanceService.attendance(userId)
+
+            // 오늘 처음 출석한 경우에만 포인트 지급
+            if (isFirstAttendanceToday) {
                 val action =
                     if (complete.continuity == 5) {
                         PetPointAction.CONTINUITY_ATTENDANCE
