@@ -8,11 +8,14 @@ services:
     network_mode: host
     env_file:
       - ~/.env
+    depends_on:
+      - redis
   redis:
-    image: "redis:alpine"
+    image: redis:alpine
     container_name: sseudam-local-redis
     ports:
       - "6379:6379"
     environment:
       - TZ=Asia/Seoul
     network_mode: "host"
+    command: [ "redis-server", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru" ]

@@ -1,4 +1,5 @@
 package com.sseudam.storage.redis.config
+
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -15,14 +16,16 @@ class CoreRedisConfig(
 ) {
     @Bean
     @Primary
-    fun coreRedisConnectionFactory(): LettuceConnectionFactory =
-        LettuceConnectionFactory(RedisStandaloneConfiguration(redisProperties.host, redisProperties.port))
+    fun coreRedisConnectionFactory(): LettuceConnectionFactory {
+        val config = RedisStandaloneConfiguration(redisProperties.host, redisProperties.port)
+        return LettuceConnectionFactory(config)
+    }
 
     @Bean
     fun coreRedisTemplate(
         @Qualifier("coreRedisConnectionFactory") redisConnectionFactory: RedisConnectionFactory,
-    ): RedisTemplate<*, *> =
-        RedisTemplate<Any, Any>().apply {
+    ): RedisTemplate<String, String> =
+        RedisTemplate<String, String>().apply {
             connectionFactory = redisConnectionFactory
             keySerializer = StringRedisSerializer.UTF_8
             valueSerializer = StringRedisSerializer.UTF_8
