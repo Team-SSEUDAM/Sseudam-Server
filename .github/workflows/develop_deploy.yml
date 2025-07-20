@@ -3,7 +3,7 @@ name: Development Build & Deploy
 on:
   push:
     branches:
-      - develop
+      - chore/redis-config-setting
 
 # permission can be added at job level or workflow level
 permissions:

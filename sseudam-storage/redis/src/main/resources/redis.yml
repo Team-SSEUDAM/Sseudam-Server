@@ -1,11 +1,9 @@
 spring:
   cache:
     type: redis
----
-spring:
-  config:
-    activate:
-      on-profile: local
+  profiles:
+    active: local
+
 core:
   storage:
     redis:

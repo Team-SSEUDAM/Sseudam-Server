@@ -17,8 +17,8 @@ class AuthenticationRedissonConfig(
             .useSingleServer()
             .setAddress("redis://${authenticationRedisProperties.host}:${authenticationRedisProperties.port}")
             .setConnectionMinimumIdleSize(1)
-            .setConnectionPoolSize(10)
-            .setConnectTimeout(1500)
+            .setConnectionPoolSize(5)
+            .setConnectTimeout(3000)
             .setRetryAttempts(3)
         return Redisson.create(config)
     }

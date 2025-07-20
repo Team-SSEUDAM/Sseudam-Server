@@ -14,14 +14,16 @@ class AuthenticationRedisConfig(
     private val authenticationRedisProperties: AuthenticationRedisProperties,
 ) {
     @Bean
-    fun authenticationRedisConnectionFactory(): LettuceConnectionFactory =
-        LettuceConnectionFactory(RedisStandaloneConfiguration(authenticationRedisProperties.host, authenticationRedisProperties.port))
+    fun authenticationRedisConnectionFactory(): LettuceConnectionFactory {
+        val config = RedisStandaloneConfiguration(authenticationRedisProperties.host, authenticationRedisProperties.port)
+        return LettuceConnectionFactory(config)
+    }
 
     @Bean
     fun authenticationRedisTemplate(
         @Qualifier("authenticationRedisConnectionFactory") redisConnectionFactory: RedisConnectionFactory,
-    ): RedisTemplate<*, *> =
-        RedisTemplate<Any, Any>().apply {
+    ): RedisTemplate<String, String> =
+        RedisTemplate<String, String>().apply {
             connectionFactory = redisConnectionFactory
             keySerializer = StringRedisSerializer.UTF_8
             valueSerializer = StringRedisSerializer.UTF_8
