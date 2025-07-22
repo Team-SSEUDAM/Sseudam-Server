@@ -29,34 +29,37 @@ class UserPetFacade(
         val (currentYear, currentMonth) = LocalDate.now().let { it.year to it.month }
         val pets = petService.findAllLatestSeasonPets(currentYear, currentMonth)
         val userPetInfo =
-            userPetService.findByUser(userId) ?: pets
-                .find { it.levelType == Pet.LevelType.LEVEL_1 }
-                ?.let { userPetService.append(userId, it) }
+            userPetService.findByUser(userId)
+                ?: pets
+                    .find { it.levelType == Pet.LevelType.LEVEL_1 }
+                    ?.let { userPetService.append(userId, it) }
                 ?: throw ErrorException(ErrorType.INVALID_PET_LEVEL_TYPE)
 
         val histories = petLevelUpHistoryService.findAllBy(currentYear, currentMonth, userPetInfo.id)
-        val levelTypeToHistory =
-            histories
-                .groupBy { it.levelType }
-                .mapValues { (_, list) -> list.maxByOrNull { it.createdAt } }
+        val levelTypeToHistory = histories.groupBy { it.levelType }.mapValues { it.value.maxByOrNull { history -> history.createdAt } }
 
         val petHistoryInfo =
             pets.map { petInfo ->
                 val pointStandard = userPetPolicy.getMinLevelStandard(petInfo.levelType)
                 val history = levelTypeToHistory[petInfo.levelType]
+                val isLocked =
+                    if (petInfo.levelType == Pet.LevelType.SPECIAL ||
+                        userPetInfo.point == 0L
+                    ) {
+                        false
+                    } else {
+                        userPetInfo.point <= pointStandard
+                    }
+                val createdAt = history?.createdAt ?: LocalDateTime.of(currentYear, currentMonth, 1, 0, 0)
+
                 UserPetLevelUpCurrentSeasonHistoryInfo(
                     userId = userId,
                     nickname = petInfo.levelType.adjective + userPetInfo.nickname,
                     levelType = petInfo.levelType,
                     point = pointStandard,
-                    isLocked = userPetInfo.point <= pointStandard,
+                    isLocked = isLocked,
                     season = userPetPolicy.getSeasonByYearMonth(history?.year ?: currentYear, history?.monthly ?: currentMonth),
-                    createdAt =
-                        if (petInfo.levelType == Pet.LevelType.LEVEL_1) {
-                            LocalDateTime.of(currentYear, currentMonth, 1, 0, 0)
-                        } else {
-                            history?.createdAt ?: LocalDateTime.of(currentYear, currentMonth, 1, 0, 0)
-                        },
+                    createdAt = createdAt,
                 )
             }
 
