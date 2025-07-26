@@ -67,18 +67,17 @@ class UserPetFacade(
     }
 
     fun findAllPetHistory(userId: Long): List<UserPetLevelUpHistoryInfo> {
-        val (currentYear, currentMonth) = LocalDateTime.now().let { it.year to it.month }
         val userPetHistories =
             petLevelUpHistoryService
                 .findAllByUser(userId)
-                .filterNot { it.createdAt.year == currentYear && it.createdAt.month == currentMonth }
 
         if (userPetHistories.isEmpty()) return emptyList()
 
         return userPetHistories
-            .groupBy { it.userPetId }
-            .mapValues { (_, histories) -> histories.maxByOrNull { it.levelType.level } ?: throw ErrorException(ErrorType.NOT_FOUND_DATA) }
+            .groupBy { userPetPolicy.getSeasonByYearMonth(it.year, it.monthly) }
+            .mapValues { (_, histories) -> histories.maxByOrNull { it.levelType.level } }
             .values
+            .filterNotNull()
             .map { history ->
                 UserPetLevelUpHistoryInfo(
                     userId = userId,
