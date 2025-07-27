@@ -29,14 +29,15 @@ class SuggestionService(
         private const val SUGGESTION_IMAGE_PATH = "suggestion"
     }
 
-    fun append(create: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> {
-        suggestionValidator.verifySite(create.site)
+    fun append(create: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> =
+        txAdvice.write {
+            suggestionValidator.verifySite(create.site)
 
-        val uploadUrl = imageS3Caller.createUploadUrl(create.userId, LocalDateTime.now(), SUGGESTION_IMAGE_PATH)
-        val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)
-        petEventPublisher.publish(create.userId, PetPointAction.SUGGESTION)
-        return spotSuggestion to uploadUrl
-    }
+            val uploadUrl = imageS3Caller.createUploadUrl(create.userId, LocalDateTime.now(), SUGGESTION_IMAGE_PATH)
+            val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)
+            petEventPublisher.publish(create.userId, PetPointAction.SUGGESTION)
+            return@write spotSuggestion to uploadUrl
+        }
 
     fun findAllSpotSuggestionByUser(userId: Long): List<SpotSuggestion.Info> = suggestionReader.readAllByUser(userId)
 
