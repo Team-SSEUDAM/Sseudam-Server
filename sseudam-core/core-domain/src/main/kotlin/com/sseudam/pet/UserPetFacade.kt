@@ -42,9 +42,10 @@ class UserPetFacade(
             pets.map { petInfo ->
                 val pointStandard = userPetPolicy.getMinLevelStandard(petInfo.levelType)
                 val history = levelTypeToHistory[petInfo.levelType]
+                val userPetLevelType = userPetPolicy.getLevelType(userPetInfo.point)
                 val isLocked =
-                    if (petInfo.levelType == Pet.LevelType.SPECIAL ||
-                        userPetInfo.point == 0L
+                    if (userPetLevelType == Pet.LevelType.SPECIAL ||
+                        (userPetInfo.point == 0L && userPetLevelType == Pet.LevelType.LEVEL_1)
                     ) {
                         false
                     } else {
