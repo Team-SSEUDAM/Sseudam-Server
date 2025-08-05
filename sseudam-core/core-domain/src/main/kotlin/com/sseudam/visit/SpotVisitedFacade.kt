@@ -79,12 +79,19 @@ class SpotVisitedFacade(
         }
     }
 
-    fun findSpotVisitedByUserId(userId: Long): SpotVisitedAll {
+    fun findSpotVisitedByUserId(userId: Long): List<SpotVisited.Info> {
         val spotVisited = spotVisitedService.findAllByUser(userId)
-        if (spotVisited.isEmpty()) return SpotVisitedAll(emptyList())
+        if (spotVisited.isEmpty()) return emptyList()
 
         val spotIds = spotVisited.map { it.spotId }
         val spots = trashSpotService.findAllByIds(spotIds)
-        return SpotVisitedAll.of(spotVisited, spots)
+        val spotsMap = spots.associateBy { it.id }
+
+        return spotVisited
+            .mapNotNull { visited ->
+                spotsMap[visited.spotId]?.let { spot ->
+                    visited.copy(site = spot.address.site)
+                }
+            }.sortedByDescending { it.visitedAt }
     }
 }

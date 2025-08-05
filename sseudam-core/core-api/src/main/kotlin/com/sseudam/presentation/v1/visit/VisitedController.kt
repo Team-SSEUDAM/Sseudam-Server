@@ -4,7 +4,7 @@ import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.visit.response.SpotLatestVisitedResponse
 import com.sseudam.presentation.v1.visit.response.SpotVisitedAllResponse
 import com.sseudam.presentation.v1.visit.response.SpotVisitedCountResponse
-import com.sseudam.presentation.v1.visit.response.SpotVisitedResponse
+import com.sseudam.presentation.v1.visit.response.SpotVisitedDetailResponse
 import com.sseudam.user.User
 import com.sseudam.visit.SpotVisitedFacade
 import com.sseudam.visit.SpotVisitedService
@@ -25,9 +25,9 @@ class VisitedController(
     fun visitedSpotCreate(
         user: User,
         @PathVariable spotId: Long,
-    ): SpotVisitedResponse {
+    ): SpotVisitedDetailResponse {
         val visited = spotVisitedFacade.visitSpot(user.id, spotId)
-        return SpotVisitedResponse.of(
+        return SpotVisitedDetailResponse.of(
             isToday = visited.first,
             visited = visited.second,
         )
@@ -37,7 +37,7 @@ class VisitedController(
     @GetMapping("/visited")
     fun visitedSpotFindAll(user: User): SpotVisitedAllResponse {
         val visitedSpots = spotVisitedFacade.findSpotVisitedByUserId(user.id)
-        return SpotVisitedAllResponse.of(visitedSpots)
+        return SpotVisitedAllResponse.from(visitedSpots)
     }
 
     @Operation(summary = "장소 최근 방문 여부 조회", description = "해당 장소에 최근 방문했는지 여부를 조회합니다.")
