@@ -15,6 +15,8 @@ data class SpotReportResponse(
     val id: Long,
     @Schema(description = "장소 ID")
     val spotId: Long,
+    @Schema(description = "장소 이름")
+    val spotName: String,
     @Schema(description = "신고자 ID")
     val userId: Long,
     @Schema(description = "신고 타입")
@@ -37,6 +39,7 @@ data class SpotReportResponse(
             SpotReportResponse(
                 id = report.id,
                 spotId = report.spotId,
+                spotName = report.spotName,
                 userId = report.userId,
                 reportType = report.reportType,
                 point = report.point,
