@@ -11,33 +11,17 @@ class HistoryFacade(
     private val reportService: ReportService,
     private val suggestionService: SuggestionService,
 ) {
-    fun findHistories(
-        userId: Long,
-        action: SpotActionType?,
-    ): List<SpotHistory.Info> =
-        when (action) {
-            SpotActionType.REPORT -> {
-                reportService
-                    .findAllReportByUserId(userId)
-                    .map { it.toSpotHistoryInfo() }
-            }
-            SpotActionType.SUGGESTION -> {
-                suggestionService
-                    .findAllSpotSuggestionByUser(userId)
-                    .map { it.toSpotHistoryInfo() }
-            }
-            else -> {
-                val reports =
-                    reportService
-                        .findAllReportByUserId(userId)
-                        .map { it.toSpotHistoryInfo() }
-                val suggestions =
-                    suggestionService
-                        .findAllSpotSuggestionByUser(userId)
-                        .map { it.toSpotHistoryInfo() }
-                (reports + suggestions).sortedByDescending { it.createdAt }
-            }
-        }
+    fun findHistories(userId: Long): List<SpotHistory.Info> {
+        val reports =
+            reportService
+                .findAllReportByUserId(userId)
+                .map { it.toSpotHistoryInfo() }
+        val suggestions =
+            suggestionService
+                .findAllSpotSuggestionByUser(userId)
+                .map { it.toSpotHistoryInfo() }
+        return (reports + suggestions).sortedByDescending { it.createdAt }
+    }
 
     private fun SpotReport.Info.toSpotHistoryInfo() =
         SpotHistory.Info(
