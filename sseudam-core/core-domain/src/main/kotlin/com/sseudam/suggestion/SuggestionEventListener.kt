@@ -49,7 +49,7 @@ class SuggestionEventListener(
                     SuggestionStatus.REJECT -> NotificationMessages.REJECT_SUGGESTION_CONTENTS
                     else -> throw ErrorException(ErrorType.INVALID_UPDATE_SUGGESTION_STATUS)
                 }
-            val userProfile = userService.getProfile(userId)
+            val userProfile = userService.getProfile(userId) ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
 
             fcmSender.send(
                 sendNotificationMessage =

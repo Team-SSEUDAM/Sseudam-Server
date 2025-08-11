@@ -63,7 +63,7 @@ class SpotVisitedFacade(
     private fun sendVisitNotificationAsync(spot: TrashSpot.Info) {
         try {
             val suggestion = suggestionService.findSpotSuggestionBySite(spot.address.site) ?: return
-            val profile = userService.getProfile(suggestion.userId)
+            val profile = userService.getProfile(suggestion.userId) ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
             fcmSender.send(
                 sendNotificationMessage =
                     SendNotificationMessage(

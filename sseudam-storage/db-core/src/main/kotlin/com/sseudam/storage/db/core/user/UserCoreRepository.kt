@@ -1,7 +1,6 @@
 package com.sseudam.storage.db.core.user
 
 import com.sseudam.common.Address
-import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
@@ -67,9 +66,9 @@ class UserCoreRepository(
                 ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
         }
 
-    override fun readByUserId(id: Long): UserProfile =
+    override fun findProfileByUserId(id: Long): UserProfile? =
         txAdvice.readOnly {
-            userJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(id).toProfile()
+            userJpaRepository.findByIdAndDeletedAtIsNull(id)?.toProfile()
         }
 
     override fun readUserByEmail(email: String): SocialUser? =

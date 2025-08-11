@@ -8,6 +8,7 @@ import com.sseudam.presentation.v1.user.response.UserMobileDeviceResponse
 import com.sseudam.presentation.v1.user.response.UserProfileResponse
 import com.sseudam.presentation.v1.user.response.UserWithdrawalResponse
 import com.sseudam.support.error.ErrorException
+import com.sseudam.support.error.ErrorType
 import com.sseudam.user.User
 import com.sseudam.user.UserFacade
 import com.sseudam.user.UserService
@@ -34,7 +35,7 @@ class UserController(
     fun me(
         @Parameter(hidden = true, required = false) user: User,
     ): UserProfileResponse {
-        val userProfile = userService.getProfile(user.id)
+        val userProfile = userService.getProfile(user.id) ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
         return UserProfileResponse.of(userProfile)
     }
 
