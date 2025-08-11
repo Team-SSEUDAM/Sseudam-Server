@@ -64,7 +64,7 @@ class AdminFacade(
     }
 
     fun findByUser(userId: Long): AdminUserProfile {
-        val profile = userService.getProfile(userId)
+        val profile = userService.getProfile(userId) ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
         val visitedByUser = spotVisitedService.findAllByUser(userId)
 
         if (visitedByUser.isEmpty()) return AdminUserProfile.of(profile, emptyList())

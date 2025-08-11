@@ -12,7 +12,7 @@ interface UserRepository {
     ): User
 
     // Read
-    fun readByUserId(id: Long): UserProfile
+    fun findProfileByUserId(id: Long): UserProfile?
 
     fun readByUserKey(userKey: String): UserProfile
 

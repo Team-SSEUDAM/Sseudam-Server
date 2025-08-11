@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 class UserReader(
     private val userRepository: UserRepository,
 ) {
-    fun readUserProfile(userId: Long): UserProfile = userRepository.readByUserId(userId)
+    fun readUserProfile(userId: Long): UserProfile? = userRepository.findProfileByUserId(userId)
 
     fun readUserProfileOrNull(userId: Long): UserProfile? = userRepository.readByUserIdOrNull(userId)
 

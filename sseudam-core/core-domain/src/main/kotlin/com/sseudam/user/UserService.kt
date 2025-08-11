@@ -18,7 +18,7 @@ class UserService(
         return userAppender.create(newUser)
     }
 
-    fun getProfile(userId: Long): UserProfile = userReader.readUserProfile(userId)
+    fun getProfile(userId: Long): UserProfile? = userReader.readUserProfile(userId)
 
     fun getSocialUserByEmail(email: String): SocialUser? = userReader.readUserByEmail(email)
 

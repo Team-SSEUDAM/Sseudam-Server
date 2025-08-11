@@ -4,6 +4,8 @@ import com.sseudam.notification.FcmSender
 import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.report.event.ReportUpdateEvent
+import com.sseudam.support.error.ErrorException
+import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.image.TrashSpotImageService
@@ -49,7 +51,7 @@ class ReportEventListener(
                     ReportStatus.REJECT -> NotificationMessages.REJECT_REPORT_CONTENTS
                     else -> throw IllegalArgumentException("Invalid report status: ${event.report.status}")
                 }
-            val userProfile = userService.getProfile(userId)
+            val userProfile = userService.getProfile(userId) ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
 
             fcmSender.send(
                 sendNotificationMessage =
