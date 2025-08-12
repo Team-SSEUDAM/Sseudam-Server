@@ -16,7 +16,7 @@ spring_boot = "3.4.5"
 spring_dependency_management = "1.1.7"
 spring_cloud_dependencies = "2024.0.0"
 jakartaAnnotation = "3.0.0"
-spring_modulith = "1.4.1"
+spring_modulith = "1.4.2"
 
 # Redis version
 redisson = "3.30.0"
@@ -225,7 +225,6 @@ spring_modulith = [
     "spring_modulith_events_core",
     "spring_modulith_starter_core",
     "spring_modulith_starter_jpa",
-    "spring_modulith_observability",
     "spring_modulith_docs"
 ]
 
@@ -236,6 +235,5 @@ spring_modulith_tests = [
 spring_modulith_runtime = [
     "spring_modulith_actuator",
     "spring_modulith_events_kafka",
-    "spring_modulith_observability",
     "spring_modulith_runtime"
 ]

@@ -1,4 +1,8 @@
 management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
   endpoints:
     web:
       exposure:
@@ -12,4 +16,4 @@ sentry:
   environment: ${SPRING_PROFILES_ACTIVE:dev}
   logs:
     enabled: true
-  traces-sample-rate: ${SENTRY_TRACES_SAMPLE_RATE:0.2}
+  traces-sample-rate: ${SENTRY_TRACES_SAMPLE_RATE:1.0}

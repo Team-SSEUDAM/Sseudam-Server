@@ -49,6 +49,7 @@ subprojects {
     }
 
     dependencies {
+        implementation(platform(libs.spring.modulith.bom))
         implementation(libs.kotlin.reflect)
         implementation(libs.kotlin.stdlib.jdk8)
         implementation(libs.jackson.kotlin)

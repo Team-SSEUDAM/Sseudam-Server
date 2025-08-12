@@ -22,7 +22,7 @@ data class NicknameRequest(
         }
 
         // 영어 및 숫자, 한글로만 구성된 닉네임인지 확인
-        require(nickname.matches(Regex("^[a-zA-Z0-9가-힣]+$"))) {
+        require(nickname.matches(Regex("^[a-zA-Z0-9ㄱ-힣]+$"))) {
             throw ErrorException(ErrorType.INVALID_NICKNAME_FORMAT)
         }
         return nickname
