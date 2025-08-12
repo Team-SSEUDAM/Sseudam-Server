@@ -71,7 +71,7 @@ subprojects {
 
         org = "sseudam"
         projectName = "sseudam-server"
-        authToken = System.getProperty("SENTRY_AUTH_TOKEN")
+        authToken = System.getenv("SENTRY_AUTH_TOKEN")
     }
 
     tasks.withType<KotlinCompile> {
