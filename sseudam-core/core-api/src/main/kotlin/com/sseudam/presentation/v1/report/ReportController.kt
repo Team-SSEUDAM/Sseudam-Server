@@ -9,6 +9,7 @@ import com.sseudam.presentation.v1.report.response.SpotReportAllResponse
 import com.sseudam.report.ReportFacade
 import com.sseudam.report.ReportService
 import com.sseudam.report.SpotReport
+import com.sseudam.support.geo.Region
 import com.sseudam.user.User
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -40,7 +41,7 @@ class ReportController(
                         latitude = request.latitude,
                         longitude = request.longitude,
                         spotName = request.spotName,
-                        region = request.region,
+                        region = request.region ?: Region.UNKNOWN,
                         city = request.city,
                         site = request.site,
                         trashType = request.trashType,

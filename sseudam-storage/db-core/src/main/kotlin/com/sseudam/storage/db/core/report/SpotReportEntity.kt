@@ -54,7 +54,7 @@ class SpotReportEntity(
                 site = createSpotReport.site,
             ),
         spotName = createSpotReport.spotName,
-        region = createSpotReport.region ?: Region.UNKNOWN,
+        region = createSpotReport.region,
         trashType = createSpotReport.trashType,
         imageUrl = imageUrl,
         status = ReportStatus.WAITING,

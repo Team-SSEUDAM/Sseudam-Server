@@ -14,11 +14,11 @@
         <minimumEventLevel>ERROR</minimumEventLevel>
     </appender>
 
-    <appender-ref ref="SENTRY_APPENDER"/>
     <logger name="org.springframework" level="WARN"/>
     <logger name="com.sseudam" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="SENTRY_APPENDER"/>
     </root>
 </configuration>

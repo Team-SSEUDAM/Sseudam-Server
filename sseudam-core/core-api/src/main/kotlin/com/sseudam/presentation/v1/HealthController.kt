@@ -24,15 +24,18 @@ class HealthController {
     )
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(*[IllegalArgumentException::class, MethodArgumentNotValidException::class])
-    fun handleException(exception: Exception): ErrorResponse {
-        Sentry.captureException(exception)
-        if (exception is MethodArgumentNotValidException) {
-            val bindingResult = exception.bindingResult
-            val errors = bindingResult.allErrors
-            return ErrorResponse.of(errors.first().defaultMessage.toString(), "Method Argument Not Valid")
-        } else {
-            return ErrorResponse.of(exception.javaClass.name, "Sentry Error")
+    @ExceptionHandler(value = [IllegalArgumentException::class, MethodArgumentNotValidException::class])
+    fun handleException(exception: Exception): ErrorResponse =
+        when (exception) {
+            is MethodArgumentNotValidException -> {
+                val fieldErrors = exception.bindingResult.fieldErrors
+                val message = fieldErrors.firstOrNull()?.defaultMessage ?: "Validation failed"
+                ErrorResponse.of(message, "Method Argument Not Valid")
+            }
+            else -> {
+                // Only capture non-validation exceptions to reduce noise.
+                Sentry.captureException(exception)
+                ErrorResponse.of(exception.message ?: exception.javaClass.simpleName, "Sentry Error")
+            }
         }
-    }
 }
