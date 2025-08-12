@@ -54,6 +54,7 @@ firebase = "9.5.0"
 
 # sentry
 sentry = "5.8.1"
+sentry_logback = "6.27.0"
 
 # OpenFeign
 spring_cloud_openfeign = "4.2.0"
@@ -185,6 +186,9 @@ line_kotlin_jdsl_spring_data_jpa_support = { module = "com.linecorp.kotlin-jdsl:
 spring_cloud_openfeign = { module = "org.springframework.cloud:spring-cloud-starter-openfeign", version.ref = "spring_cloud_openfeign" }
 openfeign_hc5 = { module = "io.github.openfeign:feign-hc5", version.ref = "openfeign_hc5" }
 openfeign_micrometer = { module = "io.github.openfeign:feign-micrometer", version.ref = "openfeign_micrometer" }
+
+# Sentry
+sentry_logback = { module = "io.sentry:sentry-logback", version.ref = "sentry_logback"}
 
 # Test Libraries
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }

@@ -12,6 +12,15 @@
 
     <appender name="SENTRY_APPENDER" class="io.sentry.logback.SentryAppender">
         <minimumEventLevel>ERROR</minimumEventLevel>
+        <minimumBreadcrumbLevel>INFO</minimumBreadcrumbLevel>
+        <!-- Drop known-noisy exceptions -->
+        <ignoredExceptionsForType>org.apache.catalina.connector.ClientAbortException</ignoredExceptionsForType>
+        <ignoredExceptionsForType>java.io.EOFException</ignoredExceptionsForType>
+        <ignoredExceptionsForType>org.springframework.web.client.HttpClientErrorException</ignoredExceptionsForType>
+        <!-- Ensure Logback itself filters below ERROR -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+          <level>ERROR</level>
+        </filter>
     </appender>
 
     <logger name="org.springframework" level="WARN"/>
