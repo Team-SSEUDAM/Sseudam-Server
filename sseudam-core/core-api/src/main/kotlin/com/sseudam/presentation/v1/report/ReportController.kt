@@ -32,7 +32,7 @@ class ReportController(
     ): ReportImageUrlResponse {
         val report =
             reportFacade.createSpotReport(
-                report =
+                create =
                     SpotReport.Create(
                         userId = user.id,
                         spotId = spotId,

@@ -32,26 +32,26 @@ class ReportFacade(
         return true
     }
 
-    fun createSpotReport(report: SpotReport.Create): Pair<SpotReport.Info, String?> =
+    fun createSpotReport(create: SpotReport.Create): Pair<SpotReport.Info, String?> =
         txAdvice.write {
             val presignedUrl: String?
-            val images = trashSpotImageService.findBySpotId(report.spotId)
+            val images = trashSpotImageService.findBySpotId(create.spotId)
             var imageUrl =
                 images
                     .filter { it.updatedAt != null }
                     .maxByOrNull { it.updatedAt!! }
                     ?.imageUrl
                     ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
-            if (report.reportType == ReportType.PHOTO) {
-                val s3ImageUrl: S3ImageUrl = imageS3Caller.createUploadUrl(report.userId, LocalDateTime.now(), REPORT_IMAGE_PATH)
+            if (create.reportType == ReportType.PHOTO) {
+                val s3ImageUrl: S3ImageUrl = imageS3Caller.createUploadUrl(create.userId, LocalDateTime.now(), REPORT_IMAGE_PATH)
                 presignedUrl = s3ImageUrl.presignedUrl
                 imageUrl = s3ImageUrl.imageUrl
             } else {
                 presignedUrl = null
             }
 
-            val spotReport = reportService.appendReport(imageUrl, report)
-            petEventPublisher.publish(report.userId, PetPointAction.REPORT)
+            val spotReport = reportService.appendReport(imageUrl, create)
+            petEventPublisher.publish(create.userId, PetPointAction.REPORT)
 
             return@write spotReport to presignedUrl
         }

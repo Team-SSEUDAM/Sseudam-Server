@@ -13,6 +13,13 @@ plugins {
     alias(libs.plugins.asciidoctor.convert) apply false
     alias(libs.plugins.epages.restdocs.api.spec) apply false
     alias(libs.plugins.hidetake.swagger.generator) apply false
+    alias(libs.plugins.sentry.gradle)
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
 }
 
 allprojects {
@@ -35,6 +42,7 @@ subprojects {
     apply(plugin = getPlugin(libs.plugins.asciidoctor.convert))
     apply(plugin = getPlugin(libs.plugins.epages.restdocs.api.spec))
     apply(plugin = getPlugin(libs.plugins.hidetake.swagger.generator))
+    apply(plugin = getPlugin(libs.plugins.sentry.gradle))
 
     java {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -54,6 +62,17 @@ subprojects {
         testImplementation(libs.spring.boot.starter.test)
         testImplementation(libs.spring.security.test)
     }
+
+//    sentry {
+//        // Generates a JVM (Java, Kotlin, etc.) source bundle and uploads your source code to Sentry.
+//        // This enables source context, allowing you to see your source
+//        // code as part of your stack traces in Sentry.
+//        includeSourceContext = true
+//
+//        org = "sseudam"
+//        projectName = "sseudam-server"
+//        authToken = System.getenv("SENTRY_AUTH_TOKEN")
+//    }
 
     tasks.withType<KotlinCompile> {
         kotlin {

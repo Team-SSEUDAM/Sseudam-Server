@@ -37,9 +37,6 @@ epages_restdocs_api_spec = "0.17.1"
 hidetake_swagger_generator = "2.18.2"
 swaggerVersion = "2.8.5"
 
-# Sentry version
-sentry = "7.3.0"
-
 # AWS version
 aws = "2.25.47"
 
@@ -54,6 +51,9 @@ spring_mockk = "4.0.2"
 
 # firebase
 firebase = "9.5.0"
+
+# sentry
+sentry = "5.8.1"
 
 # OpenFeign
 spring_cloud_openfeign = "4.2.0"
@@ -81,6 +81,8 @@ spring_dependency_management = { id = "io.spring.dependency-management", version
 asciidoctor_convert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor_convert" }
 epages_restdocs_api_spec = { id = "com.epages.restdocs-api-spec", version.ref = "epages_restdocs_api_spec" }
 hidetake_swagger_generator = { id = "org.hidetake.swagger.generator", version.ref = "hidetake_swagger_generator" }
+
+sentry_gradle = { id = "io.sentry.jvm.gradle", version.ref = "sentry" }
 
 [libraries]
 # Kotlin

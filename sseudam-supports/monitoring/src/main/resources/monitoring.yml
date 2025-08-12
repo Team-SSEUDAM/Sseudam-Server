@@ -6,3 +6,10 @@ management:
   health:
     defaults:
       enabled: false
+sentry:
+  dsn: ${SENTRY_DSN}
+  send-default-pii: true
+  environment: ${SPRING_PROFILES_ACTIVE:dev}
+  logs:
+    enabled: true
+  traces-sample-rate: 1.0

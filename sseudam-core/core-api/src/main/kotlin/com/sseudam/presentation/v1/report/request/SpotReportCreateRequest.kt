@@ -18,7 +18,7 @@ data class SpotReportCreateRequest(
     @Schema(description = "쓰레기통 이름", example = "우리집앞")
     val spotName: String,
     @Schema(description = "지역", example = "SEOUL")
-    val region: Region,
+    val region: Region? = Region.UNKNOWN,
     @Schema(description = "구/군/시", example = "강남구/거창군/동두천시")
     val city: String,
     @Schema(description = "주소", example = "서울시 강남구 강남동 1-4")

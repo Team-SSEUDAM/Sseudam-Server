@@ -26,7 +26,7 @@ class SpotReport {
         val latitude: Double,
         val longitude: Double,
         val spotName: String,
-        val region: Region,
+        val region: Region? = Region.UNKNOWN,
         val city: String,
         val site: String,
         val trashType: TrashType,
@@ -38,6 +38,8 @@ class SpotReport {
      * @property userId 신고자 id
      * @property reportType 신고 타입
      * @property point 신고 위치
+     * @property spotName 쓰레기통 이름
+     * @property region 제보 지역
      * @property address 신고 주소
      * @property trashType 쓰레기통 타입
      * @property imageUrl 신고된 S3 imageUrl
@@ -51,6 +53,7 @@ class SpotReport {
         val reportType: ReportType,
         val point: GeoJson,
         val spotName: String,
+        val region: Region? = Region.UNKNOWN,
         val address: Address,
         val trashType: TrashType,
         val imageUrl: String,
