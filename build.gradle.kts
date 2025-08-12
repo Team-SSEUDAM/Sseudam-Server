@@ -63,16 +63,16 @@ subprojects {
         testImplementation(libs.spring.security.test)
     }
 
-//    sentry {
-//        // Generates a JVM (Java, Kotlin, etc.) source bundle and uploads your source code to Sentry.
-//        // This enables source context, allowing you to see your source
-//        // code as part of your stack traces in Sentry.
-//        includeSourceContext = true
-//
-//        org = "sseudam"
-//        projectName = "sseudam-server"
-//        authToken = System.getenv("SENTRY_AUTH_TOKEN")
-//    }
+    sentry {
+        // Generates a JVM (Java, Kotlin, etc.) source bundle and uploads your source code to Sentry.
+        // This enables source context, allowing you to see your source
+        // code as part of your stack traces in Sentry.
+        includeSourceContext = true
+
+        org = "sseudam"
+        projectName = "sseudam-server"
+        authToken = System.getProperty("SENTRY_AUTH_TOKEN")
+    }
 
     tasks.withType<KotlinCompile> {
         kotlin {
