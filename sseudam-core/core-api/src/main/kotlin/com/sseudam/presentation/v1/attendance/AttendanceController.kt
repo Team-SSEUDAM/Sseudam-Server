@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.PostMapping
 
-@Tag(name = "🗓️Attendance API", description = "출석 관련 API")
+@Tag(name = "🗓️ Attendance API", description = "출석 관련 API")
 @ApiV1Controller
 class AttendanceController(
     private val attendanceFacade: AttendanceFacade,
