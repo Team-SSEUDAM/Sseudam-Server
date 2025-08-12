@@ -37,4 +37,4 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: |
-          ./gradlew :sseudam-core:core-api:build --scan
+          ./gradlew -DSENTRY_AUTH_TOKEN="$SENTRY_AUTH_TOKEN" :sseudam-core:core-api:build --scan
