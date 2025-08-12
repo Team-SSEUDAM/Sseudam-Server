@@ -50,7 +50,7 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: |
-          ./gradlew build :sseudam-core:core-api:build --scan
+          ./gradlew :sseudam-core:core-api:build --scan
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
