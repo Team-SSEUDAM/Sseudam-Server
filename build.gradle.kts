@@ -13,6 +13,13 @@ plugins {
     alias(libs.plugins.asciidoctor.convert) apply false
     alias(libs.plugins.epages.restdocs.api.spec) apply false
     alias(libs.plugins.hidetake.swagger.generator) apply false
+    alias(libs.plugins.sentry.gradle)
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
 }
 
 allprojects {
@@ -35,12 +42,14 @@ subprojects {
     apply(plugin = getPlugin(libs.plugins.asciidoctor.convert))
     apply(plugin = getPlugin(libs.plugins.epages.restdocs.api.spec))
     apply(plugin = getPlugin(libs.plugins.hidetake.swagger.generator))
+    apply(plugin = getPlugin(libs.plugins.sentry.gradle))
 
     java {
         sourceCompatibility = JavaVersion.VERSION_21
     }
 
     dependencies {
+        implementation(platform(libs.spring.modulith.bom))
         implementation(libs.kotlin.reflect)
         implementation(libs.kotlin.stdlib.jdk8)
         implementation(libs.jackson.kotlin)
@@ -53,6 +62,20 @@ subprojects {
         testImplementation(libs.bundles.kotest)
         testImplementation(libs.spring.boot.starter.test)
         testImplementation(libs.spring.security.test)
+    }
+
+    val sentryAuthToken = System.getenv("SENTRY_AUTH_TOKEN")
+    if (!sentryAuthToken.isNullOrEmpty()) {
+        sentry {
+            includeSourceContext = true
+            org = "sseudam"
+            projectName = "sseudam-server"
+            authToken = sentryAuthToken
+        }
+    } else {
+        tasks.matching { it.name.startsWith("sentry") }.configureEach {
+            enabled = false
+        }
     }
 
     tasks.withType<KotlinCompile> {

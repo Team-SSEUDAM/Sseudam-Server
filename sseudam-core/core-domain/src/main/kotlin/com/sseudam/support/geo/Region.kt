@@ -18,4 +18,5 @@ enum class Region {
     GYEONGBUK,
     GYEONGNAM,
     JEJU,
+    UNKNOWN,
 }

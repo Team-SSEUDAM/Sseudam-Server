@@ -5,6 +5,7 @@ import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.support.geo.GeoJson
+import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
@@ -17,6 +18,8 @@ data class SpotReportResponse(
     val spotId: Long,
     @Schema(description = "장소 이름")
     val spotName: String,
+    @Schema(description = "지역")
+    val region: Region,
     @Schema(description = "신고자 ID")
     val userId: Long,
     @Schema(description = "신고 타입")
@@ -40,6 +43,7 @@ data class SpotReportResponse(
                 id = report.id,
                 spotId = report.spotId,
                 spotName = report.spotName,
+                region = report.region ?: Region.UNKNOWN,
                 userId = report.userId,
                 reportType = report.reportType,
                 point = report.point,

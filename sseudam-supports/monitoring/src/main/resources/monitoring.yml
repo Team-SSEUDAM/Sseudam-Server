@@ -1,4 +1,8 @@
 management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
   endpoints:
     web:
       exposure:
@@ -6,3 +10,10 @@ management:
   health:
     defaults:
       enabled: false
+sentry:
+  dsn: ${SENTRY_DSN}
+  send-default-pii: ${SENTRY_SEND_DEFAULT_PII:false}
+  environment: ${SPRING_PROFILES_ACTIVE:dev}
+  logs:
+    enabled: true
+  traces-sample-rate: ${SENTRY_TRACES_SAMPLE_RATE:1.0}

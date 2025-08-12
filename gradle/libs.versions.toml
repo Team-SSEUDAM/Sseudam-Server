@@ -16,7 +16,7 @@ spring_boot = "3.4.5"
 spring_dependency_management = "1.1.7"
 spring_cloud_dependencies = "2024.0.0"
 jakartaAnnotation = "3.0.0"
-spring_modulith = "1.4.1"
+spring_modulith = "1.4.2"
 
 # Redis version
 redisson = "3.30.0"
@@ -37,9 +37,6 @@ epages_restdocs_api_spec = "0.17.1"
 hidetake_swagger_generator = "2.18.2"
 swaggerVersion = "2.8.5"
 
-# Sentry version
-sentry = "7.3.0"
-
 # AWS version
 aws = "2.25.47"
 
@@ -54,6 +51,10 @@ spring_mockk = "4.0.2"
 
 # firebase
 firebase = "9.5.0"
+
+# sentry
+sentry = "5.8.1"
+sentry_logback = "6.27.0"
 
 # OpenFeign
 spring_cloud_openfeign = "4.2.0"
@@ -81,6 +82,8 @@ spring_dependency_management = { id = "io.spring.dependency-management", version
 asciidoctor_convert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor_convert" }
 epages_restdocs_api_spec = { id = "com.epages.restdocs-api-spec", version.ref = "epages_restdocs_api_spec" }
 hidetake_swagger_generator = { id = "org.hidetake.swagger.generator", version.ref = "hidetake_swagger_generator" }
+
+sentry_gradle = { id = "io.sentry.jvm.gradle", version.ref = "sentry" }
 
 [libraries]
 # Kotlin
@@ -184,6 +187,9 @@ spring_cloud_openfeign = { module = "org.springframework.cloud:spring-cloud-star
 openfeign_hc5 = { module = "io.github.openfeign:feign-hc5", version.ref = "openfeign_hc5" }
 openfeign_micrometer = { module = "io.github.openfeign:feign-micrometer", version.ref = "openfeign_micrometer" }
 
+# Sentry
+sentry_logback = { module = "io.sentry:sentry-logback", version.ref = "sentry_logback"}
+
 # Test Libraries
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 spring_mockk = { module = "com.ninja-squad:springmockk", version.ref = "spring_mockk" }
@@ -223,7 +229,6 @@ spring_modulith = [
     "spring_modulith_events_core",
     "spring_modulith_starter_core",
     "spring_modulith_starter_jpa",
-    "spring_modulith_observability",
     "spring_modulith_docs"
 ]
 
@@ -234,6 +239,5 @@ spring_modulith_tests = [
 spring_modulith_runtime = [
     "spring_modulith_actuator",
     "spring_modulith_events_kafka",
-    "spring_modulith_observability",
     "spring_modulith_runtime"
 ]

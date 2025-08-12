@@ -1,3 +1,4 @@
 dependencies {
-    implementation(libs.spring.modulith.observability)
+    implementation(libs.sentry.logback)
+    runtimeOnly(libs.micrometer.tracing.bridge.brave)
 }

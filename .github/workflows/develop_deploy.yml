@@ -47,8 +47,10 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/release' }}
 
       - name: Build with Gradle
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: |
-          ./gradlew build :sseudam-core:core-api:build --scan
+          ./gradlew -DSENTRY_AUTH_TOKEN="$SENTRY_AUTH_TOKEN" :sseudam-core:core-api:build --scan
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -83,6 +85,8 @@ jobs:
           file: ./docker/DockerfileDev
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
+          build-args: |
+            "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
 
       # docker-compose.yml 파일을 EC2에 복사
       - name: Copy docker-compose.yml to EC2
