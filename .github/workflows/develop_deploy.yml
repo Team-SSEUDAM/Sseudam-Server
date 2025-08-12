@@ -85,6 +85,8 @@ jobs:
           file: ./docker/DockerfileDev
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
+          build-args: |
+            "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
 
       # docker-compose.yml 파일을 EC2에 복사
       - name: Copy docker-compose.yml to EC2

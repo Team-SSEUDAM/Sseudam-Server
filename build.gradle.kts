@@ -63,15 +63,18 @@ subprojects {
         testImplementation(libs.spring.security.test)
     }
 
-    sentry {
-        // Generates a JVM (Java, Kotlin, etc.) source bundle and uploads your source code to Sentry.
-        // This enables source context, allowing you to see your source
-        // code as part of your stack traces in Sentry.
-        includeSourceContext = true
-
-        org = "sseudam"
-        projectName = "sseudam-server"
-        authToken = System.getenv("SENTRY_AUTH_TOKEN")
+    val sentryAuthToken = System.getenv("SENTRY_AUTH_TOKEN")
+    if (!sentryAuthToken.isNullOrEmpty()) {
+        sentry {
+            includeSourceContext = true
+            org = "sseudam"
+            projectName = "sseudam-server"
+            authToken = sentryAuthToken
+        }
+    } else {
+        tasks.matching { it.name.startsWith("sentry") }.configureEach {
+            enabled = false
+        }
     }
 
     tasks.withType<KotlinCompile> {
