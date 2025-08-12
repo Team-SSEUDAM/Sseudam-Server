@@ -15,6 +15,7 @@ class SpotHistory {
         val address: Address,
         val trashType: TrashType,
         val imageUrl: String,
+        val status: HistoryStatus,
         val actionType: SpotActionType,
         val createdAt: LocalDateTime,
     )

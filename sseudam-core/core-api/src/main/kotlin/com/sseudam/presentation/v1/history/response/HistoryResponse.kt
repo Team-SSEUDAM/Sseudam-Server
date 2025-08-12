@@ -1,6 +1,7 @@
 package com.sseudam.presentation.v1.history.response
 
 import com.sseudam.common.Address
+import com.sseudam.history.HistoryStatus
 import com.sseudam.history.SpotActionType
 import com.sseudam.history.SpotHistory
 import com.sseudam.support.geo.GeoJson
@@ -25,6 +26,8 @@ data class HistoryResponse(
     val trashType: TrashType,
     @Schema(description = "신고된 이미지 url")
     val imageUrl: String,
+    @Schema(description = "내역 상태")
+    val status: HistoryStatus,
     @Schema(description = "제보/신고 여부")
     val actionType: SpotActionType,
     @Schema(description = "생성일자")
@@ -42,6 +45,7 @@ data class HistoryResponse(
                     address = address,
                     trashType = trashType,
                     imageUrl = imageUrl,
+                    status = status,
                     actionType = actionType,
                     createdAt = createdAt,
                 )
