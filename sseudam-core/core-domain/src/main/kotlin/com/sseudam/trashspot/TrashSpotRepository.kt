@@ -44,6 +44,7 @@ interface TrashSpotRepository {
 
     fun updateLocation(
         spotId: Long,
+        region: Region,
         point: Point,
     )
 

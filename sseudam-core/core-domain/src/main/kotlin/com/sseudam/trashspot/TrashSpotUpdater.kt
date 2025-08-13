@@ -1,5 +1,6 @@
 package com.sseudam.trashspot
 
+import com.sseudam.support.geo.Region
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Component
 
@@ -23,8 +24,9 @@ class TrashSpotUpdater(
 
     fun updateLocation(
         spotId: Long,
+        region: Region,
         point: Point,
     ) {
-        trashSpotRepository.updateLocation(spotId, point)
+        trashSpotRepository.updateLocation(spotId, region, point)
     }
 }

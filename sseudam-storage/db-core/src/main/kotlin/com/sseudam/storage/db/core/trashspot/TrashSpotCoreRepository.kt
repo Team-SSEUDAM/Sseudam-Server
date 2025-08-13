@@ -133,12 +133,13 @@ class TrashSpotCoreRepository(
 
     override fun updateLocation(
         spotId: Long,
+        region: Region,
         point: Point,
     ) {
         txAdvice.write {
             trashSpotJpaRepository
                 .findByIdOrElseThrow(spotId)
-                .updateLocation(point)
+                .updateLocation(region, point)
         }
     }
 

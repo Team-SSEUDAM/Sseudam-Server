@@ -21,7 +21,7 @@ class TrashSpotEntity(
     var name: String,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(20)")
-    val region: Region,
+    var region: Region,
     @Embedded
     var address: Address,
     @Column(columnDefinition = "geometry(Point, 4326)")
@@ -57,7 +57,11 @@ class TrashSpotEntity(
         this.trashType = type
     }
 
-    fun updateLocation(point: Point) {
+    fun updateLocation(
+        region: Region,
+        point: Point,
+    ) {
+        this.region = region
         this.point = point
     }
 }
