@@ -4,13 +4,10 @@ import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
-import com.sseudam.support.error.ErrorException
-import com.sseudam.support.error.ErrorType
 import com.sseudam.support.tx.TxAdvice
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.image.TrashSpotImageService
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class ReportFacade(
@@ -23,6 +20,7 @@ class ReportFacade(
 ) {
     companion object {
         private const val REPORT_IMAGE_PATH = "report"
+        private const val DEFAULT_REPORT_IMAGE_URL = "https://img.sseudam.me/dev/default_trash_profile.webp"
     }
 
     fun validateSpotReport(name: String): Boolean {
@@ -40,10 +38,9 @@ class ReportFacade(
                 images
                     .filter { it.updatedAt != null }
                     .maxByOrNull { it.updatedAt!! }
-                    ?.imageUrl
-                    ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
+                    ?.imageUrl ?: DEFAULT_REPORT_IMAGE_URL
             if (create.reportType == ReportType.PHOTO) {
-                val s3ImageUrl: S3ImageUrl = imageS3Caller.createUploadUrl(create.userId, LocalDateTime.now(), REPORT_IMAGE_PATH)
+                val s3ImageUrl: S3ImageUrl = imageS3Caller.createUploadUrl(create.userId, REPORT_IMAGE_PATH + "/${create.spotId}")
                 presignedUrl = s3ImageUrl.presignedUrl
                 imageUrl = s3ImageUrl.imageUrl
             } else {

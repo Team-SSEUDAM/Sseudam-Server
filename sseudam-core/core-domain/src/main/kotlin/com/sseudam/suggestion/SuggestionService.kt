@@ -11,7 +11,6 @@ import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
 import com.sseudam.support.tx.TxAdvice
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class SuggestionService(
@@ -33,7 +32,7 @@ class SuggestionService(
         txAdvice.write {
             suggestionValidator.verifySite(create.site)
 
-            val uploadUrl = imageS3Caller.createUploadUrl(create.userId, LocalDateTime.now(), SUGGESTION_IMAGE_PATH)
+            val uploadUrl = imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PATH)
             val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)
             petEventPublisher.publish(create.userId, PetPointAction.SUGGESTION)
             return@write spotSuggestion to uploadUrl
