@@ -66,7 +66,7 @@ class TrashSpotService(
             }
             ReportType.POINT -> {
                 val jtsPoint = geoConverter.geoJsonPointToJtsPoint(report.point as GeoJson.Point)
-                trashSpotUpdater.updateLocation(report.spotId, jtsPoint)
+                trashSpotUpdater.updateLocation(report.spotId, report.region, jtsPoint)
             }
             else -> {}
         }
