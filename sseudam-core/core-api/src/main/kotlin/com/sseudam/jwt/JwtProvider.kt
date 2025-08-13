@@ -16,6 +16,8 @@ import com.sseudam.auth.token.repository.TokenRepository
 import com.sseudam.config.AuthenticationProperties
 import com.sseudam.support.error.AuthenticationErrorException
 import com.sseudam.support.error.AuthenticationErrorType
+import com.sseudam.support.error.ErrorException
+import com.sseudam.support.error.ErrorType
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User
 import org.springframework.security.authentication.AuthenticationServiceException
@@ -29,7 +31,6 @@ import org.springframework.security.oauth2.jwt.JwtException
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException
 import org.springframework.stereotype.Component
 import java.time.Instant
-import javax.naming.AuthenticationException
 
 @Component
 class JwtProvider(
@@ -253,12 +254,11 @@ class JwtProvider(
 
     override fun findBy(accessToken: String): Provider? = redisTokenRepository.findBy(accessToken)
 
-    @Throws(AuthenticationException::class)
     fun validateToken(token: String): Jwt =
         try {
             jwtDecoder.decode(token)
         } catch (exception: BadJwtException) {
-            throw AuthenticationErrorException(AuthenticationErrorType.INVALID_TOKEN)
+            throw ErrorException(ErrorType.INVALID_TOKEN)
         } catch (exception: JwtException) {
             throw AuthenticationServiceException(exception.message, exception)
         }

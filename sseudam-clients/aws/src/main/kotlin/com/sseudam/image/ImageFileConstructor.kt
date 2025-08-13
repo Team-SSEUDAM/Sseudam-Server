@@ -2,8 +2,6 @@ package com.sseudam.image
 
 import org.springframework.core.env.Environment
 import org.springframework.stereotype.Component
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.Random
 
 @Component
@@ -21,12 +19,10 @@ class ImageFileConstructor(
 
     fun imageFilePath(
         userId: Long,
-        dateTime: LocalDateTime,
         prefix: String,
     ): String {
         val profile = environment.activeProfiles.firstOrNull() ?: "dev"
-        val dateTimeToLong = dateTime.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli()
-        return "$profile/$prefix/$userId/$dateTimeToLong"
+        return "$profile/$prefix/$userId"
     }
 
     private fun randomFileName(): String =
