@@ -2,14 +2,18 @@ package com.sseudam.admin.presentation
 
 import com.sseudam.admin.application.AdminFacade
 import com.sseudam.admin.presentation.request.AdminLoginRequest
+import com.sseudam.admin.presentation.request.AdminPushNotificationRequest
+import com.sseudam.admin.presentation.request.AdminRefreshTokenRequest
+import com.sseudam.admin.presentation.request.AdminTokenRequest
+import com.sseudam.admin.presentation.request.report.UpdateReportRequest
+import com.sseudam.admin.presentation.response.AdminLogoutResponse
 import com.sseudam.admin.presentation.response.AdminTokenResponse
 import com.sseudam.admin.presentation.response.report.SpotReportAllResponse
 import com.sseudam.admin.presentation.response.report.SpotReportResponse
 import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionAllResponse
 import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionResponse
 import com.sseudam.admin.presentation.response.user.AdminUserResponse
-import com.sseudam.admin.presentation.response.user.UserAllResponse
-import com.sseudam.admin.presentation.response.user.UserResponse
+import com.sseudam.admin.presentation.response.user.UserPageResponse
 import com.sseudam.report.ReportType
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
@@ -39,15 +43,35 @@ class AdminController(
         return AdminTokenResponse.of(token)
     }
 
+    @Operation(summary = "어드민 로그아웃", description = "어드민 로그아웃을 합니다.")
+    @PostMapping("/logout")
+    fun logout(
+        @RequestBody request: AdminTokenRequest,
+    ): AdminLogoutResponse {
+        adminFacade.logout(request.accessToken)
+        return AdminLogoutResponse(
+            message = "로그아웃 되었습니다.",
+        )
+    }
+
+    @Operation(summary = "어드민 토큰 재발급", description = "어드민 토큰을 재발급합니다.")
+    @PostMapping("/reissue")
+    fun reissueToken(
+        @RequestBody request: AdminRefreshTokenRequest,
+    ): AdminTokenResponse {
+        val token = adminFacade.reissue(request.toRefreshToken())
+        return AdminTokenResponse.of(token)
+    }
+
     /** 어드민 사용자 API */
     @Operation(summary = "사용자 리스트 조회", description = "사용자 리스트를 조회합니다.")
     @GetMapping("/users")
     fun findUsersByPage(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "20") size: Int,
-    ): UserAllResponse =
-        UserAllResponse.of(
-            adminFacade.findUsers(OffsetPageRequest(page, size)).map { UserResponse.of(it) },
+    ): UserPageResponse =
+        UserPageResponse.of(
+            adminFacade.findUsers(OffsetPageRequest(page, size)),
         )
 
     @Operation(summary = "사용자 정보 조회", description = "사용자 정보를 조회합니다.")
@@ -79,7 +103,7 @@ class AdminController(
     fun updateSuggestionStatus(
         @PathVariable suggestionId: Long,
         @RequestParam status: SuggestionStatus,
-    ) = adminFacade.updateSuggestionStatus(suggestionId, status)
+    ) = adminFacade.updateSpotSuggestionStatus(suggestionId, status)
 
     /** 어드민 신고 API */
     @Operation(summary = "신고 리스트 조회", description = "신고 리스트를 조회합니다.")
@@ -98,4 +122,19 @@ class AdminController(
     fun findReportDetails(
         @PathVariable reportId: Long,
     ): SpotReportResponse = SpotReportResponse.of(adminFacade.findReportDetails(reportId))
+
+    @Operation(summary = "신고 반영", description = "신고 상태 변경과 생성을 합니다.")
+    @PutMapping("/reports/{reportId}")
+    fun updateReportStatus(
+        @PathVariable reportId: Long,
+        @RequestBody request: UpdateReportRequest,
+    ) = adminFacade.updateSpotReportStatus(request.toUpdateReport(reportId))
+
+    @Operation(summary = "푸시 알림", description = "전체 사용자에게 푸시 알림을 보냅니다.")
+    @PostMapping("/push-all")
+    fun pushToAllUsers(
+        @RequestBody request: AdminPushNotificationRequest,
+    ) {
+        adminFacade.pushToAllUsers(request.topic, request.contents)
+    }
 }

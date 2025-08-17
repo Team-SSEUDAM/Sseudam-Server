@@ -1,10 +1,13 @@
 package com.sseudam.presentation.advice
 
+import com.sseudam.support.error.AuthenticationErrorException
+import com.sseudam.support.error.AuthenticationErrorType
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorResponse
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
 import com.sseudam.support.response.ApiResponse
+import io.sentry.Sentry
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -33,6 +36,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
     ): ResponseEntity<Any>? {
         val errorResponse = ErrorResponse.of(ex.javaClass.simpleName, ex.message ?: "No message available")
         val apiResponse = ApiResponse.fail(statusCode.value(), errorResponse)
+        Sentry.captureException(ex)
         return super.handleExceptionInternal(ex, apiResponse, headers, statusCode, request)
     }
 
@@ -47,6 +51,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
         val errorMessage = if (errors.isNotEmpty()) errors.joinToString("; ") else "Validation failed"
         val errorResponse = ErrorResponse.of(e.javaClass.simpleName, errorMessage)
         val apiResponse = ApiResponse.fail(status.value(), errorResponse)
+        Sentry.captureException(e)
         return ResponseEntity.status(status).body(apiResponse)
     }
 
@@ -60,6 +65,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
             }
         val errorResponse = ErrorResponse.of(e.javaClass.simpleName, bindingErrors.toString())
         val apiResponse = ApiResponse.fail(HttpStatus.BAD_REQUEST.value(), errorResponse)
+        Sentry.captureException(e)
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse)
     }
 
@@ -71,6 +77,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
         val errorCode: ErrorType = ErrorType.METHOD_ARGUMENT_TYPE_MISMATCH
         val errorResponse = ErrorResponse.of(e.javaClass.simpleName, errorCode.message)
         val apiResponse = ApiResponse.fail(errorCode.status, errorResponse)
+        Sentry.captureException(e)
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse)
     }
 
@@ -84,6 +91,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
         val errorCode: ErrorType = ErrorType.METHOD_NOT_ALLOWED
         val errorResponse = ErrorResponse.of(e.javaClass.simpleName, errorCode.message)
         val apiResponse = ApiResponse.fail(errorCode.status, errorResponse)
+        Sentry.captureException(e)
         return ResponseEntity.status(errorCode.status).body(apiResponse)
     }
 
@@ -93,7 +101,18 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
         val errorCode: ErrorType = e.errorType
         val errorResponse = ErrorResponse.of(errorCode.name, errorCode.message)
         val apiResponse = ApiResponse.fail(errorCode.status, errorResponse)
+        Sentry.captureException(e)
         return ResponseEntity.status(errorCode.status).body(apiResponse)
+    }
+
+    @ExceptionHandler(AuthenticationErrorException::class)
+    fun handleAuthenticationCustomException(e: AuthenticationErrorException): ResponseEntity<ApiResponse<ErrorResponse>> {
+        log.error("sseudam Custom Authentication Exception : {}", e.message, e)
+        val errorCode: AuthenticationErrorType = e.authenticationErrorType
+        val errorResponse = ErrorResponse.of(errorCode.name, errorCode.message)
+        val apiResponse = ApiResponse.fail(401, errorResponse)
+        Sentry.captureException(e)
+        return ResponseEntity.status(401).body(apiResponse)
     }
 
     @ExceptionHandler(Exception::class)
@@ -102,6 +121,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
         val internalServerError: ErrorType = ErrorType.INTERNAL_SERVER_ERROR
         val errorResponse = ErrorResponse.of(e.javaClass.simpleName, internalServerError.message)
         val apiResponse = ApiResponse.fail(internalServerError.status, errorResponse)
+        Sentry.captureException(e)
         return ResponseEntity.status(internalServerError.status).body(apiResponse)
     }
 }

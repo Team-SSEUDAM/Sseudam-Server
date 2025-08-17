@@ -116,6 +116,7 @@ class SecurityConfig(
         }
 
         http
+            .cors { }
             .headers { it.frameOptions { option -> option.disable() } }
             .csrf { it.disable() }
             .formLogin { it.disable() }
@@ -135,6 +136,7 @@ class SecurityConfig(
                     "/api/v1/auth",
                     "/api/v1/trash-spots/**",
                     "/api/v1/admin/login",
+                    "/api/v1/admin/reissue",
                 ).permitAll()
 
             authorize
@@ -151,6 +153,8 @@ class SecurityConfig(
                     "/api/v1/suggestions/**",
                     "/api/v1/reports/**",
                     "/api/v1/visited/**",
+                    "/api/v1/pets/**",
+                    "/api/v1/attendance/**",
                 ).hasRole("USER")
 
             // 나머지도 다 인증

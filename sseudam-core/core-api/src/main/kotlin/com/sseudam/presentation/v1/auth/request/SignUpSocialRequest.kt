@@ -9,8 +9,12 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "소셜 회원가입 요청 Json")
 data class SignUpSocialRequest(
+    @Schema(description = "소셜 이메일", example = "sseudam@privateasjdjan.com")
     val email: String,
+    @Schema(description = "사용자 닉네임", example = "쓰담")
     val name: String,
+    @Schema(description = "관심 지역", example = "서울시 영등포구 여의도동 123-45")
+    val address: String,
 ) {
     fun toNewUser(
         socialId: String,

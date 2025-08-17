@@ -16,6 +16,8 @@ import com.sseudam.auth.token.repository.TokenRepository
 import com.sseudam.config.AuthenticationProperties
 import com.sseudam.support.error.AuthenticationErrorException
 import com.sseudam.support.error.AuthenticationErrorType
+import com.sseudam.support.error.ErrorException
+import com.sseudam.support.error.ErrorType
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User
 import org.springframework.security.authentication.AuthenticationServiceException
@@ -29,7 +31,6 @@ import org.springframework.security.oauth2.jwt.JwtException
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException
 import org.springframework.stereotype.Component
 import java.time.Instant
-import javax.naming.AuthenticationException
 
 @Component
 class JwtProvider(
@@ -199,12 +200,50 @@ class JwtProvider(
         }
     }
 
+    override fun adminRefresh(refreshToken: String): Token {
+        val jwt = validateToken(refreshToken)
+        val tokenWithAuthentication = redisTokenRepository.findByToken(jwt.tokenValue)
+        removeRotationToken(tokenWithAuthentication.accessToken, tokenWithAuthentication.refreshToken)
+
+        val newAccessToken =
+            issueAccessToken(
+                jwtId = tokenWithAuthentication.provider.userId.toString(),
+                grantedAuthorities =
+                    tokenWithAuthentication.provider.grantedAuthorities.map {
+                        GrantedAuthority(AuthorityType.valueOf(it))
+                    },
+            )
+        val newRefreshToken =
+            issueRefreshToken(
+                jwtId = tokenWithAuthentication.provider.userId.toString(),
+            )
+
+        return Token(
+            accessToken = newAccessToken,
+            refreshToken = newRefreshToken,
+        ).apply {
+            redisTokenRepository.create(
+                accessToken = this.accessToken,
+                refreshToken = this.refreshToken,
+                deviceId = tokenWithAuthentication.deviceId,
+                providerDetail = tokenWithAuthentication.provider,
+                accessTokenExpiration = authenticationProperties.accessTokenExpirationSeconds,
+                refreshTokenExpiration = authenticationProperties.refreshTokenExpirationSeconds,
+            )
+        }
+    }
+
     override fun remove(token: String): String {
         val jwt = validateToken(token)
         authenticationHistoryUpdater.remove(token).apply {
             redisTokenRepository.deleteAllToken(this)
         }
         return jwt.id
+    }
+
+    override fun adminTokenRemove(accessToken: String) {
+        validateToken(accessToken)
+        redisTokenRepository.deleteAllToken(accessToken)
     }
 
     override fun removeByUserKey(userKey: String) {
@@ -215,12 +254,11 @@ class JwtProvider(
 
     override fun findBy(accessToken: String): Provider? = redisTokenRepository.findBy(accessToken)
 
-    @Throws(AuthenticationException::class)
     fun validateToken(token: String): Jwt =
         try {
             jwtDecoder.decode(token)
         } catch (exception: BadJwtException) {
-            throw AuthenticationErrorException(AuthenticationErrorType.INVALID_TOKEN)
+            throw ErrorException(ErrorType.INVALID_TOKEN)
         } catch (exception: JwtException) {
             throw AuthenticationServiceException(exception.message, exception)
         }

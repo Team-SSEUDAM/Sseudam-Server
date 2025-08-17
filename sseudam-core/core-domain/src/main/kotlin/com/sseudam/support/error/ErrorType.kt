@@ -52,4 +52,100 @@ enum class ErrorType(
     INVALID_NEW_LOGIN_ID(400, ErrorKind.CLIENT_ERROR, "새로 입력한 아이디와 기존 아이디는 같을 수 없습니다.", ErrorLevel.WARN),
     FAIL_TO_TRANSACTION_TEMPLATE_EXECUTE_ERROR(400, ErrorKind.CLIENT_ERROR, "트랜잭션 템플릿 실행에 실패하였습니다.", ErrorLevel.ERROR),
     DUPLICATED_EMAIL(409, ErrorKind.CLIENT_ERROR, "이미 존재하는 이메일입니다.", ErrorLevel.WARN),
+
+    /** Pet */
+    INVALID_CUMULATIVE_POINT(400, ErrorKind.CLIENT_ERROR, "잘못된 누적 포인트입니다.", ErrorLevel.WARN),
+    NOT_BLANK_NICKNAME(400, ErrorKind.CLIENT_ERROR, "펫 이름은 비워둘 수 없습니다.", ErrorLevel.WARN),
+    INVALID_PET_NICKNAME(400, ErrorKind.CLIENT_ERROR, "펫 이름은 2자 이상 12자 이하로 입력해주세요.", ErrorLevel.WARN),
+
+    INVALID_TRASH_SPOT_NAME_TWO(400, ErrorKind.CLIENT_ERROR, "쓰레기통 이름은 2자 이상 입력해주세요.", ErrorLevel.WARN),
+    INVALID_TRASH_SPOT_NAME_TWELVE(400, ErrorKind.CLIENT_ERROR, "쓰레기통 이름은 12자 이하로 입력해주세요.", ErrorLevel.WARN),
+
+    SPOT_NAME_IS_BLANK(400, ErrorKind.CLIENT_ERROR, "쓰레기통 이름은 비워둘 수 없습니다.", ErrorLevel.WARN),
+    DUPLICATE_SPOT_NAME(409, ErrorKind.CLIENT_ERROR, "이미 존재하는 쓰레기통 이름입니다.", ErrorLevel.WARN),
+    INVALID_PET_LEVEL_TYPE(
+        500,
+        ErrorKind.INTERNAL_SERVER_ERROR,
+        "펫 레벨 타입이 올바르지 않습니다.",
+        ErrorLevel.ERROR,
+    ),
+
+    /** Notification */
+    NOT_FOUND_FCM_CREDENTIALS(500, ErrorKind.INTERNAL_SERVER_ERROR, "FCM 인증 정보가 없습니다.", ErrorLevel.ERROR),
+    INVALID_UPDATE_SUGGESTION_STATUS(
+        400,
+        ErrorKind.CLIENT_ERROR,
+        "잘못된 제안 상태입니다.",
+        ErrorLevel.WARN,
+    ),
+    PUSH_NOTIFICATION_CONTENTS_EMPTY(
+        400,
+        ErrorKind.CLIENT_ERROR,
+        "푸시 알림 내용이 비어있습니다.",
+        ErrorLevel.WARN,
+    ),
+    PUSH_NOTIFICATION_TOPIC_EMPTY(
+        400,
+        ErrorKind.CLIENT_ERROR,
+        "푸시 알림 제목이 비어있습니다.",
+        ErrorLevel.WARN,
+    ),
+    PUSH_NOTIFICATION_CONTENTS_TOO_LONG(
+        400,
+        ErrorKind.CLIENT_ERROR,
+        "푸시 알림 내용은 60자 이하로 입력해주세요.",
+        ErrorLevel.WARN,
+    ),
+
+    /** Report */
+    INVALID_UPDATE_REPORT_STATUS(
+        400,
+        ErrorKind.CLIENT_ERROR,
+        "잘못된 신고 상태입니다.",
+        ErrorLevel.WARN,
+    ),
+
+    /** Visited */
+    SPOT_VISITED_ALREADY(
+        409,
+        ErrorKind.CLIENT_ERROR,
+        "이미 방문한 쓰레기통입니다.",
+        ErrorLevel.WARN,
+    ),
+    SPOT_VISITED_LIMIT_EXCEEDED(
+        429,
+        ErrorKind.CLIENT_ERROR,
+        "오늘 쓰레기통 방문 횟수를 초과했습니다.",
+        ErrorLevel.WARN,
+    ),
+
+    /** Pet */
+    FAILED_PET_CREATION(
+        500,
+        ErrorKind.INTERNAL_SERVER_ERROR,
+        "펫 생성에 실패했습니다.",
+        ErrorLevel.ERROR,
+    ),
+
+    /** Suggestion */
+    ALREADY_EXIST_SUGGESTION_SPOT_SITE(
+        409,
+        ErrorKind.CLIENT_ERROR,
+        "이미 존재하는 쓰레기통 장소입니다.",
+        ErrorLevel.WARN,
+    ),
+
+    /** SPOT */
+    ALREADY_EXIST_SPOT_SITE(
+        409,
+        ErrorKind.CLIENT_ERROR,
+        "이미 존재하는 쓰레기통 주소입니다.",
+        ErrorLevel.WARN,
+    ),
+    ALREADY_EXIST_SPOT_POINT(
+        409,
+        ErrorKind.CLIENT_ERROR,
+        "이미 존재하는 쓰레기통 좌표입니다.",
+        ErrorLevel.WARN,
+    ),
 }

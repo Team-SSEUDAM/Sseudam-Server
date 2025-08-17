@@ -1,17 +1,29 @@
 package com.sseudam.trashspot
 
 import com.sseudam.common.GeoConverter
+import com.sseudam.report.ReportType
+import com.sseudam.report.SpotReport
 import com.sseudam.suggestion.SpotSuggestion
+import com.sseudam.support.error.ErrorException
+import com.sseudam.support.error.ErrorType
 import com.sseudam.support.geo.GeoJson
 import com.sseudam.support.geo.Region
+import org.locationtech.jts.geom.Coordinate
+import org.locationtech.jts.geom.GeometryFactory
 import org.springframework.stereotype.Service
 
 @Service
 class TrashSpotService(
     private val trashSpotReader: TrashSpotReader,
     private val trashSpotAppender: TrashSpotAppender,
+    private val trashSpotUpdater: TrashSpotUpdater,
+    private val trashSpotValidator: TrashSpotValidator,
     private val geoConverter: GeoConverter,
 ) {
+    companion object {
+        private val GEOMETRY_FACTORY = GeometryFactory()
+    }
+
     fun createTrashSpotBySuggestion(suggestionInfo: SpotSuggestion.Info): TrashSpot.Info =
         trashSpotAppender.append(
             TrashSpot.Create(
@@ -43,4 +55,40 @@ class TrashSpotService(
     fun findBy(spotId: Long): TrashSpot.Info = trashSpotReader.readBy(spotId)
 
     fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> = trashSpotReader.readAllByIds(spotIds)
+
+    fun updateByReport(report: SpotReport.Info) {
+        when (report.reportType) {
+            ReportType.KIND -> {
+                trashSpotUpdater.updateType(report.spotId, report.trashType)
+            }
+            ReportType.NAME -> {
+                trashSpotUpdater.updateName(report.spotId, report.spotName)
+            }
+            ReportType.POINT -> {
+                val jtsPoint = geoConverter.geoJsonPointToJtsPoint(report.point as GeoJson.Point)
+                trashSpotUpdater.updateLocation(report.spotId, report.region, jtsPoint)
+            }
+            else -> {}
+        }
+    }
+
+    fun validateSpotName(name: String) {
+        if (trashSpotReader.existsByName(name)) {
+            throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
+        }
+    }
+
+    fun appendVerifySpot(
+        site: String,
+        longitude: Double,
+        latitude: Double,
+    ) {
+        val point =
+            GEOMETRY_FACTORY.createPoint(
+                Coordinate(longitude, latitude),
+            )
+
+        trashSpotValidator.verifySite(site)
+        trashSpotValidator.verifyPoint(point)
+    }
 }

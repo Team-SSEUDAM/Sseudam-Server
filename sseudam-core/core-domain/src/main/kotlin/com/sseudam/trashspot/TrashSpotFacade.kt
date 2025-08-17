@@ -4,6 +4,7 @@ import com.sseudam.suggestion.SuggestionService
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.image.TrashSpotImageService
 import com.sseudam.user.UserService
+import com.sseudam.visit.SpotVisitedService
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,6 +13,7 @@ class TrashSpotFacade(
     private val trashSpotImageService: TrashSpotImageService,
     private val suggestionService: SuggestionService,
     private val userService: UserService,
+    private val visitedService: SpotVisitedService,
 ) {
     fun findAll(
         region: Region?,
@@ -27,6 +29,7 @@ class TrashSpotFacade(
         val image = trashSpotImageService.findBySpotId(spotId).lastOrNull()
         val suggestioner = suggestionService.findSpotSuggestionBySite(spot.address.site)
         val user = suggestioner?.let { userService.getProfile(it.userId) }
-        return TrashSpotDetail(spot, image, user)
+        val visitedCount = visitedService.countBySpotId(spotId)
+        return TrashSpotDetail(spot, image, user, visitedCount)
     }
 }

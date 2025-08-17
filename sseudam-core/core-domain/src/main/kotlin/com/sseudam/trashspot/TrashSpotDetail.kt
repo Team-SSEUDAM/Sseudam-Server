@@ -7,4 +7,5 @@ data class TrashSpotDetail(
     val trashSpot: TrashSpot.Info,
     val image: TrashSpotImage.Info?,
     val user: UserProfile?,
+    val visitedCount: Long,
 )

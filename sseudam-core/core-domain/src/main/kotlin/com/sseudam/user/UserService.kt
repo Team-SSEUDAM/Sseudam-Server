@@ -1,6 +1,8 @@
 package com.sseudam.user
 
+import com.sseudam.common.Address
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.Page
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,7 +18,7 @@ class UserService(
         return userAppender.create(newUser)
     }
 
-    fun getProfile(userId: Long): UserProfile = userReader.readUserProfile(userId)
+    fun getProfile(userId: Long): UserProfile? = userReader.readUserProfile(userId)
 
     fun getSocialUserByEmail(email: String): SocialUser? = userReader.readUserByEmail(email)
 
@@ -28,6 +30,16 @@ class UserService(
     ): User = userReader.readUser(loginId, password)
 
     fun getUserCredential(loginId: String): UserCredentials = userReader.readUserCredentials(loginId)
+
+    fun findAllBy(userIds: List<Long>): List<UserProfile> = userReader.readAllByUserIds(userIds)
+
+    fun checkEmail(email: String) {
+        userValidator.verifyEmail(email)
+    }
+
+    fun findUserProfileBy(offsetPageRequest: OffsetPageRequest): Page<UserProfile> = userReader.readAllBy(offsetPageRequest)
+
+    fun findAll(): List<UserProfile> = userReader.readAll()
 
     fun updateNickname(
         userKey: String,
@@ -45,6 +57,11 @@ class UserService(
         return userUpdater.updateName(userKey, name)
     }
 
+    fun updateAddress(
+        userKey: String,
+        address: Address,
+    ): UserProfile = userUpdater.updateAddress(userKey, address)
+
     fun validateNickname(nickname: String): Boolean {
         userValidator.verifyNickname(nickname)
         return true
@@ -55,15 +72,7 @@ class UserService(
         email: String,
     ): UserProfile = userUpdater.updateEmail(userKey, email)
 
-    fun getAllUserProfile(userIds: List<Long>): List<UserProfile> = userReader.readAllByUserIds(userIds)
-
-    fun checkEmail(email: String) {
-        userValidator.verifyEmail(email)
-    }
-
     fun deleteUser(newUserWithdrawal: NewUserWithdrawal) {
         userDeleter.deleteUser(newUserWithdrawal.user.key)
     }
-
-    fun findUserProfileBy(offsetPageRequest: OffsetPageRequest): List<UserProfile> = userReader.readAllBy(offsetPageRequest)
 }

@@ -2,6 +2,7 @@ package com.sseudam.storage.db.core.user
 
 import com.sseudam.storage.db.core.support.JDSLExtensions
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.Page
 import com.sseudam.user.UserProfile
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Repository
 class UserCustomRepository(
     private val userJpaRepository: UserJpaRepository,
 ) {
-    fun findAllBy(offsetPageRequest: OffsetPageRequest): List<UserProfile> {
+    fun findAllBy(offsetPageRequest: OffsetPageRequest): Page<UserProfile> {
         val pageable =
             PageRequest.of(
                 offsetPageRequest.page,
@@ -26,6 +27,9 @@ class UserCustomRepository(
                         path(UserEntity::deletedAt).isNull(),
                     )
             }
-        return users.map { it!!.toProfile() }.toList()
+        return Page.of(
+            content = users.content.mapNotNull { it?.toProfile() },
+            totalCount = users.totalElements,
+        )
     }
 }

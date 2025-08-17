@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 class TrashSpotImageReader(
     private val trashSpotImageRepository: TrashSpotImageRepository,
 ) {
-    fun readAllByTrashSpotIds(map: List<Long>): List<TrashSpotImage.Info> = trashSpotImageRepository.findAllByTrashSpotIds(map)
+    fun readAllByTrashSpotIds(spotIds: List<Long>): List<TrashSpotImage.Info> = trashSpotImageRepository.findAllByTrashSpotIds(spotIds)
 
-    fun readBySpotId(spotId: Long): List<TrashSpotImage.Info> = trashSpotImageRepository.findBySpotId(spotId)
+    fun readBySpotId(spotId: Long): List<TrashSpotImage.Info> = trashSpotImageRepository.findAllBySpotId(spotId)
 }

@@ -1,6 +1,7 @@
 package com.sseudam.trashspot
 
 import com.sseudam.support.geo.Region
+import org.locationtech.jts.geom.Point
 
 interface TrashSpotRepository {
     fun save(createTrashSpot: TrashSpot.Create): TrashSpot.Info
@@ -26,4 +27,26 @@ interface TrashSpotRepository {
     fun findById(spotId: Long): TrashSpot.Info
 
     fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info>
+
+    fun findBySite(site: String): TrashSpot.Info?
+
+    fun findByPoint(point: Point): TrashSpot.Info?
+
+    fun updateName(
+        spotId: Long,
+        name: String,
+    )
+
+    fun updateType(
+        spotId: Long,
+        type: TrashType,
+    )
+
+    fun updateLocation(
+        spotId: Long,
+        region: Region,
+        point: Point,
+    )
+
+    fun existsByName(name: String): Boolean
 }

@@ -4,6 +4,7 @@ import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.storage.db.core.support.JDSLExtensions
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Repository
@@ -15,7 +16,7 @@ class SpotReportCustomRepository(
     fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): List<SpotReport.Info> {
+    ): Page<SpotReport.Info> {
         val pageable =
             PageRequest.of(
                 offsetPageRequest.page,
@@ -27,14 +28,15 @@ class SpotReportCustomRepository(
                 select(entity(SpotReportEntity::class))
                     .from(entity(SpotReportEntity::class))
                     .whereAnd(
-                        path(SpotReportEntity::deletedAt).isNull(),
+//                        path(SpotReportEntity::deletedAt).isNull(),
                         searchType?.let {
                             path(SpotReportEntity::reportType).eq(it)
                         },
                     )
             }
-        return suggestions
-            .filterNotNull()
-            .map { it.toSpotReport() }
+        return Page.of(
+            content = suggestions.content.mapNotNull { it?.toSpotReport() },
+            totalCount = suggestions.totalElements,
+        )
     }
 }

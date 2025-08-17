@@ -5,4 +5,8 @@ import org.springframework.stereotype.Component
 @Component
 class SuggestionDeleter(
     private val spotSuggestionRepository: SpotSuggestionRepository,
-)
+) {
+    fun deleteBy(suggestionId: Long) {
+        spotSuggestionRepository.deleteBy(suggestionId)
+    }
+}

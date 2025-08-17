@@ -1,11 +1,14 @@
 package com.sseudam.presentation.v1.visit.response
 
-import com.sseudam.visit.SpotVisitedAll
+import com.sseudam.visit.SpotVisited
 
 data class SpotVisitedAllResponse(
-    val list: SpotVisitedAll,
+    val list: List<SpotVisitedResponse>,
 ) {
     companion object {
-        fun of(list: SpotVisitedAll): SpotVisitedAllResponse = SpotVisitedAllResponse(list)
+        fun from(infos: List<SpotVisited.Info>): SpotVisitedAllResponse =
+            SpotVisitedAllResponse(
+                list = infos.map { SpotVisitedResponse.of(it) },
+            )
     }
 }

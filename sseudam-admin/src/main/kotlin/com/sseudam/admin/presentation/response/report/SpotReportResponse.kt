@@ -25,6 +25,8 @@ data class SpotReportResponse(
     val address: Address,
     @Schema(description = "쓰레기통 타입")
     val trashType: TrashType,
+    @Schema(description = "장소 이름")
+    val spotName: String,
     @Schema(description = "신고된 이미지 url")
     val imageUrl: String,
     @Schema(description = "신고 상태")
@@ -42,6 +44,7 @@ data class SpotReportResponse(
                 point = report.point,
                 address = report.address,
                 trashType = report.trashType,
+                spotName = report.spotName,
                 imageUrl = report.imageUrl,
                 status = report.status,
                 createdAt = report.createdAt,
