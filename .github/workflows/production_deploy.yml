@@ -2,8 +2,8 @@ name: Production Build & Deploy
 
 on:
   push:
-    branches:
-      - chore/prod-deploy
+    tags:
+      - v*.*.*
 
 # permission can be added at job level or workflow level
 permissions:
@@ -75,7 +75,9 @@ jobs:
         with:
           images: ${{ env.DOCKERHUB_IMAGE_FULL_NAME }}
           tags: |
-            type=sha,prefix=
+            type=semver,pattern={{version}}
+          flavor: |
+            latest=false
 
       # 멀티 아키텍처 지원을 위한 QEMU 설정
       - name: Set up QEMU
