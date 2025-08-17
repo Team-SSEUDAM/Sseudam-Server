@@ -7,11 +7,11 @@ ENV PROFILE=${PROFILE} \
     SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
 
 RUN mkdir -p /service/sseudam
-
-COPY sseudam-core/core-api/build/libs/core-api-0.0.1.jar /service/sseudam/core-api-0.0.1.jar
+COPY ../sseudam-core/core-api/build/libs/core-api-0.0.1.jar /service/sseudam/core-api-0.0.1.jar
 
 EXPOSE 8080
 
 CMD java \
     -Dspring.profiles.active=${PROFILE} \
+    -DSENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
     -jar /service/sseudam/core-api-0.0.1.jar
