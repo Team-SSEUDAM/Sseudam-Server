@@ -1,4 +1,4 @@
-name: Development Build & Deploy
+name: Production Build & Deploy
 
 on:
   push:
@@ -91,7 +91,7 @@ jobs:
         with:
           context: .
           platforms: linux/arm64/v8
-          file: ./docker/DockerfileDev
+          file: ./docker/DockerfileProd
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
           build-args: |
@@ -104,7 +104,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./docker/docker-compose.yml"
+          source: "./docker/docker-compose-prod.yml"
           target: "/home/ec2-user"
           overwrite: true
 

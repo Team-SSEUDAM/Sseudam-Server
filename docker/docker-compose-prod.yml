@@ -1,0 +1,10 @@
+services:
+  backend:
+    image: ${IMAGE_FULL_URL}
+    container_name: ${DOCKERHUB_IMAGE_NAME}
+    restart: always
+    environment:
+      - TZ=Asia/Seoul
+    network_mode: host
+    env_file:
+      - ~/.env
