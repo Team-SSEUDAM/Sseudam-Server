@@ -122,6 +122,7 @@ jobs:
           debug: true
           script: |
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
+            mkdir -p ~/app
             cd ~/app
             docker compose up -d
             docker image prune -a -f
