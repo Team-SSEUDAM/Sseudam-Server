@@ -14,4 +14,4 @@ EXPOSE 8080
 CMD java \
     -Dspring.profiles.active=${PROFILE} \
     -DSENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
-    -jar /service/sseudam/core-api-0.0.1.jar
+    -jar /service/sseudam/core-api-0.1.0.jar
