@@ -54,7 +54,7 @@ firebase = "9.5.0"
 
 # sentry
 sentry = "5.8.1"
-sentry_logback = "6.27.0"
+sentry_logback = "8.14.0"
 
 # OpenFeign
 spring_cloud_openfeign = "4.2.0"
