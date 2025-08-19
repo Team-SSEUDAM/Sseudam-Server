@@ -10,7 +10,7 @@ class ReportReject {
 
     data class Info(
         val reportId: Long,
-        val reason: String,
+        val reason: String?,
         val createdAt: LocalDateTime,
     )
 }

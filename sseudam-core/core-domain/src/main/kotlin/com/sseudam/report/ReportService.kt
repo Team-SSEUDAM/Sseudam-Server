@@ -3,6 +3,7 @@ package com.sseudam.report
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.report.event.ReportEventPublisher
+import com.sseudam.report.reject.ReportReject
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
@@ -33,6 +34,8 @@ class ReportService(
     ): Page<SpotReport.Info> = reportReader.readAllBy(offsetPageRequest, searchType)
 
     fun findSpotReportById(reportId: Long): SpotReport.Info = reportReader.readById(reportId)
+
+    fun findRejectReportByReportId(reportId: Long): ReportReject.Info? = reportReader.readRejectByReportId(reportId)
 
     fun updateSpotReport(updateReport: UpdateReport): SpotReport.Info =
         txAdvice.write {

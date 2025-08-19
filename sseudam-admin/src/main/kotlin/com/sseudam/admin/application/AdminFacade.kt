@@ -89,7 +89,11 @@ class AdminFacade(
         searchType: ReportType?,
     ): Page<SpotReport.Info> = reportService.findReportsBy(offsetPageRequest, searchType)
 
-    fun findReportDetails(reportId: Long): SpotReport.Info = reportService.findSpotReportById(reportId)
+    fun findReportDetails(reportId: Long): SpotReport.Detail {
+        val reportInfo = reportService.findSpotReportById(reportId)
+        val rejectReport = reportService.findRejectReportByReportId(reportId)
+        return SpotReport.Detail.of(reportInfo, rejectReport)
+    }
 
     fun updateSpotSuggestionStatus(
         suggestionId: Long,

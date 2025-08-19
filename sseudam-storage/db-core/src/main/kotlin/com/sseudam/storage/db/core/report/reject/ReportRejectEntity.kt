@@ -9,7 +9,7 @@ import jakarta.persistence.Table
 @Table(name = "t_reject_report")
 class ReportRejectEntity(
     val reportId: Long,
-    val reason: String,
+    val reason: String?,
 ) : BaseEntity() {
     constructor(
         create: ReportReject.Create,
