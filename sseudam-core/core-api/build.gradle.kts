@@ -31,24 +31,38 @@ jib {
         tags = setOf("latest", project.version.toString())
     }
     container {
-        jvmFlags = listOf(
-            "-Xmx1024m",
-            "-Dfile.encoding=UTF-8",
-            "-Duser.timezone=Asia/Seoul"
-        )
+        jvmFlags =
+            listOf(
+                "-Xmx1024m",
+                "-Dfile.encoding=UTF-8",
+                "-Duser.timezone=Asia/Seoul",
+            )
         ports = listOf("8080")
-        environment = mapOf(
-            "TZ" to "Asia/Seoul"
-        )
+        environment =
+            mapOf(
+                "TZ" to "Asia/Seoul",
+            )
         creationTime = "USE_CURRENT_TIMESTAMP"
         user = "1000:1000"
     }
 
     // 캐시 설정
     outputPaths {
-        tar = layout.buildDirectory.file("jib-image.tar").get().asFile.absolutePath
-        digest = layout.buildDirectory.file("jib-image.digest").get().asFile.absolutePath
-        imageId = layout.buildDirectory.file("jib-image.id").get().asFile.absolutePath
+        tar =
+            layout.buildDirectory
+                .file("jib-image.tar")
+                .get()
+                .asFile.absolutePath
+        digest =
+            layout.buildDirectory
+                .file("jib-image.digest")
+                .get()
+                .asFile.absolutePath
+        imageId =
+            layout.buildDirectory
+                .file("jib-image.id")
+                .get()
+                .asFile.absolutePath
     }
 }
 
@@ -66,10 +80,11 @@ tasks.register("jibDev") {
                 }
             }
             container {
-                environment = mapOf(
-                    "TZ" to "Asia/Seoul",
-                    "SPRING_PROFILES_ACTIVE" to "dev"
-                )
+                environment =
+                    mapOf(
+                        "TZ" to "Asia/Seoul",
+                        "SPRING_PROFILES_ACTIVE" to "dev",
+                    )
             }
         }
     }
@@ -90,10 +105,11 @@ tasks.register("jibProd") {
                 }
             }
             container {
-                environment = mapOf(
-                    "TZ" to "Asia/Seoul",
-                    "SPRING_PROFILES_ACTIVE" to "prod"
-                )
+                environment =
+                    mapOf(
+                        "TZ" to "Asia/Seoul",
+                        "SPRING_PROFILES_ACTIVE" to "prod",
+                    )
             }
         }
     }
