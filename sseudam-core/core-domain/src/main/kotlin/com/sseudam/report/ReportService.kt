@@ -28,6 +28,8 @@ class ReportService(
 
     fun findAllReportByUserId(userId: Long): List<SpotReport.Info> = reportReader.readAllByUserId(userId)
 
+    fun findAllDetailsByUserId(userId: Long): List<SpotReport.Detail> = reportReader.readAllDetailByUserId(userId)
+
     fun findReportsBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,

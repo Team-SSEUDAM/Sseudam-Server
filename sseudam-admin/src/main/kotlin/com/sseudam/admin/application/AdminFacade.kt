@@ -9,6 +9,7 @@ import com.sseudam.notification.NewFirebaseCloudMessage
 import com.sseudam.notification.NotificationService
 import com.sseudam.notification.NotificationStored
 import com.sseudam.notification.ReadStatus
+import com.sseudam.report.ReportFacade
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
@@ -41,6 +42,7 @@ class AdminFacade(
     private val fcmSender: FcmSender,
     private val notificationService: NotificationService,
     private val passwordEncoder: PasswordEncoder,
+    private val reportFacade: ReportFacade,
 ) {
     fun login(
         loginId: String,
@@ -89,11 +91,7 @@ class AdminFacade(
         searchType: ReportType?,
     ): Page<SpotReport.Info> = reportService.findReportsBy(offsetPageRequest, searchType)
 
-    fun findReportDetails(reportId: Long): SpotReport.Detail {
-        val reportInfo = reportService.findSpotReportById(reportId)
-        val rejectReport = reportService.findRejectReportByReportId(reportId)
-        return SpotReport.Detail.of(reportInfo, rejectReport)
-    }
+    fun findReportDetails(reportId: Long): SpotReport.Detail = reportFacade.findReportDetails(reportId)
 
     fun updateSpotSuggestionStatus(
         suggestionId: Long,

@@ -13,12 +13,14 @@ interface SpotReportRepository {
 
     fun findById(reportId: Long): SpotReport.Info
 
-    fun findAllByUserId(userId: Long): List<SpotReport.Info>
+    fun findAllInfoByUserId(userId: Long): List<SpotReport.Info>
 
     fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
     ): Page<SpotReport.Info>
+
+    fun findAllDetailsByUserId(userId: Long): List<SpotReport.Detail>
 
     fun update(
         reportId: Long,

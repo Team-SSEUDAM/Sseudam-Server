@@ -11,7 +11,7 @@ class ReportReader(
     private val reportRepository: SpotReportRepository,
     private val reportRejectRepository: ReportRejectRepository,
 ) {
-    fun readAllByUserId(userId: Long): List<SpotReport.Info> = reportRepository.findAllByUserId(userId)
+    fun readAllByUserId(userId: Long): List<SpotReport.Info> = reportRepository.findAllInfoByUserId(userId)
 
     fun readById(reportId: Long): SpotReport.Info = reportRepository.findById(reportId)
 
@@ -23,4 +23,6 @@ class ReportReader(
     fun existsByName(name: String): Boolean = reportRepository.existsByName(name)
 
     fun readRejectByReportId(reportId: Long): ReportReject.Info? = reportRejectRepository.findByReportId(reportId)
+
+    fun readAllDetailByUserId(userId: Long): List<SpotReport.Detail> = reportRepository.findAllDetailsByUserId(userId)
 }

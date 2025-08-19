@@ -6,6 +6,7 @@ import com.sseudam.presentation.v1.report.request.SpotReportCreateRequest
 import com.sseudam.presentation.v1.report.response.ReportImageUrlResponse
 import com.sseudam.presentation.v1.report.response.ReportValidationResponse
 import com.sseudam.presentation.v1.report.response.SpotReportAllResponse
+import com.sseudam.presentation.v1.report.response.SpotReportResponse
 import com.sseudam.report.ReportFacade
 import com.sseudam.report.ReportService
 import com.sseudam.user.User
@@ -36,11 +37,18 @@ class ReportController(
         )
     }
 
+    @Operation(summary = "신고 상세 내역", description = "신고 상세 내역을 조회합니다.")
+    @GetMapping("/reports/{reportId}")
+    fun reportSpotFind(
+        user: User,
+        @PathVariable reportId: Long,
+    ): SpotReportResponse = SpotReportResponse.of(reportFacade.findReportDetails(reportId))
+
     // TODO: cursor pagination (infinity scroll)
     @Operation(summary = "사용자 신고 내역 조회", description = "사용자가 신고한 내역을 조회합니다.")
     @GetMapping("/reports")
     fun reportSpotFindAll(user: User): SpotReportAllResponse {
-        val reports = reportService.findAllReportByUserId(user.id)
+        val reports = reportService.findAllDetailsByUserId(user.id)
         return SpotReportAllResponse.of(reports)
     }
 

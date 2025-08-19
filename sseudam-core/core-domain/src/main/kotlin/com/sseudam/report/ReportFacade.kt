@@ -23,6 +23,12 @@ class ReportFacade(
         private const val DEFAULT_REPORT_IMAGE_URL = "https://img.sseudam.me/dev/default_trash_profile.webp"
     }
 
+    fun findReportDetails(reportId: Long): SpotReport.Detail {
+        val reportInfo = reportService.findSpotReportById(reportId)
+        val rejectReport = reportService.findRejectReportByReportId(reportId)
+        return SpotReport.Detail.of(reportInfo, rejectReport)
+    }
+
     fun validateSpotReport(name: String): Boolean {
         reportService.validateSpotReportName(name)
         trashSpotService.validateSpotName(name)
