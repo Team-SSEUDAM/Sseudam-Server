@@ -38,11 +38,17 @@ class ReportService(
         txAdvice.write {
             val report = reportUpdater.update(updateReport.reportId, updateReport.status)
             reportEventPublisher.publish(report)
-            if (report.status == ReportStatus.APPROVE) {
-                reportDeleter.deleteBy(updateReport.reportId)
-                petEventPublisher.publish(report.userId, PetPointAction.REPORT_APPROVED)
+
+            when (report.status) {
+                ReportStatus.APPROVE -> {
+                    reportDeleter.deleteBy(updateReport.reportId)
+                    petEventPublisher.publish(report.userId, PetPointAction.REPORT_APPROVED)
+                }
+                ReportStatus.REJECT -> reportAppender.appendReject(report.id, updateReport.reason)
+                else -> {}
             }
-            return@write report
+
+            report
         }
 
     fun validateSpotReportName(name: String) {

@@ -128,7 +128,7 @@ class AdminController(
     fun updateReportStatus(
         @PathVariable reportId: Long,
         @RequestBody request: UpdateReportRequest,
-    ) = adminFacade.updateSpotReportStatus(request.toUpdateReport(reportId))
+    ) = adminFacade.updateSpotReportStatus(request.toCommand(reportId))
 
     @Operation(summary = "푸시 알림", description = "전체 사용자에게 푸시 알림을 보냅니다.")
     @PostMapping("/push-all")
