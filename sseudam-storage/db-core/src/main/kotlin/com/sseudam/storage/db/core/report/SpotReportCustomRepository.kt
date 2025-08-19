@@ -23,27 +23,45 @@ class SpotReportCustomRepository(
     fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): Page<SpotReport.Info> {
+    ): Page<SpotReport.Detail> {
         val pageable =
             PageRequest.of(
                 offsetPageRequest.page,
                 offsetPageRequest.size,
                 Sort.by(Sort.Direction.DESC, "createdAt"),
             )
-        val suggestions =
+        val reports =
             spotReportJpaRepository.findPage(JDSLExtensions, pageable) {
-                select(entity(SpotReportEntity::class))
-                    .from(entity(SpotReportEntity::class))
-                    .whereAnd(
+                selectNew<SpotReport.Detail>(
+                    path(SpotReportEntity::id),
+                    path(SpotReportEntity::spotId),
+                    path(SpotReportEntity::userId),
+                    path(SpotReportEntity::reportType),
+                    path(SpotReportEntity::point),
+                    path(SpotReportEntity::spotName),
+                    path(SpotReportEntity::region),
+                    path(SpotReportEntity::address),
+                    path(SpotReportEntity::trashType),
+                    path(SpotReportEntity::imageUrl),
+                    path(SpotReportEntity::status),
+                    coalesce(path(ReportRejectEntity::reason), null),
+                    path(SpotReportEntity::createdAt),
+                ).from(
+                    entity(SpotReportEntity::class),
+                    leftJoin(ReportRejectEntity::class).on(
+                        path(SpotReportEntity::id)
+                            .eq(path(ReportRejectEntity::reportId)),
+                    ),
+                ).whereAnd(
 //                        path(SpotReportEntity::deletedAt).isNull(),
-                        searchType?.let {
-                            path(SpotReportEntity::reportType).eq(it)
-                        },
-                    )
+                    searchType?.let {
+                        path(SpotReportEntity::reportType).eq(it)
+                    },
+                )
             }
         return Page.of(
-            content = suggestions.content.mapNotNull { it?.toSpotReport() },
-            totalCount = suggestions.totalElements,
+            content = reports.content.mapNotNull { it },
+            totalCount = reports.totalElements,
         )
     }
 

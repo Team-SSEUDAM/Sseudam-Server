@@ -10,7 +10,7 @@ data class SpotReportAllResponse(
     val totalCount: Long,
 ) {
     companion object {
-        fun of(page: Page<SpotReport.Info>): SpotReportAllResponse =
+        fun of(page: Page<SpotReport.Detail>): SpotReportAllResponse =
             SpotReportAllResponse(
                 list = page.content.map { SpotReportResponse.of(it) },
                 totalCount = page.totalCount,

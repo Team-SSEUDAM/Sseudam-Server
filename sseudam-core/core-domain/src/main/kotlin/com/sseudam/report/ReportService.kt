@@ -33,7 +33,7 @@ class ReportService(
     fun findReportsBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): Page<SpotReport.Info> = reportReader.readAllBy(offsetPageRequest, searchType)
+    ): Page<SpotReport.Detail> = reportReader.readAllBy(offsetPageRequest, searchType)
 
     fun findSpotReportById(reportId: Long): SpotReport.Info = reportReader.readById(reportId)
 

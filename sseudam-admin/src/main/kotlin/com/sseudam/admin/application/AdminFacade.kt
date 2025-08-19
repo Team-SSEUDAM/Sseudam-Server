@@ -89,7 +89,7 @@ class AdminFacade(
     fun findReports(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): Page<SpotReport.Info> = reportService.findReportsBy(offsetPageRequest, searchType)
+    ): Page<SpotReport.Detail> = reportService.findReportsBy(offsetPageRequest, searchType)
 
     fun findReportDetails(reportId: Long): SpotReport.Detail = reportFacade.findReportDetails(reportId)
 

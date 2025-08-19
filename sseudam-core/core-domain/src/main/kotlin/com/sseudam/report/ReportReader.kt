@@ -18,7 +18,7 @@ class ReportReader(
     fun readAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): Page<SpotReport.Info> = reportRepository.findAllBy(offsetPageRequest, searchType)
+    ): Page<SpotReport.Detail> = reportRepository.findAllBy(offsetPageRequest, searchType)
 
     fun existsByName(name: String): Boolean = reportRepository.existsByName(name)
 
