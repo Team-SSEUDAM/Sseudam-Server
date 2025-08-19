@@ -52,7 +52,6 @@ jib {
     }
 }
 
-// 환경별 Jib 태스크 설정
 tasks.register("jibDev") {
     group = "jib"
     description = "Build and push dev image"
@@ -61,6 +60,10 @@ tasks.register("jibDev") {
             to {
                 image = "sseudam/sseudam-dev"
                 tags = setOf("latest", project.version.toString())
+                auth {
+                    username = System.getProperty("jib.to.auth.username") ?: "sseudam"
+                    password = System.getProperty("jib.to.auth.password") ?: System.getenv("DOCKERHUB_ACCESS_TOKEN")
+                }
             }
             container {
                 environment = mapOf(
@@ -81,6 +84,10 @@ tasks.register("jibProd") {
             to {
                 image = "sseudam/sseudam-prod"
                 tags = setOf("latest", project.version.toString())
+                auth {
+                    username = System.getProperty("jib.to.auth.username") ?: "sseudam"
+                    password = System.getProperty("jib.to.auth.password") ?: System.getenv("DOCKERHUB_ACCESS_TOKEN")
+                }
             }
             container {
                 environment = mapOf(
