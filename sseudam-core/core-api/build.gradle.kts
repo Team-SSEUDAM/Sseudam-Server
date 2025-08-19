@@ -39,7 +39,7 @@ jib {
                 "-XX:MaxRAMPercentage=75.0",
                 "-Dfile.encoding=UTF-8",
                 "-Duser.timezone=Asia/Seoul",
-                "-Djava.security.egd=file:/dev/./urandom"
+                "-Djava.security.egd=file:/dev/./urandom",
             )
         ports = listOf("8080")
         environment =
