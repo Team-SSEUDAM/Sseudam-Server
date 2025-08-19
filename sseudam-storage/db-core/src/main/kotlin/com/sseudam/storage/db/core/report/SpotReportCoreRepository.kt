@@ -34,7 +34,7 @@ class SpotReportCoreRepository(
         txAdvice.readOnly {
             spotReportJpaRepository
                 .findByIdOrElseThrow(reportId)
-                .toSpfindAllDetailsByUserIdotReport()
+                .toSpotReport()
         }
 
     override fun findAllInfoByUserId(userId: Long): List<SpotReport.Info> =
@@ -52,7 +52,7 @@ class SpotReportCoreRepository(
             spotReportCustomRepository.findAllBy(offsetPageRequest, searchType)
         }
 
-    override fun (userId: Long): List<SpotReport.Detail> =
+    override fun findAllDetailsByUserId(userId: Long): List<SpotReport.Detail> =
         txAdvice.readOnly {
             spotReportCustomRepository.findAllDetailsByUserId(userId)
         }
