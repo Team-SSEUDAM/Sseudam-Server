@@ -14,6 +14,7 @@ plugins {
     alias(libs.plugins.epages.restdocs.api.spec) apply false
     alias(libs.plugins.hidetake.swagger.generator) apply false
     alias(libs.plugins.sentry.gradle)
+    alias(libs.plugins.jib) apply false
 }
 
 buildscript {

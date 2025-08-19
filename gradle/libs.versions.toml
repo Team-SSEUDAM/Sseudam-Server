@@ -84,6 +84,7 @@ epages_restdocs_api_spec = { id = "com.epages.restdocs-api-spec", version.ref = 
 hidetake_swagger_generator = { id = "org.hidetake.swagger.generator", version.ref = "hidetake_swagger_generator" }
 
 sentry_gradle = { id = "io.sentry.jvm.gradle", version.ref = "sentry" }
+jib = { id = "com.google.cloud.tools.jib", version = "3.4.5" }
 
 [libraries]
 # Kotlin
