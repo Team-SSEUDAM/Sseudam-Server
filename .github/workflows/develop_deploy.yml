@@ -76,16 +76,16 @@ jobs:
           tags: |
             type=sha,prefix=
 
-      # Docker 이미지 빌드 및 도커허브로 푸시
-      - name: Docker Build and Push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./docker/DockerfileDev
-          push: true
-          tags: ${{ steps.metadata.outputs.tags }}
-          build-args: |
-            "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
+      # Jib을 사용한 Docker 이미지 빌드 및 푸시
+      - name: Build and Push Docker Image with Jib
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        run: |
+          ./gradlew :sseudam-core:core-api:jib \
+            -Djib.to.image=${{ steps.metadata.outputs.tags }} \
+            -Djib.to.auth.username=sseudam \
+            -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} \
+            -Djib.container.environment=SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }},SPRING_PROFILES_ACTIVE=dev
 
       # docker-compose.yml 파일을 EC2에 복사
       - name: Copy docker-compose.yml to EC2

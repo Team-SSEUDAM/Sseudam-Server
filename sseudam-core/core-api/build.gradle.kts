@@ -1,9 +1,96 @@
+import com.google.cloud.tools.jib.gradle.JibExtension
+
+plugins {
+    alias(libs.plugins.jib)
+}
+
 tasks.getByName("bootJar") {
     enabled = true
 }
 
 tasks.getByName("jar") {
     enabled = false
+}
+
+jib {
+    from {
+        image = "amazoncorretto:21"
+        platforms {
+            platform {
+                architecture = "amd64"
+                os = "linux"
+            }
+            platform {
+                architecture = "arm64"
+                os = "linux"
+            }
+        }
+    }
+    to {
+        image = "sseudam/sseudam-server"
+        tags = setOf("latest", project.version.toString())
+    }
+    container {
+        jvmFlags = listOf(
+            "-Xmx1024m",
+            "-Dfile.encoding=UTF-8",
+            "-Duser.timezone=Asia/Seoul"
+        )
+        ports = listOf("8080")
+        environment = mapOf(
+            "TZ" to "Asia/Seoul"
+        )
+        creationTime = "USE_CURRENT_TIMESTAMP"
+        user = "1000:1000"
+    }
+
+    // 캐시 설정
+    outputPaths {
+        tar = layout.buildDirectory.file("jib-image.tar").get().asFile.absolutePath
+        digest = layout.buildDirectory.file("jib-image.digest").get().asFile.absolutePath
+        imageId = layout.buildDirectory.file("jib-image.id").get().asFile.absolutePath
+    }
+}
+
+// 환경별 Jib 태스크 설정
+tasks.register("jibDev") {
+    group = "jib"
+    description = "Build and push dev image"
+    doLast {
+        project.extensions.configure<JibExtension> {
+            to {
+                image = "sseudam/sseudam-dev"
+                tags = setOf("latest", project.version.toString())
+            }
+            container {
+                environment = mapOf(
+                    "TZ" to "Asia/Seoul",
+                    "SPRING_PROFILES_ACTIVE" to "dev"
+                )
+            }
+        }
+    }
+    finalizedBy("jib")
+}
+
+tasks.register("jibProd") {
+    group = "jib"
+    description = "Build and push prod image"
+    doLast {
+        project.extensions.configure<JibExtension> {
+            to {
+                image = "sseudam/sseudam-prod"
+                tags = setOf("latest", project.version.toString())
+            }
+            container {
+                environment = mapOf(
+                    "TZ" to "Asia/Seoul",
+                    "SPRING_PROFILES_ACTIVE" to "prod"
+                )
+            }
+        }
+    }
+    finalizedBy("jib")
 }
 
 dependencies {
