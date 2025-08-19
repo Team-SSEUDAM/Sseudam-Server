@@ -48,7 +48,6 @@ jib {
             )
         creationTime = "USE_CURRENT_TIMESTAMP"
         user = "1000:1000"
-        format = com.google.cloud.tools.jib.api.buildplan.ImageFormat.OCI
     }
 
     // 압축 최적화
