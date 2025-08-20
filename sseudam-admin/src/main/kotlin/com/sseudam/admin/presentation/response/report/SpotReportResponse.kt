@@ -31,23 +31,26 @@ data class SpotReportResponse(
     val imageUrl: String,
     @Schema(description = "신고 상태")
     val status: ReportStatus,
+    @Schema(description = "반려 사유")
+    val rejectReason: String?,
     @Schema(description = "신고 시간")
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun of(report: SpotReport.Info) =
+        fun of(detail: SpotReport.Detail) =
             SpotReportResponse(
-                id = report.id,
-                spotId = report.spotId,
-                userId = report.userId,
-                reportType = report.reportType,
-                point = report.point,
-                address = report.address,
-                trashType = report.trashType,
-                spotName = report.spotName,
-                imageUrl = report.imageUrl,
-                status = report.status,
-                createdAt = report.createdAt,
+                id = detail.id,
+                spotId = detail.spotId,
+                userId = detail.userId,
+                reportType = detail.reportType,
+                point = detail.point,
+                address = detail.address,
+                trashType = detail.trashType,
+                spotName = detail.spotName,
+                imageUrl = detail.imageUrl,
+                status = detail.status,
+                rejectReason = detail.rejectReason,
+                createdAt = detail.createdAt,
             )
     }
 }

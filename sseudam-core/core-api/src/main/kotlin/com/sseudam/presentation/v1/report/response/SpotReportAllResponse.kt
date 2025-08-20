@@ -8,6 +8,6 @@ data class SpotReportAllResponse(
     val list: List<SpotReportResponse>,
 ) {
     companion object {
-        fun of(list: List<SpotReport.Info>): SpotReportAllResponse = SpotReportAllResponse(list.map { SpotReportResponse.of(it) })
+        fun of(list: List<SpotReport.Detail>): SpotReportAllResponse = SpotReportAllResponse(list.map { SpotReportResponse.of(it) })
     }
 }
