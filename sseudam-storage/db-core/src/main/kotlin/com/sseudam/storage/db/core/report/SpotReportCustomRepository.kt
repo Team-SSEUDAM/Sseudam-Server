@@ -44,7 +44,7 @@ class SpotReportCustomRepository(
                     path(SpotReportEntity::trashType),
                     path(SpotReportEntity::imageUrl),
                     path(SpotReportEntity::status),
-                    coalesce(path(ReportRejectEntity::reason), null),
+                    path(ReportRejectEntity::reason),
                     path(SpotReportEntity::createdAt),
                 ).from(
                     entity(SpotReportEntity::class),
@@ -57,6 +57,8 @@ class SpotReportCustomRepository(
                     searchType?.let {
                         path(SpotReportEntity::reportType).eq(it)
                     },
+                ).orderBy(
+                    path(SpotReportEntity::createdAt).desc(),
                 )
             }
         return Page.of(
@@ -80,7 +82,7 @@ class SpotReportCustomRepository(
                     path(SpotReportEntity::trashType),
                     path(SpotReportEntity::imageUrl),
                     path(SpotReportEntity::status),
-                    coalesce(path(ReportRejectEntity::reason), null),
+                    path(ReportRejectEntity::reason),
                     path(SpotReportEntity::createdAt),
                 ).from(
                     entity(SpotReportEntity::class),
@@ -90,6 +92,8 @@ class SpotReportCustomRepository(
                     ),
                 ).where(
                     path(SpotReportEntity::userId).eq(userId),
+                ).orderBy(
+                    path(SpotReportEntity::createdAt).desc(),
                 )
             }
         return entityManager.createQuery(query, jdslRenderContext).resultList
