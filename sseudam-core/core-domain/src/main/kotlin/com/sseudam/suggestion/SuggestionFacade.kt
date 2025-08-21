@@ -17,7 +17,7 @@ class SuggestionFacade(
 
     fun createSpotSuggestion(create: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> {
         trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude)
-        val appendSuggestion = suggestionService.append(create)
-        return appendSuggestion.first to appendSuggestion.second
+        val (suggestionInfo, s3ImageUrl) = suggestionService.append(create)
+        return suggestionInfo to s3ImageUrl
     }
 }

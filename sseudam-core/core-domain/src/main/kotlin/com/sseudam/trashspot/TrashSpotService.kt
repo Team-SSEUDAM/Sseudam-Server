@@ -88,7 +88,6 @@ class TrashSpotService(
                 Coordinate(longitude, latitude),
             )
 
-        trashSpotValidator.verifySite(site)
         trashSpotValidator.verifyPoint(point)
     }
 }
