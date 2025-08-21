@@ -5,6 +5,7 @@ import com.linecorp.kotlinjdsl.render.RenderContext
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.extension.createQuery
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
+import com.sseudam.storage.db.core.report.model.SpotReportEntityWithReject
 import com.sseudam.storage.db.core.report.reject.ReportRejectEntity
 import com.sseudam.storage.db.core.support.JDSLExtensions
 import com.sseudam.support.cursor.OffsetPageRequest
@@ -32,20 +33,9 @@ class SpotReportCustomRepository(
             )
         val reports =
             spotReportJpaRepository.findPage(JDSLExtensions, pageable) {
-                selectNew<SpotReport.Detail>(
-                    path(SpotReportEntity::id),
-                    path(SpotReportEntity::spotId),
-                    path(SpotReportEntity::userId),
-                    path(SpotReportEntity::reportType),
-                    path(SpotReportEntity::point),
-                    path(SpotReportEntity::spotName),
-                    path(SpotReportEntity::region),
-                    path(SpotReportEntity::address),
-                    path(SpotReportEntity::trashType),
-                    path(SpotReportEntity::imageUrl),
-                    path(SpotReportEntity::status),
-                    path(ReportRejectEntity::reason),
-                    path(SpotReportEntity::createdAt),
+                selectNew<SpotReportEntityWithReject>(
+                    entity(SpotReportEntity::class),
+                    entity(ReportRejectEntity::class).path(ReportRejectEntity::reason),
                 ).from(
                     entity(SpotReportEntity::class),
                     leftJoin(ReportRejectEntity::class).on(
@@ -53,7 +43,6 @@ class SpotReportCustomRepository(
                             .eq(path(ReportRejectEntity::reportId)),
                     ),
                 ).whereAnd(
-//                        path(SpotReportEntity::deletedAt).isNull(),
                     searchType?.let {
                         path(SpotReportEntity::reportType).eq(it)
                     },
@@ -62,7 +51,14 @@ class SpotReportCustomRepository(
                 )
             }
         return Page.of(
-            content = reports.content.mapNotNull { it },
+            content =
+                reports.content.mapNotNull { result ->
+                    result?.let {
+                        SpotReport.Detail
+                            .of(it.entity.toSpotReport(), null)
+                            .copy(rejectReason = it.rejectReason)
+                    }
+                },
             totalCount = reports.totalElements,
         )
     }
@@ -70,20 +66,9 @@ class SpotReportCustomRepository(
     fun findAllDetailsByUserId(userId: Long): List<SpotReport.Detail> {
         val query =
             jpql(JDSLExtensions) {
-                selectNew<SpotReport.Detail>(
-                    path(SpotReportEntity::id),
-                    path(SpotReportEntity::spotId),
-                    path(SpotReportEntity::userId),
-                    path(SpotReportEntity::reportType),
-                    path(SpotReportEntity::point),
-                    path(SpotReportEntity::spotName),
-                    path(SpotReportEntity::region),
-                    path(SpotReportEntity::address),
-                    path(SpotReportEntity::trashType),
-                    path(SpotReportEntity::imageUrl),
-                    path(SpotReportEntity::status),
-                    path(ReportRejectEntity::reason),
-                    path(SpotReportEntity::createdAt),
+                selectNew<SpotReportEntityWithReject>(
+                    entity(SpotReportEntity::class),
+                    entity(ReportRejectEntity::class).path(ReportRejectEntity::reason),
                 ).from(
                     entity(SpotReportEntity::class),
                     leftJoin(ReportRejectEntity::class).on(
@@ -96,6 +81,15 @@ class SpotReportCustomRepository(
                     path(SpotReportEntity::createdAt).desc(),
                 )
             }
-        return entityManager.createQuery(query, jdslRenderContext).resultList
+        return entityManager
+            .createQuery(query, jdslRenderContext)
+            .resultList
+            .mapNotNull { result ->
+                result?.let {
+                    SpotReport.Detail
+                        .of(it.entity.toSpotReport(), null)
+                        .copy(rejectReason = it.rejectReason)
+                }
+            }
     }
 }
