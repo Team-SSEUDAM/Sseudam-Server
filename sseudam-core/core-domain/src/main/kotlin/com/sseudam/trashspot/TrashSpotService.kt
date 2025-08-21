@@ -10,6 +10,7 @@ import com.sseudam.support.geo.GeoJson
 import com.sseudam.support.geo.Region
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.PrecisionModel
 import org.springframework.stereotype.Service
 
 @Service
@@ -21,7 +22,7 @@ class TrashSpotService(
     private val geoConverter: GeoConverter,
 ) {
     companion object {
-        private val GEOMETRY_FACTORY = GeometryFactory()
+        private val GEOMETRY_FACTORY = GeometryFactory(PrecisionModel(), 4326)
     }
 
     fun createTrashSpotBySuggestion(suggestionInfo: SpotSuggestion.Info): TrashSpot.Info =
@@ -88,7 +89,6 @@ class TrashSpotService(
                 Coordinate(longitude, latitude),
             )
 
-        trashSpotValidator.verifySite(site)
         trashSpotValidator.verifyPoint(point)
     }
 }

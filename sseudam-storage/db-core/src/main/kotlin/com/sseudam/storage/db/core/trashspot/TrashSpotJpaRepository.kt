@@ -82,5 +82,5 @@ interface TrashSpotJpaRepository :
 
     fun findByAddressSite(site: String): TrashSpotEntity?
 
-    fun findByPoint(point: Point): TrashSpotEntity?
+    fun findByPointAndDeletedAtIsNull(point: Point): TrashSpotEntity?
 }

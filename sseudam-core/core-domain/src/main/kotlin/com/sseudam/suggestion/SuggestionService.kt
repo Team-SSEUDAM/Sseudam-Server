@@ -10,6 +10,9 @@ import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
 import com.sseudam.support.tx.TxAdvice
+import org.locationtech.jts.geom.Coordinate
+import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.PrecisionModel
 import org.springframework.stereotype.Service
 
 @Service
@@ -26,11 +29,16 @@ class SuggestionService(
 ) {
     companion object {
         private const val SUGGESTION_IMAGE_PATH = "suggestion"
+        private val GEOMETRY_FACTORY = GeometryFactory(PrecisionModel(), 4326)
     }
 
     fun append(create: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> =
         txAdvice.write {
-            suggestionValidator.verifySite(create.site)
+            val point =
+                GEOMETRY_FACTORY.createPoint(
+                    Coordinate(create.longitude, create.latitude),
+                )
+            suggestionValidator.verifyPoint(point)
 
             val uploadUrl = imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PATH)
             val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)

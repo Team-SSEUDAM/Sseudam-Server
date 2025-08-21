@@ -109,7 +109,7 @@ class TrashSpotCoreRepository(
     override fun findByPoint(point: Point): TrashSpot.Info? =
         txAdvice.readOnly {
             trashSpotJpaRepository
-                .findByPoint(point)
+                .findByPointAndDeletedAtIsNull(point)
                 ?.toTrashSpot()
         }
 

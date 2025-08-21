@@ -50,6 +50,13 @@ class SpotSuggestionCoreRepository(
                 ?.toSpotSuggestion()
         }
 
+    override fun findByPoint(point: Point): SpotSuggestion.Info? =
+        txAdvice.readOnly {
+            spotSuggestionJpaRepository
+                .findByPointAndDeletedAtIsNull(point)
+                ?.toSpotSuggestion()
+        }
+
     override fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
