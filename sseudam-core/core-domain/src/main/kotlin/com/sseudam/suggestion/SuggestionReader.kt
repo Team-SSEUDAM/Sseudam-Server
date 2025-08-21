@@ -2,17 +2,12 @@ package com.sseudam.suggestion
 
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
-import org.locationtech.jts.geom.GeometryFactory
 import org.springframework.stereotype.Component
 
 @Component
 class SuggestionReader(
     private val spotSuggestionRepository: SpotSuggestionRepository,
 ) {
-    companion object {
-        private val GEOMETRY_FACTORY = GeometryFactory()
-    }
-
     fun readBy(suggestionId: Long): SpotSuggestion.Info = spotSuggestionRepository.findBy(suggestionId)
 
     fun readAllByUser(userId: Long): List<SpotSuggestion.Info> = spotSuggestionRepository.findAllByUserId(userId)

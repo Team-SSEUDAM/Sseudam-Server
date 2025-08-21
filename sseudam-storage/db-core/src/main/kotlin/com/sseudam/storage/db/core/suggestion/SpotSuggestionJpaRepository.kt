@@ -11,7 +11,7 @@ interface SpotSuggestionJpaRepository :
 
     fun findByAddressSiteAndDeletedAtIsNull(site: String): SpotSuggestionEntity?
 
-    fun findByPoint(point: Point): SpotSuggestionEntity?
+    fun findByPointAndDeletedAtIsNull(point: Point): SpotSuggestionEntity?
 
     fun existsBySpotName(name: String): Boolean
 }

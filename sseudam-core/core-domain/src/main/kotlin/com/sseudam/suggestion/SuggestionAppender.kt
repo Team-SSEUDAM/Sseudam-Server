@@ -2,6 +2,7 @@ package com.sseudam.suggestion
 
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.PrecisionModel
 import org.springframework.stereotype.Component
 
 @Component
@@ -9,7 +10,7 @@ class SuggestionAppender(
     private val spotSuggestionRepository: SpotSuggestionRepository,
 ) {
     companion object {
-        private val GEOMETRY_FACTORY = GeometryFactory()
+        private val GEOMETRY_FACTORY = GeometryFactory(PrecisionModel(), 4326)
     }
 
     fun append(

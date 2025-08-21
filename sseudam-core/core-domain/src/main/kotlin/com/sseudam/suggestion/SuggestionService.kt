@@ -12,6 +12,7 @@ import com.sseudam.support.page.Page
 import com.sseudam.support.tx.TxAdvice
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.PrecisionModel
 import org.springframework.stereotype.Service
 
 @Service
@@ -28,7 +29,7 @@ class SuggestionService(
 ) {
     companion object {
         private const val SUGGESTION_IMAGE_PATH = "suggestion"
-        private val GEOMETRY_FACTORY = GeometryFactory()
+        private val GEOMETRY_FACTORY = GeometryFactory(PrecisionModel(), 4326)
     }
 
     fun append(create: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> =

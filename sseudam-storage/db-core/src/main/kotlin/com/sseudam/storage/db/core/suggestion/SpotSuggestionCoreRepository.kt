@@ -53,7 +53,7 @@ class SpotSuggestionCoreRepository(
     override fun findByPoint(point: Point): SpotSuggestion.Info? =
         txAdvice.readOnly {
             spotSuggestionJpaRepository
-                .findByPoint(point)
+                .findByPointAndDeletedAtIsNull(point)
                 ?.toSpotSuggestion()
         }
 
