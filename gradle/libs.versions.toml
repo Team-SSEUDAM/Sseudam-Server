@@ -91,6 +91,7 @@ jib = { id = "com.google.cloud.tools.jib", version = "3.4.5" }
 kotlin_reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 kotlin_test_junit5 = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5", version.ref = "kotlin" }
 kotlin_stdlib_jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
+kotlin_logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version = "7.0.3" }
 
 # Jakarta Libraries Validation
 jakarta_validation = { group = "jakarta.validation", name = "jakarta.validation-api" }
