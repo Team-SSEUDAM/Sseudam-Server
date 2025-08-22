@@ -64,7 +64,7 @@ class ReportEventListener(
                 parameterValue = targetId.toString(),
             )
         } catch (e: Exception) {
-            log.warn(e) { "${"Failed to send notification for user ${event.report.userId}"}" }
+            log.warn(e) { "Failed to send notification for user ${event.report.userId}" }
         }
     }
 }
