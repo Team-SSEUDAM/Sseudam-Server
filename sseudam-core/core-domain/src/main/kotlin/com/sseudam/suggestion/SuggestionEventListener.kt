@@ -62,7 +62,7 @@ class SuggestionEventListener(
                 parameterValue = targetId.toString(),
             )
         } catch (e: Exception) {
-            log.warn("Failed to send notification for user ${event.suggestion.userId}", e)
+            log.warn(e) { "Failed to send notification for user ${event.suggestion.userId}" }
         }
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler
 import java.lang.reflect.Method
 
 class AsyncExceptionHandler : AsyncUncaughtExceptionHandler {
-    private val log by logger()
+    private val logger by logger()
 
     override fun handleUncaughtException(
         e: Throwable,
@@ -15,12 +15,12 @@ class AsyncExceptionHandler : AsyncUncaughtExceptionHandler {
     ) {
         if (e is ErrorException) {
             when (e.errorType.level) {
-                ErrorLevel.ERROR -> log.error("ErrorException : {}", e.message, e)
-                ErrorLevel.WARN -> log.warn("ErrorException : {}", e.message, e)
-                else -> log.info("ErrorException : {}", e.message, e)
+                ErrorLevel.ERROR -> logger.error { "${"ErrorException : {}"} ${e.message} $e" }
+                ErrorLevel.WARN -> logger.warn { "${"ErrorException : {}"} ${e.message} $e" }
+                else -> logger.info { "${"ErrorException : {}"} ${e.message} $e" }
             }
         } else {
-            log.error("Exception : {}", e.message, e)
+            logger.error { "${"Exception : {}"} ${e.message} $e" }
         }
     }
 }

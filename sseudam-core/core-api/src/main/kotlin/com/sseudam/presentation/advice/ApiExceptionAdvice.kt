@@ -46,7 +46,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
         status: HttpStatusCode,
         request: WebRequest,
     ): ResponseEntity<Any>? {
-        log.error("MethodArgumentNotValidException : {}", e.message, e)
+        log.error { "${"MethodArgumentNotValidException : {}"} ${e.message} $e" }
         val errors = e.bindingResult.allErrors.mapNotNull { it.defaultMessage }
         val errorMessage = if (errors.isNotEmpty()) errors.joinToString("; ") else "Validation failed"
         val errorResponse = ErrorResponse.of(e.javaClass.simpleName, errorMessage)
@@ -57,7 +57,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(ConstraintViolationException::class)
     fun handleConstraintViolationException(e: ConstraintViolationException): ResponseEntity<ApiResponse<ErrorResponse>> {
-        log.error("ConstraintViolationException: {}", e.message, e)
+        log.error { "${"ConstraintViolationException: {}"} ${e.message} $e" }
         val bindingErrors =
             e.constraintViolations.associate { violation ->
                 val path = violation.propertyPath.toString().substringAfterLast(".", "unknown")
@@ -73,7 +73,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
     protected fun handleMethodArgumentTypeMismatchException(
         e: MethodArgumentTypeMismatchException,
     ): ResponseEntity<ApiResponse<ErrorResponse>> {
-        log.error("MethodArgumentTypeMismatchException : {}", e.message, e)
+        log.error { "${"MethodArgumentTypeMismatchException : {}"} ${e.message} $e" }
         val errorCode: ErrorType = ErrorType.METHOD_ARGUMENT_TYPE_MISMATCH
         val errorResponse = ErrorResponse.of(e.javaClass.simpleName, errorCode.message)
         val apiResponse = ApiResponse.fail(errorCode.status, errorResponse)
@@ -87,7 +87,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
         status: HttpStatusCode,
         request: WebRequest,
     ): ResponseEntity<Any>? {
-        log.error("HttpRequestMethodNotSupportedException : {}", e.message, e)
+        log.error { "${"HttpRequestMethodNotSupportedException : {}"} ${e.message} $e" }
         val errorCode: ErrorType = ErrorType.METHOD_NOT_ALLOWED
         val errorResponse = ErrorResponse.of(e.javaClass.simpleName, errorCode.message)
         val apiResponse = ApiResponse.fail(errorCode.status, errorResponse)
@@ -97,7 +97,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(ErrorException::class)
     fun handleCustomException(e: ErrorException): ResponseEntity<ApiResponse<ErrorResponse>> {
-        log.error("sseudam CustomException : {}", e.message, e)
+        log.error { "${"sseudam CustomException : {}"} ${e.message} $e" }
         val errorCode: ErrorType = e.errorType
         val errorResponse = ErrorResponse.of(errorCode.name, errorCode.message)
         val apiResponse = ApiResponse.fail(errorCode.status, errorResponse)
@@ -107,7 +107,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(AuthenticationErrorException::class)
     fun handleAuthenticationCustomException(e: AuthenticationErrorException): ResponseEntity<ApiResponse<ErrorResponse>> {
-        log.error("sseudam Custom Authentication Exception : {}", e.message, e)
+        log.error { "${"sseudam Custom Authentication Exception : {}"} ${e.message} $e" }
         val errorCode: AuthenticationErrorType = e.authenticationErrorType
         val errorResponse = ErrorResponse.of(errorCode.name, errorCode.message)
         val apiResponse = ApiResponse.fail(401, errorResponse)
@@ -117,7 +117,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(Exception::class)
     protected fun handleException(e: Exception): ResponseEntity<ApiResponse<ErrorResponse>> {
-        log.error("Internal Server Error : {}", e.message, e)
+        log.error { "${"Internal Server Error : {}"} ${e.message} $e" }
         val internalServerError: ErrorType = ErrorType.INTERNAL_SERVER_ERROR
         val errorResponse = ErrorResponse.of(e.javaClass.simpleName, internalServerError.message)
         val apiResponse = ApiResponse.fail(internalServerError.status, errorResponse)

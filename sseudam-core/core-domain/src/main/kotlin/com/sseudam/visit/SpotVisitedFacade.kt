@@ -75,7 +75,7 @@ class SpotVisitedFacade(
                 parameterValue = spot.id.toString(),
             )
         } catch (e: Exception) {
-            log.warn("Failed to send visit notification", e)
+            log.warn(e) { "Failed to send visit notification" }
         }
     }
 
