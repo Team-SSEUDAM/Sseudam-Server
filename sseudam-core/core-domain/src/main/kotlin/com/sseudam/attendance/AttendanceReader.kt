@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component
 class AttendanceReader(
     private val attendanceRepository: AttendanceRepository,
 ) {
-    fun readByUser(userId: Long): Attendance.Info? = attendanceRepository.findByUserId(userId)
+    fun readLastByUser(userId: Long): Attendance.Info? = attendanceRepository.findLastByUserId(userId)
 }

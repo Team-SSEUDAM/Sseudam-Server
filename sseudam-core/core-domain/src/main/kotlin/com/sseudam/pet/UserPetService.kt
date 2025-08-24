@@ -1,5 +1,6 @@
 package com.sseudam.pet
 
+import com.sseudam.support.Cache
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,7 +17,15 @@ class UserPetService(
     fun append(
         userId: Long,
         pet: Pet.Info,
-    ): UserPet.Info = userPetAppender.append(userId, pet)
+    ): UserPet.Info {
+        val created = userPetAppender.append(userId, pet)
+        Cache.put(
+            ttl = Cache.TTL_1_DAY,
+            key = "user:$userId:pet",
+            value = created,
+        )
+        return created
+    }
 
     fun updatePointByAction(
         userPet: UserPet.Info,

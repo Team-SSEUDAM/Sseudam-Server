@@ -1,5 +1,7 @@
 package com.sseudam.pet
 
+import com.fasterxml.jackson.core.type.TypeReference
+import com.sseudam.support.Cache
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import org.springframework.stereotype.Service
@@ -67,27 +69,28 @@ class UserPetFacade(
         return Pair(userPetInfo, petHistoryInfo)
     }
 
-    fun findAllPetHistory(userId: Long): List<UserPetLevelUpHistoryInfo> {
-        val userPetHistories =
-            petLevelUpHistoryService
-                .findAllByUser(userId)
+    fun findAllPetHistory(userId: Long): List<UserPetLevelUpHistoryInfo> =
+        Cache.cache(
+            ttl = 10,
+            key = "pet:history:$userId",
+            typeReference = object : TypeReference<List<UserPetLevelUpHistoryInfo>>() {},
+        ) {
+            val userPetHistories = petLevelUpHistoryService.findAllByUser(userId)
+            if (userPetHistories.isEmpty()) return@cache emptyList()
 
-        if (userPetHistories.isEmpty()) return emptyList()
-
-        return userPetHistories
-            .groupBy { userPetPolicy.getSeasonByYearMonth(it.year, it.monthly) }
-            .mapValues { (_, histories) -> histories.maxByOrNull { it.levelType.level } }
-            .values
-            .filterNotNull()
-            .map { history ->
-                UserPetLevelUpHistoryInfo(
-                    userId = userId,
-                    nickname = history.levelType.adjective + history.nickname,
-                    levelType = history.levelType,
-                    point = userPetPolicy.getMinLevelStandard(history.levelType),
-                    season = userPetPolicy.getSeasonByYearMonth(history.year, history.monthly),
-                    createdAt = history.createdAt,
-                )
-            }
-    }
+            return@cache userPetHistories
+                .groupBy { userPetPolicy.getSeasonByYearMonth(it.year, it.monthly) }
+                .mapNotNull { (_, histories) ->
+                    histories.maxByOrNull { it.levelType.level }
+                }.map { history ->
+                    UserPetLevelUpHistoryInfo(
+                        userId = userId,
+                        nickname = history.levelType.adjective + history.nickname,
+                        levelType = history.levelType,
+                        point = userPetPolicy.getMinLevelStandard(history.levelType),
+                        season = userPetPolicy.getSeasonByYearMonth(history.year, history.monthly),
+                        createdAt = history.createdAt,
+                    )
+                }
+        }
 }

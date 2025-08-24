@@ -22,6 +22,8 @@ data class AttendanceResponse(
     val userId: Long,
     @Schema(description = "출석 날짜", example = "2025-06-30")
     val date: LocalDate,
+    @Schema(description = "오늘 출석 여부", example = "true")
+    val isToday: Boolean,
     @Schema(description = "출석 연속 횟수", example = "3")
     val continuity: Int,
     @Schema(description = "연속 출석 여부", example = "true")
@@ -37,6 +39,7 @@ data class AttendanceResponse(
             AttendanceResponse(
                 userId = attendance.userId,
                 date = attendance.date,
+                isToday = attendance.isToday,
                 continuity = attendance.continuity,
                 isContinuity = isContinuity,
                 createdAt = attendance.createdAt,

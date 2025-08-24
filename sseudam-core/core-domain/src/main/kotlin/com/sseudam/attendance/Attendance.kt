@@ -28,7 +28,17 @@ class Attendance {
         val date: LocalDate,
         val continuity: Int = 1,
         val createdAt: LocalDateTime,
-    )
+    ) {
+        fun toComplete(isToday: Boolean) =
+            Complete(
+                id = id,
+                userId = userId,
+                date = date,
+                continuity = continuity,
+                isToday = isToday,
+                createdAt = createdAt,
+            )
+    }
 
     data class Complete(
         val id: Long,

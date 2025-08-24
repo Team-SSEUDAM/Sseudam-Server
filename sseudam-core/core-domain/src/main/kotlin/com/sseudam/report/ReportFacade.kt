@@ -4,6 +4,7 @@ import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
+import com.sseudam.support.Cache
 import com.sseudam.support.tx.TxAdvice
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.image.TrashSpotImageService
@@ -53,7 +54,10 @@ class ReportFacade(
                 presignedUrl = null
             }
 
-            val spotReport = reportService.appendReport(imageUrl, create)
+            val spotReport =
+                reportService.appendReport(imageUrl, create).apply {
+                    Cache.delete("user:${create.userId}:histories")
+                }
             petEventPublisher.publish(create.userId, PetPointAction.REPORT)
 
             return@write spotReport to presignedUrl
