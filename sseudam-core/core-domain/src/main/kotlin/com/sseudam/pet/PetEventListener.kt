@@ -29,16 +29,16 @@ class PetEventListener(
         val currentPetInfo = petService.findBy(userPet.petId)
         val levelType = userPetPolicy.getLevelType(userPet.point)
 
-        if (levelType.level >= Pet.LevelType.SPECIAL.level) return
-
-        val nextLevelPetInfo = petInfos.firstOrNull { it.levelType.level == levelType.level } ?: return
-        if (userPetPolicy.getLevelType(userPet.point).level > currentPetInfo.levelType.level) {
+        if (currentPetInfo.levelType == Pet.LevelType.SPECIAL) return
+        val nextLevelPetInfo = petInfos.firstOrNull { it.levelType == levelType } ?: return
+        if (levelType.level > currentPetInfo.levelType.level) {
             Cache.put(
                 key = "pet:${userPet.userId}",
                 value = userPetService.updatePetId(userPet.id, nextLevelPetInfo.id),
                 ttl = Cache.TTL_1_DAY,
             )
             petLevelUpHistoryService.append(userPet, nextLevelPetInfo)
+            Cache.delete(key = "pet:history:${userPet.userId}")
         }
     }
 }
