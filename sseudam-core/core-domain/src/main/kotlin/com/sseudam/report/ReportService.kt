@@ -1,38 +1,64 @@
 package com.sseudam.report
 
-import com.sseudam.common.ImageS3Caller
-import com.sseudam.common.S3ImageUrl
+import com.sseudam.pet.PetPointAction
+import com.sseudam.pet.event.PetEventPublisher
+import com.sseudam.report.event.ReportEventPublisher
+import com.sseudam.report.reject.ReportReject
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.error.ErrorException
+import com.sseudam.support.error.ErrorType
+import com.sseudam.support.page.Page
+import com.sseudam.support.tx.TxAdvice
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class ReportService(
     private val reportAppender: ReportAppender,
     private val reportReader: ReportReader,
-    private val imageS3Caller: ImageS3Caller,
+    private val reportUpdater: ReportUpdater,
+    private val reportDeleter: ReportDeleter,
+    private val txAdvice: TxAdvice,
+    private val reportEventPublisher: ReportEventPublisher,
+    private val petEventPublisher: PetEventPublisher,
 ) {
-    companion object {
-        const val REPORT_IMAGE_PATH = "report"
-    }
-
-    fun createSpotReport(report: SpotReport.Create): Pair<SpotReport.Info, S3ImageUrl> {
-        val createUploadUrl =
-            imageS3Caller.createUploadUrl(
-                report.userId,
-                LocalDateTime.now(),
-                REPORT_IMAGE_PATH,
-            )
-        val spotReport = reportAppender.append(createUploadUrl.imageUrl, report)
-        return spotReport to createUploadUrl
-    }
+    fun appendReport(
+        imageUrl: String,
+        report: SpotReport.Create,
+    ): SpotReport.Info = reportAppender.append(imageUrl, report)
 
     fun findAllReportByUserId(userId: Long): List<SpotReport.Info> = reportReader.readAllByUserId(userId)
+
+    fun findAllDetailsByUserId(userId: Long): List<SpotReport.Detail> = reportReader.readAllDetailByUserId(userId)
 
     fun findReportsBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): List<SpotReport.Info> = reportReader.readAllBy(offsetPageRequest, searchType)
+    ): Page<SpotReport.Detail> = reportReader.readAllBy(offsetPageRequest, searchType)
 
     fun findSpotReportById(reportId: Long): SpotReport.Info = reportReader.readById(reportId)
+
+    fun findRejectReportByReportId(reportId: Long): ReportReject.Info? = reportReader.readRejectByReportId(reportId)
+
+    fun updateSpotReport(updateReport: UpdateReport): SpotReport.Info =
+        txAdvice.write {
+            val report = reportUpdater.update(updateReport.reportId, updateReport.status)
+            reportEventPublisher.publish(report)
+
+            when (report.status) {
+                ReportStatus.APPROVE -> {
+                    reportDeleter.deleteBy(updateReport.reportId)
+                    petEventPublisher.publish(report.userId, PetPointAction.REPORT_APPROVED)
+                }
+                ReportStatus.REJECT -> reportAppender.appendReject(report.id, updateReport.reason)
+                else -> {}
+            }
+
+            report
+        }
+
+    fun validateSpotReportName(name: String) {
+        if (reportReader.existsByName(name)) {
+            throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
+        }
+    }
 }

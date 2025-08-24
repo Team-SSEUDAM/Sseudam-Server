@@ -1,6 +1,8 @@
 package com.sseudam.user
 
+import com.sseudam.common.Address
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.Page
 
 interface UserRepository {
     // Create
@@ -10,7 +12,7 @@ interface UserRepository {
     ): User
 
     // Read
-    fun readByUserId(id: Long): UserProfile
+    fun findProfileByUserId(id: Long): UserProfile?
 
     fun readByUserKey(userKey: String): UserProfile
 
@@ -29,11 +31,13 @@ interface UserRepository {
 
     fun existsByEmail(email: String): Boolean
 
-    fun readAllBy(offsetPageRequest: OffsetPageRequest): List<UserProfile>
+    fun readAllBy(offsetPageRequest: OffsetPageRequest): Page<UserProfile>
 
     fun existsByNickname(nickname: String): Boolean
 
     fun readUserByEmail(email: String): SocialUser?
+
+    fun findAll(): List<UserProfile>
 
     // Update
     fun updateNickname(
@@ -44,6 +48,11 @@ interface UserRepository {
     fun updateName(
         userKey: String,
         name: String,
+    ): UserProfile
+
+    fun updateAddress(
+        userKey: String,
+        address: Address,
     ): UserProfile
 
     fun updateEmail(

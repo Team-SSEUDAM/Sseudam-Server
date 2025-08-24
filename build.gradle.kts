@@ -13,6 +13,14 @@ plugins {
     alias(libs.plugins.asciidoctor.convert) apply false
     alias(libs.plugins.epages.restdocs.api.spec) apply false
     alias(libs.plugins.hidetake.swagger.generator) apply false
+    alias(libs.plugins.sentry.gradle)
+    alias(libs.plugins.jib) apply false
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
 }
 
 allprojects {
@@ -35,22 +43,18 @@ subprojects {
     apply(plugin = getPlugin(libs.plugins.asciidoctor.convert))
     apply(plugin = getPlugin(libs.plugins.epages.restdocs.api.spec))
     apply(plugin = getPlugin(libs.plugins.hidetake.swagger.generator))
+    apply(plugin = getPlugin(libs.plugins.sentry.gradle))
 
     java {
         sourceCompatibility = JavaVersion.VERSION_21
     }
 
     dependencies {
+        implementation(platform(libs.spring.modulith.bom))
         implementation(libs.kotlin.reflect)
         implementation(libs.kotlin.stdlib.jdk8)
         implementation(libs.jackson.kotlin)
         implementation(libs.hibernate.spatial)
-
-        // Spring Modulith (bundle 사용)
-//        implementation(libs.bundles.spring.modulith)
-//        runtimeOnly(libs.bundles.spring.modulith.runtime)
-//        kapt("org.springframework.modulith:spring-modulith-docs:1.3.1")
-//        testImplementation(libs.spring.modulith.test)
 
         annotationProcessor(libs.spring.boot.configuration.processor)
         kapt(libs.spring.boot.configuration.processor)
@@ -61,15 +65,19 @@ subprojects {
         testImplementation(libs.spring.security.test)
     }
 
-//    dependencyManagement {
-//        imports {
-//            mavenBom(
-//                libs.spring.modulith.bom
-//                    .get()
-//                    .toString(),
-//            )
-//        }
-//    }
+    val sentryAuthToken = System.getenv("SENTRY_AUTH_TOKEN")
+    if (!sentryAuthToken.isNullOrEmpty()) {
+        sentry {
+            includeSourceContext = true
+            org = "sseudam"
+            projectName = "sseudam-server"
+            authToken = sentryAuthToken
+        }
+    } else {
+        tasks.matching { it.name.startsWith("sentry") }.configureEach {
+            enabled = false
+        }
+    }
 
     tasks.withType<KotlinCompile> {
         kotlin {
@@ -97,8 +105,6 @@ subprojects {
         useJUnitPlatform()
     }
 }
-
-//extra["springModulithVersion"] = "1.3.1"
 
 tasks.register("addLintPreCommitHook", DefaultTask::class) {
     group = "setup"

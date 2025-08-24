@@ -6,6 +6,7 @@ import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.storage.db.core.support.BaseEntity
 import com.sseudam.support.geo.GeoJson
+import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -29,11 +30,14 @@ class SpotReportEntity(
     val spotName: String,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(15)")
+    val region: Region,
+    @Enumerated(value = EnumType.STRING)
+    @Column(columnDefinition = "varchar(15)")
     val trashType: TrashType,
     val imageUrl: String,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(15)")
-    val status: ReportStatus,
+    var status: ReportStatus,
 ) : BaseEntity() {
     constructor(
         imageUrl: String,
@@ -50,6 +54,7 @@ class SpotReportEntity(
                 site = createSpotReport.site,
             ),
         spotName = createSpotReport.spotName,
+        region = createSpotReport.region,
         trashType = createSpotReport.trashType,
         imageUrl = imageUrl,
         status = ReportStatus.WAITING,
@@ -62,10 +67,17 @@ class SpotReportEntity(
             userId = userId,
             reportType = reportType,
             point = GeoJson.Point(listOf(point.x, point.y)),
+            spotName = spotName,
             address = address,
+            region = region,
             trashType = trashType,
             imageUrl = imageUrl,
             status = status,
             createdAt = createdAt,
         )
+
+    fun updateStatus(status: ReportStatus): SpotReportEntity {
+        this.status = status
+        return this
+    }
 }

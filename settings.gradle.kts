@@ -31,6 +31,10 @@ include(
 )
 
 include(
+    "sseudam-batch"
+)
+
+include(
     "sseudam-clients:aws",
     "sseudam-clients:notification",
     "sseudam-clients:oauth-client",

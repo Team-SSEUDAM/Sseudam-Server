@@ -1,6 +1,7 @@
 package com.sseudam.suggestion
 
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.Page
 import org.springframework.stereotype.Component
 
 @Component
@@ -16,5 +17,7 @@ class SuggestionReader(
     fun readAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): List<SpotSuggestion.Info> = spotSuggestionRepository.findAllBy(offsetPageRequest, searchStatus)
+    ): Page<SpotSuggestion.Info> = spotSuggestionRepository.findAllBy(offsetPageRequest, searchStatus)
+
+    fun existsByName(name: String): Boolean = spotSuggestionRepository.existsByName(name)
 }

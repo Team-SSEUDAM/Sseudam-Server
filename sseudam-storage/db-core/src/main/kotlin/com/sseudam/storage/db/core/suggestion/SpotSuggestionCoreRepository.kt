@@ -1,10 +1,12 @@
 package com.sseudam.storage.db.core.suggestion
 
+import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SpotSuggestionRepository
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.Page
 import com.sseudam.support.tx.TxAdvice
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Repository
@@ -44,14 +46,21 @@ class SpotSuggestionCoreRepository(
     override fun findBySite(site: String): SpotSuggestion.Info? =
         txAdvice.readOnly {
             spotSuggestionJpaRepository
-                .findByAddressSite(site)
+                .findByAddressSiteAndDeletedAtIsNull(site)
+                ?.toSpotSuggestion()
+        }
+
+    override fun findByPoint(point: Point): SpotSuggestion.Info? =
+        txAdvice.readOnly {
+            spotSuggestionJpaRepository
+                .findByPointAndDeletedAtIsNull(point)
                 ?.toSpotSuggestion()
         }
 
     override fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): List<SpotSuggestion.Info> =
+    ): Page<SpotSuggestion.Info> =
         txAdvice.readOnly {
             spotSuggestionCustomRepository.findAllBy(offsetPageRequest, searchStatus)
         }
@@ -63,5 +72,16 @@ class SpotSuggestionCoreRepository(
         txAdvice.write {
             val suggestion = spotSuggestionJpaRepository.findByIdOrElseThrow(suggestionId)
             return@write suggestion.updateStatus(status).toSpotSuggestion()
+        }
+
+    override fun existsByName(name: String): Boolean =
+        txAdvice.readOnly {
+            spotSuggestionJpaRepository.existsBySpotName(name)
+        }
+
+    override fun deleteBy(suggestionId: Long) =
+        txAdvice.write {
+            val suggestion = spotSuggestionJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(suggestionId)
+            suggestion.softDelete()
         }
 }

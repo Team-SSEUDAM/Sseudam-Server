@@ -5,6 +5,7 @@ import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.support.geo.GeoJson
+import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
@@ -15,6 +16,10 @@ data class SpotReportResponse(
     val id: Long,
     @Schema(description = "장소 ID")
     val spotId: Long,
+    @Schema(description = "장소 이름")
+    val spotName: String,
+    @Schema(description = "지역")
+    val region: Region,
     @Schema(description = "신고자 ID")
     val userId: Long,
     @Schema(description = "신고 타입")
@@ -29,22 +34,27 @@ data class SpotReportResponse(
     val imageUrl: String,
     @Schema(description = "신고 상태")
     val status: ReportStatus,
+    @Schema(description = "반려 사유")
+    val rejectReason: String?,
     @Schema(description = "신고 시간")
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun of(report: SpotReport.Info) =
+        fun of(detail: SpotReport.Detail) =
             SpotReportResponse(
-                id = report.id,
-                spotId = report.spotId,
-                userId = report.userId,
-                reportType = report.reportType,
-                point = report.point,
-                address = report.address,
-                trashType = report.trashType,
-                imageUrl = report.imageUrl,
-                status = report.status,
-                createdAt = report.createdAt,
+                id = detail.id,
+                spotId = detail.spotId,
+                spotName = detail.spotName,
+                region = detail.region ?: Region.UNKNOWN,
+                userId = detail.userId,
+                reportType = detail.reportType,
+                point = detail.point,
+                address = detail.address,
+                trashType = detail.trashType,
+                imageUrl = detail.imageUrl,
+                status = detail.status,
+                rejectReason = detail.rejectReason,
+                createdAt = detail.createdAt,
             )
     }
 }

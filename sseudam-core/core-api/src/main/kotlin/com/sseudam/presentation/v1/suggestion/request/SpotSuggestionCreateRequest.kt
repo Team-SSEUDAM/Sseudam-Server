@@ -1,5 +1,6 @@
 package com.sseudam.presentation.v1.suggestion.request
 
+import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
@@ -20,4 +21,16 @@ data class SpotSuggestionCreateRequest(
     val site: String,
     @Schema(description = "쓰레기통 유형", example = "GENERAL")
     val trashType: TrashType,
-)
+) {
+    fun toCommand(userId: Long): SpotSuggestion.Create =
+        SpotSuggestion.Create(
+            userId = userId,
+            spotName = spotName,
+            latitude = latitude,
+            longitude = longitude,
+            region = region,
+            city = city,
+            site = site,
+            trashType = trashType,
+        )
+}

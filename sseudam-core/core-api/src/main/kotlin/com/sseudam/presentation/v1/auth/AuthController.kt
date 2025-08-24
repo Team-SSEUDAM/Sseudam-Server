@@ -4,6 +4,7 @@ import com.sseudam.auth.AuthenticationFacade
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.auth.CredentialSocial
 import com.sseudam.client.oauth.OAuthService
+import com.sseudam.common.Address
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.auth.request.LoginRequest
 import com.sseudam.presentation.v1.auth.request.RefreshTokenRequest
@@ -41,7 +42,14 @@ class AuthController(
         @RequestBody request: LoginRequest,
     ): TokenResponse {
         val userCredentials = userService.getUserCredential(request.loginId)
-        if (!passwordEncoder.matches(request.password, userCredentials.password)) {
+        val storedPassword =
+            if (!userCredentials.password.startsWith("{")) {
+                "{noop}${userCredentials.password}"
+            } else {
+                userCredentials.password
+            }
+
+        if (!passwordEncoder.matches(request.password, storedPassword)) {
             throw ErrorException(ErrorType.INVALID_PASSWORD)
         }
         val token = authenticationService.login(deviceId, User(userCredentials.id, userCredentials.key), request.toCredentialSseudam())
@@ -109,6 +117,13 @@ class AuthController(
             throw ErrorException(ErrorType.NOT_FOUND_DATA)
         } else {
             userService.updateName(tempUser.key, request.name)
+            userService.updateAddress(
+                tempUser.key,
+                Address(
+                    city = request.address.split(" ")[1],
+                    site = request.address,
+                ),
+            )
         }
         return SignUpResponse("회원가입에 성공했습니다.")
     }

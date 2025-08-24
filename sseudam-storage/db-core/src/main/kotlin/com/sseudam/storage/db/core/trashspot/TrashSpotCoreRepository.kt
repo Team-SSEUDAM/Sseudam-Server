@@ -7,6 +7,7 @@ import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashSpotLocation
 import com.sseudam.trashspot.TrashSpotRepository
 import com.sseudam.trashspot.TrashType
+import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -96,5 +97,54 @@ class TrashSpotCoreRepository(
             trashSpotJpaRepository
                 .findAllByIdIn(spotIds)
                 .map { it.toTrashSpot() }
+        }
+
+    override fun findBySite(site: String): TrashSpot.Info? =
+        txAdvice.readOnly {
+            trashSpotJpaRepository
+                .findByAddressSite(site)
+                ?.toTrashSpot()
+        }
+
+    override fun findByPoint(point: Point): TrashSpot.Info? =
+        txAdvice.readOnly {
+            trashSpotJpaRepository
+                .findByPointAndDeletedAtIsNull(point)
+                ?.toTrashSpot()
+        }
+
+    override fun updateName(
+        spotId: Long,
+        name: String,
+    ) = txAdvice.write {
+        trashSpotJpaRepository
+            .findByIdOrElseThrow(spotId)
+            .updateName(name)
+    }
+
+    override fun updateType(
+        spotId: Long,
+        type: TrashType,
+    ) = txAdvice.write {
+        trashSpotJpaRepository
+            .findByIdOrElseThrow(spotId)
+            .updateType(type)
+    }
+
+    override fun updateLocation(
+        spotId: Long,
+        region: Region,
+        point: Point,
+    ) {
+        txAdvice.write {
+            trashSpotJpaRepository
+                .findByIdOrElseThrow(spotId)
+                .updateLocation(region, point)
+        }
+    }
+
+    override fun existsByName(name: String): Boolean =
+        txAdvice.readOnly {
+            trashSpotJpaRepository.existsByName(name)
         }
 }

@@ -44,7 +44,7 @@ class ApiResponseAdvice : ResponseBodyAdvice<Any> {
         }
 
         return when {
-            resolve == null || body == null || body is String -> body
+            resolve == null || body == null || body is String || body is Unit -> body
             resolve.is2xxSuccessful -> ApiResponse.success(status, body)
             else -> body
         }

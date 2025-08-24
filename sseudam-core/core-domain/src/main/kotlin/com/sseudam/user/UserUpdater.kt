@@ -1,5 +1,6 @@
 package com.sseudam.user
 
+import com.sseudam.common.Address
 import org.springframework.stereotype.Component
 
 @Component
@@ -20,4 +21,9 @@ class UserUpdater(
         userKey: String,
         email: String,
     ): UserProfile = userRepository.updateEmail(userKey, email)
+
+    fun updateAddress(
+        userKey: String,
+        address: Address,
+    ): UserProfile = userRepository.updateAddress(userKey, address)
 }

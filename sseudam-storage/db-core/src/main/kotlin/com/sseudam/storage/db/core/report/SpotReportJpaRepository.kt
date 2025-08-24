@@ -7,4 +7,6 @@ interface SpotReportJpaRepository :
     JpaRepository<SpotReportEntity, Long>,
     KotlinJdslJpqlExecutor {
     fun findAllByUserId(userId: Long): List<SpotReportEntity>
+
+    fun existsBySpotName(name: String): Boolean
 }

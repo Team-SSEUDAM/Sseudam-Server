@@ -3,6 +3,7 @@ package com.sseudam.storage.db.core.trashspot
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
+import org.locationtech.jts.geom.Point
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -76,4 +77,10 @@ interface TrashSpotJpaRepository :
     fun findAllByTrashType(type: TrashType): List<TrashSpotEntity>
 
     fun findAllByIdIn(spotIds: List<Long>): List<TrashSpotEntity>
+
+    fun existsByName(name: String): Boolean
+
+    fun findByAddressSite(site: String): TrashSpotEntity?
+
+    fun findByPointAndDeletedAtIsNull(point: Point): TrashSpotEntity?
 }

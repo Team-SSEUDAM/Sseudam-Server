@@ -50,7 +50,15 @@ out/
 .*.env
 *.env
 
+### Key Files ###
+sseudam-firebase-key.json
+
 ### Kotlin ###
 .kotlin
 
+### Log ###
 logs
+
+### Prompt ###
+copilot-instructions.md
+

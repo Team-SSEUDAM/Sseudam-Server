@@ -1,15 +1,19 @@
 package com.sseudam.report
 
+import com.sseudam.report.reject.ReportReject
+import com.sseudam.report.reject.ReportRejectRepository
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.PrecisionModel
 import org.springframework.stereotype.Component
 
 @Component
 class ReportAppender(
     private val spotReportRepository: SpotReportRepository,
+    private val reportRejectRepository: ReportRejectRepository,
 ) {
     companion object {
-        private val GEOMETRY_FACTORY = GeometryFactory()
+        private val GEOMETRY_FACTORY = GeometryFactory(PrecisionModel(), 4326)
     }
 
     fun append(
@@ -21,5 +25,12 @@ class ReportAppender(
                 Coordinate(createSpotSuggestion.longitude, createSpotSuggestion.latitude),
             )
         return spotReportRepository.create(imageUrl, point, createSpotSuggestion)
+    }
+
+    fun appendReject(
+        reportId: Long,
+        reason: String?,
+    ) {
+        reportRejectRepository.save(ReportReject.Create(reportId, reason ?: ""))
     }
 }

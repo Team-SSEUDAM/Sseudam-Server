@@ -1,10 +1,13 @@
 package com.sseudam.storage.db.core.report
 
+import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.report.SpotReportRepository
+import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.Page
 import com.sseudam.support.tx.TxAdvice
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Repository
@@ -34,7 +37,7 @@ class SpotReportCoreRepository(
                 .toSpotReport()
         }
 
-    override fun findAllByUserId(userId: Long): List<SpotReport.Info> =
+    override fun findAllInfoByUserId(userId: Long): List<SpotReport.Info> =
         txAdvice.readOnly {
             spotReportJpaRepository
                 .findAllByUserId(userId)
@@ -44,8 +47,35 @@ class SpotReportCoreRepository(
     override fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): List<SpotReport.Info> =
+    ): Page<SpotReport.Detail> =
         txAdvice.readOnly {
             spotReportCustomRepository.findAllBy(offsetPageRequest, searchType)
+        }
+
+    override fun findAllDetailsByUserId(userId: Long): List<SpotReport.Detail> =
+        txAdvice.readOnly {
+            spotReportCustomRepository.findAllDetailsByUserId(userId)
+        }
+
+    override fun update(
+        reportId: Long,
+        reportStatus: ReportStatus,
+    ): SpotReport.Info =
+        txAdvice.write {
+            val report =
+                spotReportJpaRepository
+                    .findByIdOrElseThrow(reportId)
+            report.updateStatus(reportStatus).toSpotReport()
+        }
+
+    override fun existsByName(name: String): Boolean =
+        txAdvice.readOnly {
+            spotReportJpaRepository.existsBySpotName(name)
+        }
+
+    override fun deleteBy(reportId: Long) =
+        txAdvice.write {
+            val report = spotReportJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(reportId)
+            report.softDelete()
         }
 }

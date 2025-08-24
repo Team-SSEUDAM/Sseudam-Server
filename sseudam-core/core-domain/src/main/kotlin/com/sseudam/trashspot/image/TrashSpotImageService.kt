@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service
 class TrashSpotImageService(
     private val trashSpotImageReader: TrashSpotImageReader,
     private val trashSpotImageAppender: TrashSpotImageAppender,
+    private val trashSpotImageUpdater: TrashSpotImageUpdater,
 ) {
     fun append(createImage: TrashSpotImage.Create): TrashSpotImage.Info = trashSpotImageAppender.append(createImage)
 
@@ -18,4 +19,11 @@ class TrashSpotImageService(
         )
 
     fun findBySpotId(spotId: Long): List<TrashSpotImage.Info> = trashSpotImageReader.readBySpotId(spotId)
+
+    fun updateImage(
+        spotId: Long,
+        imageUrl: String,
+    ) {
+        trashSpotImageUpdater.updateImage(spotId, imageUrl)
+    }
 }

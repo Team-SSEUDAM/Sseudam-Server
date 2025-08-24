@@ -6,7 +6,6 @@ import com.sseudam.config.AwsProperties
 import com.sseudam.s3.AwsS3Client
 import org.springframework.stereotype.Component
 import java.time.Duration
-import java.time.LocalDateTime
 
 @Component
 class ImageS3Processor(
@@ -20,10 +19,9 @@ class ImageS3Processor(
 
     override fun createUploadUrl(
         userId: Long,
-        dateTime: LocalDateTime,
         prefix: String,
     ): S3ImageUrl {
-        val imageFilePath = imageFileConstructor.imageFilePath(userId, dateTime, prefix)
+        val imageFilePath = imageFileConstructor.imageFilePath(userId, prefix)
         val imageFileName = imageFileConstructor.imageFileName()
 
         val presignedUrl =
