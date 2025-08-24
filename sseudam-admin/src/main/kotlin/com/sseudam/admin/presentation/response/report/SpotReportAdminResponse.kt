@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
 @Schema(description = "신고 내역 응답")
-data class SpotReportResponse(
+data class SpotReportAdminResponse(
     @Schema(description = "신고 내역 응답")
     val id: Long,
     @Schema(description = "장소 ID")
@@ -38,7 +38,7 @@ data class SpotReportResponse(
 ) {
     companion object {
         fun of(detail: SpotReport.Detail) =
-            SpotReportResponse(
+            SpotReportAdminResponse(
                 id = detail.id,
                 spotId = detail.spotId,
                 userId = detail.userId,
