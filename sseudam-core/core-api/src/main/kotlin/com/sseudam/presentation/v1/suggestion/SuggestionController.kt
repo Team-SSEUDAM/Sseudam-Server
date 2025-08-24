@@ -6,7 +6,6 @@ import com.sseudam.presentation.v1.suggestion.request.SuggestionValidationReques
 import com.sseudam.presentation.v1.suggestion.response.SpotSuggestionAllResponse
 import com.sseudam.presentation.v1.suggestion.response.SuggestionImageUrlResponse
 import com.sseudam.presentation.v1.suggestion.response.SuggestionValidationResponse
-import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionFacade
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.user.User
@@ -29,18 +28,7 @@ class SuggestionController(
         @RequestBody request: SpotSuggestionCreateRequest,
     ): SuggestionImageUrlResponse {
         val suggestion =
-            suggestionFacade.createSpotSuggestion(
-                SpotSuggestion.Create(
-                    userId = user.id,
-                    spotName = request.spotName,
-                    latitude = request.latitude,
-                    longitude = request.longitude,
-                    region = request.region,
-                    city = request.city,
-                    site = request.site,
-                    trashType = request.trashType,
-                ),
-            )
+            suggestionFacade.createSpotSuggestion(request.toCommand(user.id))
         return SuggestionImageUrlResponse.of(suggestion.first, suggestion.second)
     }
 

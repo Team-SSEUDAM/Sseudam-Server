@@ -1,11 +1,13 @@
 package com.sseudam.history
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.SpotReport
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
+import com.sseudam.support.Cache
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,17 +15,22 @@ class HistoryFacade(
     private val reportService: ReportService,
     private val suggestionService: SuggestionService,
 ) {
-    fun findHistories(userId: Long): List<SpotHistory.Info> {
-        val reports =
-            reportService
-                .findAllReportByUserId(userId)
-                .map { it.toSpotHistoryInfo() }
-        val suggestions =
-            suggestionService
-                .findAllSpotSuggestionByUser(userId)
-                .map { it.toSpotHistoryInfo() }
-        return (reports + suggestions).sortedByDescending { it.createdAt }
-    }
+    fun findHistories(userId: Long): List<SpotHistory.Info> =
+        Cache.cache(
+            key = "user:$userId:histories",
+            ttl = 60,
+            typeReference = object : TypeReference<List<SpotHistory.Info>>() {},
+        ) {
+            val reports =
+                reportService
+                    .findAllReportByUserId(userId)
+                    .map { it.toSpotHistoryInfo() }
+            val suggestions =
+                suggestionService
+                    .findAllSpotSuggestionByUser(userId)
+                    .map { it.toSpotHistoryInfo() }
+            return@cache (reports + suggestions).sortedByDescending { it.createdAt }
+        }
 
     private fun SpotReport.Info.toSpotHistoryInfo() =
         SpotHistory.Info(

@@ -1,5 +1,7 @@
 package com.sseudam.pet
 
+import com.fasterxml.jackson.core.type.TypeReference
+import com.sseudam.support.Cache
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,7 +18,14 @@ class UserPetService(
     fun append(
         userId: Long,
         pet: Pet.Info,
-    ): UserPet.Info = userPetAppender.append(userId, pet)
+    ): UserPet.Info =
+        Cache.cache(
+            ttl = Cache.TTL_1_DAY,
+            key = "pet:$userId",
+            typeReference = object : TypeReference<UserPet.Info>() {},
+        ) {
+            userPetAppender.append(userId, pet)
+        }
 
     fun updatePointByAction(
         userPet: UserPet.Info,

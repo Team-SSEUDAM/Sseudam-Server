@@ -1,6 +1,7 @@
 package com.sseudam.pet
 
 import com.sseudam.pet.event.PetPointEvent
+import com.sseudam.support.Cache
 import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
@@ -14,51 +15,30 @@ class PetEventListener(
     private val petLevelUpHistoryService: PetLevelUpHistoryService,
 ) {
     /** 포인트 지급 기록 저장 */
-    @ApplicationModuleListener(
-        condition = "#event.petPointAction != null",
-    )
+    @ApplicationModuleListener(condition = "#event.petPointAction != null")
     fun addPetPointHistory(event: PetPointEvent) {
-        petPointHistoryService.append(
-            userPet = event.userPet,
-            action = event.petPointAction,
-        )
+        petPointHistoryService.append(event.userPet, event.petPointAction)
     }
 
     /** 레벨업 여부 결정 및 성장 기록 저장 */
-    @ApplicationModuleListener(
-        condition = "#event.petPointAction != null",
-    )
+    @ApplicationModuleListener(condition = "#event.petPointAction != null")
     fun addUserPetPoint(event: PetPointEvent) {
-        val (currentYear, currentMonth) = LocalDateTime.now().let { it.year to it.month }
-        val userPet =
-            userPetService.updatePointByAction(
-                userPet = event.userPet,
-                action = event.petPointAction,
-            )
-
+        val (currentYear, currentMonth) = LocalDateTime.now().run { year to month }
+        val userPet = userPetService.updatePointByAction(event.userPet, event.petPointAction)
         val petInfos = petService.findAllLatestSeasonPets(currentYear, currentMonth)
         val currentPetInfo = petService.findBy(userPet.petId)
-
         val levelType = userPetPolicy.getLevelType(userPet.point)
 
         if (levelType.level >= Pet.LevelType.SPECIAL.level) return
 
-        val nextLevelPetInfo =
-            petInfos
-                .firstOrNull { it.levelType.level == levelType.level }
-                ?: return
-
-        val levelUpType = userPetPolicy.getLevelType(userPet.point)
-
-        if (levelUpType.level > currentPetInfo.levelType.level) {
-            userPetService.updatePetId(
-                userPetId = userPet.id,
-                petId = nextLevelPetInfo.id,
+        val nextLevelPetInfo = petInfos.firstOrNull { it.levelType.level == levelType.level } ?: return
+        if (userPetPolicy.getLevelType(userPet.point).level > currentPetInfo.levelType.level) {
+            Cache.put(
+                key = "pet:${userPet.userId}",
+                value = userPetService.updatePetId(userPet.id, nextLevelPetInfo.id),
+                ttl = Cache.TTL_1_DAY,
             )
-            petLevelUpHistoryService.append(
-                userPet = userPet,
-                petInfo = nextLevelPetInfo,
-            )
+            petLevelUpHistoryService.append(userPet, nextLevelPetInfo)
         }
     }
 }

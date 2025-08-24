@@ -13,6 +13,7 @@ class Cache(
     }
 
     companion object {
+        const val TTL_1_DAY = 24 * 60L
         private lateinit var cacheAdvice: CacheAdvice
 
         fun <T> cache(
@@ -21,6 +22,14 @@ class Cache(
             typeReference: TypeReference<T>,
             function: () -> T,
         ): T = cacheAdvice.invoke(ttl, key, typeReference, function)
+
+        fun <T> put(
+            key: String,
+            value: T,
+            ttl: Long,
+        ) = cacheAdvice.put(key, value, ttl)
+
+        fun delete(key: String) = cacheAdvice.delete(key)
     }
 }
 
@@ -48,4 +57,12 @@ class CacheAdvice(
         }
         return result
     }
+
+    fun <T> put(
+        key: String,
+        value: T,
+        ttl: Long,
+    ) = cacheRepository.put(key, objectMapper.writeValueAsString(value), ttl)
+
+    fun delete(key: String) = cacheRepository.delete(key)
 }

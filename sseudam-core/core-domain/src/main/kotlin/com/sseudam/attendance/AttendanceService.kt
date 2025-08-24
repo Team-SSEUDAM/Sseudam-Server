@@ -13,37 +13,25 @@ class AttendanceService(
         val attendance = attendanceReader.readByUser(userId)
         val isFirstAttendanceToday = attendance?.date != currentDate
 
-        return if (attendance == null || isFirstAttendanceToday) {
-            val continuity = if (attendance?.date?.plusDays(1) == currentDate) ((attendance?.continuity ?: 0) + 1).coerceAtMost(5) else 1
-            val newAttendance =
-                attendanceAppender.append(
-                    Attendance.Create(userId, currentDate, continuity),
-                )
-            Triple(
+        if (attendance == null || isFirstAttendanceToday) {
+            val continuity =
+                if (attendance?.date?.plusDays(1) == currentDate) {
+                    ((attendance?.continuity ?: 0) + 1).coerceAtMost(5)
+                } else {
+                    1
+                }
+            val newAttendance = attendanceAppender.append(Attendance.Create(userId, currentDate, continuity))
+            return Triple(
                 continuity > 1,
-                Attendance.Complete(
-                    id = newAttendance.id,
-                    userId = newAttendance.userId,
-                    date = newAttendance.date,
-                    continuity = newAttendance.continuity,
-                    isToday = true,
-                    createdAt = newAttendance.createdAt,
-                ),
+                newAttendance.toComplete(isToday = true),
                 true,
             )
-        } else {
-            Triple(
-                attendance.continuity > 1,
-                Attendance.Complete(
-                    id = attendance.id,
-                    userId = attendance.userId,
-                    date = attendance.date,
-                    continuity = attendance.continuity,
-                    isToday = true,
-                    createdAt = attendance.createdAt,
-                ),
-                false,
-            )
         }
+
+        return Triple(
+            attendance.continuity > 1,
+            attendance.toComplete(isToday = true),
+            false,
+        )
     }
 }
