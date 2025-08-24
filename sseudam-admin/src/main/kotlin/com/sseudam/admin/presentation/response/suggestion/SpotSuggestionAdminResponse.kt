@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
 @Schema(description = "제보 내역 응답")
-data class SpotSuggestionResponse(
+data class SpotSuggestionAdminResponse(
     @Schema(description = "제보 ID")
     val id: Long,
     @Schema(description = "제보 위치")
@@ -30,7 +30,7 @@ data class SpotSuggestionResponse(
 ) {
     companion object {
         fun of(suggestion: SpotSuggestion.Info) =
-            SpotSuggestionResponse(
+            SpotSuggestionAdminResponse(
                 id = suggestion.id,
                 point = suggestion.point,
                 region = suggestion.region,
