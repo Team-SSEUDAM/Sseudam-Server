@@ -26,7 +26,7 @@ class AdminReportController(
     fun findReportsByPage(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "20") size: Int,
-        @RequestParam searchType: ReportType?,
+        @RequestParam(required = false) searchType: ReportType?,
     ): SpotReportAllAdminResponse =
         SpotReportAllAdminResponse.of(
             adminFacade.findReports(OffsetPageRequest(page, size), searchType),

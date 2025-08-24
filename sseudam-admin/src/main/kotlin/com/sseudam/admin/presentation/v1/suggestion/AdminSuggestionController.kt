@@ -24,7 +24,7 @@ class AdminSuggestionController(
     fun findSuggestionsByPage(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "20") size: Int,
-        @RequestParam searchStatus: SuggestionStatus?,
+        @RequestParam(required = false) searchStatus: SuggestionStatus?,
     ): SpotSuggestionAllAdminResponse =
         SpotSuggestionAllAdminResponse.of(
             adminFacade.findSuggestions(OffsetPageRequest(page, size), searchStatus),
