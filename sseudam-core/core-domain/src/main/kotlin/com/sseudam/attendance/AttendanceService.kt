@@ -10,7 +10,7 @@ class AttendanceService(
 ) {
     fun attendance(userId: Long): Triple<Boolean, Attendance.Complete, Boolean> {
         val currentDate = LocalDate.now()
-        val attendance = attendanceReader.readByUser(userId)
+        val attendance = attendanceReader.readLastByUser(userId)
         val isFirstAttendanceToday = attendance?.date != currentDate
 
         if (attendance == null || isFirstAttendanceToday) {
@@ -23,7 +23,7 @@ class AttendanceService(
             val newAttendance = attendanceAppender.append(Attendance.Create(userId, currentDate, continuity))
             return Triple(
                 continuity > 1,
-                newAttendance.toComplete(isToday = true),
+                newAttendance.toComplete(isToday = isFirstAttendanceToday),
                 true,
             )
         }

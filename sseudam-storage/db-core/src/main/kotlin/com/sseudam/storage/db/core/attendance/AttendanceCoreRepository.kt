@@ -20,7 +20,7 @@ class AttendanceCoreRepository(
                 ).toAttendanceInfo()
         }
 
-    override fun findByUserId(userId: Long): Attendance.Info? =
+    override fun findLastByUserId(userId: Long): Attendance.Info? =
         txAdvice.readOnly {
             attendanceJpaRepository
                 .findFirstByUserIdOrderByDateDesc(userId)
