@@ -1,4 +1,6 @@
 import com.google.cloud.tools.jib.gradle.JibExtension
+import groovy.lang.Closure
+import io.swagger.v3.oas.models.servers.Server
 
 plugins {
     alias(libs.plugins.jib)
@@ -167,4 +169,20 @@ dependencyManagement {
                 .toString(),
         )
     }
+}
+
+openapi3 {
+    @Suppress("UNCHECKED_CAST")
+    setServers(
+        listOf(
+            closureOf<Server> { url = "https://dev-api.sseudam.me" },
+            closureOf<Server> { url = "http://localhost:8080" },
+        ) as List<Closure<Server>>,
+    )
+    title = "${project.property("openapi3Title")}"
+    description = "${project.property("openapi3Description")}"
+    version = "${project.property("openapi3DocsVersion")}"
+    format = "yaml"
+    outputFileNamePrefix = "${project.property("openapi3JsonName")}"
+    outputDirectory = "${project.property("openapi3OutDirectory")}"
 }
