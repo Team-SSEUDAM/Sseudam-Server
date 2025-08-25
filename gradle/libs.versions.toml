@@ -47,6 +47,7 @@ slack = "1.39.2"
 line_kotlin_jdsl = "3.4.1"
 
 # External version
+mockk = "1.14.4"
 spring_mockk = "4.0.2"
 
 # firebase
@@ -194,6 +195,7 @@ sentry_logback = { module = "io.sentry:sentry-logback", version.ref = "sentry_lo
 
 # Test Libraries
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 spring_mockk = { module = "com.ninja-squad:springmockk", version.ref = "spring_mockk" }
 kotest_runner_junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 junit_platform = { module = "org.junit.platform:junit-platform-launcher" }
@@ -223,7 +225,7 @@ line_kotlin_jdsl = ["line_kotlin_jdsl_jpql_dsl", "line_kotlin_jdsl_jpql_render",
 aws_client = ["aws_sdk_s3"]
 openfeign = ["spring_cloud_openfeign", "openfeign_hc5", "openfeign_micrometer"]
 testcontainers_postgres = ["test_containers_postgres", "spring_boot_testcontainers", "test_containers_junit_jupiter", "spring_boot_starter_test"]
-kotest = ["kotest_assertions", "kotest_property", "kotest_extensions"]
+kotest = ["kotest_assertions", "kotest_property", "kotest_extensions", "mockk"]
 
 spring_modulith = [
     "spring_modulith_events_api",
