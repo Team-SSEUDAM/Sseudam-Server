@@ -18,7 +18,7 @@ import org.springframework.restdocs.request.ParameterDescriptor
 import org.springframework.restdocs.snippet.Attributes
 
 object RestDocsUtils {
-    private const val HOST = "dev-sseudam.com"
+    private const val HOST = "dev-api.sseudam.me"
 
     fun requestPreprocessor(): OperationRequestPreprocessor =
         Preprocessors.preprocessRequest(
