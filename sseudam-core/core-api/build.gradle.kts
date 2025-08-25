@@ -154,6 +154,7 @@ dependencies {
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(project(":sseudam-storage:db-core"))
     testImplementation(project(":sseudam-storage:redis"))
+    testImplementation(project(":sseudam-tests:api-docs"))
     testImplementation(project(":sseudam-tests:test-helper"))
     testImplementation(testFixtures(project(":sseudam-tests:test-container")))
 }
