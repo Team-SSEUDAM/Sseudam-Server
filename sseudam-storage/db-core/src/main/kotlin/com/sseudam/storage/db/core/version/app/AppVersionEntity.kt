@@ -15,7 +15,9 @@ class AppVersionEntity(
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(50)")
     val deviceType: DeviceType,
+    @Column(length = 15, nullable = false)
     val currentVersion: String,
+    @Column(length = 15, nullable = false)
     val criticalVersion: String,
 ) : BaseEntity() {
     fun toAppVersion(): AppVersion =
