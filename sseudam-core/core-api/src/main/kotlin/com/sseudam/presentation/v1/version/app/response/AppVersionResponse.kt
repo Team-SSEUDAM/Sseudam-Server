@@ -16,7 +16,7 @@ data class AppVersionResponse(
             with(appVersion) {
                 AppVersionResponse(
                     deviceType = deviceType,
-                    version = version,
+                    version = currentVersion,
                 )
             }
     }
