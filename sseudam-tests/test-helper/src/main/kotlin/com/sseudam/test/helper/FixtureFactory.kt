@@ -12,8 +12,19 @@ val FixtureFactory: FixtureMonkey =
 
 inline fun <reified T> createFixture(): T = FixtureFactory.giveMeOne(T::class.java)
 
+inline fun <reified T> createFixtures(size: Int): List<T> = FixtureFactory.giveMe(T::class.java, size)
+
 inline fun <reified T> fixtureBuilder(block: (ArbitraryBuilder<T>.() -> Unit)): T =
     FixtureFactory
         .giveMeBuilder(T::class.java)
         .apply(block)
         .sample()
+
+inline fun <reified T> fixtureBuilders(
+    block: ArbitraryBuilder<T>.() -> Unit,
+    size: Int,
+): List<T> =
+    FixtureFactory
+        .giveMeBuilder(T::class.java)
+        .apply(block)
+        .sampleList(size)
