@@ -15,11 +15,15 @@ class AppVersionEntity(
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(50)")
     val deviceType: DeviceType,
-    val version: String,
+    @Column(length = 15, nullable = false)
+    val currentVersion: String,
+    @Column(length = 15, nullable = false)
+    val criticalVersion: String,
 ) : BaseEntity() {
     fun toAppVersion(): AppVersion =
         AppVersion(
             deviceType = deviceType,
-            version = version,
+            currentVersion = currentVersion,
+            criticalVersion = criticalVersion,
         )
 }
