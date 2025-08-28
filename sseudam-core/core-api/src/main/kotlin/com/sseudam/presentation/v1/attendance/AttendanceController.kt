@@ -19,10 +19,10 @@ class AttendanceController(
     )
     @PostMapping("/attendance")
     fun attendanceCheck(user: User): AttendanceResponse {
-        val (isContinuity, complete) =
+        val attendanceResult =
             attendanceFacade.todayAttendance(
                 userId = user.id,
             )
-        return AttendanceResponse.of(isContinuity, complete)
+        return AttendanceResponse.from(attendanceResult)
     }
 }

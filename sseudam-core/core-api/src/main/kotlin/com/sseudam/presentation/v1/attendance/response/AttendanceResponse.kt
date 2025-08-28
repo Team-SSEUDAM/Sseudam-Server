@@ -1,6 +1,6 @@
 package com.sseudam.presentation.v1.attendance.response
 
-import com.sseudam.attendance.Attendance
+import com.sseudam.attendance.AttendanceResult
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -32,17 +32,14 @@ data class AttendanceResponse(
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun of(
-            isContinuity: Boolean,
-            attendance: Attendance.Complete,
-        ): AttendanceResponse =
+        fun from(attendanceResult: AttendanceResult): AttendanceResponse =
             AttendanceResponse(
-                userId = attendance.userId,
-                date = attendance.date,
-                isToday = attendance.isToday,
-                continuity = attendance.continuity,
-                isContinuity = isContinuity,
-                createdAt = attendance.createdAt,
+                userId = attendanceResult.userId,
+                date = attendanceResult.date,
+                isToday = attendanceResult.isToday,
+                continuity = attendanceResult.continuity,
+                isContinuity = attendanceResult.isContinuity,
+                createdAt = attendanceResult.createdAt,
             )
     }
 }

@@ -11,12 +11,11 @@ class AttendanceFacade(
     private val petEventPublisher: PetEventPublisher,
     private val txAdvice: TxAdvice,
 ) {
-    fun todayAttendance(userId: Long): Pair<Boolean, Attendance.Complete> =
+    fun todayAttendance(userId: Long): AttendanceResult =
         txAdvice.write {
             val (isContinuity, complete, isFirstAttendanceToday) = attendanceService.attendance(userId)
-
             // 오늘 처음 출석한 경우에만 포인트 지급
-            if (isFirstAttendanceToday) {
+            if (!isFirstAttendanceToday) {
                 val action =
                     if (complete.continuity == 5) {
                         PetPointAction.CONTINUITY_ATTENDANCE
@@ -25,6 +24,6 @@ class AttendanceFacade(
                     }
                 petEventPublisher.publish(userId, action)
             }
-            return@write Pair(isContinuity, complete)
+            return@write AttendanceResult.of(complete, isContinuity, isFirstAttendanceToday)
         }
 }
