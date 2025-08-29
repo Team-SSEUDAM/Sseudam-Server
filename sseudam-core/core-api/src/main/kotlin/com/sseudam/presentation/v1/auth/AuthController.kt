@@ -142,7 +142,7 @@ class AuthController(
     fun reissueToken(
         @RequestBody request: RefreshTokenRequest,
     ): TokenResponse {
-        val token = authenticationService.renew(request.toRefreshToken())
+        val token = authenticationService.renew(request.refreshToken)
         return TokenResponse.toResponse(false, token)
     }
 }
