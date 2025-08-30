@@ -7,4 +7,9 @@ dependencies {
     api(libs.epages.restdocs.api.spec.mock.mvc)
     api(libs.epages.restdocs.api.spec.restassured)
     api(libs.jackson.datatype.jsr310)
+    api(libs.bundles.kotest)
+    api(libs.kotest.runner.junit5)
+    api(libs.kotest.extensions)
+    api(libs.spring.boot.starter.security)
+    api(libs.spring.security.test)
 }

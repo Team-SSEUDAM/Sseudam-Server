@@ -1,6 +1,5 @@
 package com.sseudam.fixture.trashspot
 
-import com.navercorp.fixturemonkey.kotlin.set
 import com.navercorp.fixturemonkey.kotlin.setExp
 import com.sseudam.common.Address
 import com.sseudam.support.geo.GeoJson
@@ -9,6 +8,7 @@ import com.sseudam.test.helper.fixtureBuilder
 import com.sseudam.test.helper.fixtureBuilders
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashType
+import com.sseudam.trashspot.image.TrashSpotImage
 import net.jqwik.api.Arbitraries
 
 object TrashSpotFixture {
@@ -49,7 +49,7 @@ object TrashSpotFixture {
     val infos =
         fixtureBuilders<TrashSpot.Info>(
             block = {
-                set(TrashSpot.Info::name, Arbitraries.strings().ofMaxLength(50).sample())
+                set("name", Arbitraries.strings().ofMaxLength(50))
                 setExp(TrashSpot.Info::region, Region.entries.filter { it != Region.UNKNOWN }.random())
                 setExp(TrashSpot.Info::trashType, TrashType.entries.random())
                 setExp(TrashSpot.Info::address, randomAddress())
@@ -60,17 +60,22 @@ object TrashSpotFixture {
 
     val info =
         fixtureBuilder<TrashSpot.Info> {
-            set(TrashSpot.Info::name, Arbitraries.strings().ofMaxLength(50).sample())
+            set("name", Arbitraries.strings().ofMaxLength(50))
             setExp(TrashSpot.Info::region, DEFAULT_REGION)
             setExp(TrashSpot.Info::trashType, DEFAULT_TRASH_TYPE)
             setExp(TrashSpot.Info::address, DEFAULT_ADDRESS)
             setExp(TrashSpot.Info::point, DEFAULT_POINT)
         }
 
+    val image =
+        fixtureBuilder<TrashSpotImage.Info> {
+            set("imageUrl", Arbitraries.strings().ofMaxLength(255))
+        }
+
     fun createTrashSpotInfos(size: Int = 5): List<TrashSpot.Create> =
         fixtureBuilders<TrashSpot.Create>(
             block = {
-                set(TrashSpot.Create::name, Arbitraries.strings().ofMaxLength(50).sample())
+                set("name", Arbitraries.strings().ofMaxLength(50))
                 setExp(TrashSpot.Create::region, Region.entries.filter { it != Region.UNKNOWN }.random())
                 setExp(TrashSpot.Create::trashType, TrashType.entries.random())
                 setExp(TrashSpot.Create::address, randomAddress())

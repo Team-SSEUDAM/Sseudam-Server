@@ -225,7 +225,17 @@ line_kotlin_jdsl = ["line_kotlin_jdsl_jpql_dsl", "line_kotlin_jdsl_jpql_render",
 aws_client = ["aws_sdk_s3"]
 openfeign = ["spring_cloud_openfeign", "openfeign_hc5", "openfeign_micrometer"]
 testcontainers_postgres = ["test_containers_postgres", "spring_boot_testcontainers", "test_containers_junit_jupiter", "spring_boot_starter_test"]
-kotest = ["kotest_assertions", "kotest_property", "kotest_extensions", "mockk"]
+kotest = [
+    "kotest_runner_junit5",
+    "kotest_assertions",
+    "kotest_property",
+    "mockk"
+]
+
+spring_test = [
+    "spring_mockk",
+    "kotest_extensions",
+]
 
 spring_modulith = [
     "spring_modulith_events_api",
