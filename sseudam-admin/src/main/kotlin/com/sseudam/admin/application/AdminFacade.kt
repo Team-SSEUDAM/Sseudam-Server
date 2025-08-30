@@ -9,6 +9,8 @@ import com.sseudam.notification.NewFirebaseCloudMessage
 import com.sseudam.notification.NotificationService
 import com.sseudam.notification.NotificationStored
 import com.sseudam.notification.ReadStatus
+import com.sseudam.pet.PetPointAction
+import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.report.ReportFacade
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportType
@@ -17,11 +19,16 @@ import com.sseudam.report.UpdateReport
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
+import com.sseudam.suggestion.event.SuggestionEventPublisher
+import com.sseudam.support.CacheRepository
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
+import com.sseudam.support.tx.TxAdvice
 import com.sseudam.trashspot.TrashSpotService
+import com.sseudam.trashspot.image.TrashSpotImage
+import com.sseudam.trashspot.image.TrashSpotImageService
 import com.sseudam.user.UserProfile
 import com.sseudam.user.UserService
 import com.sseudam.user.device.UserDeviceService
@@ -43,7 +50,16 @@ class AdminFacade(
     private val notificationService: NotificationService,
     private val passwordEncoder: PasswordEncoder,
     private val reportFacade: ReportFacade,
+    private val cacheRepository: CacheRepository,
+    private val trashSpotImageService: TrashSpotImageService,
+    private val petEventPublisher: PetEventPublisher,
+    private val suggestionEventPublisher: SuggestionEventPublisher,
+    private val txAdvice: TxAdvice,
 ) {
+    companion object {
+        private const val SPOT_DETAIL_CACHE_KEY_PREFIX = "spot:detail:"
+    }
+
     fun login(
         loginId: String,
         password: String,
@@ -96,9 +112,31 @@ class AdminFacade(
     fun updateSpotSuggestionStatus(
         suggestionId: Long,
         status: SuggestionStatus,
-    ): SpotSuggestion.Info = suggestionService.updateSuggestion(suggestionId, status)
+    ): SpotSuggestion.UpdateResult =
+        txAdvice.write {
+            val suggestion = suggestionService.updateStatus(suggestionId, status)
+            val spotId: Long =
+                if (suggestion.status == SuggestionStatus.APPROVE) {
+                    val trashSpot = trashSpotService.createTrashSpotBySuggestion(suggestion)
+                    trashSpotImageService.append(
+                        TrashSpotImage.Create(trashSpot.id, suggestion.imageUrl),
+                    )
+                    petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
+                    cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + trashSpot.id)
+                    trashSpot.id
+                } else {
+                    0L
+                }
 
-    fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info = reportService.updateSpotReport(updateReport)
+            suggestionEventPublisher.publish(suggestion)
+            return@write SpotSuggestion.UpdateResult.of(suggestion, spotId)
+        }
+
+    fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info {
+        val spotReportInfo = reportService.updateSpotReport(updateReport)
+        cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + spotReportInfo.spotId)
+        return spotReportInfo
+    }
 
     fun pushToAllUsers(
         topic: String,
