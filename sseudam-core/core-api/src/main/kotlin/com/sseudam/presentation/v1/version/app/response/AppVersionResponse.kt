@@ -8,15 +8,18 @@ import io.swagger.v3.oas.annotations.media.Schema
 data class AppVersionResponse(
     @Schema(description = "앱 OS", example = "IOS")
     val deviceType: DeviceType,
-    @Schema(description = "버전", example = "1.0.0")
-    val version: String,
+    @Schema(description = "앱 최신 버전", example = "1.0.1")
+    val currentVersion: String,
+    @Schema(description = "강제 업데이트 대상 버전", example = "1.0.0")
+    val criticalVersion: String,
 ) {
     companion object {
         fun from(appVersion: AppVersion): AppVersionResponse =
             with(appVersion) {
                 AppVersionResponse(
                     deviceType = deviceType,
-                    version = currentVersion,
+                    currentVersion = currentVersion,
+                    criticalVersion = criticalVersion,
                 )
             }
     }

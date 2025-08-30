@@ -134,6 +134,7 @@ class SecurityConfig(
                 .requestMatchers(
                     "/api/v1/auth/**",
                     "/api/v1/auth",
+                    "/api/v1/versions/app",
                     "/api/v1/trash-spots/**",
                     "/api/v1/admin/login",
                     "/api/v1/admin/reissue",

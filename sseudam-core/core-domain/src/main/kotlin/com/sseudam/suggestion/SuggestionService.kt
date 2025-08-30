@@ -4,7 +4,6 @@ import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
-import com.sseudam.suggestion.event.SuggestionEventPublisher
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
@@ -19,10 +18,8 @@ import org.springframework.stereotype.Service
 class SuggestionService(
     private val suggestionAppender: SuggestionAppender,
     private val suggestionReader: SuggestionReader,
-    private val suggestionUpdater: SuggestionUpdater,
-    private val suggestionDeleter: SuggestionDeleter,
     private val suggestionValidator: SuggestionValidator,
-    private val suggestionEventPublisher: SuggestionEventPublisher,
+    private val suggestionUpdater: SuggestionUpdater,
     private val txAdvice: TxAdvice,
     private val petEventPublisher: PetEventPublisher,
     private val imageS3Caller: ImageS3Caller,
@@ -57,19 +54,10 @@ class SuggestionService(
 
     fun findSpotSuggestionById(suggestionId: Long): SpotSuggestion.Info = suggestionReader.readBy(suggestionId)
 
-    fun updateSuggestion(
+    fun updateStatus(
         suggestionId: Long,
         status: SuggestionStatus,
-    ): SpotSuggestion.Info =
-        txAdvice.write {
-            val suggestion = suggestionUpdater.update(suggestionId, status)
-            suggestionEventPublisher.publish(suggestion)
-            if (suggestion.status == SuggestionStatus.APPROVE) {
-                suggestionDeleter.deleteBy(suggestionId)
-                petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
-            }
-            return@write suggestion
-        }
+    ): SpotSuggestion.Info = suggestionUpdater.update(suggestionId, status)
 
     fun validateSpotSuggestionName(name: String) {
         if (suggestionReader.existsByName(name)) {

@@ -54,4 +54,37 @@ class SpotSuggestion {
         val status: SuggestionStatus = SuggestionStatus.WAITING,
         val createdAt: LocalDateTime,
     )
+
+    data class UpdateResult(
+        val id: Long,
+        val spotId: Long,
+        val userId: Long,
+        val spotName: String,
+        val point: GeoJson,
+        val region: Region,
+        val address: Address,
+        val trashType: TrashType,
+        val imageUrl: String,
+        val status: SuggestionStatus = SuggestionStatus.WAITING,
+        val createdAt: LocalDateTime,
+    ) {
+        companion object {
+            fun of(
+                suggestionInfo: Info,
+                spotId: Long,
+            ) = UpdateResult(
+                id = suggestionInfo.id,
+                spotId = spotId,
+                userId = suggestionInfo.userId,
+                spotName = suggestionInfo.spotName,
+                point = suggestionInfo.point,
+                region = suggestionInfo.region,
+                address = suggestionInfo.address,
+                trashType = suggestionInfo.trashType,
+                imageUrl = suggestionInfo.imageUrl,
+                status = suggestionInfo.status,
+                createdAt = suggestionInfo.createdAt,
+            )
+        }
+    }
 }
