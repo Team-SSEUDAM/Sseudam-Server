@@ -1,6 +1,8 @@
 package com.sseudam.trashspot
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.sseudam.suggestion.SuggestionService
+import com.sseudam.support.Cache
 import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.image.TrashSpotImageService
 import com.sseudam.user.UserService
@@ -24,12 +26,17 @@ class TrashSpotFacade(
         return trashSpots
     }
 
-    fun findDetails(spotId: Long): TrashSpotDetail {
-        val spot = trashSpotService.findBy(spotId)
-        val image = trashSpotImageService.findBySpotId(spotId).lastOrNull()
-        val suggestioner = suggestionService.findSpotSuggestionBySite(spot.address.site)
-        val user = suggestioner?.let { userService.getProfile(it.userId) }
-        val visitedCount = visitedService.countBySpotId(spotId)
-        return TrashSpotDetail(spot, image, user, visitedCount)
-    }
+    fun findDetails(spotId: Long): TrashSpotDetail =
+        Cache.cache(
+            ttl = 10L,
+            key = "spot:detail:$spotId",
+            typeReference = object : TypeReference<TrashSpotDetail>() {},
+        ) {
+            val spot = trashSpotService.findBy(spotId)
+            val image = trashSpotImageService.findBySpotId(spotId).lastOrNull()
+            val suggestioner = suggestionService.findSpotSuggestionBySite(spot.address.site)
+            val user = suggestioner?.let { userService.getProfile(it.userId) }
+            val visitedCount = visitedService.countBySpotId(spotId)
+            return@cache TrashSpotDetail(spot, image, user, visitedCount)
+        }
 }
