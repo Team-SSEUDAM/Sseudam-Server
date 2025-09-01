@@ -18,4 +18,3 @@ services:
     environment:
       - TZ=Asia/Seoul
     network_mode: "host"
-    command: [ "redis-server", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru" ]
