@@ -74,6 +74,30 @@ interface TrashSpotJpaRepository :
         @Param("type") type: String,
     ): List<TrashSpotEntity>
 
+    @Query(
+        """
+        SELECT *
+        FROM t_trash_spot
+        WHERE point && ST_MakeEnvelope(:swLng, :swLat, :neLng, :neLat, 4326)
+          AND ST_Contains(
+            ST_MakeEnvelope(:swLng, :swLat, :neLng, :neLat, 4326),
+            point
+          )
+          AND deleted_at IS NULL
+          AND (:region IS NULL OR region = :region)
+          AND (:type IS NULL OR trash_type = :type)
+        """,
+        nativeQuery = true,
+    )
+    fun findAllByLocationWithOptionalFilters(
+        @Param("swLat") swLat: Double,
+        @Param("swLng") swLng: Double,
+        @Param("neLat") neLat: Double,
+        @Param("neLng") neLng: Double,
+        @Param("region") region: String?,
+        @Param("type") type: String?,
+    ): List<TrashSpotEntity>
+
     fun findAllByTrashType(type: TrashType): List<TrashSpotEntity>
 
     fun findAllByIdIn(spotIds: List<Long>): List<TrashSpotEntity>
