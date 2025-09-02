@@ -23,7 +23,7 @@ class SpotReportEntity(
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(10)")
     val reportType: ReportType,
-    @Column(columnDefinition = "geometry(Point, 4326)")
+    @Column
     val point: Point,
     val address: Address,
     @Column(columnDefinition = "varchar(50)")

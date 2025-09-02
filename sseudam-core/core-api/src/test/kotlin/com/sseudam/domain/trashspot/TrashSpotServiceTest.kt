@@ -1,5 +1,6 @@
 package com.sseudam.domain.trashspot
 
+import com.sseudam.DevelopTest
 import com.sseudam.common.Address
 import com.sseudam.common.GeoConverter
 import com.sseudam.support.geo.GeoJson
@@ -17,6 +18,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.mockk.every
 import io.mockk.mockk
 
+@DevelopTest
 class TrashSpotServiceTest :
     DescribeSpec({
         val reader: TrashSpotReader = mockk()

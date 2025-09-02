@@ -127,7 +127,7 @@ class SecurityConfig(
 
         http.authorizeHttpRequests { authorize ->
             // Swagger 인증
-            authorize.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+            authorize.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/static/sseudam-api.yaml").permitAll()
 
             // 인증 없이 허용할 API
             authorize

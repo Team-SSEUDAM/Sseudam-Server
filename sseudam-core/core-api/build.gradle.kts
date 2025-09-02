@@ -171,6 +171,10 @@ dependencyManagement {
     }
 }
 
+tasks.withType<Test> {
+    jvmArgs("-Xmx2g", "-XX:MaxMetaspaceSize=512m")
+}
+
 openapi3 {
     @Suppress("UNCHECKED_CAST")
     setServers(

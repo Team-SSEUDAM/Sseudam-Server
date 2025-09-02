@@ -1,5 +1,6 @@
 package com.sseudam.domain.trashspot
 
+import com.sseudam.DevelopTest
 import com.sseudam.fixture.trashspot.TrashSpotFixture
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
@@ -16,6 +17,7 @@ import io.mockk.every
 import io.mockk.mockk
 import java.time.LocalDateTime
 
+@DevelopTest
 class TrashSpotFacadeTest :
     DescribeSpec({
         val service: TrashSpotService = mockk()

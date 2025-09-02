@@ -1,0 +1,301 @@
+openapi: 3.0.1
+info:
+  title: Sseudam API Server
+  description: Sseudam API ?????.
+  version: v0.1.0
+servers:
+- url: https://dev-api.sseudam.me
+- url: http://localhost:8080
+tags: []
+paths:
+  /api/v1/trash-spots:
+    get:
+      tags:
+      - 🗑️ Trash Spot API
+      summary: 쓰레기통 장소 목록 조회
+      description: 쓰레기통 장소 목록 조회
+      operationId: 쓰레기통 장소 목록 조회
+      parameters:
+      - name: region
+        in: query
+        description: 지역
+        required: false
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: 쓰레기통 유형
+        required: false
+        schema:
+          type: string
+      - name: swLat
+        in: query
+        description: 남서쪽 위도
+        required: false
+        schema:
+          type: string
+      - name: swLng
+        in: query
+        description: 남서쪽 경도
+        required: false
+        schema:
+          type: string
+      - name: neLat
+        in: query
+        description: 북동쪽 위도
+        required: false
+        schema:
+          type: string
+      - name: neLng
+        in: query
+        description: 북동쪽 경도
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/TrashSpotAllResponse"
+              examples:
+                쓰레기통 장소 목록 조회:
+                  value: |-
+                    {
+                      "list" : [ {
+                        "id" : -123,
+                        "name" : "竩𥉉㙝脙҂쩥뇥캾듘ᴩꔰ颚ѳ鍰푗쿨⃲埋䒦톜ኃ驴넏옪웴⭄୒䇞ἦ塭构㬾Ⱗ㋫嶳팡鉇痋걥",
+                        "region" : "JEONNAM",
+                        "address" : {
+                          "city" : "쒎ᄨ젬햵㭖劑β擐芨诫ᑊᡇ掿늽冡჋嫮",
+                          "site" : "瘬᰺Ⓝ䕄㐍ꀨ쟢᫷쇾倆᎔"
+                        },
+                        "point" : {
+                          "type" : "Point",
+                          "coordinates" : [ 126.88, 37.39 ]
+                        },
+                        "trashType" : "RECYCLE",
+                        "updatedAt" : null
+                      }, {
+                        "id" : -19582504656616,
+                        "name" : "뼛ﳝ왚ᤸ嘛秫㥳뎡䶖粗蓮㎾鯙띦仆甌ꕦ蜴怒",
+                        "region" : "JEONNAM",
+                        "address" : {
+                          "city" : "쒎ᄨ젬햵㭖劑β擐芨诫ᑊᡇ掿늽冡჋嫮",
+                          "site" : "瘬᰺Ⓝ䕄㐍ꀨ쟢᫷쇾倆᎔"
+                        },
+                        "point" : {
+                          "type" : "Point",
+                          "coordinates" : [ 126.88, 37.39 ]
+                        },
+                        "trashType" : "RECYCLE",
+                        "updatedAt" : "2024-11-04T02:28:56.121603"
+                      }, {
+                        "id" : 145,
+                        "name" : "₊嶪抉⯃苶⒍넸鱅飫㎠㦛ḵࡰ猆窥鎋꬧᧢「妏㰒ɳ긢梭㣠㸦쁞۸헓䳃䕘㣊↘뫧偉఑ዯ傦ﯣ犐쌲䒱晢",
+                        "region" : "JEONNAM",
+                        "address" : {
+                          "city" : "쒎ᄨ젬햵㭖劑β擐芨诫ᑊᡇ掿늽冡჋嫮",
+                          "site" : "瘬᰺Ⓝ䕄㐍ꀨ쟢᫷쇾倆᎔"
+                        },
+                        "point" : {
+                          "type" : "Point",
+                          "coordinates" : [ 126.88, 37.39 ]
+                        },
+                        "trashType" : "RECYCLE",
+                        "updatedAt" : "2026-05-03T07:55:33.320948"
+                      }, {
+                        "id" : -9606,
+                        "name" : "앤Ｅ쳌䄸컸⨶䵚﵎ẞᗳ芷喫꽰쎤䃜⧰뙲",
+                        "region" : "JEONNAM",
+                        "address" : {
+                          "city" : "쒎ᄨ젬햵㭖劑β擐芨诫ᑊᡇ掿늽冡჋嫮",
+                          "site" : "瘬᰺Ⓝ䕄㐍ꀨ쟢᫷쇾倆᎔"
+                        },
+                        "point" : {
+                          "type" : "Point",
+                          "coordinates" : [ 126.88, 37.39 ]
+                        },
+                        "trashType" : "RECYCLE",
+                        "updatedAt" : "2025-08-20T21:02:55.005545"
+                      }, {
+                        "id" : -25115,
+                        "name" : "歜㧜땩鐼ឥᐐ✢덺⪒櫗筼秠똿牻㗚꒾吻䴴槓涍ᡪ㥶⎃ⱴ菿ଢ谟秪葲阅",
+                        "region" : "JEONNAM",
+                        "address" : {
+                          "city" : "쒎ᄨ젬햵㭖劑β擐芨诫ᑊᡇ掿늽冡჋嫮",
+                          "site" : "瘬᰺Ⓝ䕄㐍ꀨ쟢᫷쇾倆᎔"
+                        },
+                        "point" : {
+                          "type" : "Point",
+                          "coordinates" : [ 126.88, 37.39 ]
+                        },
+                        "trashType" : "RECYCLE",
+                        "updatedAt" : "2024-11-02T19:50:31.277787"
+                      } ]
+                    }
+  /api/v1/trash-spots/{spotId}:
+    get:
+      tags:
+      - 🗑️ Trash Spot API
+      summary: 쓰레기통 장소 상세 조회
+      description: 쓰레기통 장소 상세 조회
+      operationId: 쓰레기통 장소 상세 조회
+      parameters:
+      - name: spotId
+        in: path
+        description: 쓰레기통 장소 ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/TrashSpotDetailsResponse"
+              examples:
+                쓰레기통 장소 상세 조회:
+                  value: |-
+                    {
+                      "id" : 11940,
+                      "suggestionerId" : null,
+                      "suggestionerName" : null,
+                      "name" : "嶃㜘駫῞㻶⁒泪뿒䗋飱尠竀屑迹ㅦ亠⨏쭖ࡶဉ啁徜洃ﺊ咁빉",
+                      "region" : "SEOUL",
+                      "address" : {
+                        "city" : "은평구",
+                        "site" : "은평구 어디APT"
+                      },
+                      "point" : {
+                        "type" : "Point",
+                        "coordinates" : [ 126.9201620274132, 37.643421545524795 ]
+                      },
+                      "trashType" : "GENERAL",
+                      "visitedCount" : 0,
+                      "imageUrl" : "艖ኝᣢ繙燏厶絊쬛횊텀ﶵ딣瞾횪权昰晁禕ꎇ㪥⃡׼㴙雉걊陿",
+                      "lastVisitedAt" : null,
+                      "updatedAt" : "2025-11-09T04:30:30.032024"
+                    }
+components:
+  schemas:
+    TrashSpotDetailsResponse:
+      title: TrashSpotDetailsResponse
+      type: object
+      properties:
+        visitedCount:
+          type: number
+          description: 방문 횟수
+        trashType:
+          type: string
+          description: 쓰레기통 유형
+        address:
+          type: object
+          properties:
+            site:
+              type: string
+              description: 상세 주소
+            city:
+              type: string
+              description: 도시
+          description: 주소 정보
+        imageUrl:
+          type: string
+          description: 이미지 URL
+        name:
+          type: string
+          description: 쓰레기통 장소명
+        lastVisitedAt:
+          type: string
+          description: 최근 방문 시간
+        suggestionerId:
+          type: number
+          description: 제보자 ID
+        id:
+          type: number
+          description: 쓰레기통 장소 ID
+        region:
+          type: string
+          description: 지역
+        point:
+          type: object
+          properties:
+            coordinates:
+              type: array
+              description: 좌표 배열
+              items:
+                oneOf:
+                - type: object
+                - type: boolean
+                - type: string
+                - type: number
+            type:
+              type: string
+              description: 좌표 타입
+          description: 좌표 정보
+        suggestionerName:
+          type: string
+          description: 제보자 이름
+        updatedAt:
+          type: string
+          description: 수정 시간
+    TrashSpotAllResponse:
+      title: TrashSpotAllResponse
+      type: object
+      properties:
+        list:
+          type: array
+          description: 쓰레기통 장소 목록
+          items:
+            type: object
+            properties:
+              trashType:
+                type: string
+                description: 쓰레기통 유형
+              address:
+                type: object
+                properties:
+                  site:
+                    type: string
+                    description: 상세 주소
+                  city:
+                    type: string
+                    description: 도시
+                description: 주소 정보
+              name:
+                type: string
+                description: 쓰레기통 장소명
+              id:
+                type: number
+                description: 쓰레기통 장소 ID
+              region:
+                type: string
+                description: 지역
+              point:
+                type: object
+                properties:
+                  coordinates:
+                    type: array
+                    description: 좌표 배열
+                    items:
+                      oneOf:
+                      - type: object
+                      - type: boolean
+                      - type: string
+                      - type: number
+                  type:
+                    type: string
+                    description: 좌표 타입
+                description: 좌표 정보
+              updatedAt:
+                type: string
+                description: 수정 시간
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Authorization: []

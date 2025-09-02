@@ -6,10 +6,10 @@ cloud:
   aws:
     region: ap-northeast-2
     credentials:
-      access-key: ${AWS_ACCESS_KEY}
-      secret-key: ${AWS_SECRET_KEY}
+      access-key: ${AWS_ACCESS_KEY:test_access_key}
+      secret-key: ${AWS_SECRET_KEY:test_secret_key}
     s3:
-      bucket: ${AWS_S3_IMAGE_BUCKET}
+      bucket: ${AWS_S3_IMAGE_BUCKET:test_bucket}
     stack:
       auto: false
     connection-time-out: 900000

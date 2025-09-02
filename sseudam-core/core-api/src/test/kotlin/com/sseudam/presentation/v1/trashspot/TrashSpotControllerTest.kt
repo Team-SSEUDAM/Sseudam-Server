@@ -29,6 +29,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import org.springframework.restdocs.RestDocumentationContextProvider
 
 @RestDocsTest
 class TrashSpotControllerTest : RestDocsTestSuite() {
@@ -36,9 +37,8 @@ class TrashSpotControllerTest : RestDocsTestSuite() {
     private lateinit var trashSpotFacade: TrashSpotFacade
 
     @BeforeEach
-    fun setUp() {
+    fun setUpTest(restDocumentation: RestDocumentationContextProvider) {
         trashSpotFacade = mockk()
-        trashSpotController = mockk()
         trashSpotController = TrashSpotController(trashSpotFacade)
         mockMvcSpec = mockController(trashSpotController)
     }
@@ -88,7 +88,12 @@ class TrashSpotControllerTest : RestDocsTestSuite() {
                     "list[].region" type ENUM(Region::class) means "지역",
                     "list[].trashType" type ENUM(TrashType::class) means "쓰레기통 유형",
                     "list[].address" type OBJECT means "주소 정보",
+                    "list[].address.city" type STRING means "도시",
+                    "list[].address.site" type STRING means "상세 주소",
                     "list[].point" type OBJECT means "좌표 정보",
+                    "list[].point.type" type STRING means "좌표 타입",
+                    "list[].point.coordinates" type ARRAY means "좌표 배열",
+                    "list[].updatedAt" type STRING means "수정 시간" isOptional true,
                 ),
         )
     }
@@ -109,7 +114,7 @@ class TrashSpotControllerTest : RestDocsTestSuite() {
         val response =
             given()
                 .pathParams("spotId", 1L)
-                .get("/api/v1/trash-spots")
+                .get("/api/v1/trash-spots/{spotId}")
                 .then()
                 .status(HttpStatus.OK)
 
@@ -129,7 +134,11 @@ class TrashSpotControllerTest : RestDocsTestSuite() {
                     "name" type STRING means "쓰레기통 장소명",
                     "region" type ENUM(Region::class) means "지역",
                     "address" type OBJECT means "주소 정보",
+                    "address.city" type STRING means "도시",
+                    "address.site" type STRING means "상세 주소",
                     "point" type OBJECT means "좌표 정보",
+                    "point.type" type STRING means "좌표 타입",
+                    "point.coordinates" type ARRAY means "좌표 배열",
                     "trashType" type ENUM(TrashType::class) means "쓰레기통 유형",
                     "visitedCount" type NUMBER means "방문 횟수",
                     "imageUrl" type STRING means "이미지 URL" isOptional true,

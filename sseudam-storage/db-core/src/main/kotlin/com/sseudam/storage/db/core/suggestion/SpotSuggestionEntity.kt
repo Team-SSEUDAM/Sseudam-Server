@@ -20,7 +20,7 @@ class SpotSuggestionEntity(
     val userId: Long,
     @Column(columnDefinition = "varchar(50)")
     val spotName: String,
-    @Column(columnDefinition = "geometry(Point, 4326)")
+    @Column
     val point: Point,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(15)")
