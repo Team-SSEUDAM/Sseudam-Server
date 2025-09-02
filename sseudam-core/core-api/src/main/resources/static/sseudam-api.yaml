@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Sseudam API Server
-  description: Sseudam API ?????.
+  description: Sseudam API DOCS
   version: v0.1.0
 servers:
 - url: https://dev-api.sseudam.me
@@ -64,75 +64,75 @@ paths:
                   value: |-
                     {
                       "list" : [ {
-                        "id" : -123,
-                        "name" : "竩𥉉㙝脙҂쩥뇥캾듘ᴩꔰ颚ѳ鍰푗쿨⃲埋䒦톜ኃ驴넏옪웴⭄୒䇞ἦ塭构㬾Ⱗ㋫嶳팡鉇痋걥",
-                        "region" : "JEONNAM",
+                        "id" : 17996729856118,
+                        "name" : "쑩븙ñ딘᯻桑磡慌២瓴索涜쬒ꄭ៓竈枮뀒ﺣ؛ᴕ胰ऽ㭨윤⫅맯Ɫ垏ዢ騍팔",
+                        "region" : "GYEONGNAM",
                         "address" : {
-                          "city" : "쒎ᄨ젬햵㭖劑β擐芨诫ᑊᡇ掿늽冡჋嫮",
-                          "site" : "瘬᰺Ⓝ䕄㐍ꀨ쟢᫷쇾倆᎔"
+                          "city" : "㔨뜬弍┧獜၇",
+                          "site" : "룆孂꼈웰ↁ逸ꎇॴ훀仿꽪䋇鱄煹쪠ᇄ玈쓳䍠質켧惢च䵭政ઝ䔅됳ᛙ㉐⸪倛梶ů䊄潔໰র큖皼﬷젲적孷詇碈荍军⎇޻⺚㪍坎滕ḫ◠촓愀䴗譑隅锂㴖瀖猒쫇᜼ⴱ騤彺␆䜑腑䖏ꒅ鄍㲍毴褋ⵋ쀝"
                         },
                         "point" : {
                           "type" : "Point",
-                          "coordinates" : [ 126.88, 37.39 ]
+                          "coordinates" : [ 126.05, 37.24 ]
                         },
-                        "trashType" : "RECYCLE",
+                        "trashType" : "GENERAL",
+                        "updatedAt" : "2024-11-24T05:21:39.864844"
+                      }, {
+                        "id" : 18330,
+                        "name" : "礌吒쟶쎕΅낁ㄝ◘㱏뱡쭟砎࿥",
+                        "region" : "GYEONGNAM",
+                        "address" : {
+                          "city" : "㔨뜬弍┧獜၇",
+                          "site" : "룆孂꼈웰ↁ逸ꎇॴ훀仿꽪䋇鱄煹쪠ᇄ玈쓳䍠質켧惢च䵭政ઝ䔅됳ᛙ㉐⸪倛梶ů䊄潔໰র큖皼﬷젲적孷詇碈荍军⎇޻⺚㪍坎滕ḫ◠촓愀䴗譑隅锂㴖瀖猒쫇᜼ⴱ騤彺␆䜑腑䖏ꒅ鄍㲍毴褋ⵋ쀝"
+                        },
+                        "point" : {
+                          "type" : "Point",
+                          "coordinates" : [ 126.05, 37.24 ]
+                        },
+                        "trashType" : "GENERAL",
                         "updatedAt" : null
                       }, {
-                        "id" : -19582504656616,
-                        "name" : "뼛ﳝ왚ᤸ嘛秫㥳뎡䶖粗蓮㎾鯙띦仆甌ꕦ蜴怒",
-                        "region" : "JEONNAM",
+                        "id" : -2370,
+                        "name" : "໗篹⭁⡸",
+                        "region" : "GYEONGNAM",
                         "address" : {
-                          "city" : "쒎ᄨ젬햵㭖劑β擐芨诫ᑊᡇ掿늽冡჋嫮",
-                          "site" : "瘬᰺Ⓝ䕄㐍ꀨ쟢᫷쇾倆᎔"
+                          "city" : "㔨뜬弍┧獜၇",
+                          "site" : "룆孂꼈웰ↁ逸ꎇॴ훀仿꽪䋇鱄煹쪠ᇄ玈쓳䍠質켧惢च䵭政ઝ䔅됳ᛙ㉐⸪倛梶ů䊄潔໰র큖皼﬷젲적孷詇碈荍军⎇޻⺚㪍坎滕ḫ◠촓愀䴗譑隅锂㴖瀖猒쫇᜼ⴱ騤彺␆䜑腑䖏ꒅ鄍㲍毴褋ⵋ쀝"
                         },
                         "point" : {
                           "type" : "Point",
-                          "coordinates" : [ 126.88, 37.39 ]
+                          "coordinates" : [ 126.05, 37.24 ]
                         },
-                        "trashType" : "RECYCLE",
-                        "updatedAt" : "2024-11-04T02:28:56.121603"
+                        "trashType" : "GENERAL",
+                        "updatedAt" : "2026-06-11T09:30:12.428792"
                       }, {
-                        "id" : 145,
-                        "name" : "₊嶪抉⯃苶⒍넸鱅飫㎠㦛ḵࡰ猆窥鎋꬧᧢「妏㰒ɳ긢梭㣠㸦쁞۸헓䳃䕘㣊↘뫧偉఑ዯ傦ﯣ犐쌲䒱晢",
-                        "region" : "JEONNAM",
+                        "id" : 1161697,
+                        "name" : "ྐྵ㳦",
+                        "region" : "GYEONGNAM",
                         "address" : {
-                          "city" : "쒎ᄨ젬햵㭖劑β擐芨诫ᑊᡇ掿늽冡჋嫮",
-                          "site" : "瘬᰺Ⓝ䕄㐍ꀨ쟢᫷쇾倆᎔"
+                          "city" : "㔨뜬弍┧獜၇",
+                          "site" : "룆孂꼈웰ↁ逸ꎇॴ훀仿꽪䋇鱄煹쪠ᇄ玈쓳䍠質켧惢च䵭政ઝ䔅됳ᛙ㉐⸪倛梶ů䊄潔໰র큖皼﬷젲적孷詇碈荍军⎇޻⺚㪍坎滕ḫ◠촓愀䴗譑隅锂㴖瀖猒쫇᜼ⴱ騤彺␆䜑腑䖏ꒅ鄍㲍毴褋ⵋ쀝"
                         },
                         "point" : {
                           "type" : "Point",
-                          "coordinates" : [ 126.88, 37.39 ]
+                          "coordinates" : [ 126.05, 37.24 ]
                         },
-                        "trashType" : "RECYCLE",
-                        "updatedAt" : "2026-05-03T07:55:33.320948"
+                        "trashType" : "GENERAL",
+                        "updatedAt" : "2025-01-07T18:07:44.005894"
                       }, {
-                        "id" : -9606,
-                        "name" : "앤Ｅ쳌䄸컸⨶䵚﵎ẞᗳ芷喫꽰쎤䃜⧰뙲",
-                        "region" : "JEONNAM",
+                        "id" : -344,
+                        "name" : "벪哳녻潤覺뾂",
+                        "region" : "GYEONGNAM",
                         "address" : {
-                          "city" : "쒎ᄨ젬햵㭖劑β擐芨诫ᑊᡇ掿늽冡჋嫮",
-                          "site" : "瘬᰺Ⓝ䕄㐍ꀨ쟢᫷쇾倆᎔"
+                          "city" : "㔨뜬弍┧獜၇",
+                          "site" : "룆孂꼈웰ↁ逸ꎇॴ훀仿꽪䋇鱄煹쪠ᇄ玈쓳䍠質켧惢च䵭政ઝ䔅됳ᛙ㉐⸪倛梶ů䊄潔໰র큖皼﬷젲적孷詇碈荍军⎇޻⺚㪍坎滕ḫ◠촓愀䴗譑隅锂㴖瀖猒쫇᜼ⴱ騤彺␆䜑腑䖏ꒅ鄍㲍毴褋ⵋ쀝"
                         },
                         "point" : {
                           "type" : "Point",
-                          "coordinates" : [ 126.88, 37.39 ]
+                          "coordinates" : [ 126.05, 37.24 ]
                         },
-                        "trashType" : "RECYCLE",
-                        "updatedAt" : "2025-08-20T21:02:55.005545"
-                      }, {
-                        "id" : -25115,
-                        "name" : "歜㧜땩鐼ឥᐐ✢덺⪒櫗筼秠똿牻㗚꒾吻䴴槓涍ᡪ㥶⎃ⱴ菿ଢ谟秪葲阅",
-                        "region" : "JEONNAM",
-                        "address" : {
-                          "city" : "쒎ᄨ젬햵㭖劑β擐芨诫ᑊᡇ掿늽冡჋嫮",
-                          "site" : "瘬᰺Ⓝ䕄㐍ꀨ쟢᫷쇾倆᎔"
-                        },
-                        "point" : {
-                          "type" : "Point",
-                          "coordinates" : [ 126.88, 37.39 ]
-                        },
-                        "trashType" : "RECYCLE",
-                        "updatedAt" : "2024-11-02T19:50:31.277787"
+                        "trashType" : "GENERAL",
+                        "updatedAt" : "2026-04-19T05:44:56.210132"
                       } ]
                     }
   /api/v1/trash-spots/{spotId}:
@@ -160,10 +160,10 @@ paths:
                 쓰레기통 장소 상세 조회:
                   value: |-
                     {
-                      "id" : 11940,
+                      "id" : 38210,
                       "suggestionerId" : null,
                       "suggestionerName" : null,
-                      "name" : "嶃㜘駫῞㻶⁒泪뿒䗋飱尠竀屑迹ㅦ亠⨏쭖ࡶဉ啁徜洃ﺊ咁빉",
+                      "name" : "뻺礬⹀┪ۯ덣䊢箙ꐒ낺蔁ⶺ雧䠳脽䄂嵞従麐蠩趂㘻ᗗ尩庩⪞챃⋣̩枳ꍴꗻ戥ṻ礄䒶㪀ಢ腔띿⋓འ聆༭⯼㘊咲",
                       "region" : "SEOUL",
                       "address" : {
                         "city" : "은평구",
@@ -175,9 +175,9 @@ paths:
                       },
                       "trashType" : "GENERAL",
                       "visitedCount" : 0,
-                      "imageUrl" : "艖ኝᣢ繙燏厶絊쬛횊텀ﶵ딣瞾횪权昰晁禕ꎇ㪥⃡׼㴙雉걊陿",
+                      "imageUrl" : "賴ᴦ䇘㙹쬉妄炉儂媁태ﲖꏁ価晶좦ﻘ᷺躠䖴鸱ꣁ붚蛣嫯",
                       "lastVisitedAt" : null,
-                      "updatedAt" : "2025-11-09T04:30:30.032024"
+                      "updatedAt" : "2025-01-17T13:46:30.151474"
                     }
 components:
   schemas:
