@@ -11,14 +11,11 @@ class AttendanceService(
     fun attendance(userId: Long): Triple<Boolean, Attendance.Complete, Boolean> {
         val currentDate = LocalDate.now()
         val attendance = attendanceReader.readLastByUser(userId)
-        println("attendacne: $attendance $currentDate")
         val isFirstAttendanceToday = attendance?.date == currentDate
-
-        println("isFirstAttendanceToday: $isFirstAttendanceToday")
 
         if (attendance == null || !isFirstAttendanceToday) {
             val continuity =
-                if (attendance?.date?.plusDays(1) == currentDate) {
+                if (attendance?.date?.plusDays(1) == currentDate && (attendance?.continuity ?: 0) < 5) {
                     ((attendance?.continuity ?: 0) + 1).coerceAtMost(5)
                 } else {
                     1
