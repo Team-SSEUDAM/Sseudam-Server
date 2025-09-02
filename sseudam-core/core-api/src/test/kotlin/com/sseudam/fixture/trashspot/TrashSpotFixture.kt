@@ -49,9 +49,9 @@ object TrashSpotFixture {
     val infos =
         fixtureBuilders<TrashSpot.Info>(
             block = {
-                set("name", Arbitraries.strings().ofMaxLength(50))
-                setExp(TrashSpot.Info::region, Region.entries.filter { it != Region.UNKNOWN }.random())
-                setExp(TrashSpot.Info::trashType, TrashType.entries.random())
+                set("name", Arbitraries.strings().ofMinLength(1).ofMaxLength(50))
+                setExp(TrashSpot.Info::region, Arbitraries.of(Region.entries.filter { it != Region.UNKNOWN }))
+                setExp(TrashSpot.Info::trashType, Arbitraries.of(TrashType.entries))
                 setExp(TrashSpot.Info::address, randomAddress())
                 setExp(TrashSpot.Info::point, randomPoint())
             },
@@ -75,9 +75,9 @@ object TrashSpotFixture {
     fun createTrashSpotInfos(size: Int = 5): List<TrashSpot.Create> =
         fixtureBuilders<TrashSpot.Create>(
             block = {
-                set("name", Arbitraries.strings().ofMaxLength(50))
-                setExp(TrashSpot.Create::region, Region.entries.filter { it != Region.UNKNOWN }.random())
-                setExp(TrashSpot.Create::trashType, TrashType.entries.random())
+                set("name", Arbitraries.strings().ofMinLength(1).ofMaxLength(50))
+                setExp(TrashSpot.Create::region, Arbitraries.of(Region.entries.filter { it != Region.UNKNOWN }))
+                setExp(TrashSpot.Create::trashType, Arbitraries.of(TrashType.entries))
                 setExp(TrashSpot.Create::address, randomAddress())
                 setExp(TrashSpot.Create::point, randomPoint())
             },

@@ -26,21 +26,21 @@ class TrashSpotFacadeTest :
         val userService: UserService = mockk()
         val visitedService: SpotVisitedService = mockk()
 
-        val facade = TrashSpotFacade(service, imageService, suggestionService, userService, visitedService)
+        val trashSpotFacade = TrashSpotFacade(service, imageService, suggestionService, userService, visitedService)
 
-        describe("findAll") {
-            it("returns what the service returns") {
+        describe("장소 전체 조회") {
+            it("FindAll 요청 결과를 반환하여 검증한다.") {
                 val expected = TrashSpotFixture.infos
                 every { service.findAll(any(), any(), any()) } returns expected
 
-                val actual = facade.findAll(region = null, trashType = null, location = TrashSpotLocation.notSet())
+                val actual = trashSpotFacade.findAll(region = null, trashType = null, location = TrashSpotLocation.notSet())
 
                 actual shouldBe expected
             }
         }
 
-        describe("findDetails") {
-            it("composes detail from services") {
+        describe("장소 상세 조회") {
+            it("FindDetails 요청 결과를 반환하여 검증한다.") {
                 val spot = TrashSpotFixture.info
                 val image = TrashSpotFixture.image
                 val suggestion =
@@ -63,7 +63,7 @@ class TrashSpotFacadeTest :
                 every { userService.getProfile(123L) } returns userProfile
                 every { visitedService.countBySpotId(1L) } returns 5L
 
-                val actual = facade.findDetails(1L)
+                val actual = trashSpotFacade.findDetails(1L)
 
                 actual.trashSpot shouldBe spot
                 actual.image shouldBe image
