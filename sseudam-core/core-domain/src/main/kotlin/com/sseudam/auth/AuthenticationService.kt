@@ -1,6 +1,5 @@
 package com.sseudam.auth
 
-import com.sseudam.auth.token.RefreshToken
 import com.sseudam.auth.token.Token
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User
@@ -30,7 +29,7 @@ class AuthenticationService(
             socialUser = socialUser,
         )
 
-    fun renew(refreshToken: RefreshToken): Token = authenticationProcessor.renew(refreshToken.token)
+    fun renew(refreshToken: String): Token = authenticationProcessor.renew(refreshToken)
 
     fun logout(token: String): String = authenticationProcessor.remove(token)
 
@@ -40,7 +39,7 @@ class AuthenticationService(
 
     fun adminLogin(adminId: Long): Token = authenticationProcessor.adminLogin(adminId, listOf(GrantedAuthority(AuthorityType.ADMIN)))
 
-    fun adminReissue(refreshToken: RefreshToken): Token = authenticationProcessor.adminRenew(refreshToken.token)
+    fun adminReissue(refreshToken: String): Token = authenticationProcessor.adminRenew(refreshToken)
 
     fun adminLogout(accessToken: String) = authenticationProcessor.adminLogout(accessToken)
 }

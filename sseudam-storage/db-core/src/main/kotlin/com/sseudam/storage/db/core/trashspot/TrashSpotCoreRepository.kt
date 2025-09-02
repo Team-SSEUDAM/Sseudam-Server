@@ -39,12 +39,15 @@ class TrashSpotCoreRepository(
 
     override fun findAllByLocation(location: TrashSpotLocation): List<TrashSpot.Info> =
         txAdvice.readOnly {
+            // region/type 모두 사용하지 않는 경우에 대한 단일 네이티브 쿼리 사용
             trashSpotJpaRepository
-                .findAllByLocation(
+                .findAllByLocationWithOptionalFilters(
                     location.swLat!!,
                     location.swLng!!,
                     location.neLat!!,
                     location.neLng!!,
+                    null,
+                    null,
                 ).map { it.toTrashSpot() }
         }
 
@@ -54,12 +57,13 @@ class TrashSpotCoreRepository(
     ): List<TrashSpot.Info> =
         txAdvice.readOnly {
             trashSpotJpaRepository
-                .findAllByLocationAndRegion(
+                .findAllByLocationWithOptionalFilters(
                     location.swLat!!,
                     location.swLng!!,
                     location.neLat!!,
                     location.neLng!!,
                     region.name,
+                    null,
                 ).map { it.toTrashSpot() }
         }
 
@@ -76,11 +80,12 @@ class TrashSpotCoreRepository(
     ): List<TrashSpot.Info> =
         txAdvice.readOnly {
             trashSpotJpaRepository
-                .findAllByLocationAndType(
+                .findAllByLocationWithOptionalFilters(
                     location.swLat!!,
                     location.swLng!!,
                     location.neLat!!,
                     location.neLng!!,
+                    null,
                     type.name,
                 ).map { it.toTrashSpot() }
         }

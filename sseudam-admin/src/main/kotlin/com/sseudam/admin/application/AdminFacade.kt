@@ -3,7 +3,6 @@ package com.sseudam.admin.application
 import com.sseudam.admin.domain.AdminToken
 import com.sseudam.admin.domain.AdminUserProfile
 import com.sseudam.auth.AuthenticationService
-import com.sseudam.auth.token.RefreshToken
 import com.sseudam.notification.FcmSender
 import com.sseudam.notification.NewFirebaseCloudMessage
 import com.sseudam.notification.NotificationService
@@ -76,7 +75,7 @@ class AdminFacade(
 
     fun logout(accessToken: String) = authService.adminLogout(accessToken)
 
-    fun reissue(refreshToken: RefreshToken): AdminToken {
+    fun reissue(refreshToken: String): AdminToken {
         val token = authService.adminReissue(refreshToken)
         return AdminToken(token.accessToken, token.refreshToken)
     }
