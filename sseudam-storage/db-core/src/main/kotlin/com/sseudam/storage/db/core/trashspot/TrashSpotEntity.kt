@@ -24,7 +24,7 @@ class TrashSpotEntity(
     var region: Region,
     @Embedded
     var address: Address,
-    @Column(columnDefinition = "geometry(Point, 4326)")
+    @Column
     var point: Point,
     @Enumerated(value = EnumType.STRING)
     @Column(columnDefinition = "varchar(20)")

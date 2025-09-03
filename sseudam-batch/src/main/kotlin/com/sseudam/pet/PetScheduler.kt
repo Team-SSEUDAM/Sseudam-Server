@@ -24,7 +24,7 @@ class PetScheduler(
     private val notificationService: NotificationService,
     private val notificationStoredKeyGenerator: NotificationStoredKeyGenerator,
 ) {
-    @Scheduled(cron = "0 59 23 L * *")
+    @Scheduled(cron = "0 0 0 1 * *")
     fun createPetSeason() {
         val nextDay = LocalDate.now().plusDays(1)
         val currentYear = nextDay.year

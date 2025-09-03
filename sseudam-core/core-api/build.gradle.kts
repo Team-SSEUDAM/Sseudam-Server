@@ -1,4 +1,6 @@
 import com.google.cloud.tools.jib.gradle.JibExtension
+import groovy.lang.Closure
+import io.swagger.v3.oas.models.servers.Server
 
 plugins {
     alias(libs.plugins.jib)
@@ -154,6 +156,7 @@ dependencies {
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(project(":sseudam-storage:db-core"))
     testImplementation(project(":sseudam-storage:redis"))
+    testImplementation(project(":sseudam-tests:api-docs"))
     testImplementation(project(":sseudam-tests:test-helper"))
     testImplementation(testFixtures(project(":sseudam-tests:test-container")))
 }
@@ -166,4 +169,24 @@ dependencyManagement {
                 .toString(),
         )
     }
+}
+
+tasks.withType<Test> {
+    jvmArgs("-Xmx2g", "-XX:MaxMetaspaceSize=512m")
+}
+
+openapi3 {
+    @Suppress("UNCHECKED_CAST")
+    setServers(
+        listOf(
+            closureOf<Server> { url = "https://dev-api.sseudam.me" },
+            closureOf<Server> { url = "http://localhost:8080" },
+        ) as List<Closure<Server>>,
+    )
+    title = "${project.property("openapi3Title")}"
+    description = "${project.property("openapi3Description")}"
+    version = "${project.property("openapi3DocsVersion")}"
+    format = "yaml"
+    outputFileNamePrefix = "${project.property("openapi3JsonName")}"
+    outputDirectory = "${project.property("openapi3OutDirectory")}"
 }
