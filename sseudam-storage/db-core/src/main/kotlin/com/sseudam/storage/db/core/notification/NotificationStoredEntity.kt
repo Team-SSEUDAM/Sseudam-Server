@@ -19,7 +19,7 @@ class NotificationStoredEntity(
     val topic: String,
     val contents: String,
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(10)")
+    @Column(length = 10)
     var readStatus: ReadStatus,
 ) : BaseEntity() {
     constructor(create: NotificationStored.Create) : this(
