@@ -25,6 +25,8 @@ redisson = "3.30.0"
 postgresql = "42.7.5"
 hibernate_spatial = "6.6.10.Final"
 
+flyway="11.11.2"
+
 # Test Version
 assertj = "3.24.2"
 fixture_monkey = "1.0.13"
@@ -177,8 +179,8 @@ hibernate_spatial = { module = "org.hibernate:hibernate-spatial", version.ref = 
 h2 = { module = "com.h2database:h2" }
 
 # DataBase Migration Libraries
-# flyway_core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
-# flyway_mysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
+flyway_core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway_postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 
 # LINE Kotlin-JDSL Libraries
 line_kotlin_jdsl_jpql_dsl = { module = "com.linecorp.kotlin-jdsl:jpql-dsl", version.ref = "line_kotlin_jdsl" }

@@ -13,7 +13,7 @@ import jakarta.persistence.Table
 @Table(name = "t_app_version")
 class AppVersionEntity(
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(50)")
+    @Column(length = 50)
     val deviceType: DeviceType,
     @Column(length = 15, nullable = false)
     val currentVersion: String,

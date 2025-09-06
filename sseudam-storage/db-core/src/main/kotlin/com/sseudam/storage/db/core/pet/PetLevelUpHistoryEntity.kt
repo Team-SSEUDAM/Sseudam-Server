@@ -18,10 +18,10 @@ class PetLevelUpHistoryEntity(
     val nickname: String,
     val year: Int,
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(10)")
+    @Column(length = 10)
     val monthly: Month,
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(15)")
+    @Column(length = 15)
     val levelType: Pet.LevelType,
 ) : BaseEntity() {
     constructor(create: PetLevelUpHistory.Create) : this(

@@ -21,7 +21,7 @@ abstract class AuthenticationBaseEntity {
     val id: Long? = null
 
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(50)")
+    @Column(length = 50)
     var entityStatus: AuthenticationEntityStatus = AuthenticationEntityStatus.ACTIVE
         protected set
 
