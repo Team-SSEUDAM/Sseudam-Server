@@ -21,15 +21,28 @@ class Cache(
             key: String,
             typeReference: TypeReference<T>,
             function: () -> T,
-        ): T = cacheAdvice.invoke(ttl, key, typeReference, function)
+        ): T =
+            if (::cacheAdvice.isInitialized) {
+                cacheAdvice.invoke(ttl, key, typeReference, function)
+            } else {
+                function()
+            }
 
         fun <T> put(
             key: String,
             value: T,
             ttl: Long,
-        ) = cacheAdvice.put(key, value, ttl)
+        ) {
+            if (::cacheAdvice.isInitialized) {
+                cacheAdvice.put(key, value, ttl)
+            }
+        }
 
-        fun delete(key: String) = cacheAdvice.delete(key)
+        fun delete(key: String) {
+            if (::cacheAdvice.isInitialized) {
+                cacheAdvice.delete(key)
+            }
+        }
     }
 }
 

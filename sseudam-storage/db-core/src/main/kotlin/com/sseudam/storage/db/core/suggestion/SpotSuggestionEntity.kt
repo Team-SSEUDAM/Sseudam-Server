@@ -18,20 +18,20 @@ import org.locationtech.jts.geom.Point
 @Table(name = "t_spot_suggestion")
 class SpotSuggestionEntity(
     val userId: Long,
-    @Column(columnDefinition = "varchar(50)")
+    @Column(length = 50)
     val spotName: String,
-    @Column(columnDefinition = "geometry(Point, 4326)")
+    @Column
     val point: Point,
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(15)")
+    @Column(length = 15)
     val region: Region,
     val address: Address,
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(15)")
+    @Column(length = 15)
     val trashType: TrashType,
     val imageUrl: String,
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(15)")
+    @Column(length = 15)
     var status: SuggestionStatus,
 ) : BaseEntity() {
     constructor(

@@ -20,6 +20,8 @@ springdoc:
     urls:
       - name: Sseudam App API DOCS
         url: /v3/api-docs
+      - name: Sseudam App API REST DOCS
+        url: /static/sseudam-api.yaml
 ---
 spring:
   config:

@@ -5,6 +5,16 @@ spring:
 spring:
   config:
     activate:
+      on-profile: test
+core:
+  storage:
+    redis:
+      host: localhost
+      port: 6379
+---
+spring:
+  config:
+    activate:
       on-profile: local
 core:
   storage:
@@ -19,8 +29,8 @@ spring:
 core:
   storage:
     redis:
-      host: localhost
-      port: 6379
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
 ---
 spring:
   config:

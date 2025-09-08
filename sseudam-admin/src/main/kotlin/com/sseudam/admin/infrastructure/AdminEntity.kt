@@ -9,7 +9,7 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "t_admin")
 class AdminEntity(
-    @Column(columnDefinition = "varchar(15)")
+    @Column(length = 15)
     val name: String,
     val loginId: String,
     val password: String,

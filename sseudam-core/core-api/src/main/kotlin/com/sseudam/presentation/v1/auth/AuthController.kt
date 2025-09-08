@@ -35,7 +35,6 @@ class AuthController(
     private val oAuthService: OAuthService,
     private val userService: UserService,
 ) {
-    @Operation(summary = "테스트 로그인", description = "테스트를 위한 로그인을 합니다.")
     @PostMapping("/auth/test-login")
     fun login(
         @RequestHeader(name = "X-DEVICE-ID") deviceId: String?,
@@ -56,7 +55,6 @@ class AuthController(
         return TokenResponse.toResponse(false, token)
     }
 
-    @Operation(summary = "이메일 회원가입", description = "회원가입합니다.")
     @PostMapping("/auth/signup")
     fun signUp(
         @RequestBody request: SignUpRequest,
@@ -142,7 +140,7 @@ class AuthController(
     fun reissueToken(
         @RequestBody request: RefreshTokenRequest,
     ): TokenResponse {
-        val token = authenticationService.renew(request.toRefreshToken())
+        val token = authenticationService.renew(request.refreshToken)
         return TokenResponse.toResponse(false, token)
     }
 }

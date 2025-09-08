@@ -29,7 +29,7 @@ class UserEntity(
     val password: String?,
     var socialId: String?,
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(50)")
+    @Column(length = 50)
     val socialType: SocialType,
 ) : BaseEntity() {
     constructor(

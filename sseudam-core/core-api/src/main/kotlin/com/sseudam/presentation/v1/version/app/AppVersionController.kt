@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
-@Tag(name = "📱 AppVersion API", description = "앱 버전 관련 API입니다.")
+@Tag(name = "📱 Version API", description = "버전 관련 API입니다.")
 @ApiV1Controller
 class AppVersionController(
     private val appVersionService: AppVersionService,

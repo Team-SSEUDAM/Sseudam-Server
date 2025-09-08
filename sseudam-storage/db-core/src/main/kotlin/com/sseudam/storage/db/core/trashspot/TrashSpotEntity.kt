@@ -17,17 +17,17 @@ import org.locationtech.jts.geom.Point
 @Entity
 @Table(name = "t_trash_spot")
 class TrashSpotEntity(
-    @Column(columnDefinition = "varchar(50)")
+    @Column(length = 50)
     var name: String,
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(20)")
+    @Column(length = 20)
     var region: Region,
     @Embedded
     var address: Address,
-    @Column(columnDefinition = "geometry(Point, 4326)")
+    @Column
     var point: Point,
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(20)")
+    @Column(length = 20)
     var trashType: TrashType,
 ) : BaseEntity() {
     constructor(createTrashSpot: TrashSpot.Create) : this(

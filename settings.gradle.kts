@@ -47,6 +47,7 @@ include(
 )
 
 include(
+    "sseudam-tests:api-docs",
     "sseudam-tests:test-helper",
     "sseudam-tests:test-container",
 )

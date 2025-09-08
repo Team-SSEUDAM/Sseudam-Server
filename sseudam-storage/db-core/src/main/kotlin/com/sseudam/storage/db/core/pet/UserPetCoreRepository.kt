@@ -103,7 +103,7 @@ class UserPetCoreRepository(
         txAdvice.write {
             val userPet =
                 userPetJpaRepository.findByUserIdAndDeletedAtIsNull(userId)
-                    ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
-            userPet.softDelete()
+            userPet?.softDelete()
+            return@write
         }
 }

@@ -1,4 +1,8 @@
 spring:
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
   jpa:
     open-in-view: false
     properties:
@@ -11,10 +15,39 @@ spring:
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: test
+  flyway:
+    enabled: false
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+datasource:
+  db:
+    core:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:core;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+      username: sa
+      password: ""
+      pool-name: core-db-pool
+      maximum-pool-size: 5
+      data-source-properties:
+        rewriteBatchedStatements: true
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  flyway:
+    baseline-on-migrate: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
     properties:
       hibernate:
         show_log: true
@@ -39,9 +72,11 @@ spring:
   config:
     activate:
       on-profile: dev
+  flyway:
+    baseline-on-migrate: true
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         show_log: true
@@ -66,9 +101,11 @@ spring:
   config:
     activate:
       on-profile: prod
+  flyway:
+    baseline-on-migrate: true
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     properties:
       hibernate:
         show_log: true

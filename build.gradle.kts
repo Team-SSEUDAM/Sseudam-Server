@@ -59,8 +59,8 @@ subprojects {
         annotationProcessor(libs.spring.boot.configuration.processor)
         kapt(libs.spring.boot.configuration.processor)
 
-        testImplementation(libs.spring.mockk)
         testImplementation(libs.bundles.kotest)
+        testImplementation(libs.bundles.spring.test)
         testImplementation(libs.spring.boot.starter.test)
         testImplementation(libs.spring.security.test)
     }
@@ -101,8 +101,61 @@ subprojects {
         enabled = true
     }
 
-    tasks.withType<Test> {
-        useJUnitPlatform()
+    tasks.test {
+        useJUnitPlatform {
+            excludeTags("develop", "restdocs")
+        }
+    }
+
+    tasks.register<Test>("unitTest") {
+        group = "verification"
+        useJUnitPlatform {
+            excludeTags("develop", "context", "restdocs")
+        }
+    }
+
+    tasks.register<Test>("developTest") {
+        group = "verification"
+        useJUnitPlatform {
+            includeTags("develop")
+        }
+    }
+
+    tasks.register<Test>("contextTest") {
+        group = "verification"
+        useJUnitPlatform {
+            includeTags("context")
+        }
+    }
+
+    tasks.register<Test>("restDocsTest") {
+        group = "verification"
+        useJUnitPlatform {
+            includeTags("restdocs")
+        }
+    }
+
+    tasks.register<Copy>("copyOasSwagger") {
+        dependsOn("openapi3")
+        doFirst {
+            delete("${project.property("openapi3IntoDirectory")}/${project.property("openapi3JsonName")}.yaml")
+
+            val jwtSchemes = "  securitySchemes:\n" +
+                    "    Authorization:\n" +
+                    "      type: http\n" +
+                    "      scheme: bearer\n" +
+                    "      bearerFormat: JWT\n" +
+                    "security:\n" +
+                    "  - Authorization: []"
+            file("${project.property("openapi3OutDirectory")}/${project.property("openapi3JsonName")}.yaml")
+                .appendText(jwtSchemes)
+        }
+        from("${project.property("openapi3OutDirectory")}/${project.property("openapi3JsonName")}.yaml")
+        into("${project.property("openapi3IntoDirectory")}")
+    }
+
+    tasks.getByName("asciidoctor") {
+        dependsOn("restDocsTest")
     }
 }
 

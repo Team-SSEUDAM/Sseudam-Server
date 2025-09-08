@@ -21,22 +21,22 @@ class SpotReportEntity(
     val spotId: Long,
     val userId: Long,
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(10)")
+    @Column(length = 10)
     val reportType: ReportType,
-    @Column(columnDefinition = "geometry(Point, 4326)")
+    @Column
     val point: Point,
     val address: Address,
-    @Column(columnDefinition = "varchar(50)")
+    @Column(length = 50)
     val spotName: String,
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(15)")
+    @Column(length = 15)
     val region: Region,
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(15)")
+    @Column(length = 15)
     val trashType: TrashType,
     val imageUrl: String,
     @Enumerated(value = EnumType.STRING)
-    @Column(columnDefinition = "varchar(15)")
+    @Column(length = 15)
     var status: ReportStatus,
 ) : BaseEntity() {
     constructor(

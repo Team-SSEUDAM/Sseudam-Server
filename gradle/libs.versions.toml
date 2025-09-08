@@ -25,6 +25,8 @@ redisson = "3.30.0"
 postgresql = "42.7.5"
 hibernate_spatial = "6.6.10.Final"
 
+flyway="11.11.2"
+
 # Test Version
 assertj = "3.24.2"
 fixture_monkey = "1.0.13"
@@ -47,6 +49,7 @@ slack = "1.39.2"
 line_kotlin_jdsl = "3.4.1"
 
 # External version
+mockk = "1.14.4"
 spring_mockk = "4.0.2"
 
 # firebase
@@ -176,8 +179,8 @@ hibernate_spatial = { module = "org.hibernate:hibernate-spatial", version.ref = 
 h2 = { module = "com.h2database:h2" }
 
 # DataBase Migration Libraries
-# flyway_core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
-# flyway_mysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
+flyway_core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway_postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 
 # LINE Kotlin-JDSL Libraries
 line_kotlin_jdsl_jpql_dsl = { module = "com.linecorp.kotlin-jdsl:jpql-dsl", version.ref = "line_kotlin_jdsl" }
@@ -194,6 +197,7 @@ sentry_logback = { module = "io.sentry:sentry-logback", version.ref = "sentry_lo
 
 # Test Libraries
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 spring_mockk = { module = "com.ninja-squad:springmockk", version.ref = "spring_mockk" }
 kotest_runner_junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 junit_platform = { module = "org.junit.platform:junit-platform-launcher" }
@@ -223,7 +227,17 @@ line_kotlin_jdsl = ["line_kotlin_jdsl_jpql_dsl", "line_kotlin_jdsl_jpql_render",
 aws_client = ["aws_sdk_s3"]
 openfeign = ["spring_cloud_openfeign", "openfeign_hc5", "openfeign_micrometer"]
 testcontainers_postgres = ["test_containers_postgres", "spring_boot_testcontainers", "test_containers_junit_jupiter", "spring_boot_starter_test"]
-kotest = ["kotest_assertions", "kotest_property", "kotest_extensions"]
+kotest = [
+    "kotest_runner_junit5",
+    "kotest_assertions",
+    "kotest_property",
+    "mockk"
+]
+
+spring_test = [
+    "spring_mockk",
+    "kotest_extensions",
+]
 
 spring_modulith = [
     "spring_modulith_events_api",

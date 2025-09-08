@@ -15,11 +15,11 @@ import java.time.Year
 class PetEntity(
     val name: String,
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(15)")
+    @Column(length = 15)
     val levelType: Pet.LevelType,
     val year: Int,
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(10)")
+    @Column(length = 10)
     val monthly: Month,
 ) : BaseEntity() {
     constructor(petCreate: Pet.Create) : this(

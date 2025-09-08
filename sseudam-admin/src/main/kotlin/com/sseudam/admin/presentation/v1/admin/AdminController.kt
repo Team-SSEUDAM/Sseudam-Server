@@ -42,7 +42,7 @@ class AdminController(
     fun reissueToken(
         @RequestBody request: AdminRefreshTokenRequest,
     ): AdminTokenResponse {
-        val token = adminFacade.reissue(request.toRefreshToken())
+        val token = adminFacade.reissue(request.refreshToken)
         return AdminTokenResponse.of(token)
     }
 }
