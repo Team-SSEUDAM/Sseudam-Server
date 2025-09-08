@@ -27,8 +27,8 @@ class UserPetFacade(
             }
     }
 
-    fun findCurrentSeasonPetHistory(userId: Long): Pair<UserPet.Info, List<UserPetLevelUpCurrentSeasonHistoryInfo>> {
-        val (currentYear, currentMonth) = LocalDate.now().let { it.year to it.month }
+    fun findCurrentSeasonPetHistory(userId: Long): UserPetCurrentSeasonHistoryResult {
+        val (currentYear, currentMonth) = LocalDate.now().run { year to month }
         val pets = petService.findAllLatestSeasonPets(currentYear, currentMonth)
         val userPetInfo =
             userPetService.findByUser(userId)
@@ -38,21 +38,17 @@ class UserPetFacade(
                 ?: throw ErrorException(ErrorType.INVALID_PET_LEVEL_TYPE)
 
         val histories = petLevelUpHistoryService.findAllBy(currentYear, currentMonth, userPetInfo.id)
-        val levelTypeToHistory = histories.groupBy { it.levelType }.mapValues { it.value.maxByOrNull { history -> history.createdAt } }
+        val levelTypeToHistory =
+            histories
+                .groupBy { it.levelType }
+                .mapValues { it.value.maxByOrNull { history -> history.createdAt } }
 
         val petHistoryInfo =
             pets.map { petInfo ->
                 val pointStandard = userPetPolicy.getMinLevelStandard(petInfo.levelType)
                 val history = levelTypeToHistory[petInfo.levelType]
                 val userPetLevelType = userPetPolicy.getLevelType(userPetInfo.point)
-                val isLocked =
-                    if (userPetLevelType == Pet.LevelType.SPECIAL ||
-                        (userPetInfo.point == 0L && userPetLevelType == Pet.LevelType.LEVEL_1)
-                    ) {
-                        false
-                    } else {
-                        userPetInfo.point <= pointStandard
-                    }
+                val isLocked = petInfo.levelType.level > userPetLevelType.level
                 val createdAt = history?.createdAt ?: LocalDateTime.of(currentYear, currentMonth, 1, 0, 0)
 
                 UserPetLevelUpCurrentSeasonHistoryInfo(
@@ -61,12 +57,16 @@ class UserPetFacade(
                     levelType = petInfo.levelType,
                     point = pointStandard,
                     isLocked = isLocked,
-                    season = userPetPolicy.getSeasonByYearMonth(history?.year ?: currentYear, history?.monthly ?: currentMonth),
+                    season =
+                        userPetPolicy.getSeasonByYearMonth(
+                            history?.year ?: currentYear,
+                            history?.monthly ?: currentMonth,
+                        ),
                     createdAt = createdAt,
                 )
             }
 
-        return Pair(userPetInfo, petHistoryInfo)
+        return UserPetCurrentSeasonHistoryResult(userPetInfo, petHistoryInfo)
     }
 
     fun findAllPetHistory(userId: Long): List<UserPetLevelUpHistoryInfo> =
