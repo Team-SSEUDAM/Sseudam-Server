@@ -58,14 +58,14 @@ class PetController(
     @GetMapping("/pets/season")
     fun findUserPetSeasonInfo(user: User): UserPetLevelHistoryCurrentSeasonAllResponse {
         val seasonHistory = userPetFacade.findCurrentSeasonPetHistory(user.id)
-        val petInfo = petService.findBy(seasonHistory.first.petId)
+        val petInfo = petService.findBy(seasonHistory.userPetInfo.petId)
 
-        val petLevel = userPetPolicy.getLevelType(seasonHistory.first.point)
+        val petLevel = userPetPolicy.getLevelType(seasonHistory.userPetInfo.point)
         val maxLevelStandard = userPetPolicy.getMaxLevelStandard(petLevel)
         val season = userPetPolicy.getSeasonByPetInfo(petInfo)
         return UserPetLevelHistoryCurrentSeasonAllResponse.of(
-            UserPetInfoResponse.of(seasonHistory.first, petLevel, season, maxLevelStandard),
-            seasonHistory.second,
+            UserPetInfoResponse.of(seasonHistory.userPetInfo, petLevel, season, maxLevelStandard),
+            seasonHistory.seasonHistory,
         )
     }
 
