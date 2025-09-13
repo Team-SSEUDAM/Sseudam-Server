@@ -3,7 +3,7 @@ name: Development Build & Deploy
 on:
   push:
     branches:
-      - develop
+      - fix/restdocs-swagger-container
 
 # permission can be added at job level or workflow level
 permissions:
@@ -70,6 +70,11 @@ jobs:
           tags: |
             type=sha,prefix=
 
+      # Generate RestDocs API documentation
+      - name: Generate RestDocs
+        run: |
+          ./gradlew restDocsTest openapi3 copyOasSwagger
+
       # Jib을 사용한 Docker 이미지 빌드 및 푸시
       - name: Build and Push Docker Image with Jib
         env:
@@ -81,14 +86,14 @@ jobs:
             -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} \
             -Djib.container.environment=SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }},SPRING_PROFILES_ACTIVE=dev
 
-      # docker-compose.yml 파일을 EC2에 복사
-      - name: Copy docker-compose.yml to EC2
+      # docker-compose-dev.yml 파일을 EC2에 복사
+      - name: Copy docker-compose-dev.yml to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./docker/docker-compose.yml"
+          source: "./docker/docker-compose-dev.yml"
           target: "/home/ec2-user"
           overwrite: true
 

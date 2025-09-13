@@ -92,8 +92,8 @@ jobs:
             -Djib.container.environment=SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }},SPRING_PROFILES_ACTIVE=prod \
             -Djib.from.platforms=linux/arm64
 
-      # docker-compose.yml 파일을 EC2에 복사
-      - name: Copy docker-compose.yml to EC2
+      # docker-compose-dev.yml 파일을 EC2에 복사
+      - name: Copy docker-compose-prod.yml to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
