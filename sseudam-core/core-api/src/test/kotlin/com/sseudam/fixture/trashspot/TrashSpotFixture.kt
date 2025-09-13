@@ -2,8 +2,8 @@ package com.sseudam.fixture.trashspot
 
 import com.navercorp.fixturemonkey.kotlin.setExp
 import com.sseudam.common.Address
-import com.sseudam.support.geo.GeoJson
-import com.sseudam.support.geo.Region
+import com.sseudam.common.GeoJson
+import com.sseudam.common.Region
 import com.sseudam.test.helper.fixtureBuilder
 import com.sseudam.test.helper.fixtureBuilders
 import com.sseudam.trashspot.TrashSpot

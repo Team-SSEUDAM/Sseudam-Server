@@ -1,6 +1,5 @@
 package com.sseudam.config
 
-import com.sseudam.support.filter.UserArgumentResolver
 import com.sseudam.user.UserService
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.method.support.HandlerMethodArgumentResolver

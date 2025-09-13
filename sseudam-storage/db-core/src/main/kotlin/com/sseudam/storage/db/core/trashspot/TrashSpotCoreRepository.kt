@@ -1,7 +1,7 @@
 package com.sseudam.storage.db.core.trashspot
 
+import com.sseudam.common.Region
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
-import com.sseudam.support.geo.Region
 import com.sseudam.support.tx.TxAdvice
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashSpotLocation

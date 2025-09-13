@@ -1,4 +1,4 @@
-package com.sseudam.support.geo
+package com.sseudam.common
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonSubTypes

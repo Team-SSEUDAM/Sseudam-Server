@@ -3,4 +3,5 @@ dependencies {
 
     implementation(libs.redisson)
     implementation(project(":sseudam-core:core-domain"))
+    implementation(project(":sseudam-core:core-contract"))
 }

@@ -1,6 +1,5 @@
 package com.sseudam.common
 
-import com.sseudam.support.geo.GeoJson
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point

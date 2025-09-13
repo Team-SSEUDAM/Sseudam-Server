@@ -1,4 +1,4 @@
-package com.sseudam.support.error
+package com.sseudam
 
 data class ErrorResponse(
     val errorClassName: String,

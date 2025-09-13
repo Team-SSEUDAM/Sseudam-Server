@@ -1,9 +1,9 @@
 package com.sseudam.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.sseudam.ApiResponse
+import com.sseudam.ErrorResponse
 import com.sseudam.support.error.AuthenticationErrorType
-import com.sseudam.support.error.ErrorResponse
-import com.sseudam.support.response.ApiResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
