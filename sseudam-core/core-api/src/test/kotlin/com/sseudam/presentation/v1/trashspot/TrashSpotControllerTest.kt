@@ -1,6 +1,7 @@
 package com.sseudam.presentation.v1.trashspot
 
 import com.sseudam.RestDocsTest
+import com.sseudam.common.Region
 import com.sseudam.docs.RestDocsTestSuite
 import com.sseudam.docs.support.ARRAY
 import com.sseudam.docs.support.DOUBLE
@@ -18,7 +19,6 @@ import com.sseudam.docs.support.STRING
 import com.sseudam.docs.support.parameterType
 import com.sseudam.docs.support.type
 import com.sseudam.fixture.trashspot.TrashSpotFixture
-import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashSpotDetail
 import com.sseudam.trashspot.TrashSpotFacade
 import com.sseudam.trashspot.TrashType

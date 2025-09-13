@@ -1,12 +1,12 @@
 package com.sseudam.storage.db.core.report
 
 import com.sseudam.common.Address
+import com.sseudam.common.GeoJson
+import com.sseudam.common.Region
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.storage.db.core.support.BaseEntity
-import com.sseudam.support.geo.GeoJson
-import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

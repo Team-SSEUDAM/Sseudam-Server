@@ -1,4 +1,4 @@
-package com.sseudam.support.geo
+package com.sseudam.common
 
 enum class Region {
     SEOUL,

@@ -1,8 +1,8 @@
 package com.sseudam.trashspot
 
 import com.fasterxml.jackson.core.type.TypeReference
+import com.sseudam.common.Region
 import com.sseudam.support.Cache
-import com.sseudam.support.geo.Region
 import org.springframework.stereotype.Component
 
 @Component

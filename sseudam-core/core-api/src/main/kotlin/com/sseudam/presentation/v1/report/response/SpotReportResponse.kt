@@ -1,11 +1,11 @@
 package com.sseudam.presentation.v1.report.response
 
 import com.sseudam.common.Address
+import com.sseudam.common.GeoJson
+import com.sseudam.common.Region
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
-import com.sseudam.support.geo.GeoJson
-import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime

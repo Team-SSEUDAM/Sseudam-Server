@@ -8,6 +8,7 @@ dependencies {
     api(libs.spring.boot.starter.data.jpa)
     implementation(libs.bundles.line.kotlin.jdsl)
     compileOnly(project(":sseudam-core:core-domain"))
+    compileOnly(project(":sseudam-core:core-contract"))
 
     implementation(libs.flyway.core)
     implementation(libs.flyway.postgresql)

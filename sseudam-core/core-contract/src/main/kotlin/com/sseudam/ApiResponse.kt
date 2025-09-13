@@ -1,6 +1,5 @@
-package com.sseudam.support.response
+package com.sseudam
 
-import com.sseudam.support.error.ErrorResponse
 import java.time.LocalDateTime
 
 data class ApiResponse<Data>(

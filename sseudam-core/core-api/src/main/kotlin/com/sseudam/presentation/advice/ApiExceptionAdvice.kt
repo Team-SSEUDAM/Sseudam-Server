@@ -1,12 +1,12 @@
 package com.sseudam.presentation.advice
 
+import com.sseudam.ApiResponse
+import com.sseudam.ErrorResponse
 import com.sseudam.support.error.AuthenticationErrorException
 import com.sseudam.support.error.AuthenticationErrorType
 import com.sseudam.support.error.ErrorException
-import com.sseudam.support.error.ErrorResponse
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
-import com.sseudam.support.response.ApiResponse
 import io.sentry.Sentry
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.HttpHeaders

@@ -1,24 +1,24 @@
 
 dependencies {
-    compileOnly(libs.spring.context)
-    implementation(libs.spring.tx)
-    implementation(libs.slf4j)
     api(libs.kotlin.logging)
-    implementation(libs.jakarta.annotation.api)
-    implementation(libs.reactor.kotlin)
+    compileOnly(libs.spring.context)
+    implementation(project(":sseudam-core:core-contract"))
 
     // Coroutine
     implementation(libs.kotlinx.coroutine.core)
     implementation(libs.kotlinx.coroutine.reactor)
     implementation(libs.kotlinx.coroutine.slf4j)
+    implementation(libs.reactor.kotlin)
+    // Arrow Kt
+    implementation(libs.arrow.fx.coroutine)
+    implementation(libs.arrow.fx.stm)
+
+    implementation(libs.spring.tx)
+    implementation(libs.slf4j)
 
     // modulith
     implementation(libs.bundles.spring.modulith)
     runtimeOnly(libs.bundles.spring.modulith.runtime)
-
-    // Arrow Kt
-    implementation(libs.arrow.fx.coroutine)
-    implementation(libs.arrow.fx.stm)
 
     testImplementation(libs.bundles.spring.modulith.tests)
 }

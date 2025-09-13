@@ -1,7 +1,7 @@
 package com.sseudam.history
 
 import com.sseudam.common.Address
-import com.sseudam.support.geo.GeoJson
+import com.sseudam.common.GeoJson
 import com.sseudam.trashspot.TrashType
 import java.time.LocalDateTime
 

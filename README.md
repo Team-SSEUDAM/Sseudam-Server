@@ -29,7 +29,8 @@
 📦 Sseudam-Server
 ├── 🎯 sseudam-core/
 │   ├── core-api/          # REST API 엔드포인트
-│   └── core-domain/       # 도메인 모델 및 비즈니스 로직
+│   ├── core-domain/       # 도메인 모델 및 비즈니스 로직
+│   └── core-contract/     # 공통 DTO 및 예외 처리 정의
 ├── 💾 sseudam-storage/
 │   ├── db-core/           # JPA 엔티티 및 리포지토리
 │   └── redis/             # Redis 캐시 설정
@@ -44,6 +45,7 @@
 ├── 🔄 sseudam-batch/      # 배치 작업
 ├── 👨‍💼 sseudam-admin/       # 관리자 기능
 └── 🧪 sseudam-tests/      # 테스트 유틸리티
+    ├── api-docs/          # RestDocs API 문서 테스트
     ├── test-container/    # TestContainers 설정
     └── test-helper/       # 테스트 헬퍼
 ```

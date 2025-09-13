@@ -1,7 +1,7 @@
 package com.sseudam.presentation.advice
 
-import com.sseudam.support.error.ErrorResponse
-import com.sseudam.support.response.ApiResponse
+import com.sseudam.ApiResponse
+import com.sseudam.ErrorResponse
 import org.springframework.core.MethodParameter
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType

@@ -3,8 +3,8 @@ package com.sseudam.domain.trashspot
 import com.sseudam.DevelopTest
 import com.sseudam.common.Address
 import com.sseudam.common.GeoConverter
-import com.sseudam.support.geo.GeoJson
-import com.sseudam.support.geo.Region
+import com.sseudam.common.GeoJson
+import com.sseudam.common.Region
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashSpotAppender
 import com.sseudam.trashspot.TrashSpotLocation

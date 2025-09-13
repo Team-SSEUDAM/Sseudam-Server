@@ -1,9 +1,9 @@
 package com.sseudam.trashspot
 
 import com.fasterxml.jackson.core.type.TypeReference
+import com.sseudam.common.Region
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.support.Cache
-import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.image.TrashSpotImageService
 import com.sseudam.user.UserService
 import com.sseudam.visit.SpotVisitedService
