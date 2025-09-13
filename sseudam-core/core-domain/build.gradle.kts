@@ -1,5 +1,6 @@
 
 dependencies {
+    api(libs.kotlin.logging)
     compileOnly(libs.spring.context)
     implementation(project(":sseudam-core:core-contract"))
 
