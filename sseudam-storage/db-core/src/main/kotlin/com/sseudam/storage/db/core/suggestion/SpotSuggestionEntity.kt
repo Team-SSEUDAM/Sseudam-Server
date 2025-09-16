@@ -18,7 +18,7 @@ import org.locationtech.jts.geom.Point
 @Table(name = "t_spot_suggestion")
 class SpotSuggestionEntity(
     val userId: Long,
-    @Column(length = 50)
+    @Column(length = 100)
     val spotName: String,
     @Column
     val point: Point,

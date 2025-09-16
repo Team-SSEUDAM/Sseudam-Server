@@ -17,7 +17,7 @@ import org.locationtech.jts.geom.Point
 @Entity
 @Table(name = "t_trash_spot")
 class TrashSpotEntity(
-    @Column(length = 50)
+    @Column(length = 100)
     var name: String,
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20)

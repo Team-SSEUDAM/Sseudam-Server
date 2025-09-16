@@ -1,0 +1,5 @@
+ALTER TABLE t_trash_spot ALTER COLUMN name TYPE VARCHAR(100);
+ALTER TABLE t_spot_suggestion ALTER COLUMN spot_name TYPE VARCHAR(100);
+ALTER TABLE t_spot_report ALTER COLUMN spot_name TYPE VARCHAR(100);
+
+

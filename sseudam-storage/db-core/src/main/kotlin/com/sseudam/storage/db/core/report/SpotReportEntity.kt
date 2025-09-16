@@ -26,7 +26,7 @@ class SpotReportEntity(
     @Column
     val point: Point,
     val address: Address,
-    @Column(length = 50)
+    @Column(length = 100)
     val spotName: String,
     @Enumerated(value = EnumType.STRING)
     @Column(length = 15)
