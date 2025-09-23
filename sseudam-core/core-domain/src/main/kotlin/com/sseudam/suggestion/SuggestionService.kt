@@ -11,6 +11,7 @@ import com.sseudam.support.page.Page
 import com.sseudam.support.tx.TxAdvice
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.Point
 import org.locationtech.jts.geom.PrecisionModel
 import org.springframework.stereotype.Service
 
@@ -46,6 +47,8 @@ class SuggestionService(
     fun findAllSpotSuggestionByUser(userId: Long): List<SpotSuggestion.Info> = suggestionReader.readAllByUser(userId)
 
     fun findSpotSuggestionBySite(site: String): SpotSuggestion.Info? = suggestionReader.readBySite(site)
+
+    fun findSpotSuggestionByPoint(point: Point): SpotSuggestion.Info? = suggestionReader.readByPoint(point)
 
     fun findSuggestionsBy(
         offsetPageRequest: OffsetPageRequest,

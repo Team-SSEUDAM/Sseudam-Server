@@ -2,6 +2,7 @@ package com.sseudam.suggestion
 
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
+import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Component
 
 @Component
@@ -20,4 +21,6 @@ class SuggestionReader(
     ): Page<SpotSuggestion.Info> = spotSuggestionRepository.findAllBy(offsetPageRequest, searchStatus)
 
     fun existsByName(name: String): Boolean = spotSuggestionRepository.existsByName(name)
+
+    fun readByPoint(point: Point): SpotSuggestion.Info? = spotSuggestionRepository.findByPoint(point)
 }

@@ -1,6 +1,8 @@
 package com.sseudam.trashspot
 
 import com.fasterxml.jackson.core.type.TypeReference
+import com.sseudam.common.GeoConverter
+import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.support.Cache
@@ -16,6 +18,7 @@ class TrashSpotFacade(
     private val suggestionService: SuggestionService,
     private val userService: UserService,
     private val visitedService: SpotVisitedService,
+    private val geoConverter: GeoConverter,
 ) {
     fun findAll(
         region: Region?,
@@ -34,7 +37,10 @@ class TrashSpotFacade(
         ) {
             val spot = trashSpotService.findBy(spotId)
             val image = trashSpotImageService.findBySpotId(spotId).lastOrNull()
-            val suggestioner = suggestionService.findSpotSuggestionBySite(spot.address.site)
+            val suggestioner =
+                suggestionService.findSpotSuggestionByPoint(
+                    geoConverter.geoJsonPointToJtsPoint(spot.point as GeoJson.Point),
+                )
             val user = suggestioner?.let { userService.getProfile(it.userId) }
             val visitedCount = visitedService.countBySpotId(spotId)
             return@cache TrashSpotDetail(spot, image, user, visitedCount)
