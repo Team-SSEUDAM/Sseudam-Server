@@ -1,7 +1,7 @@
 package com.sseudam.storage.db.core.trashspot
 
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
-import com.sseudam.support.geo.Region
+import com.sseudam.common.Region
 import com.sseudam.trashspot.TrashType
 import org.locationtech.jts.geom.Point
 import org.springframework.data.jpa.repository.JpaRepository

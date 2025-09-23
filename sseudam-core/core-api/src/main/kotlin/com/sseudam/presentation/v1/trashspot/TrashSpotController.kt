@@ -1,10 +1,10 @@
 package com.sseudam.presentation.v1.trashspot
 
+import com.sseudam.common.Region
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.trashspot.response.TrashSpotAllResponse
 import com.sseudam.presentation.v1.trashspot.response.TrashSpotDetailsResponse
 import com.sseudam.presentation.v1.trashspot.response.TrashSpotResponse
-import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashSpotFacade
 import com.sseudam.trashspot.TrashSpotLocation
 import com.sseudam.trashspot.TrashType

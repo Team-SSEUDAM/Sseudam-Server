@@ -1,6 +1,6 @@
 package com.sseudam.trashspot
 
-import com.sseudam.support.geo.Region
+import com.sseudam.common.Region
 import org.locationtech.jts.geom.Point
 
 interface TrashSpotRepository {

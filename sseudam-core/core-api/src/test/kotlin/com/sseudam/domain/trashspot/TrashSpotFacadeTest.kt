@@ -1,6 +1,8 @@
 package com.sseudam.domain.trashspot
 
 import com.sseudam.DevelopTest
+import com.sseudam.common.GeoConverter
+import com.sseudam.common.GeoJson
 import com.sseudam.fixture.trashspot.TrashSpotFixture
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
@@ -25,8 +27,9 @@ class TrashSpotFacadeTest :
         val suggestionService: SuggestionService = mockk()
         val userService: UserService = mockk()
         val visitedService: SpotVisitedService = mockk()
+        val geoConverter: GeoConverter = mockk()
 
-        val trashSpotFacade = TrashSpotFacade(service, imageService, suggestionService, userService, visitedService)
+        val trashSpotFacade = TrashSpotFacade(service, imageService, suggestionService, userService, visitedService, geoConverter)
 
         describe("장소 전체 조회") {
             it("FindAll 요청 결과를 반환하여 검증한다.") {
@@ -59,7 +62,7 @@ class TrashSpotFacadeTest :
 
                 every { service.findBy(1L) } returns spot
                 every { imageService.findBySpotId(1L) } returns listOf(image)
-                every { suggestionService.findSpotSuggestionBySite(spot.address.site) } returns suggestion
+                every { suggestionService.findSpotSuggestionByPoint(geoConverter.geoJsonPointToJtsPoint(spot.point as GeoJson.Point)) } returns suggestion
                 every { userService.getProfile(123L) } returns userProfile
                 every { visitedService.countBySpotId(1L) } returns 5L
 

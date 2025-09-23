@@ -1,13 +1,13 @@
 package com.sseudam.trashspot
 
 import com.sseudam.common.GeoConverter
+import com.sseudam.common.GeoJson
+import com.sseudam.common.Region
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
-import com.sseudam.support.geo.GeoJson
-import com.sseudam.support.geo.Region
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.PrecisionModel

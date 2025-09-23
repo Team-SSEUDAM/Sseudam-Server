@@ -1,4 +1,4 @@
-package com.sseudam.support.response
+package com.sseudam.support.page
 
 data class PageResponse<Data>(
     val content: Data? = null,

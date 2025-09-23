@@ -8,6 +8,7 @@ dependencies {
     testImplementation(libs.spring.security.test)
 
     implementation(project(":sseudam-core:core-domain"))
+    implementation(project(":sseudam-core:core-contract"))
     implementation(project(":sseudam-storage:db-core"))
     implementation(project(":sseudam-storage:redis"))
     implementation(project(":sseudam-clients:notification"))

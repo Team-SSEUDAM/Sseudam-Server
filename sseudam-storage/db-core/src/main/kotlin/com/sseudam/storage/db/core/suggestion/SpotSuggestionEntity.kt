@@ -1,11 +1,11 @@
 package com.sseudam.storage.db.core.suggestion
 
 import com.sseudam.common.Address
+import com.sseudam.common.GeoJson
+import com.sseudam.common.Region
 import com.sseudam.storage.db.core.support.BaseEntity
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
-import com.sseudam.support.geo.GeoJson
-import com.sseudam.support.geo.Region
 import com.sseudam.trashspot.TrashType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -18,7 +18,7 @@ import org.locationtech.jts.geom.Point
 @Table(name = "t_spot_suggestion")
 class SpotSuggestionEntity(
     val userId: Long,
-    @Column(length = 50)
+    @Column(length = 100)
     val spotName: String,
     @Column
     val point: Point,

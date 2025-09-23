@@ -1,4 +1,4 @@
-package com.sseudam.support.filter
+package com.sseudam.config
 
 import com.sseudam.auth.Provider
 import com.sseudam.user.User
