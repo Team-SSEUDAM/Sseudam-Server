@@ -1,8 +1,8 @@
 package com.sseudam.visit
 
-import com.sseudam.notification.FcmSender
 import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.SendNotificationMessage
+import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.suggestion.SuggestionService

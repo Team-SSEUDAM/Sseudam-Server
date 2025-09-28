@@ -1,4 +1,4 @@
-package com.sseudam.notification
+package com.sseudam.notification.fcm
 
 import org.springframework.stereotype.Component
 import java.time.LocalDate

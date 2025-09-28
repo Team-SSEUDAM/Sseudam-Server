@@ -1,4 +1,4 @@
-package com.sseudam.notification
+package com.sseudam.notification.fcm
 
 data class NewFcmToUser(
     val userKey: String,

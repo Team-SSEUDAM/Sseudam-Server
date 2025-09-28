@@ -1,5 +1,10 @@
-package com.sseudam.notification
+package com.sseudam.notification.fcm
 
+import com.sseudam.notification.NotificationStored
+import com.sseudam.notification.NotificationStoredAppender
+import com.sseudam.notification.NotificationStoredKeyGenerator
+import com.sseudam.notification.ReadStatus
+import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.user.device.UserDeviceReader
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component

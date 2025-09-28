@@ -1,7 +1,7 @@
 package com.sseudam.client.notification
 
-import com.sseudam.notification.FcmRepository
-import com.sseudam.notification.FirebaseCloudMessage
+import com.sseudam.notification.fcm.FcmRepository
+import com.sseudam.notification.fcm.FirebaseCloudMessage
 import org.springframework.stereotype.Repository
 
 @Repository

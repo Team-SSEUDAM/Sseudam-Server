@@ -1,16 +1,11 @@
 package com.sseudam.user
 
 import com.sseudam.common.Address
-import com.sseudam.pet.Pet
-import com.sseudam.pet.PetReader
-import com.sseudam.pet.UserPetAppender
 import com.sseudam.support.cursor.OffsetPageRequest
-import com.sseudam.support.error.ErrorException
-import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
 import com.sseudam.support.tx.TxAdvice
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 
 @Service
 class UserService(
@@ -19,20 +14,15 @@ class UserService(
     private val userUpdater: UserUpdater,
     private val userDeleter: UserDeleter,
     private val userValidator: UserValidator,
-    private val userPetAppender: UserPetAppender,
-    private val petReader: PetReader,
     private val txAdvice: TxAdvice,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     fun create(newUser: NewUser): User =
         txAdvice.write {
             userValidator.verifyEmail(newUser.email)
-            val (currentYear, currentMonth) = LocalDate.now().let { it.year to it.month }
-            val pets = petReader.readAllLatestSeasonPets(currentYear, currentMonth)
-            val level1Pet =
-                pets.find { it.levelType == Pet.LevelType.LEVEL_1 }
-                    ?: throw ErrorException(ErrorType.INVALID_PET_LEVEL_TYPE)
+
             val createUser = userAppender.create(newUser)
-            userPetAppender.append(createUser.id, level1Pet)
+            applicationEventPublisher.publishEvent(UserCreatedEvent(userId = createUser.id))
             return@write createUser
         }
 
