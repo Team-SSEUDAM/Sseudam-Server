@@ -18,13 +18,13 @@ class UserService(
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     fun create(newUser: NewUser): User =
-        txAdvice.write {
-            userValidator.verifyEmail(newUser.email)
-
-            val createUser = userAppender.create(newUser)
-            applicationEventPublisher.publishEvent(UserCreatedEvent(userId = createUser.id))
-            return@write createUser
-        }
+        txAdvice
+            .write {
+                userValidator.verifyEmail(newUser.email)
+                userAppender.create(newUser)
+            }.also { createdUser ->
+                applicationEventPublisher.publishEvent(UserCreatedEvent(userId = createdUser.id))
+            }
 
     fun getProfile(userId: Long): UserProfile? = userReader.readUserProfile(userId)
 
