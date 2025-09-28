@@ -1,8 +1,8 @@
 package com.sseudam.suggestion
 
-import com.sseudam.notification.FcmSender
 import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.SendNotificationMessage
+import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.suggestion.event.SuggestionUpdateEvent
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType

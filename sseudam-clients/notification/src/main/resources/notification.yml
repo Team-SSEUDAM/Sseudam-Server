@@ -1,2 +1,9 @@
 fcm:
   key-json: ${FIREBASE_KEY_JSON}
+
+discord:
+  webhook:
+    alert:
+      user-channel: ${DISCORD_USER_NOTIFICATION_WEBHOOK}
+      report-channel: ${DISCORD_REPORT_NOTIFICATION_WEBHOOK}
+      suggestion-channel: ${DISCORD_SUGGESTION_NOTIFICATION_WEBHOOK}

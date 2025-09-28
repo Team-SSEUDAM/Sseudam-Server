@@ -1,5 +1,6 @@
 package com.sseudam.notification
 
+import com.sseudam.notification.fcm.NewFirebaseCloudMessage
 import com.sseudam.user.UserService
 import com.sseudam.user.device.UserDeviceService
 import org.springframework.stereotype.Service

@@ -1,12 +1,12 @@
 package com.sseudam.pet
 
-import com.sseudam.notification.FcmSender
-import com.sseudam.notification.NewFirebaseCloudMessage
 import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.NotificationService
 import com.sseudam.notification.NotificationStored
 import com.sseudam.notification.NotificationStoredKeyGenerator
 import com.sseudam.notification.ReadStatus
+import com.sseudam.notification.fcm.FcmSender
+import com.sseudam.notification.fcm.NewFirebaseCloudMessage
 import com.sseudam.user.UserService
 import com.sseudam.user.device.UserDeviceService
 import org.springframework.scheduling.annotation.Scheduled
