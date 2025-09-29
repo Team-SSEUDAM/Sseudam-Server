@@ -21,6 +21,16 @@ CREATE TABLE event_publication (
     CONSTRAINT event_publication_pkey PRIMARY KEY (id)
 );
 
+CREATE TABLE public.event_publication_archive (
+    id uuid NOT NULL,
+    completion_date timestamptz(6) NULL,
+    event_type varchar(255) NULL,
+    listener_id varchar(255) NULL,
+    publication_date timestamptz(6) NULL,
+    serialized_event text NULL,
+    CONSTRAINT event_publication_archive_pkey PRIMARY KEY (id)
+);
+
 -- ================================
 -- 사용자 관련 테이블
 -- ================================
@@ -133,6 +143,16 @@ CREATE TABLE t_spot_report (
 CREATE TABLE t_reject_report (
     id BIGSERIAL PRIMARY KEY,
     report_id BIGINT NOT NULL,
+    reason TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP
+);
+
+-- 제보 거절 테이블
+CREATE TABLE t_reject_suggestion (
+    id BIGSERIAL PRIMARY KEY,
+    suggestion_id BIGINT NOT NULL,
     reason TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,

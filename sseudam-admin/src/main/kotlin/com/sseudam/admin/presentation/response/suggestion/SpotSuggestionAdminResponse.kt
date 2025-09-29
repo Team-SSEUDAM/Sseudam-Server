@@ -27,11 +27,13 @@ data class SpotSuggestionAdminResponse(
     val imageUrl: String,
     @Schema(description = "제보 상태")
     val status: SuggestionStatus,
+    @Schema(description = "거절 사유")
+    val rejectReason: String? = null,
     @Schema(description = "제보 시간")
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun of(suggestion: SpotSuggestion.Info) =
+        fun of(suggestion: SpotSuggestion.Detail) =
             SpotSuggestionAdminResponse(
                 id = suggestion.id,
                 point = suggestion.point,
@@ -41,6 +43,7 @@ data class SpotSuggestionAdminResponse(
                 trashType = suggestion.trashType,
                 imageUrl = suggestion.imageUrl,
                 status = suggestion.status,
+                rejectReason = suggestion.rejectReason,
                 createdAt = suggestion.createdAt,
             )
     }
