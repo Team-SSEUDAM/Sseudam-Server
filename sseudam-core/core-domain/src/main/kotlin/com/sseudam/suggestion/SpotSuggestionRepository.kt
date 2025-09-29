@@ -22,7 +22,7 @@ interface SpotSuggestionRepository {
     fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): Page<SpotSuggestion.Info>
+    ): Page<SpotSuggestion.Detail>
 
     fun update(
         suggestionId: Long,

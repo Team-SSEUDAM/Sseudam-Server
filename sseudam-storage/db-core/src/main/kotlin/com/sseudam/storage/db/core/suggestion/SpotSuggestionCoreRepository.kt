@@ -60,7 +60,7 @@ class SpotSuggestionCoreRepository(
     override fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): Page<SpotSuggestion.Info> =
+    ): Page<SpotSuggestion.Detail> =
         txAdvice.readOnly {
             spotSuggestionCustomRepository.findAllBy(offsetPageRequest, searchStatus)
         }

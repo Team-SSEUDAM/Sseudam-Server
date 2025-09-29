@@ -1,5 +1,7 @@
 package com.sseudam.suggestion
 
+import com.sseudam.suggestion.reject.SuggestionReject
+import com.sseudam.suggestion.reject.SuggestionRejectRepository
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.PrecisionModel
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 class SuggestionAppender(
     private val spotSuggestionRepository: SpotSuggestionRepository,
+    private val suggestionRejectRepository: SuggestionRejectRepository,
 ) {
     companion object {
         private val GEOMETRY_FACTORY = GeometryFactory(PrecisionModel(), 4326)
@@ -22,5 +25,12 @@ class SuggestionAppender(
                 Coordinate(createSpotSuggestion.longitude, createSpotSuggestion.latitude),
             )
         return spotSuggestionRepository.create(imageUrl, point, createSpotSuggestion)
+    }
+
+    fun appendReject(
+        suggestionId: Long,
+        reason: String?,
+    ) {
+        suggestionRejectRepository.save(SuggestionReject.Create(suggestionId, reason ?: ""))
     }
 }
