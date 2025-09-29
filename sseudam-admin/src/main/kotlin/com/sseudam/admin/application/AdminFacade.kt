@@ -3,11 +3,11 @@ package com.sseudam.admin.application
 import com.sseudam.admin.domain.AdminToken
 import com.sseudam.admin.domain.AdminUserProfile
 import com.sseudam.auth.AuthenticationService
-import com.sseudam.notification.FcmSender
-import com.sseudam.notification.NewFirebaseCloudMessage
 import com.sseudam.notification.NotificationService
 import com.sseudam.notification.NotificationStored
 import com.sseudam.notification.ReadStatus
+import com.sseudam.notification.fcm.FcmSender
+import com.sseudam.notification.fcm.NewFirebaseCloudMessage
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.report.ReportFacade

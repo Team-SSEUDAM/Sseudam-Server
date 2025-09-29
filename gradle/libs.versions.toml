@@ -64,6 +64,9 @@ spring_cloud_openfeign = "4.2.0"
 openfeign_hc5 = "13.1"
 openfeign_micrometer = "13.1"
 
+# Spring Retry
+spring_retry = "2.0.11"
+
 micrometer = "1.5.1"
 micrometer-registry-prometheus = "1.15.1"
 
@@ -191,6 +194,9 @@ line_kotlin_jdsl_spring_data_jpa_support = { module = "com.linecorp.kotlin-jdsl:
 spring_cloud_openfeign = { module = "org.springframework.cloud:spring-cloud-starter-openfeign", version.ref = "spring_cloud_openfeign" }
 openfeign_hc5 = { module = "io.github.openfeign:feign-hc5", version.ref = "openfeign_hc5" }
 openfeign_micrometer = { module = "io.github.openfeign:feign-micrometer", version.ref = "openfeign_micrometer" }
+
+# Spring Retry Libraries
+spring_retry = { module = "org.springframework.retry:spring-retry", version.ref = "spring_retry" }
 
 # Sentry
 sentry_logback = { module = "io.sentry:sentry-logback", version.ref = "sentry_logback"}

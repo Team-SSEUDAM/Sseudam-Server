@@ -1,5 +1,6 @@
 package com.sseudam.notification
 
+import com.sseudam.notification.fcm.FcmSender
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 

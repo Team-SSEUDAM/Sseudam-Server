@@ -15,6 +15,8 @@ data class SpotSuggestionAdminResponse(
     val id: Long,
     @Schema(description = "제보 위치")
     val point: GeoJson,
+    @Schema(description = "제보 장소 이름")
+    val spotName: String,
     @Schema(description = "제보 지역")
     val region: Region,
     @Schema(description = "제보 주소")
@@ -33,6 +35,7 @@ data class SpotSuggestionAdminResponse(
             SpotSuggestionAdminResponse(
                 id = suggestion.id,
                 point = suggestion.point,
+                spotName = suggestion.spotName,
                 region = suggestion.region,
                 address = suggestion.address,
                 trashType = suggestion.trashType,
