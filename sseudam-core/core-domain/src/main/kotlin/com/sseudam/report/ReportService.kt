@@ -49,7 +49,11 @@ class ReportService(
                     reportDeleter.deleteBy(updateReport.reportId)
                     petEventPublisher.publish(report.userId, PetPointAction.REPORT_APPROVED)
                 }
-                ReportStatus.REJECT -> reportAppender.appendReject(report.id, updateReport.reason)
+                ReportStatus.REJECT -> {
+                    if (!updateReport.reason.isNullOrBlank()) {
+                        reportAppender.appendReject(report.id, updateReport.reason)
+                    }
+                }
                 else -> {}
             }
 

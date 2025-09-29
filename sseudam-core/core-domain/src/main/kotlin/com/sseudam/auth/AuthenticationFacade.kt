@@ -1,7 +1,6 @@
 package com.sseudam.auth
 
 import com.sseudam.auth.token.Token
-import com.sseudam.pet.UserPetFacade
 import com.sseudam.user.NewUser
 import com.sseudam.user.SocialUser
 import com.sseudam.user.UserService
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service
 @Service
 class AuthenticationFacade(
     private val userService: UserService,
-    private val userPetFacade: UserPetFacade,
     private val authenticationService: AuthenticationService,
 ) {
     fun socialLogin(
@@ -33,8 +31,6 @@ class AuthenticationFacade(
                 deviceId = deviceId,
                 socialUser = socialUser,
             )
-
-        userPetFacade.findPetInfo(socialUser.id)
 
         return isNewUser to token
     }

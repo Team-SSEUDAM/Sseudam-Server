@@ -44,6 +44,11 @@ class SuggestionService(
             return@write spotSuggestion to uploadUrl
         }
 
+    fun appendReject(
+        suggestionId: Long,
+        reason: String?,
+    ) = suggestionAppender.appendReject(suggestionId, reason)
+
     fun findAllSpotSuggestionByUser(userId: Long): List<SpotSuggestion.Info> = suggestionReader.readAllByUser(userId)
 
     fun findSpotSuggestionBySite(site: String): SpotSuggestion.Info? = suggestionReader.readBySite(site)
@@ -53,9 +58,13 @@ class SuggestionService(
     fun findSuggestionsBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): Page<SpotSuggestion.Info> = suggestionReader.readAllBy(offsetPageRequest, searchStatus)
+    ): Page<SpotSuggestion.Detail> = suggestionReader.readAllBy(offsetPageRequest, searchStatus)
 
-    fun findSpotSuggestionById(suggestionId: Long): SpotSuggestion.Info = suggestionReader.readBy(suggestionId)
+    fun findSpotSuggestionById(suggestionId: Long): SpotSuggestion.Detail {
+        val suggestion = suggestionReader.readBy(suggestionId)
+        val rejectSuggestion = suggestionReader.findRejectBySuggestionId(suggestionId)
+        return SpotSuggestion.Detail.of(suggestion, rejectSuggestion)
+    }
 
     fun updateStatus(
         suggestionId: Long,

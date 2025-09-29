@@ -1,5 +1,7 @@
 package com.sseudam.suggestion
 
+import com.sseudam.suggestion.reject.SuggestionReject
+import com.sseudam.suggestion.reject.SuggestionRejectRepository
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
 import org.locationtech.jts.geom.Point
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 class SuggestionReader(
     private val spotSuggestionRepository: SpotSuggestionRepository,
+    private val suggestionRejectRepository: SuggestionRejectRepository,
 ) {
     fun readBy(suggestionId: Long): SpotSuggestion.Info = spotSuggestionRepository.findBy(suggestionId)
 
@@ -18,9 +21,11 @@ class SuggestionReader(
     fun readAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): Page<SpotSuggestion.Info> = spotSuggestionRepository.findAllBy(offsetPageRequest, searchStatus)
+    ): Page<SpotSuggestion.Detail> = spotSuggestionRepository.findAllBy(offsetPageRequest, searchStatus)
 
     fun existsByName(name: String): Boolean = spotSuggestionRepository.existsByName(name)
 
     fun readByPoint(point: Point): SpotSuggestion.Info? = spotSuggestionRepository.findByPoint(point)
+
+    fun findRejectBySuggestionId(suggestionId: Long): SuggestionReject.Info? = suggestionRejectRepository.findBySuggestionId(suggestionId)
 }

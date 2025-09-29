@@ -1,5 +1,7 @@
 package com.sseudam.storage.db.core.suggestion
 
+import com.sseudam.storage.db.core.suggestion.model.SpotSuggestionEntityWithReject
+import com.sseudam.storage.db.core.suggestion.reject.SuggestionRejectEntity
 import com.sseudam.storage.db.core.support.JDSLExtensions
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
@@ -16,7 +18,7 @@ class SpotSuggestionCustomRepository(
     fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): Page<SpotSuggestion.Info> {
+    ): Page<SpotSuggestion.Detail> {
         val pageable =
             PageRequest.of(
                 offsetPageRequest.page,
@@ -26,18 +28,33 @@ class SpotSuggestionCustomRepository(
 
         val suggestions =
             spotSuggestionJpaRepository.findPage(JDSLExtensions, pageable) {
-                select(entity(SpotSuggestionEntity::class))
-                    .from(entity(SpotSuggestionEntity::class))
-                    .whereAnd(
-//                        path(SpotSuggestionEntity::deletedAt).isNull(),
-                        searchStatus?.let {
-                            path(SpotSuggestionEntity::status).eq(it)
-                        },
-                    )
+                selectNew<SpotSuggestionEntityWithReject>(
+                    entity(SpotSuggestionEntity::class),
+                    entity(SuggestionRejectEntity::class).path(SuggestionRejectEntity::reason),
+                ).from(
+                    entity(SpotSuggestionEntity::class),
+                    leftJoin(SuggestionRejectEntity::class).on(
+                        path(SpotSuggestionEntity::id)
+                            .eq(path(SuggestionRejectEntity::suggestionId)),
+                    ),
+                ).whereAnd(
+                    searchStatus?.let {
+                        path(SpotSuggestionEntity::status).eq(it)
+                    },
+                ).orderBy(
+                    path(SpotSuggestionEntity::createdAt).desc(),
+                )
             }
 
         return Page.of(
-            content = suggestions.content.mapNotNull { it?.toSpotSuggestion() },
+            content =
+                suggestions.content.mapNotNull { result ->
+                    result?.let {
+                        SpotSuggestion.Detail
+                            .of(it.entity.toSpotSuggestion(), null)
+                            .copy(rejectReason = it.rejectReason)
+                    }
+                },
             totalCount = suggestions.totalElements,
         )
     }

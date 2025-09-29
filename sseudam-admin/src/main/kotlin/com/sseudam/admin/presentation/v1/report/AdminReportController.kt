@@ -1,7 +1,7 @@
 package com.sseudam.admin.presentation.v1.report
 
 import com.sseudam.admin.application.AdminFacade
-import com.sseudam.admin.presentation.request.report.UpdateReportRequest
+import com.sseudam.admin.presentation.request.report.AdminUpdateReportRequest
 import com.sseudam.admin.presentation.response.report.SpotReportAdminResponse
 import com.sseudam.admin.presentation.response.report.SpotReportAllAdminResponse
 import com.sseudam.admin.presentation.v1.annotation.AdminTagDocs
@@ -42,6 +42,6 @@ class AdminReportController(
     @PutMapping("/reports/{reportId}")
     fun updateReportStatus(
         @PathVariable reportId: Long,
-        @RequestBody request: UpdateReportRequest,
+        @RequestBody request: AdminUpdateReportRequest,
     ) = adminFacade.updateSpotReportStatus(request.toCommand(reportId))
 }

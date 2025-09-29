@@ -18,6 +18,7 @@ import com.sseudam.report.UpdateReport
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
+import com.sseudam.suggestion.UpdateSuggestionCommand
 import com.sseudam.suggestion.event.SuggestionEventPublisher
 import com.sseudam.support.CacheRepository
 import com.sseudam.support.cursor.OffsetPageRequest
@@ -97,9 +98,9 @@ class AdminFacade(
     fun findSuggestions(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): Page<SpotSuggestion.Info> = suggestionService.findSuggestionsBy(offsetPageRequest, searchStatus)
+    ): Page<SpotSuggestion.Detail> = suggestionService.findSuggestionsBy(offsetPageRequest, searchStatus)
 
-    fun findSuggestionDetails(suggestionId: Long): SpotSuggestion.Info = suggestionService.findSpotSuggestionById(suggestionId)
+    fun findSuggestionDetails(suggestionId: Long): SpotSuggestion.Detail = suggestionService.findSpotSuggestionById(suggestionId)
 
     fun findReports(
         offsetPageRequest: OffsetPageRequest,
@@ -108,25 +109,30 @@ class AdminFacade(
 
     fun findReportDetails(reportId: Long): SpotReport.Detail = reportFacade.findReportDetails(reportId)
 
-    fun updateSpotSuggestionStatus(
-        suggestionId: Long,
-        status: SuggestionStatus,
-    ): SpotSuggestion.UpdateResult =
+    fun updateSpotSuggestionStatus(command: UpdateSuggestionCommand): SpotSuggestion.UpdateResult =
         txAdvice.write {
-            val suggestion = suggestionService.updateStatus(suggestionId, status)
+            val suggestion = suggestionService.updateStatus(command.suggestionId, command.status)
             val spotId: Long =
-                if (suggestion.status == SuggestionStatus.APPROVE) {
-                    val trashSpot = trashSpotService.createTrashSpotBySuggestion(suggestion)
-                    trashSpotImageService.append(
-                        TrashSpotImage.Create(trashSpot.id, suggestion.imageUrl),
-                    )
-                    petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
-                    cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + trashSpot.id)
-                    trashSpot.id
-                } else {
-                    0L
+                when (suggestion.status) {
+                    SuggestionStatus.APPROVE -> {
+                        val trashSpot = trashSpotService.createTrashSpotBySuggestion(suggestion)
+                        trashSpotImageService.append(
+                            TrashSpotImage.Create(trashSpot.id, suggestion.imageUrl),
+                        )
+                        petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
+                        cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + trashSpot.id)
+                        trashSpot.id
+                    }
+                    SuggestionStatus.REJECT -> {
+                        if (!command.reason.isNullOrBlank()) {
+                            suggestionService.appendReject(command.suggestionId, command.reason)
+                        }
+                        0L
+                    }
+                    else -> {
+                        0L
+                    }
                 }
-
             suggestionEventPublisher.publish(suggestion)
             return@write SpotSuggestion.UpdateResult.of(suggestion, spotId)
         }

@@ -1,6 +1,7 @@
 package com.sseudam.admin.presentation.v1.suggestion
 
 import com.sseudam.admin.application.AdminFacade
+import com.sseudam.admin.presentation.request.suggestion.AdminUpdateSuggestionRequest
 import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionAdminResponse
 import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionAllAdminResponse
 import com.sseudam.admin.presentation.v1.annotation.AdminTagDocs
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 
 @AdminTagDocs
@@ -41,5 +43,6 @@ class AdminSuggestionController(
     fun updateSuggestionStatus(
         @PathVariable suggestionId: Long,
         @RequestParam status: SuggestionStatus,
-    ) = adminFacade.updateSpotSuggestionStatus(suggestionId, status)
+        @RequestBody request: AdminUpdateSuggestionRequest,
+    ) = adminFacade.updateSpotSuggestionStatus(request.toCommand(suggestionId))
 }

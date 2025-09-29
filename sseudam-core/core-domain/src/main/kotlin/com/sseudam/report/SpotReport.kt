@@ -62,7 +62,7 @@ class SpotReport {
         val createdAt: LocalDateTime,
     )
 
-    /** SpotReport Info
+    /** SpotReport Detail
      * @property id 쓰레기통 신고 id
      * @property spotId 쓰레기통 위치 id
      * @property userId 신고자 id
@@ -74,7 +74,7 @@ class SpotReport {
      * @property trashType 쓰레기통 타입
      * @property imageUrl 신고된 S3 imageUrl
      * @property status 신고 상태
-     * @property rejectReason 신고 사유
+     * @property rejectReason 거절 사유
      * @property createdAt 신고 시간
      */
     data class Detail(

@@ -8,7 +8,7 @@ data class SpotSuggestionAllAdminResponse(
     val totalCount: Long,
 ) {
     companion object {
-        fun of(page: Page<SpotSuggestion.Info>) =
+        fun of(page: Page<SpotSuggestion.Detail>) =
             SpotSuggestionAllAdminResponse(
                 list = page.content.map { SpotSuggestionAdminResponse.of(it) },
                 totalCount = page.totalCount,
