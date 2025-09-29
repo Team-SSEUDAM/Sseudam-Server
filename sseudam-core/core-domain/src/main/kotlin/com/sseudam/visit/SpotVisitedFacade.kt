@@ -1,5 +1,7 @@
 package com.sseudam.visit
 
+import com.sseudam.common.GeoConverter
+import com.sseudam.common.GeoJson
 import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.notification.fcm.FcmSender
@@ -25,6 +27,7 @@ class SpotVisitedFacade(
     private val suggestionService: SuggestionService,
     private val userService: UserService,
     private val fcmSender: FcmSender,
+    private val geoConverter: GeoConverter,
     private val txAdvice: TxAdvice,
 ) {
     companion object {
@@ -34,36 +37,44 @@ class SpotVisitedFacade(
     fun visitSpot(
         userId: Long,
         spotId: Long,
-    ): Pair<Boolean, SpotVisited.Info> =
-        txAdvice.write {
-            val todayVisits = spotVisitedService.findTodaySpotVisitedByUser(userId)
-            val todayVisitedSpot = todayVisits.find { it.spotId == spotId }
+    ): Pair<Boolean, SpotVisited.Info> {
+        val result =
+            txAdvice.write {
+                val todayVisits = spotVisitedService.findTodaySpotVisitedByUser(userId)
+                val todayVisitedSpot = todayVisits.find { it.spotId == spotId }
 
-            if (todayVisitedSpot != null) {
-                val lastVisitTime = todayVisits.maxBy { it.visitedAt }.visitedAt
-                if (lastVisitTime.isAfter(LocalDateTime.now().minusMinutes(5))) {
-                    throw ErrorException(ErrorType.SPOT_VISITED_ALREADY)
+                if (todayVisitedSpot != null) {
+                    val lastVisitTime = todayVisits.maxBy { it.visitedAt }.visitedAt
+                    if (lastVisitTime.isAfter(LocalDateTime.now().minusMinutes(5))) {
+                        throw ErrorException(ErrorType.SPOT_VISITED_ALREADY)
+                    }
+                    if (todayVisits.size >= 5) {
+                        throw ErrorException(ErrorType.SPOT_VISITED_LIMIT_EXCEEDED)
+                    }
                 }
-                if (todayVisits.size >= 5) {
-                    throw ErrorException(ErrorType.SPOT_VISITED_LIMIT_EXCEEDED)
-                }
+
+                val isToday = todayVisitedSpot == null && todayVisits.isEmpty()
+                val spot = trashSpotService.findBy(spotId)
+                val visited = spotVisitedService.append(SpotVisited.Create(userId, spotId, LocalDate.now()))
+
+                val action = if (isToday) PetPointAction.TODAY_FIRST_SPOT_VISITED else PetPointAction.SPOT_VISITED
+                petEventPublisher.publish(visited.userId, action)
+
+                Triple(isToday, visited, spot)
             }
 
-            val isToday = todayVisitedSpot == null && todayVisits.isEmpty()
-            val spot = trashSpotService.findBy(spotId)
-            val visited = spotVisitedService.append(SpotVisited.Create(userId, spotId, LocalDate.now()))
-
-            val action = if (isToday) PetPointAction.TODAY_FIRST_SPOT_VISITED else PetPointAction.SPOT_VISITED
-            petEventPublisher.publish(visited.userId, action)
-
-            sendVisitNotificationAsync(spot)
-            return@write Pair(isToday, visited)
+        txAdvice.requiresNew {
+            sendVisitNotificationAsync(result.third)
         }
+
+        return Pair(result.first, result.second)
+    }
 
     private fun sendVisitNotificationAsync(spot: TrashSpot.Info) {
         try {
-            val suggestion = suggestionService.findSpotSuggestionBySite(spot.address.site) ?: return
-            val profile = userService.getProfile(suggestion.userId) ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
+            val suggestion =
+                suggestionService.findSpotSuggestionByPoint(geoConverter.geoJsonPointToJtsPoint(spot.point as GeoJson.Point)) ?: return
+            val profile = userService.getProfile(suggestion.userId) ?: return
             fcmSender.send(
                 sendNotificationMessage =
                     SendNotificationMessage(
