@@ -34,8 +34,6 @@ class AuthenticationFacade(
                 socialUser = socialUser,
             )
 
-        userPetFacade.findPetInfo(socialUser.id)
-
         return isNewUser to token
     }
 
