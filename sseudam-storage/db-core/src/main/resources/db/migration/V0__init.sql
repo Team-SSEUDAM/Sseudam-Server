@@ -149,16 +149,6 @@ CREATE TABLE t_reject_report (
     deleted_at TIMESTAMP
 );
 
--- 제보 거절 테이블
-CREATE TABLE t_reject_suggestion (
-    id BIGSERIAL PRIMARY KEY,
-    suggestion_id BIGINT NOT NULL,
-    reason TEXT,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP,
-    deleted_at TIMESTAMP
-);
-
 -- 쓰레기통 제안 테이블
 CREATE TABLE t_spot_suggestion (
     id BIGSERIAL PRIMARY KEY,
