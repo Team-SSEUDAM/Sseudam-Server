@@ -124,7 +124,9 @@ class AdminFacade(
                         trashSpot.id
                     }
                     SuggestionStatus.REJECT -> {
-                        suggestionService.appendReject(command.suggestionId, command.reason)
+                        if (!command.reason.isNullOrBlank()) {
+                            suggestionService.appendReject(command.suggestionId, command.reason)
+                        }
                         0L
                     }
                     else -> {

@@ -5,13 +5,13 @@ import com.sseudam.report.UpdateReport
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "신고 반영 요청 Json")
-data class UpdateReportRequest(
+data class AdminUpdateReportRequest(
     @Schema(description = "장소 id", example = "1")
     val spotId: Long,
     @Schema(description = "신고 상태", example = "APPROVE")
     val status: ReportStatus,
     @Schema(description = "반려 사유", example = "장소가 다름.")
-    val reason: String?,
+    val reason: String? = null,
 ) {
     fun toCommand(reportId: Long) =
         UpdateReport(
