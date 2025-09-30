@@ -32,9 +32,7 @@ class DiscordClientSender(
             """
             ## 🎉 쓰담 새 회원 가입 알림 ($environmentName)
 
-            **닉네임:** ${userProfile.nickname}
             **이메일:** ${userProfile.email}
-            **이름:** ${userProfile.name ?: "Unknown"}
             **회원 ID:** ${userProfile.id}
             **가입일시:** ${userProfile.createdAt.toLocalDate()} ${userProfile.createdAt.toLocalTime()}
             """.trimIndent()
