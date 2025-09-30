@@ -42,7 +42,6 @@ class AdminSuggestionController(
     @PutMapping("/suggestions/{suggestionId}")
     fun updateSuggestionStatus(
         @PathVariable suggestionId: Long,
-        @RequestParam status: SuggestionStatus,
         @RequestBody request: AdminUpdateSuggestionRequest,
     ) = adminFacade.updateSpotSuggestionStatus(request.toCommand(suggestionId))
 }
