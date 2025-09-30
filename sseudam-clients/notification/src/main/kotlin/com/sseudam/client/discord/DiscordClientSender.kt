@@ -61,8 +61,17 @@ class DiscordClientSender(
         val reportMessageByType = "**신고 내용:** ${
             when (report.reportType) {
                 ReportType.POINT -> {
-                    val pointCoordinate = (report.point as GeoJson.Point).coordinates
-                    "${pointCoordinate[0]}, ${pointCoordinate[1]} (경도, 위도)"
+                    when (val point = report.point) {
+                        is GeoJson.Point -> {
+                            val coords = point.coordinates
+                            if (coords.size >= 2) {
+                                "${coords[0]}, ${coords[1]} (경도, 위도)"
+                            } else {
+                                "좌표 정보 없음"
+                            }
+                        }
+                        else -> "좌표 정보 없음"
+                    }
                 }
                 ReportType.NAME -> report.spotName
                 ReportType.KIND -> report.trashType.displayName
@@ -92,23 +101,33 @@ class DiscordClientSender(
         retryFor = [Exception::class],
     )
     override fun sendSuggestionMessage(suggestion: SpotSuggestion.Info) {
-        val pointCoordinate = (suggestion.point as GeoJson.Point).coordinates
+        val pointCoordinate =
+            when (val point = suggestion.point) {
+                is GeoJson.Point -> point.coordinates
+                else -> emptyList()
+            }
+        val coordinateText =
+            if (pointCoordinate.size >= 2) {
+                "${pointCoordinate[0]}, ${pointCoordinate[1]} (경도, 위도)"
+            } else {
+                "좌표 정보 없음"
+            }
         val content =
             """
             ## 💡 제보 접수 알림 ($environmentName)
-
             **제보 ID:** ${suggestion.id}
             **제보된 주소:** ${suggestion.address.site}
             **제보된 장소 이름:** ${suggestion.spotName}
-            **제보된 장소 좌표:** ${pointCoordinate[0]}, ${pointCoordinate[1]} (경도, 위도)
+            **제보된 장소 좌표:** $coordinateText
             **제보된 쓰레기통 타입:** ${suggestion.trashType.displayName}
             **제보자 ID:** ${suggestion.userId}
             **제보 일시:** ${suggestion.createdAt.toLocalDate()} ${suggestion.createdAt.toLocalTime()}
-
             확인하러 가기 -> $ADMIN_URL/suggestions/trash-cans
             """.trimIndent()
-
         val message = DiscordMessagePayload(content)
-        discordWebhookClient.sendMessage(URI.create(discordWebhookProperties.suggestionChannel), message)
+        discordWebhookClient.sendMessage(
+            URI.create(discordWebhookProperties.suggestionChannel),
+            message,
+        )
     }
 }
