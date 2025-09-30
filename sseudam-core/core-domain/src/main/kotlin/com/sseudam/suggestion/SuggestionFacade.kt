@@ -1,6 +1,7 @@
 package com.sseudam.suggestion
 
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.notification.discord.DiscordClient
 import com.sseudam.support.Cache
 import com.sseudam.trashspot.TrashSpotService
 import org.springframework.stereotype.Service
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service
 class SuggestionFacade(
     private val suggestionService: SuggestionService,
     private val trashSpotService: TrashSpotService,
+    private val discordClient: DiscordClient,
 ) {
     fun validateSpotSuggestion(name: String): Boolean {
         suggestionService.validateSpotSuggestionName(name)
@@ -24,6 +26,7 @@ class SuggestionFacade(
                 .apply {
                     Cache.delete("user:${create.userId}:histories")
                 }
+        discordClient.sendSuggestionMessage(suggestionInfo)
         return suggestionInfo to s3ImageUrl
     }
 }

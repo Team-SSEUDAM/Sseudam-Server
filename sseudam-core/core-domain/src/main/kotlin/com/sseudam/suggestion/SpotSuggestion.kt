@@ -52,7 +52,7 @@ class SpotSuggestion {
         val address: Address,
         val trashType: TrashType,
         val imageUrl: String,
-        val status: SuggestionStatus = SuggestionStatus.WAITING,
+        val status: SuggestionStatus,
         val createdAt: LocalDateTime,
     )
 
