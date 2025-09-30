@@ -6,6 +6,7 @@ import com.sseudam.common.GeoJson
 import com.sseudam.fixture.trashspot.TrashSpotFixture
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
+import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.trashspot.TrashSpotFacade
 import com.sseudam.trashspot.TrashSpotLocation
 import com.sseudam.trashspot.TrashSpotService
@@ -56,6 +57,7 @@ class TrashSpotFacadeTest :
                         address = spot.address,
                         trashType = spot.trashType,
                         imageUrl = "",
+                        status = SuggestionStatus.WAITING,
                         createdAt = LocalDateTime.now(),
                     )
                 val userProfile = UserProfile(id = 123L, key = "k", email = "e@example.com", name = "u", nickname = "nick", createdAt = LocalDateTime.now())

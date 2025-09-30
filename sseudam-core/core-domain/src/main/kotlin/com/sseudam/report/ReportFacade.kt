@@ -2,6 +2,7 @@ package com.sseudam.report
 
 import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.notification.discord.DiscordClient
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.support.Cache
@@ -15,6 +16,7 @@ class ReportFacade(
     private val reportService: ReportService,
     private val trashSpotService: TrashSpotService,
     private val trashSpotImageService: TrashSpotImageService,
+    private val discordClient: DiscordClient,
     private val imageS3Caller: ImageS3Caller,
     private val petEventPublisher: PetEventPublisher,
     private val txAdvice: TxAdvice,
@@ -58,6 +60,7 @@ class ReportFacade(
                 reportService.appendReport(imageUrl, create).apply {
                     Cache.delete("user:${create.userId}:histories")
                 }
+            discordClient.sendReportMessage(spotReport)
             petEventPublisher.publish(create.userId, PetPointAction.REPORT)
 
             return@write spotReport to presignedUrl
