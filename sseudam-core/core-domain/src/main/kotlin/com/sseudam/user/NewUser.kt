@@ -13,7 +13,7 @@ import com.sseudam.common.Address
  * @property socialType 소셜 타입
  */
 data class NewUser(
-    val name: String?,
+    val name: String,
     val nickname: String? = null,
     val address: Address?,
     val email: String,

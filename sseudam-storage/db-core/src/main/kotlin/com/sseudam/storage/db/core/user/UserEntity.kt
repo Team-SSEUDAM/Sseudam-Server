@@ -72,6 +72,7 @@ class UserEntity(
             email = email,
             name = name,
             nickname = nickname ?: "",
+            address = address,
             createdAt = createdAt,
         )
 

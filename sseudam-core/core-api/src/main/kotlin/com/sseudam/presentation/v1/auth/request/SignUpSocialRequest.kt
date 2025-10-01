@@ -3,6 +3,7 @@ package com.sseudam.presentation.v1.auth.request
 import com.sseudam.auth.AuthorityType
 import com.sseudam.auth.GrantedAuthority
 import com.sseudam.auth.NewAuthenticationSocial
+import com.sseudam.common.Address
 import com.sseudam.user.NewUser
 import com.sseudam.user.SocialType
 import io.swagger.v3.oas.annotations.media.Schema
@@ -26,6 +27,23 @@ data class SignUpSocialRequest(
             socialId = socialId,
             socialType = socialType,
             address = null,
+        )
+
+    fun toNewUser(
+        socialId: String,
+        socialType: SocialType,
+        address: String,
+    ): NewUser =
+        NewUser(
+            email = email,
+            name = name,
+            socialId = socialId,
+            socialType = socialType,
+            address =
+                Address(
+                    city = address.split(" ")[1],
+                    site = address,
+                ),
         )
 
     fun toNewAuthenticationSocial(
