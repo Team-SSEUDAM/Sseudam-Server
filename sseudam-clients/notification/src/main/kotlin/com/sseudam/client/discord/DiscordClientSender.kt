@@ -46,7 +46,6 @@ class DiscordClientSender(
             **이메일:** ${userProfile.email}
             **회원 ID:** ${userProfile.id}
             **닉네임:** ${userProfile.nickname}
-            **이름:** ${userProfile.name}
             **사용자 관심지역:** ${userProfile.address.site}
             **가입일시:** ${userProfile.createdAt.toLocalDate()} ${userProfile.createdAt.toLocalTime()}
             """.trimIndent()
