@@ -16,7 +16,7 @@ data class SuggestionValidationRequest(
         when {
             name.isBlank() -> throw ErrorException(ErrorType.SPOT_NAME_IS_BLANK)
             name.length < 2 -> throw ErrorException(ErrorType.INVALID_TRASH_SPOT_NAME_TWO)
-            name.length > 12 -> throw ErrorException(ErrorType.INVALID_TRASH_SPOT_NAME_TWELVE)
+            name.length > 30 -> throw ErrorException(ErrorType.INVALID_TRASH_SPOT_NAME_TWELVE)
         }
     }
 }

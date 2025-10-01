@@ -1,5 +1,5 @@
 package com.sseudam.user
 
-data class UserCreatedEvent(
+data class UserSignUpEvent(
     val userId: Long,
 )

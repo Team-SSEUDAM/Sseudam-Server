@@ -70,9 +70,9 @@ class RedisTokenCoreRepository(
         val tokenWithAuthentication =
             redisTemplate.opsForValue().get(token)?.let {
                 objectMapper.readValue(it, TokenWithAuthentication::class.java)
-            } ?: throw AuthenticationErrorException(AuthenticationErrorType.INVALID_TOKEN)
+            }
 
-        redisTemplate.delete(tokenWithAuthentication.accessToken)
-        redisTemplate.delete(tokenWithAuthentication.refreshToken)
+        tokenWithAuthentication?.accessToken?.let { redisTemplate.delete(it) }
+        tokenWithAuthentication?.refreshToken?.let { redisTemplate.delete(it) }
     }
 }
