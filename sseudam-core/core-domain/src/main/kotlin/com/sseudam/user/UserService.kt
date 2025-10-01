@@ -21,9 +21,19 @@ class UserService(
         txAdvice.write {
             userValidator.verifyEmail(newUser.email)
             val createdUser = userAppender.create(newUser)
-            applicationEventPublisher.publishEvent(UserCreatedEvent(userId = createdUser.id))
             return@write createdUser
         }
+
+    fun socialSignUp(
+        socialUser: SocialUser,
+        newUser: NewUser,
+    ) = txAdvice.write {
+        updateName(socialUser.key, newUser.name)
+        newUser.address?.let { address ->
+            updateAddress(socialUser.key, address)
+        }
+        applicationEventPublisher.publishEvent(UserSignUpEvent(userId = socialUser.id))
+    }
 
     fun getProfile(userId: Long): UserProfile? = userReader.readUserProfile(userId)
 

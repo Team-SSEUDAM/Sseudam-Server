@@ -18,7 +18,7 @@ class UserEventListener(
     private val discordClient: DiscordClient,
 ) {
     @ApplicationModuleListener(condition = "#event.userId != null")
-    fun onCreatePetListener(event: UserCreatedEvent) {
+    fun onCreatePetListener(event: UserSignUpEvent) {
         val (currentYear, currentMonth) = LocalDate.now().let { it.year to it.month }
 
         val pets = petReader.readAllLatestSeasonPets(currentYear, currentMonth)
@@ -29,7 +29,7 @@ class UserEventListener(
     }
 
     @ApplicationModuleListener(condition = "#event.userId != null")
-    fun onDiscordNotificationListener(event: UserCreatedEvent) {
+    fun onDiscordNotificationListener(event: UserSignUpEvent) {
         val userProfile =
             userReader.readUserProfile(event.userId)
                 ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
