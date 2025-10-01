@@ -60,7 +60,16 @@ class TrashSpotFacadeTest :
                         status = SuggestionStatus.WAITING,
                         createdAt = LocalDateTime.now(),
                     )
-                val userProfile = UserProfile(id = 123L, key = "k", email = "e@example.com", name = "u", nickname = "nick", createdAt = LocalDateTime.now())
+                val userProfile =
+                    UserProfile(
+                        id = 123L,
+                        key = "k",
+                        email = "e@example.com",
+                        name = "u",
+                        nickname = "nick",
+                        address = spot.address,
+                        createdAt = LocalDateTime.now(),
+                    )
 
                 every { service.findBy(1L) } returns spot
                 every { imageService.findBySpotId(1L) } returns listOf(image)

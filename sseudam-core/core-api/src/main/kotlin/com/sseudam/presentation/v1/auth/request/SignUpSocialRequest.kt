@@ -32,7 +32,7 @@ data class SignUpSocialRequest(
     fun toNewUser(
         socialId: String,
         socialType: SocialType,
-        address: String,
+        site: String,
     ): NewUser =
         NewUser(
             email = email,
@@ -41,8 +41,8 @@ data class SignUpSocialRequest(
             socialType = socialType,
             address =
                 Address(
-                    city = address.split(" ")[1],
-                    site = address,
+                    city = site.split(" ").getOrNull(1) ?: "",
+                    site = site,
                 ),
         )
 

@@ -29,10 +29,9 @@ class UserService(
         newUser: NewUser,
     ) = txAdvice.write {
         updateName(socialUser.key, newUser.name)
-        updateAddress(
-            socialUser.key,
-            newUser.address ?: Address(city = "", site = ""),
-        )
+        newUser.address?.let { address ->
+            updateAddress(socialUser.key, address)
+        }
         applicationEventPublisher.publishEvent(UserCreatedEvent(userId = socialUser.id))
     }
 
