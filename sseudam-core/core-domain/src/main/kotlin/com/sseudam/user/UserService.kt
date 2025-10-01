@@ -32,7 +32,7 @@ class UserService(
         newUser.address?.let { address ->
             updateAddress(socialUser.key, address)
         }
-        applicationEventPublisher.publishEvent(UserCreatedEvent(userId = socialUser.id))
+        applicationEventPublisher.publishEvent(UserSignUpEvent(userId = socialUser.id))
     }
 
     fun getProfile(userId: Long): UserProfile? = userReader.readUserProfile(userId)
