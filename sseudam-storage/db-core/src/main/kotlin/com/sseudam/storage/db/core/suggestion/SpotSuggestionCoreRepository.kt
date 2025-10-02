@@ -3,8 +3,8 @@ package com.sseudam.storage.db.core.suggestion
 import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.suggestion.SpotSuggestion
-import com.sseudam.suggestion.SpotSuggestionRepository
 import com.sseudam.suggestion.SuggestionStatus
+import com.sseudam.suggestion.repository.SpotSuggestionRepository
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
 import com.sseudam.support.tx.Tx

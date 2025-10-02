@@ -6,13 +6,13 @@ import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
 import com.sseudam.support.tx.Tx
-import com.sseudam.user.NewUser
-import com.sseudam.user.NewUserKey
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User
 import com.sseudam.user.UserCredentials
 import com.sseudam.user.UserProfile
-import com.sseudam.user.UserRepository
+import com.sseudam.user.command.UserCommand
+import com.sseudam.user.command.UserKeyCommand
+import com.sseudam.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
@@ -22,11 +22,11 @@ class UserCoreRepository(
     private val userCustomRepository: UserCustomRepository,
 ) : UserRepository {
     override fun create(
-        newUser: NewUser,
-        newUserKey: NewUserKey,
+        userCommand: UserCommand,
+        userKeyCommand: UserKeyCommand,
     ): User =
         Tx.writeable {
-            userJpaRepository.save(UserEntity(newUser, newUserKey)).toUser()
+            userJpaRepository.save(UserEntity(userCommand, userKeyCommand)).toUser()
         }
 
     override fun readUserById(id: Long): User? =

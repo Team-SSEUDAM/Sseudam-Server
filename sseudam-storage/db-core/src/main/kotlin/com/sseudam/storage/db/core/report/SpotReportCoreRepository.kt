@@ -3,7 +3,7 @@ package com.sseudam.storage.db.core.report
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
-import com.sseudam.report.SpotReportRepository
+import com.sseudam.report.repository.SpotReportRepository
 import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.support.cursor.OffsetPageRequest

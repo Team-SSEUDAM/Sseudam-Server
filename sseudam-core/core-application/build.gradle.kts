@@ -3,6 +3,7 @@ dependencies {
     api(libs.kotlin.logging)
     compileOnly(libs.spring.context)
     implementation(project(":sseudam-core:core-contract"))
+    implementation(project(":sseudam-core:core-domain"))
 
     // Coroutine
     implementation(libs.kotlinx.coroutine.core)

@@ -3,12 +3,12 @@ package com.sseudam.pet
 import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.NotificationService
 import com.sseudam.notification.NotificationStored
-import com.sseudam.notification.NotificationStoredKeyGenerator
 import com.sseudam.notification.ReadStatus
+import com.sseudam.notification.command.FirebaseCloudMessageCommand
+import com.sseudam.notification.component.NotificationStoredKeyGenerator
 import com.sseudam.notification.fcm.FcmSender
-import com.sseudam.notification.fcm.NewFirebaseCloudMessage
+import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserService
-import com.sseudam.user.device.UserDeviceService
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -47,7 +47,7 @@ class PetScheduler(
                 .associateBy { it.id }
         val messages =
             userDevices.map { device ->
-                NewFirebaseCloudMessage(
+                FirebaseCloudMessageCommand(
                     fcmToken = device.fcmToken,
                     title = NotificationMessages.DEFAULT_TITLE,
                     body =

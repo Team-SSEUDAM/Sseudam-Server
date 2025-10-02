@@ -2,7 +2,7 @@ package com.sseudam.storage.db.core.visit
 
 import com.sseudam.support.tx.Tx
 import com.sseudam.visit.SpotVisited
-import com.sseudam.visit.SpotVisitedRepository
+import com.sseudam.visit.repository.SpotVisitedRepository
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
 

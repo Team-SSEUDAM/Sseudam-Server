@@ -1,7 +1,7 @@
 package com.sseudam.storage.db.core.pet
 
 import com.sseudam.pet.Pet
-import com.sseudam.pet.PetRepository
+import com.sseudam.pet.repository.PetRepository
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.support.tx.Tx
 import org.springframework.stereotype.Repository

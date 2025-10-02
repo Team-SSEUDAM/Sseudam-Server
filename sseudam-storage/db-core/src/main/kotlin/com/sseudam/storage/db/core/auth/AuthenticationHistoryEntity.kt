@@ -1,9 +1,9 @@
 package com.sseudam.storage.db.core.auth
 
 import com.sseudam.auth.AuthenticationHistory
-import com.sseudam.auth.NewAuthenticationHistory
-import com.sseudam.auth.token.Token
-import com.sseudam.auth.token.TokenStatus
+import com.sseudam.auth.Token
+import com.sseudam.auth.TokenStatus
+import com.sseudam.auth.command.AuthenticationHistoryCommand
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
@@ -20,13 +20,13 @@ class AuthenticationHistoryEntity(
     var refreshToken: String,
 ) : AuthenticationBaseEntity() {
     constructor(
-        newAuthenticationHistory: NewAuthenticationHistory,
+        authenticationHistoryCommand: AuthenticationHistoryCommand,
     ) : this(
-        userId = newAuthenticationHistory.userId,
-        userKey = newAuthenticationHistory.userKey,
-        deviceId = newAuthenticationHistory.deviceId,
-        accessToken = newAuthenticationHistory.newToken.token.accessToken,
-        refreshToken = newAuthenticationHistory.newToken.token.refreshToken,
+        userId = authenticationHistoryCommand.userId,
+        userKey = authenticationHistoryCommand.userKey,
+        deviceId = authenticationHistoryCommand.deviceId,
+        accessToken = authenticationHistoryCommand.tokenGenerateCommand.token.accessToken,
+        refreshToken = authenticationHistoryCommand.tokenGenerateCommand.token.refreshToken,
     )
 
     fun toAuthenticationHistory(): AuthenticationHistory =

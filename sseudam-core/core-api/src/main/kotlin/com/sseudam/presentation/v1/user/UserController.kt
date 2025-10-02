@@ -10,9 +10,9 @@ import com.sseudam.presentation.v1.user.response.UserWithdrawalResponse
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.user.User
+import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserFacade
 import com.sseudam.user.UserService
-import com.sseudam.user.device.UserDeviceService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag

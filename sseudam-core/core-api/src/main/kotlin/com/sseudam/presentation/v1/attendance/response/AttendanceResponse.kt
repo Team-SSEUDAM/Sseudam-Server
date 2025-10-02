@@ -1,6 +1,6 @@
 package com.sseudam.presentation.v1.attendance.response
 
-import com.sseudam.attendance.AttendanceResult
+import com.sseudam.attendance.result.AttendanceResult
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
 import java.time.LocalDateTime

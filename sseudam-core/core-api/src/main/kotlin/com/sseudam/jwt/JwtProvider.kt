@@ -1,18 +1,18 @@
 package com.sseudam.jwt
 
 import com.sseudam.auth.AuthenticationHistory
-import com.sseudam.auth.AuthenticationHistoryReader
-import com.sseudam.auth.AuthenticationHistoryUpdater
 import com.sseudam.auth.AuthorityType
 import com.sseudam.auth.GrantedAuthority
-import com.sseudam.auth.Provider
-import com.sseudam.auth.ProviderDetail
-import com.sseudam.auth.RedisTokenRepository
-import com.sseudam.auth.UpdateAuthenticationHistory
-import com.sseudam.auth.token.NewToken
-import com.sseudam.auth.token.Token
-import com.sseudam.auth.token.TokenStatus
-import com.sseudam.auth.token.repository.TokenRepository
+import com.sseudam.auth.Token
+import com.sseudam.auth.TokenStatus
+import com.sseudam.auth.command.TokenGenerateCommand
+import com.sseudam.auth.command.UpdateAuthenticationHistoryCommand
+import com.sseudam.auth.component.AuthenticationHistoryReader
+import com.sseudam.auth.component.AuthenticationHistoryUpdater
+import com.sseudam.auth.dto.Provider
+import com.sseudam.auth.dto.ProviderDetail
+import com.sseudam.auth.repository.RedisTokenRepository
+import com.sseudam.auth.repository.TokenRepository
 import com.sseudam.config.AuthenticationProperties
 import com.sseudam.support.error.AuthenticationErrorException
 import com.sseudam.support.error.AuthenticationErrorType
@@ -183,12 +183,12 @@ class JwtProvider(
             )
 
             authenticationHistoryUpdater.update(
-                UpdateAuthenticationHistory(
+                UpdateAuthenticationHistoryCommand(
                     userKey = authenticationHistory.userKey,
                     deviceId = authenticationHistory.deviceId,
                     refreshToken = refreshToken,
-                    newToken =
-                        NewToken(
+                    tokenGenerateCommand =
+                        TokenGenerateCommand(
                             token =
                                 Token(
                                     accessToken = this.accessToken,

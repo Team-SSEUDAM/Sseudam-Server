@@ -1,7 +1,5 @@
 package com.sseudam.auth
 
-import com.sseudam.auth.token.Token
-import com.sseudam.auth.token.TokenStatus
 import java.time.LocalDateTime
 
 data class AuthenticationHistory(

@@ -2,7 +2,7 @@ package com.sseudam.storage.db.core.trashspot.image
 
 import com.sseudam.support.tx.Tx
 import com.sseudam.trashspot.image.TrashSpotImage
-import com.sseudam.trashspot.image.TrashSpotImageRepository
+import com.sseudam.trashspot.repository.TrashSpotImageRepository
 import org.springframework.stereotype.Repository
 
 @Repository

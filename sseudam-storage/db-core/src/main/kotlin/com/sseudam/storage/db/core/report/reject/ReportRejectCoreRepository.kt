@@ -1,7 +1,7 @@
 package com.sseudam.storage.db.core.report.reject
 
 import com.sseudam.report.reject.ReportReject
-import com.sseudam.report.reject.ReportRejectRepository
+import com.sseudam.report.repository.ReportRejectRepository
 import com.sseudam.support.tx.Tx
 import org.springframework.stereotype.Repository
 

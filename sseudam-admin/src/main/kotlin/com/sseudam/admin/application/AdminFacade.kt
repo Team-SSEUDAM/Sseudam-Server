@@ -6,25 +6,25 @@ import com.sseudam.auth.AuthenticationService
 import com.sseudam.notification.NotificationService
 import com.sseudam.notification.NotificationStored
 import com.sseudam.notification.ReadStatus
+import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.fcm.FcmSender
-import com.sseudam.notification.fcm.NewFirebaseCloudMessage
 import com.sseudam.report.ReportFacade
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
-import com.sseudam.report.UpdateReport
+import com.sseudam.report.command.UpdateReportCommand
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
-import com.sseudam.suggestion.UpdateSuggestionCommand
+import com.sseudam.suggestion.command.UpdateSuggestionCommand
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
 import com.sseudam.trashspot.TrashSpotService
+import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserProfile
 import com.sseudam.user.UserService
-import com.sseudam.user.device.UserDeviceService
 import com.sseudam.visit.SpotVisitedService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -98,7 +98,8 @@ class AdminFacade(
             suggestionService.updateStatus(command.suggestionId, command.status, command.reason),
         )
 
-    fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info = reportService.updateSpotReport(updateReport)
+    fun updateSpotReportStatus(updateReportCommand: UpdateReportCommand): SpotReport.Info =
+        reportService.updateSpotReport(updateReportCommand)
 
     fun pushToAllUsers(
         topic: String,
@@ -112,7 +113,7 @@ class AdminFacade(
             userDevices
                 .filter { it.fcmToken.isNotBlank() }
                 .map { device ->
-                    NewFirebaseCloudMessage(
+                    FirebaseCloudMessageCommand(
                         fcmToken = device.fcmToken,
                         title = topic,
                         body = contents,

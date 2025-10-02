@@ -2,8 +2,8 @@ package com.sseudam.presentation.v1.pet
 
 import com.sseudam.pet.PetService
 import com.sseudam.pet.UserPetFacade
-import com.sseudam.pet.UserPetPolicy
 import com.sseudam.pet.UserPetService
+import com.sseudam.pet.component.UserPetPolicy
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.pet.request.UpdateUserPetNameRequest
 import com.sseudam.presentation.v1.pet.response.UserPetInfoResponse
@@ -65,7 +65,7 @@ class PetController(
         val season = userPetPolicy.getSeasonByPetInfo(petInfo)
         return UserPetLevelHistoryCurrentSeasonAllResponse.of(
             UserPetInfoResponse.of(seasonHistory.userPetInfo, petLevel, season, maxLevelStandard),
-            seasonHistory.seasonHistory,
+            seasonHistory.seasonHistories,
         )
     }
 

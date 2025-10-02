@@ -1,6 +1,6 @@
 package com.sseudam.config
 
-import com.sseudam.auth.Provider
+import com.sseudam.auth.dto.Provider
 import com.sseudam.user.User
 import com.sseudam.user.UserService
 import org.springframework.core.MethodParameter

@@ -1,7 +1,7 @@
 package com.sseudam.admin.presentation.request.report
 
 import com.sseudam.report.ReportStatus
-import com.sseudam.report.UpdateReport
+import com.sseudam.report.command.UpdateReportCommand
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "신고 반영 요청 Json")
@@ -14,7 +14,7 @@ data class AdminUpdateReportRequest(
     val reason: String? = null,
 ) {
     fun toCommand(reportId: Long) =
-        UpdateReport(
+        UpdateReportCommand(
             reportId = reportId,
             spotId = spotId,
             status = status,
