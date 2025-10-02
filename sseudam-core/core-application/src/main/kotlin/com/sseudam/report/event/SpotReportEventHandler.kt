@@ -73,6 +73,9 @@ class SpotReportEventHandler(
 
     @ApplicationModuleListener(id = "spot-report-discord-notification")
     fun handleDiscordNotification(event: SpotReportCreatedEvent) {
+        val userProfile =
+            userService.getProfile(event.spotReport.userId)
+                ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
         discordClient.sendReportMessage(event.spotReport)
     }
 }

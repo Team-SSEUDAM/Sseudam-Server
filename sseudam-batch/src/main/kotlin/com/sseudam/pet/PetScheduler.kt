@@ -1,8 +1,7 @@
 package com.sseudam.pet
 
 import com.sseudam.notification.NotificationService
-import com.sseudam.notification.NotificationStored
-import com.sseudam.notification.ReadStatus
+import com.sseudam.notification.command.CreateNotificationStoredCommand
 import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.component.NotificationStoredKeyGenerator
 import com.sseudam.notification.dto.NotificationMessages
@@ -61,7 +60,7 @@ class PetScheduler(
             notificationService.appendAll(
                 messages
                     .map { message ->
-                        NotificationStored.Create(
+                        CreateNotificationStoredCommand(
                             userId =
                                 userDevices
                                     .find { it.fcmToken == message.fcmToken }
@@ -72,7 +71,6 @@ class PetScheduler(
                             parameterValue = "",
                             topic = message.title,
                             contents = message.body,
-                            readStatus = ReadStatus.UNREAD,
                         )
                     }.filterNotNull(),
             )

@@ -7,6 +7,7 @@ import com.sseudam.pet.component.UserPetAppender
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.user.component.UserReader
+import com.sseudam.user.dto.SendMessageUserProfileDto
 import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -34,6 +35,6 @@ class UserEventHandler(
         val userProfile =
             userReader.readUserProfile(event.userId)
                 ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
-        discordClient.sendCreateUserMessage(userProfile)
+        discordClient.sendCreateUserMessage(SendMessageUserProfileDto.from(userProfile))
     }
 }
