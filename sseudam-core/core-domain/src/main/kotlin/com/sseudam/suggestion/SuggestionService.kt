@@ -2,14 +2,17 @@ package com.sseudam.suggestion
 
 import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.suggestion.event.SuggestionUpdateEvent
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
+import com.sseudam.support.tx.Tx
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
 import org.locationtech.jts.geom.PrecisionModel
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,6 +22,7 @@ class SuggestionService(
     private val suggestionValidator: SuggestionValidator,
     private val suggestionUpdater: SuggestionUpdater,
     private val imageS3Caller: ImageS3Caller,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     companion object {
         private const val SUGGESTION_IMAGE_PATH = "suggestion"
@@ -45,8 +49,6 @@ class SuggestionService(
 
     fun findAllSpotSuggestionByUser(userId: Long): List<SpotSuggestion.Info> = suggestionReader.readAllByUser(userId)
 
-    fun findSpotSuggestionBySite(site: String): SpotSuggestion.Info? = suggestionReader.readBySite(site)
-
     fun findSpotSuggestionByPoint(point: Point): SpotSuggestion.Info? = suggestionReader.readByPoint(point)
 
     fun findSuggestionsBy(
@@ -63,7 +65,20 @@ class SuggestionService(
     fun updateStatus(
         suggestionId: Long,
         status: SuggestionStatus,
-    ): SpotSuggestion.Info = suggestionUpdater.update(suggestionId, status)
+        reason: String?,
+    ): SpotSuggestion.Info =
+        Tx.writeable {
+            suggestionUpdater
+                .update(suggestionId, status)
+                .also {
+                    applicationEventPublisher.publishEvent(
+                        SuggestionUpdateEvent(
+                            suggestion = it,
+                            reason = reason,
+                        ),
+                    )
+                }
+        }
 
     fun validateSpotSuggestionName(name: String) {
         if (suggestionReader.existsByName(name)) {
