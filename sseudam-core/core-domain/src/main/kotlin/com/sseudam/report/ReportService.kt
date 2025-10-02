@@ -15,7 +15,6 @@ class ReportService(
     private val reportAppender: ReportAppender,
     private val reportReader: ReportReader,
     private val reportUpdater: ReportUpdater,
-    private val reportDeleter: ReportDeleter,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     fun appendReport(

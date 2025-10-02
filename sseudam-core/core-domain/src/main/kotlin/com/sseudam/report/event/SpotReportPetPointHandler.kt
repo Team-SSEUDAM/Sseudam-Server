@@ -2,14 +2,14 @@ package com.sseudam.report.event
 
 import com.sseudam.pet.event.UserPetContextEvent
 import org.springframework.context.ApplicationEventPublisher
-import org.springframework.context.event.EventListener
+import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 
 @Component
 class SpotReportPetPointHandler(
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
-    @EventListener
+    @ApplicationModuleListener(id = "spot-report-pet-point-reward")
     fun handlePetPointReward(event: SpotReportCreatedEvent) {
         applicationEventPublisher.publishEvent(
             UserPetContextEvent(

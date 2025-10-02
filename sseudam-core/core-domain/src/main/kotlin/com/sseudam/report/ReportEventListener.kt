@@ -2,7 +2,6 @@ package com.sseudam.report
 
 import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.SendNotificationMessage
-import com.sseudam.notification.discord.DiscordClient
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.report.event.SpotReportUpdateEvent
 import com.sseudam.support.error.ErrorException
@@ -20,13 +19,12 @@ class ReportEventListener(
     private val trashSpotImageService: TrashSpotImageService,
     private val userService: UserService,
     private val fcmSender: FcmSender,
-    private val discordClient: DiscordClient,
 ) {
     companion object {
         private val log by logger()
     }
 
-    @ApplicationModuleListener
+    @ApplicationModuleListener(id = "update-report-trash-spot")
     fun updateReportListener(event: SpotReportUpdateEvent) {
         when (event.report.reportType) {
             ReportType.PHOTO -> {
@@ -41,7 +39,7 @@ class ReportEventListener(
         }
     }
 
-    @ApplicationModuleListener
+    @ApplicationModuleListener(id = "report-update-fcm-notification")
     fun reportUpdateNotificationListener(event: SpotReportUpdateEvent) {
         try {
             val userId = event.report.userId

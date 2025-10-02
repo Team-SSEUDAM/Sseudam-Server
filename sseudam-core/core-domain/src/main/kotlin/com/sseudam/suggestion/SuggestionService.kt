@@ -10,7 +10,6 @@ import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
 import org.locationtech.jts.geom.PrecisionModel
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,7 +19,6 @@ class SuggestionService(
     private val suggestionValidator: SuggestionValidator,
     private val suggestionUpdater: SuggestionUpdater,
     private val imageS3Caller: ImageS3Caller,
-    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     companion object {
         private const val SUGGESTION_IMAGE_PATH = "suggestion"

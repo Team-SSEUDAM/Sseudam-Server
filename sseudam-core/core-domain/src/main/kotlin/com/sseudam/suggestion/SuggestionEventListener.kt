@@ -20,7 +20,9 @@ class SuggestionEventListener(
         private val log by logger()
     }
 
-    @ApplicationModuleListener
+    @ApplicationModuleListener(
+        id = "suggestion-update-fcm-notification",
+    )
     fun suggestionUpdateNotificationListener(event: SuggestionUpdateEvent) {
         try {
             val suggestion = event.suggestion

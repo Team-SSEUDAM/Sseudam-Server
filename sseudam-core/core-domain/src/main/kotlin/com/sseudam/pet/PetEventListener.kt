@@ -15,14 +15,14 @@ class PetEventListener(
     private val petLevelUpHistoryService: PetLevelUpHistoryService,
 ) {
     /** 포인트 지급 기록 저장 */
-    @ApplicationModuleListener(condition = "#event.petPointAction != null")
+    @ApplicationModuleListener(id = "add-pet-point-history", condition = "#event.petPointAction != null")
     fun addPetPointHistory(event: UserPetContextEvent) {
         val userPet = userPetService.findByUser(event.userId) ?: return
         petPointHistoryService.append(userPet, event.petPointAction)
     }
 
     /** 레벨업 여부 결정 및 성장 기록 저장 */
-    @ApplicationModuleListener(condition = "#event.petPointAction != null")
+    @ApplicationModuleListener(id = "user-pet-point-update", condition = "#event.petPointAction != null")
     fun addUserPetPoint(event: UserPetContextEvent) {
         val (currentYear, currentMonth) = LocalDateTime.now().run { year to month }
         val userPet = userPetService.findByUser(event.userId) ?: return

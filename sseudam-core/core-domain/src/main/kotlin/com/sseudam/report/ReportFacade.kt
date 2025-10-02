@@ -59,14 +59,16 @@ class ReportFacade(
                     Cache.delete("user:${create.userId}:histories")
                 }
 
-            applicationEventPublisher.publishEvent(
-                SpotReportCreatedEvent(
-                    spotReport = spotReport,
-                    userId = create.userId,
-                    petPointAction = PetPointAction.REPORT,
-                ),
-            )
-
-            return@writeable spotReport to presignedUrl
+            return@writeable spotReport to
+                presignedUrl
+                    .also {
+                        applicationEventPublisher.publishEvent(
+                            SpotReportCreatedEvent(
+                                spotReport = spotReport,
+                                userId = create.userId,
+                                petPointAction = PetPointAction.REPORT,
+                            ),
+                        )
+                    }
         }
 }
