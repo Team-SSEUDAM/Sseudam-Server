@@ -1,8 +1,6 @@
 package com.sseudam.report
 
-import com.sseudam.pet.PetPointAction
-import com.sseudam.pet.event.UserPetContextEvent
-import com.sseudam.report.event.ReportUpdateEvent
+import com.sseudam.report.event.SpotReportUpdateEvent
 import com.sseudam.report.reject.ReportReject
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
@@ -40,31 +38,11 @@ class ReportService(
 
     fun updateSpotReport(updateReport: UpdateReport): SpotReport.Info =
         Tx.writeable {
-            val report = reportUpdater.update(updateReport.reportId, updateReport.status)
-            applicationEventPublisher.publishEvent(
-                ReportUpdateEvent(
-                    report,
-                ),
-            )
-            when (report.status) {
-                ReportStatus.APPROVE -> {
-                    reportDeleter.deleteBy(updateReport.reportId)
-                    applicationEventPublisher.publishEvent(
-                        UserPetContextEvent(
-                            userId = report.userId,
-                            petPointAction = PetPointAction.REPORT_APPROVED,
-                        ),
-                    )
-                }
-                ReportStatus.REJECT -> {
-                    if (!updateReport.reason.isNullOrBlank()) {
-                        reportAppender.appendReject(report.id, updateReport.reason)
-                    }
-                }
-                else -> {}
+            reportUpdater.update(updateReport.reportId, updateReport.status).also { report ->
+                applicationEventPublisher.publishEvent(
+                    SpotReportUpdateEvent(report, updateReport.reason),
+                )
             }
-
-            report
         }
 
     fun validateSpotReportName(name: String) {

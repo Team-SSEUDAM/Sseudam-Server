@@ -145,11 +145,12 @@ class AdminFacade(
             return@writeable SpotSuggestion.UpdateResult.of(suggestion, spotId)
         }
 
-    fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info {
-        val spotReportInfo = reportService.updateSpotReport(updateReport)
-        cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + spotReportInfo.spotId)
-        return spotReportInfo
-    }
+    fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info =
+        Tx.writeable {
+            reportService.updateSpotReport(updateReport).also {
+                cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + it.spotId)
+            }
+        }
 
     fun pushToAllUsers(
         topic: String,
