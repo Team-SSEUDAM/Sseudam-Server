@@ -2,13 +2,10 @@ package com.sseudam.suggestion
 
 import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
-import com.sseudam.pet.PetPointAction
-import com.sseudam.pet.event.UserPetContextEvent
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.Tx
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
@@ -30,24 +27,18 @@ class SuggestionService(
         private val GEOMETRY_FACTORY = GeometryFactory(PrecisionModel(), 4326)
     }
 
-    fun append(create: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> =
-        Tx.writeable {
-            val point =
-                GEOMETRY_FACTORY.createPoint(
-                    Coordinate(create.longitude, create.latitude),
-                )
-            suggestionValidator.verifyPoint(point)
-
-            val uploadUrl = imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PATH)
-            val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)
-            applicationEventPublisher.publishEvent(
-                UserPetContextEvent(
-                    userId = create.userId,
-                    petPointAction = PetPointAction.SUGGESTION,
-                ),
+    fun append(create: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> {
+        val point =
+            GEOMETRY_FACTORY.createPoint(
+                Coordinate(create.longitude, create.latitude),
             )
-            return@writeable spotSuggestion to uploadUrl
-        }
+        suggestionValidator.verifyPoint(point)
+
+        val uploadUrl = imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PATH)
+        val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)
+
+        return spotSuggestion to uploadUrl
+    }
 
     fun appendReject(
         suggestionId: Long,

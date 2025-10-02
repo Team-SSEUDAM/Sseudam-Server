@@ -2,6 +2,7 @@ package com.sseudam.report
 
 import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.SendNotificationMessage
+import com.sseudam.notification.discord.DiscordClient
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.report.event.ReportUpdateEvent
 import com.sseudam.support.error.ErrorException
@@ -19,6 +20,7 @@ class ReportEventListener(
     private val trashSpotImageService: TrashSpotImageService,
     private val userService: UserService,
     private val fcmSender: FcmSender,
+    private val discordClient: DiscordClient,
 ) {
     companion object {
         private val log by logger()
