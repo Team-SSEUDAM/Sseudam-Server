@@ -37,9 +37,10 @@ class SpotReportUpdateHandler(
 
     @ApplicationModuleListener(
         id = "spot-report-update-reject-reason",
-        condition = "#event.report.status.name() == 'REJECT' && !#event.reason?.isEmpty()",
+        condition = "#event.report.status.name() == 'REJECT' && #event.reason != null && #event.reason.trim().length() > 0",
     )
     fun handleReject(event: SpotReportUpdateEvent) {
-        reportAppender.appendReject(event.report.id, event.reason!!)
+        val reason = event.reason ?: return
+        reportAppender.appendReject(event.report.id, event.reason)
     }
 }

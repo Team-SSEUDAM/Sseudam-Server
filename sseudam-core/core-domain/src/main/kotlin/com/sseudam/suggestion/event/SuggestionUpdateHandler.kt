@@ -43,9 +43,10 @@ class SuggestionUpdateHandler(
 
     @ApplicationModuleListener(
         id = "suggestion-update-reject-reason",
-        condition = "#event.suggestion.status.name() == 'REJECT' && !#event.reason?.isEmpty()",
+        condition = "#event.suggestion.status.name() == 'REJECT' && #event.reason != null && #event.reason.trim().length() > 0",
     )
     fun handleReject(event: SuggestionUpdateEvent) {
-        suggestionService.appendReject(event.suggestion.id, event.reason!!)
+        val reason = event.reason ?: return
+        suggestionService.appendReject(event.suggestion.id, reason)
     }
 }
