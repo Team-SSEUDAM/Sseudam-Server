@@ -2,17 +2,16 @@ package com.sseudam.storage.db.core.pet
 
 import com.sseudam.pet.PetLevelUpHistory
 import com.sseudam.pet.PetLevelUpHistoryRepository
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import org.springframework.stereotype.Repository
 import java.time.Month
 
 @Repository
 class PetLevelUpHistoryCoreHistoryRepository(
     private val petLevelUpHistoryJpaRepository: PetLevelUpHistoryJpaRepository,
-    private val txAdvice: TxAdvice,
 ) : PetLevelUpHistoryRepository {
     override fun save(petLevelUpHistory: PetLevelUpHistory.Create): PetLevelUpHistory.Info =
-        txAdvice.write {
+        Tx.writeable {
             petLevelUpHistoryJpaRepository
                 .save(
                     PetLevelUpHistoryEntity(
@@ -26,21 +25,21 @@ class PetLevelUpHistoryCoreHistoryRepository(
         currentMonth: Month,
         userPetId: Long,
     ): List<PetLevelUpHistory.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             petLevelUpHistoryJpaRepository
                 .findAllByYearAndMonthlyAndUserPetId(currentYear, currentMonth, userPetId)
                 .map { it.toPetLevelUpHistoryInfo() }
         }
 
     override fun findAllBy(userPetId: Long): List<PetLevelUpHistory.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             petLevelUpHistoryJpaRepository
                 .findAllByUserPetId(userPetId)
                 .map { it.toPetLevelUpHistoryInfo() }
         }
 
     override fun findAllByUserId(userId: Long): List<PetLevelUpHistory.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             petLevelUpHistoryJpaRepository
                 .findAllByUserId(userId)
                 .map { it.toPetLevelUpHistoryInfo() }

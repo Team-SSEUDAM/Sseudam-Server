@@ -1,6 +1,6 @@
 package com.sseudam.pet
 
-import com.sseudam.pet.event.PetPointEvent
+import com.sseudam.pet.event.UserPetContextEvent
 import com.sseudam.support.Cache
 import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
@@ -16,29 +16,31 @@ class PetEventListener(
 ) {
     /** 포인트 지급 기록 저장 */
     @ApplicationModuleListener(condition = "#event.petPointAction != null")
-    fun addPetPointHistory(event: PetPointEvent) {
-        petPointHistoryService.append(event.userPet, event.petPointAction)
+    fun addPetPointHistory(event: UserPetContextEvent) {
+        val userPet = userPetService.findByUser(event.userId) ?: return
+        petPointHistoryService.append(userPet, event.petPointAction)
     }
 
     /** 레벨업 여부 결정 및 성장 기록 저장 */
     @ApplicationModuleListener(condition = "#event.petPointAction != null")
-    fun addUserPetPoint(event: PetPointEvent) {
+    fun addUserPetPoint(event: UserPetContextEvent) {
         val (currentYear, currentMonth) = LocalDateTime.now().run { year to month }
-        val userPet = userPetService.updatePointByAction(event.userPet, event.petPointAction)
+        val userPet = userPetService.findByUser(event.userId) ?: return
+        val updateUserPet = userPetService.updatePointByAction(userPet, event.petPointAction)
         val petInfos = petService.findAllLatestSeasonPets(currentYear, currentMonth)
-        val currentPetInfo = petService.findBy(userPet.petId)
-        val levelType = userPetPolicy.getLevelType(userPet.point)
+        val currentPetInfo = petService.findBy(updateUserPet.petId)
+        val levelType = userPetPolicy.getLevelType(updateUserPet.point)
 
         if (currentPetInfo.levelType == Pet.LevelType.SPECIAL) return
         val nextLevelPetInfo = petInfos.firstOrNull { it.levelType == levelType } ?: return
         if (levelType.level > currentPetInfo.levelType.level) {
             Cache.put(
-                key = "pet:${userPet.userId}",
-                value = userPetService.updatePetId(userPet.id, nextLevelPetInfo.id),
+                key = "pet:${updateUserPet.userId}",
+                value = userPetService.updatePetId(updateUserPet.id, nextLevelPetInfo.id),
                 ttl = Cache.TTL_1_DAY,
             )
-            petLevelUpHistoryService.append(userPet, nextLevelPetInfo)
-            Cache.delete(key = "pet:history:${userPet.userId}")
+            petLevelUpHistoryService.append(updateUserPet, nextLevelPetInfo)
+            Cache.delete(key = "pet:history:${updateUserPet.userId}")
         }
     }
 }

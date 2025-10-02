@@ -1,18 +1,18 @@
 package com.sseudam.attendance
 
 import com.sseudam.pet.PetPointAction
-import com.sseudam.pet.event.PetEventPublisher
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.pet.event.UserPetContextEvent
+import com.sseudam.support.tx.Tx
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 @Service
 class AttendanceFacade(
     private val attendanceService: AttendanceService,
-    private val petEventPublisher: PetEventPublisher,
-    private val txAdvice: TxAdvice,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     fun todayAttendance(userId: Long): AttendanceResult =
-        txAdvice.write {
+        Tx.writeable {
             val (isContinuity, complete, isFirstAttendanceToday) = attendanceService.attendance(userId)
             // 오늘 처음 출석한 경우에만 포인트 지급
             if (!isFirstAttendanceToday) {
@@ -22,8 +22,13 @@ class AttendanceFacade(
                     } else {
                         PetPointAction.ATTENDANCE
                     }
-                petEventPublisher.publish(userId, action)
+                applicationEventPublisher.publishEvent(
+                    UserPetContextEvent(
+                        userId = userId,
+                        petPointAction = action,
+                    ),
+                )
             }
-            return@write AttendanceResult.of(complete, isContinuity, isFirstAttendanceToday)
+            return@writeable AttendanceResult.of(complete, isContinuity, isFirstAttendanceToday)
         }
 }

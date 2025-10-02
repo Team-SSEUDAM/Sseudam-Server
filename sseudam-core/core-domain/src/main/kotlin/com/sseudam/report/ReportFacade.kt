@@ -4,11 +4,12 @@ import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
 import com.sseudam.notification.discord.DiscordClient
 import com.sseudam.pet.PetPointAction
-import com.sseudam.pet.event.PetEventPublisher
+import com.sseudam.pet.event.UserPetContextEvent
 import com.sseudam.support.Cache
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.image.TrashSpotImageService
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 @Service
@@ -18,8 +19,7 @@ class ReportFacade(
     private val trashSpotImageService: TrashSpotImageService,
     private val discordClient: DiscordClient,
     private val imageS3Caller: ImageS3Caller,
-    private val petEventPublisher: PetEventPublisher,
-    private val txAdvice: TxAdvice,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     companion object {
         private const val REPORT_IMAGE_PATH = "report"
@@ -40,7 +40,7 @@ class ReportFacade(
     }
 
     fun createSpotReport(create: SpotReport.Create): Pair<SpotReport.Info, String?> =
-        txAdvice.write {
+        Tx.writeable {
             val presignedUrl: String?
             val images = trashSpotImageService.findBySpotId(create.spotId)
             var imageUrl =
@@ -61,8 +61,13 @@ class ReportFacade(
                     Cache.delete("user:${create.userId}:histories")
                 }
             discordClient.sendReportMessage(spotReport)
-            petEventPublisher.publish(create.userId, PetPointAction.REPORT)
+            applicationEventPublisher.publishEvent(
+                UserPetContextEvent(
+                    userId = create.userId,
+                    petPointAction = PetPointAction.REPORT,
+                ),
+            )
 
-            return@write spotReport to presignedUrl
+            return@writeable spotReport to presignedUrl
         }
 }

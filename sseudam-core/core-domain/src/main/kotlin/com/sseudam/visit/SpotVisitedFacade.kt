@@ -6,15 +6,16 @@ import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.pet.PetPointAction
-import com.sseudam.pet.event.PetEventPublisher
+import com.sseudam.pet.event.UserPetContextEvent
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.UserService
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -23,12 +24,11 @@ import java.time.LocalDateTime
 class SpotVisitedFacade(
     private val spotVisitedService: SpotVisitedService,
     private val trashSpotService: TrashSpotService,
-    private val petEventPublisher: PetEventPublisher,
     private val suggestionService: SuggestionService,
     private val userService: UserService,
     private val fcmSender: FcmSender,
     private val geoConverter: GeoConverter,
-    private val txAdvice: TxAdvice,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     companion object {
         private val log by logger()
@@ -39,7 +39,7 @@ class SpotVisitedFacade(
         spotId: Long,
     ): Pair<Boolean, SpotVisited.Info> {
         val result =
-            txAdvice.write {
+            Tx.writeable {
                 val todayVisits = spotVisitedService.findTodaySpotVisitedByUser(userId)
                 val todayVisitedSpot = todayVisits.find { it.spotId == spotId }
 
@@ -58,12 +58,17 @@ class SpotVisitedFacade(
                 val visited = spotVisitedService.append(SpotVisited.Create(userId, spotId, LocalDate.now()))
 
                 val action = if (isToday) PetPointAction.TODAY_FIRST_SPOT_VISITED else PetPointAction.SPOT_VISITED
-                petEventPublisher.publish(visited.userId, action)
+                applicationEventPublisher.publishEvent(
+                    UserPetContextEvent(
+                        userId = userId,
+                        petPointAction = action,
+                    ),
+                )
 
                 Triple(isToday, visited, spot)
             }
 
-        txAdvice.requiresNew {
+        Tx.requiresNew {
             sendVisitNotificationAsync(result.third)
         }
 
