@@ -2,13 +2,10 @@ package com.sseudam.suggestion
 
 import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
-import com.sseudam.pet.PetPointAction
-import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.TxAdvice
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
@@ -21,8 +18,6 @@ class SuggestionService(
     private val suggestionReader: SuggestionReader,
     private val suggestionValidator: SuggestionValidator,
     private val suggestionUpdater: SuggestionUpdater,
-    private val txAdvice: TxAdvice,
-    private val petEventPublisher: PetEventPublisher,
     private val imageS3Caller: ImageS3Caller,
 ) {
     companion object {
@@ -30,19 +25,18 @@ class SuggestionService(
         private val GEOMETRY_FACTORY = GeometryFactory(PrecisionModel(), 4326)
     }
 
-    fun append(create: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> =
-        txAdvice.write {
-            val point =
-                GEOMETRY_FACTORY.createPoint(
-                    Coordinate(create.longitude, create.latitude),
-                )
-            suggestionValidator.verifyPoint(point)
+    fun append(create: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> {
+        val point =
+            GEOMETRY_FACTORY.createPoint(
+                Coordinate(create.longitude, create.latitude),
+            )
+        suggestionValidator.verifyPoint(point)
 
-            val uploadUrl = imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PATH)
-            val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)
-            petEventPublisher.publish(create.userId, PetPointAction.SUGGESTION)
-            return@write spotSuggestion to uploadUrl
-        }
+        val uploadUrl = imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PATH)
+        val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)
+
+        return spotSuggestion to uploadUrl
+    }
 
     fun appendReject(
         suggestionId: Long,

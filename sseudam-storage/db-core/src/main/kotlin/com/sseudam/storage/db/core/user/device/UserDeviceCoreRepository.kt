@@ -1,6 +1,6 @@
 package com.sseudam.storage.db.core.user.device
 
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import com.sseudam.user.device.UserDevice
 import com.sseudam.user.device.UserDeviceRepository
 import org.springframework.stereotype.Repository
@@ -8,10 +8,9 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserDeviceCoreRepository(
     private val userDeviceJpaRepository: UserDeviceJpaRepository,
-    private val txAdvice: TxAdvice,
 ) : UserDeviceRepository {
     override fun save(create: UserDevice.Create) =
-        txAdvice.write {
+        Tx.writeable {
             userDeviceJpaRepository
                 .save(
                     UserDeviceEntity(
@@ -21,14 +20,14 @@ class UserDeviceCoreRepository(
         }
 
     override fun findAll(): List<UserDevice.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             userDeviceJpaRepository
                 .findAllByDeletedAtIsNull()
                 .map { it.toUserDevice() }
         }
 
     override fun findByUserId(userId: Long): UserDevice.Info? =
-        txAdvice.readOnly {
+        Tx.readable {
             userDeviceJpaRepository
                 .findByUserIdAndDeletedAtIsNull(userId)
                 .lastOrNull()
@@ -36,21 +35,21 @@ class UserDeviceCoreRepository(
         }
 
     override fun findAllByUserKey(userKey: String): List<UserDevice.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             userDeviceJpaRepository
                 .findAllByUserKey(userKey)
                 .map { it.toUserDevice() }
         }
 
     override fun findAllByUserId(userId: Long): List<UserDevice.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             userDeviceJpaRepository
                 .findByUserIdAndDeletedAtIsNull(userId)
                 .map { it.toUserDevice() }
         }
 
     override fun softDeleteBy(id: Long) {
-        txAdvice.write {
+        Tx.writeable {
             userDeviceJpaRepository.findById(id).ifPresent { entity ->
                 entity.softDelete()
                 userDeviceJpaRepository.save(entity)

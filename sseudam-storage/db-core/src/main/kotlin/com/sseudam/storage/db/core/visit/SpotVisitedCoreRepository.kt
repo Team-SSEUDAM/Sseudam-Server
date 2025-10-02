@@ -1,6 +1,6 @@
 package com.sseudam.storage.db.core.visit
 
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import com.sseudam.visit.SpotVisited
 import com.sseudam.visit.SpotVisitedRepository
 import org.springframework.stereotype.Repository
@@ -9,10 +9,9 @@ import java.time.LocalDate
 @Repository
 class SpotVisitedCoreRepository(
     private val spotVisitedJpaRepository: SpotVisitedJpaRepository,
-    private val txAdvice: TxAdvice,
 ) : SpotVisitedRepository {
     override fun create(spotVisited: SpotVisited.Create): SpotVisited.Info =
-        txAdvice.write {
+        Tx.writeable {
             spotVisitedJpaRepository
                 .save(
                     SpotVisitedEntity(spotVisited),
@@ -20,7 +19,7 @@ class SpotVisitedCoreRepository(
         }
 
     override fun findByUserId(userId: Long): List<SpotVisited.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             spotVisitedJpaRepository
                 .findAllByUserId(userId)
                 .map { it.toSpotVisitedInfo() }
@@ -30,14 +29,14 @@ class SpotVisitedCoreRepository(
         userId: Long,
         spotId: Long,
     ): SpotVisited.Info? =
-        txAdvice.readOnly {
+        Tx.readable {
             spotVisitedJpaRepository
                 .findFirstByUserIdAndSpotIdOrderByCreatedAtDesc(userId, spotId)
                 ?.toSpotVisitedInfo()
         }
 
     override fun countBySpotId(spotId: Long): Long =
-        txAdvice.readOnly {
+        Tx.readable {
             spotVisitedJpaRepository
                 .countBySpotId(spotId)
         }
@@ -46,7 +45,7 @@ class SpotVisitedCoreRepository(
         userId: Long,
         today: LocalDate,
     ): List<SpotVisited.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             spotVisitedJpaRepository
                 .findAllByUserIdAndDate(userId, today)
                 .map { it.toSpotVisitedInfo() }
@@ -57,7 +56,7 @@ class SpotVisitedCoreRepository(
         spotId: Long,
         today: LocalDate,
     ): List<SpotVisited.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             spotVisitedJpaRepository
                 .findAllByUserIdAndSpotIdAndDate(userId, spotId, today)
                 .map { it.toSpotVisitedInfo() }

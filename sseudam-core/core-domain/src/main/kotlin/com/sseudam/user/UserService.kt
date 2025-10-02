@@ -3,7 +3,7 @@ package com.sseudam.user
 import com.sseudam.common.Address
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
@@ -14,20 +14,19 @@ class UserService(
     private val userUpdater: UserUpdater,
     private val userDeleter: UserDeleter,
     private val userValidator: UserValidator,
-    private val txAdvice: TxAdvice,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     fun create(newUser: NewUser): User =
-        txAdvice.write {
+        Tx.writeable {
             userValidator.verifyEmail(newUser.email)
             val createdUser = userAppender.create(newUser)
-            return@write createdUser
+            return@writeable createdUser
         }
 
     fun socialSignUp(
         socialUser: SocialUser,
         newUser: NewUser,
-    ) = txAdvice.write {
+    ) = Tx.writeable {
         updateName(socialUser.key, newUser.name)
         newUser.address?.let { address ->
             updateAddress(socialUser.key, address)

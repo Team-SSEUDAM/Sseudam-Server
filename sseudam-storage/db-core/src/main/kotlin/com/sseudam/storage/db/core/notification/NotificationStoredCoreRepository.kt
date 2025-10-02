@@ -4,16 +4,15 @@ import com.sseudam.notification.NotificationStored
 import com.sseudam.notification.NotificationStoredRepository
 import com.sseudam.notification.ReadStatus
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import org.springframework.stereotype.Repository
 
 @Repository
 class NotificationStoredCoreRepository(
     private val notificationStoredJpaRepository: NotificationStoredJpaRepository,
-    private val txAdvice: TxAdvice,
 ) : NotificationStoredRepository {
     override fun save(notificationStored: NotificationStored.Create): NotificationStored.Info =
-        txAdvice.write {
+        Tx.writeable {
             notificationStoredJpaRepository
                 .save(
                     NotificationStoredEntity(notificationStored),
@@ -21,7 +20,7 @@ class NotificationStoredCoreRepository(
         }
 
     override fun saveAll(createAll: List<NotificationStored.Create>) =
-        txAdvice.write {
+        Tx.writeable {
             notificationStoredJpaRepository
                 .saveAll(
                     createAll.map { NotificationStoredEntity(it) },
@@ -29,7 +28,7 @@ class NotificationStoredCoreRepository(
         }
 
     override fun findById(notificationStoredId: Long): NotificationStored.Info =
-        txAdvice.readOnly {
+        Tx.readable {
             notificationStoredJpaRepository
                 .findByIdOrElseThrow(notificationStoredId)
                 .toNotificationStoredInfo()
@@ -39,7 +38,7 @@ class NotificationStoredCoreRepository(
         userId: Long,
         readStatus: ReadStatus,
     ): List<NotificationStored.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             notificationStoredJpaRepository
                 .findByUserIdAndReadStatus(userId, readStatus)
                 .map { it.toNotificationStoredInfo() }
@@ -49,13 +48,13 @@ class NotificationStoredCoreRepository(
         userId: Long,
         readStatus: ReadStatus?,
     ): Long =
-        txAdvice.readOnly {
+        Tx.readable {
             notificationStoredJpaRepository
                 .countByUserIdAndReadStatus(userId, readStatus)
         }
 
     override fun read(notificationStoredId: Long) =
-        txAdvice.write {
+        Tx.writeable {
             val notificationStored =
                 notificationStoredJpaRepository
                     .findByIdOrElseThrow(notificationStoredId)

@@ -17,7 +17,7 @@ class UserEventListener(
     private val userReader: UserReader,
     private val discordClient: DiscordClient,
 ) {
-    @ApplicationModuleListener(condition = "#event.userId != null")
+    @ApplicationModuleListener(id = "user-signup-create-pet", condition = "#event.userId != null")
     fun onCreatePetListener(event: UserSignUpEvent) {
         val (currentYear, currentMonth) = LocalDate.now().let { it.year to it.month }
 
@@ -28,7 +28,7 @@ class UserEventListener(
         userPetAppender.append(event.userId, level1Pet)
     }
 
-    @ApplicationModuleListener(condition = "#event.userId != null")
+    @ApplicationModuleListener(id = "user-signup-discord-notification", condition = "#event.userId != null")
     fun onDiscordNotificationListener(event: UserSignUpEvent) {
         val userProfile =
             userReader.readUserProfile(event.userId)

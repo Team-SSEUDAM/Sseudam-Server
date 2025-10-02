@@ -3,7 +3,7 @@ package com.sseudam.report
 import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.notification.fcm.FcmSender
-import com.sseudam.report.event.ReportUpdateEvent
+import com.sseudam.report.event.SpotReportUpdateEvent
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
@@ -24,8 +24,8 @@ class ReportEventListener(
         private val log by logger()
     }
 
-    @ApplicationModuleListener
-    fun updateReportListener(event: ReportUpdateEvent) {
+    @ApplicationModuleListener(id = "update-report-trash-spot")
+    fun updateReportListener(event: SpotReportUpdateEvent) {
         when (event.report.reportType) {
             ReportType.PHOTO -> {
                 trashSpotImageService.updateImage(
@@ -39,8 +39,8 @@ class ReportEventListener(
         }
     }
 
-    @ApplicationModuleListener
-    fun reportUpdateNotificationListener(event: ReportUpdateEvent) {
+    @ApplicationModuleListener(id = "report-update-fcm-notification")
+    fun reportUpdateNotificationListener(event: SpotReportUpdateEvent) {
         try {
             val userId = event.report.userId
             val type = "REPORT"

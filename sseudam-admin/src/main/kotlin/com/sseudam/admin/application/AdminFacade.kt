@@ -9,7 +9,7 @@ import com.sseudam.notification.ReadStatus
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.notification.fcm.NewFirebaseCloudMessage
 import com.sseudam.pet.PetPointAction
-import com.sseudam.pet.event.PetEventPublisher
+import com.sseudam.pet.event.UserPetContextEvent
 import com.sseudam.report.ReportFacade
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportType
@@ -19,13 +19,13 @@ import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.UpdateSuggestionCommand
-import com.sseudam.suggestion.event.SuggestionEventPublisher
+import com.sseudam.suggestion.event.SuggestionUpdateEvent
 import com.sseudam.support.CacheRepository
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.image.TrashSpotImage
 import com.sseudam.trashspot.image.TrashSpotImageService
@@ -33,6 +33,7 @@ import com.sseudam.user.UserProfile
 import com.sseudam.user.UserService
 import com.sseudam.user.device.UserDeviceService
 import com.sseudam.visit.SpotVisitedService
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -52,9 +53,7 @@ class AdminFacade(
     private val reportFacade: ReportFacade,
     private val cacheRepository: CacheRepository,
     private val trashSpotImageService: TrashSpotImageService,
-    private val petEventPublisher: PetEventPublisher,
-    private val suggestionEventPublisher: SuggestionEventPublisher,
-    private val txAdvice: TxAdvice,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     companion object {
         private const val SPOT_DETAIL_CACHE_KEY_PREFIX = "spot:detail:"
@@ -110,7 +109,7 @@ class AdminFacade(
     fun findReportDetails(reportId: Long): SpotReport.Detail = reportFacade.findReportDetails(reportId)
 
     fun updateSpotSuggestionStatus(command: UpdateSuggestionCommand): SpotSuggestion.UpdateResult =
-        txAdvice.write {
+        Tx.writeable {
             val suggestion = suggestionService.updateStatus(command.suggestionId, command.status)
             val spotId: Long =
                 when (suggestion.status) {
@@ -119,7 +118,12 @@ class AdminFacade(
                         trashSpotImageService.append(
                             TrashSpotImage.Create(trashSpot.id, suggestion.imageUrl),
                         )
-                        petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
+                        applicationEventPublisher.publishEvent(
+                            UserPetContextEvent(
+                                userId = suggestion.userId,
+                                petPointAction = PetPointAction.SUGGESTION_APPROVED,
+                            ),
+                        )
                         cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + trashSpot.id)
                         trashSpot.id
                     }
@@ -133,15 +137,20 @@ class AdminFacade(
                         0L
                     }
                 }
-            suggestionEventPublisher.publish(suggestion)
-            return@write SpotSuggestion.UpdateResult.of(suggestion, spotId)
+            applicationEventPublisher.publishEvent(
+                SuggestionUpdateEvent(
+                    suggestion,
+                ),
+            )
+            return@writeable SpotSuggestion.UpdateResult.of(suggestion, spotId)
         }
 
-    fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info {
-        val spotReportInfo = reportService.updateSpotReport(updateReport)
-        cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + spotReportInfo.spotId)
-        return spotReportInfo
-    }
+    fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info =
+        Tx.writeable {
+            reportService.updateSpotReport(updateReport).also {
+                cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + it.spotId)
+            }
+        }
 
     fun pushToAllUsers(
         topic: String,

@@ -1,14 +1,13 @@
 package com.sseudam.report
 
-import com.sseudam.pet.PetPointAction
-import com.sseudam.pet.event.PetEventPublisher
-import com.sseudam.report.event.ReportEventPublisher
+import com.sseudam.report.event.SpotReportUpdateEvent
 import com.sseudam.report.reject.ReportReject
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,10 +15,7 @@ class ReportService(
     private val reportAppender: ReportAppender,
     private val reportReader: ReportReader,
     private val reportUpdater: ReportUpdater,
-    private val reportDeleter: ReportDeleter,
-    private val txAdvice: TxAdvice,
-    private val reportEventPublisher: ReportEventPublisher,
-    private val petEventPublisher: PetEventPublisher,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     fun appendReport(
         imageUrl: String,
@@ -40,24 +36,12 @@ class ReportService(
     fun findRejectReportByReportId(reportId: Long): ReportReject.Info? = reportReader.readRejectByReportId(reportId)
 
     fun updateSpotReport(updateReport: UpdateReport): SpotReport.Info =
-        txAdvice.write {
-            val report = reportUpdater.update(updateReport.reportId, updateReport.status)
-            reportEventPublisher.publish(report)
-
-            when (report.status) {
-                ReportStatus.APPROVE -> {
-                    reportDeleter.deleteBy(updateReport.reportId)
-                    petEventPublisher.publish(report.userId, PetPointAction.REPORT_APPROVED)
-                }
-                ReportStatus.REJECT -> {
-                    if (!updateReport.reason.isNullOrBlank()) {
-                        reportAppender.appendReject(report.id, updateReport.reason)
-                    }
-                }
-                else -> {}
+        Tx.writeable {
+            reportUpdater.update(updateReport.reportId, updateReport.status).also { report ->
+                applicationEventPublisher.publishEvent(
+                    SpotReportUpdateEvent(report, updateReport.reason),
+                )
             }
-
-            report
         }
 
     fun validateSpotReportName(name: String) {
