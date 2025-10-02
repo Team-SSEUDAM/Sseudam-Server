@@ -1,8 +1,8 @@
 package com.sseudam.storage.db.core.notification
 
 import com.sseudam.notification.NotificationStored
-import com.sseudam.notification.NotificationStoredRepository
 import com.sseudam.notification.ReadStatus
+import com.sseudam.notification.repository.NotificationStoredRepository
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.support.tx.Tx
 import org.springframework.stereotype.Repository

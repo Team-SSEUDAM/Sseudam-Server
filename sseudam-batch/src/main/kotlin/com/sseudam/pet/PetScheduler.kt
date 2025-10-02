@@ -1,11 +1,11 @@
 package com.sseudam.pet
 
-import com.sseudam.notification.NotificationMessages
 import com.sseudam.notification.NotificationService
 import com.sseudam.notification.NotificationStored
 import com.sseudam.notification.ReadStatus
 import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.component.NotificationStoredKeyGenerator
+import com.sseudam.notification.dto.NotificationMessages
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserService

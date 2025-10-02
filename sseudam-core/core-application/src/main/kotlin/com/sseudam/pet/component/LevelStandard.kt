@@ -1,4 +1,4 @@
-package com.sseudam.pet
+package com.sseudam.pet.component
 
 object LevelStandard {
     const val LEVEL_1_MIN = 0

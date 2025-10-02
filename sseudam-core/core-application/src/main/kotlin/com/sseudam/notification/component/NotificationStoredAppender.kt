@@ -1,7 +1,7 @@
 package com.sseudam.notification.component
 
 import com.sseudam.notification.NotificationStored
-import com.sseudam.notification.NotificationStoredRepository
+import com.sseudam.notification.repository.NotificationStoredRepository
 import org.springframework.stereotype.Component
 
 @Component

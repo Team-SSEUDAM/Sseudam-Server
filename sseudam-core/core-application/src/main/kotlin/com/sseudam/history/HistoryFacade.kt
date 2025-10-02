@@ -1,6 +1,9 @@
 package com.sseudam.history
 
 import com.fasterxml.jackson.core.type.TypeReference
+import com.sseudam.history.dto.HistoryStatus
+import com.sseudam.history.dto.SpotActionType
+import com.sseudam.history.dto.SpotHistory
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.SpotReport

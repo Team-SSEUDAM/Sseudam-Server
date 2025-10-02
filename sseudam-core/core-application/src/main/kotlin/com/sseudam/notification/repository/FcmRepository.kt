@@ -1,4 +1,6 @@
-package com.sseudam.notification.fcm
+package com.sseudam.notification.repository
+
+import com.sseudam.notification.dto.FirebaseCloudMessage
 
 interface FcmRepository {
     fun sendAll(firebaseCloudMessages: List<FirebaseCloudMessage>): List<FirebaseCloudMessage>

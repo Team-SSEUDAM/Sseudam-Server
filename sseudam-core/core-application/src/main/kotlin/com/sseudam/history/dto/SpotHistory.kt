@@ -1,4 +1,4 @@
-package com.sseudam.history
+package com.sseudam.history.dto
 
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson

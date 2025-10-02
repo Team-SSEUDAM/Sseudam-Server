@@ -1,8 +1,8 @@
 package com.sseudam.suggestion.event
 
-import com.sseudam.notification.NotificationMessages
-import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.notification.discord.DiscordClient
+import com.sseudam.notification.dto.NotificationMessages
+import com.sseudam.notification.dto.SendNotificationMessage
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.error.ErrorException

@@ -1,8 +1,8 @@
 package com.sseudam.presentation.v1.auth.request
 
 import com.sseudam.auth.AuthorityType
-import com.sseudam.auth.GrantedAuthority
 import com.sseudam.auth.command.AuthenticationSocialCommand
+import com.sseudam.auth.dto.GrantedAuthority
 import com.sseudam.common.Address
 import com.sseudam.user.SocialType
 import com.sseudam.user.command.UserCommand

@@ -1,4 +1,4 @@
-package com.sseudam.notification
+package com.sseudam.notification.dto
 
 data class SendNotificationMessage(
     val userId: Long,

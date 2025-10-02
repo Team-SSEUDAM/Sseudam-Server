@@ -1,7 +1,7 @@
 package com.sseudam.auth.repository
 
-import com.sseudam.auth.GrantedAuthority
 import com.sseudam.auth.Token
+import com.sseudam.auth.dto.GrantedAuthority
 import com.sseudam.auth.dto.Provider
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User

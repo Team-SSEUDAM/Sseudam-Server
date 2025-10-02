@@ -1,4 +1,4 @@
-package com.sseudam.notification
+package com.sseudam.notification.dto
 
 object NotificationMessages {
     private val messages: List<Pair<String, String>> =

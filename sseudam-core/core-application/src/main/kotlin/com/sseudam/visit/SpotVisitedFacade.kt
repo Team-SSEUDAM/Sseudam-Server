@@ -2,8 +2,8 @@ package com.sseudam.visit
 
 import com.sseudam.common.GeoConverter
 import com.sseudam.common.GeoJson
-import com.sseudam.notification.NotificationMessages
-import com.sseudam.notification.SendNotificationMessage
+import com.sseudam.notification.dto.NotificationMessages
+import com.sseudam.notification.dto.SendNotificationMessage
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.UserPetContextEvent

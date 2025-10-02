@@ -1,6 +1,6 @@
 package com.sseudam.auth.command
 
-import com.sseudam.auth.GrantedAuthority
+import com.sseudam.auth.dto.GrantedAuthority
 import com.sseudam.user.SocialType
 
 data class AuthenticationSocialCommand(

@@ -1,4 +1,4 @@
-package com.sseudam.history
+package com.sseudam.history.dto
 
 enum class HistoryStatus(
     val displayName: String,

@@ -1,11 +1,11 @@
 package com.sseudam.auth.component
 
-import com.sseudam.auth.GrantedAuthority
 import com.sseudam.auth.Token
 import com.sseudam.auth.TokenStatus
 import com.sseudam.auth.command.AuthenticationHistoryCommand
 import com.sseudam.auth.command.CredentialSseudamCommand
 import com.sseudam.auth.command.TokenGenerateCommand
+import com.sseudam.auth.dto.GrantedAuthority
 import com.sseudam.auth.repository.TokenRepository
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User

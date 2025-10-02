@@ -1,4 +1,7 @@
-package com.sseudam.notification
+package com.sseudam.notification.repository
+
+import com.sseudam.notification.NotificationStored
+import com.sseudam.notification.ReadStatus
 
 interface NotificationStoredRepository {
     fun save(notificationStored: NotificationStored.Create): NotificationStored.Info

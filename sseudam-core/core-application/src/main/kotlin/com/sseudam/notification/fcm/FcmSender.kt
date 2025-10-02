@@ -2,10 +2,12 @@ package com.sseudam.notification.fcm
 
 import com.sseudam.notification.NotificationStored
 import com.sseudam.notification.ReadStatus
-import com.sseudam.notification.SendNotificationMessage
 import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.component.NotificationStoredAppender
 import com.sseudam.notification.component.NotificationStoredKeyGenerator
+import com.sseudam.notification.dto.FirebaseCloudMessage
+import com.sseudam.notification.dto.SendNotificationMessage
+import com.sseudam.notification.repository.FcmRepository
 import com.sseudam.user.component.UserDeviceReader
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component

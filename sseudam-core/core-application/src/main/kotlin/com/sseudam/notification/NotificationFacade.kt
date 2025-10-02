@@ -2,6 +2,7 @@ package com.sseudam.notification
 
 import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.component.NotificationStoredKeyGenerator
+import com.sseudam.notification.dto.NotificationMessages
 import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserService
 import org.springframework.stereotype.Service

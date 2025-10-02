@@ -2,6 +2,7 @@ package com.sseudam.auth
 
 import com.sseudam.auth.command.CredentialSseudamCommand
 import com.sseudam.auth.component.AuthenticationProcessor
+import com.sseudam.auth.dto.GrantedAuthority
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User
 import org.springframework.stereotype.Service

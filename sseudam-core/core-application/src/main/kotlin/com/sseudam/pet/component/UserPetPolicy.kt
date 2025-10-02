@@ -1,6 +1,5 @@
 package com.sseudam.pet.component
 
-import com.sseudam.pet.LevelStandard
 import com.sseudam.pet.Pet
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType

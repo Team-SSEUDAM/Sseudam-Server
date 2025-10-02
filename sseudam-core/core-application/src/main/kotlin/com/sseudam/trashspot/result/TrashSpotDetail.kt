@@ -1,5 +1,6 @@
-package com.sseudam.trashspot
+package com.sseudam.trashspot.result
 
+import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.image.TrashSpotImage
 import com.sseudam.user.UserProfile
 

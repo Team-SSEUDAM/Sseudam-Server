@@ -1,5 +1,6 @@
 package com.sseudam.notification.fcm
 
+import com.sseudam.notification.dto.FcmKey
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

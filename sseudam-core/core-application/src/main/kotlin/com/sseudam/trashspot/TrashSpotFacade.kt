@@ -8,6 +8,7 @@ import com.sseudam.suggestion.SuggestionService
 import com.sseudam.support.Cache
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import com.sseudam.trashspot.image.TrashSpotImageService
+import com.sseudam.trashspot.result.TrashSpotDetail
 import com.sseudam.user.UserService
 import com.sseudam.visit.SpotVisitedService
 import org.springframework.stereotype.Service

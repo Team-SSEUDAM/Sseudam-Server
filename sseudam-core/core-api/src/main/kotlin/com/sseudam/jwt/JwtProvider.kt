@@ -2,13 +2,13 @@ package com.sseudam.jwt
 
 import com.sseudam.auth.AuthenticationHistory
 import com.sseudam.auth.AuthorityType
-import com.sseudam.auth.GrantedAuthority
 import com.sseudam.auth.Token
 import com.sseudam.auth.TokenStatus
 import com.sseudam.auth.command.TokenGenerateCommand
 import com.sseudam.auth.command.UpdateAuthenticationHistoryCommand
 import com.sseudam.auth.component.AuthenticationHistoryReader
 import com.sseudam.auth.component.AuthenticationHistoryUpdater
+import com.sseudam.auth.dto.GrantedAuthority
 import com.sseudam.auth.dto.Provider
 import com.sseudam.auth.dto.ProviderDetail
 import com.sseudam.auth.repository.RedisTokenRepository
