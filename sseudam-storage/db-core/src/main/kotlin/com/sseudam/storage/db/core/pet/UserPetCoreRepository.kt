@@ -2,21 +2,20 @@ package com.sseudam.storage.db.core.pet
 
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.UserPet
-import com.sseudam.pet.UserPetRepository
+import com.sseudam.pet.repository.UserPetRepository
 import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import org.springframework.stereotype.Repository
 
 @Repository
 class UserPetCoreRepository(
     private val userPetCustomRepository: UserPetCustomRepository,
     private val userPetJpaRepository: UserPetJpaRepository,
-    private val txAdvice: TxAdvice,
 ) : UserPetRepository {
     override fun save(createUserPet: UserPet.Create): UserPet.Info =
-        txAdvice.write {
+        Tx.writeable {
             userPetJpaRepository
                 .save(
                     UserPetEntity(
@@ -26,7 +25,7 @@ class UserPetCoreRepository(
         }
 
     override fun saveAll(createUserPets: List<UserPet.Create>): List<UserPet.Info> =
-        txAdvice.write {
+        Tx.writeable {
             userPetJpaRepository
                 .saveAll(
                     createUserPets.map { UserPetEntity(it) },
@@ -34,12 +33,12 @@ class UserPetCoreRepository(
         }
 
     override fun findByUserId(userId: Long): UserPet.Info? =
-        txAdvice.readOnly {
+        Tx.readable {
             userPetJpaRepository.findByUserIdAndDeletedAtIsNull(userId)?.toUserPetInfo()
         }
 
     override fun findAll(): List<UserPet.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             userPetJpaRepository
                 .findAllByDeletedAtIsNull()
                 .map { it.toUserPetInfo() }
@@ -49,7 +48,7 @@ class UserPetCoreRepository(
         userId: Long,
         nickname: String,
     ): UserPet.Info =
-        txAdvice.write {
+        Tx.writeable {
             val userPet =
                 userPetJpaRepository
                     .findByUserIdAndDeletedAtIsNull(userId) ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
@@ -60,7 +59,7 @@ class UserPetCoreRepository(
         userPetId: Long,
         petId: Long,
     ): UserPet.Info =
-        txAdvice.write {
+        Tx.writeable {
             val userPet =
                 userPetJpaRepository
                     .findByIdAndDeletedAtIsNullOrElseThrow(userPetId)
@@ -71,7 +70,7 @@ class UserPetCoreRepository(
         userPetId: Long,
         action: PetPointAction,
     ): UserPet.Info =
-        txAdvice.write {
+        Tx.writeable {
             val userPet =
                 userPetJpaRepository
                     .findByIdAndDeletedAtIsNullOrElseThrow(userPetId)
@@ -82,7 +81,7 @@ class UserPetCoreRepository(
         userPetId: Long,
         point: Long,
     ): UserPet.Info =
-        txAdvice.write {
+        Tx.writeable {
             val userPet =
                 userPetJpaRepository
                     .findByIdAndDeletedAtIsNullOrElseThrow(userPetId)
@@ -94,16 +93,16 @@ class UserPetCoreRepository(
     }
 
     override fun deleteAllByUserIds(userIds: List<Long>) {
-        txAdvice.write {
+        Tx.writeable {
             userPetCustomRepository.softDeleteAllByUserIds(userIds)
         }
     }
 
     override fun deleteByUserId(userId: Long) =
-        txAdvice.write {
+        Tx.writeable {
             val userPet =
                 userPetJpaRepository.findByUserIdAndDeletedAtIsNull(userId)
             userPet?.softDelete()
-            return@write
+            return@writeable
         }
 }

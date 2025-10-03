@@ -7,6 +7,7 @@ dependencies {
     implementation(libs.spring.boot.starter.security)
     testImplementation(libs.spring.security.test)
 
+    implementation(project(":sseudam-core:core-application"))
     implementation(project(":sseudam-core:core-domain"))
     implementation(project(":sseudam-core:core-contract"))
     implementation(project(":sseudam-storage:db-core"))

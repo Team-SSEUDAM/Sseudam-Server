@@ -1,17 +1,16 @@
 package com.sseudam.storage.db.core.attendance
 
 import com.sseudam.attendance.Attendance
-import com.sseudam.attendance.AttendanceRepository
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.attendance.repository.AttendanceRepository
+import com.sseudam.support.tx.Tx
 import org.springframework.stereotype.Repository
 
 @Repository
 class AttendanceCoreRepository(
     private val attendanceJpaRepository: AttendanceJpaRepository,
-    private val txAdvice: TxAdvice,
 ) : AttendanceRepository {
     override fun save(createAttendance: Attendance.Create): Attendance.Info =
-        txAdvice.write {
+        Tx.writeable {
             attendanceJpaRepository
                 .save(
                     AttendanceEntity(
@@ -21,7 +20,7 @@ class AttendanceCoreRepository(
         }
 
     override fun findLastByUserId(userId: Long): Attendance.Info? =
-        txAdvice.readOnly {
+        Tx.readable {
             attendanceJpaRepository
                 .findFirstByUserIdOrderByDateDesc(userId)
                 ?.toAttendanceInfo()

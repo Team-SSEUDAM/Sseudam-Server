@@ -1,6 +1,6 @@
 package com.sseudam.presentation.v1.pet.response
 
-import com.sseudam.pet.UserPetLevelUpHistoryInfo
+import com.sseudam.pet.result.UserPetLevelUpHistoryInfo
 
 data class UserPetLevelHistoryAllResponse(
     val list: List<UserPetLevelHistoryResponse>,

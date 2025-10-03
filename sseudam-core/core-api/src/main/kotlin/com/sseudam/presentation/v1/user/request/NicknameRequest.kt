@@ -2,7 +2,7 @@ package com.sseudam.presentation.v1.user.request
 
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
-import com.sseudam.user.UpdateNickname
+import com.sseudam.user.command.UpdateNicknameCommand
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "닉네임 요청 Json")
@@ -14,8 +14,8 @@ data class NicknameRequest(
         private val NICKNAME_REGEX = Regex("^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]+$")
     }
 
-    fun toUpdateNickname(): UpdateNickname =
-        UpdateNickname(
+    fun toUpdateNickname(): UpdateNicknameCommand =
+        UpdateNicknameCommand(
             nickname = nickname,
         )
 

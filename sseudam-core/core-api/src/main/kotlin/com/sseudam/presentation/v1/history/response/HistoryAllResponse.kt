@@ -1,6 +1,6 @@
 package com.sseudam.presentation.v1.history.response
 
-import com.sseudam.history.SpotHistory
+import com.sseudam.history.dto.SpotHistory
 
 data class HistoryAllResponse(
     val list: List<HistoryResponse>,

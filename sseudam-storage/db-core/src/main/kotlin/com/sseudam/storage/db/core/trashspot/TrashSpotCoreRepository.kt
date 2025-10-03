@@ -2,21 +2,20 @@ package com.sseudam.storage.db.core.trashspot
 
 import com.sseudam.common.Region
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import com.sseudam.trashspot.TrashSpot
-import com.sseudam.trashspot.TrashSpotLocation
-import com.sseudam.trashspot.TrashSpotRepository
 import com.sseudam.trashspot.TrashType
+import com.sseudam.trashspot.dto.TrashSpotLocation
+import com.sseudam.trashspot.repository.TrashSpotRepository
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Repository
 
 @Repository
 class TrashSpotCoreRepository(
     private val trashSpotJpaRepository: TrashSpotJpaRepository,
-    private val txAdvice: TxAdvice,
 ) : TrashSpotRepository {
     override fun save(createTrashSpot: TrashSpot.Create): TrashSpot.Info =
-        txAdvice.write {
+        Tx.writeable {
             trashSpotJpaRepository
                 .save(
                     TrashSpotEntity(createTrashSpot),
@@ -24,21 +23,21 @@ class TrashSpotCoreRepository(
         }
 
     override fun findAll(): List<TrashSpot.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotJpaRepository
                 .findAll()
                 .map { it.toTrashSpot() }
         }
 
     override fun findAllByRegion(region: Region): List<TrashSpot.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotJpaRepository
                 .findAllByRegion(region)
                 .map { it.toTrashSpot() }
         }
 
     override fun findAllByLocation(location: TrashSpotLocation): List<TrashSpot.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             // region/type 모두 사용하지 않는 경우에 대한 단일 네이티브 쿼리 사용
             trashSpotJpaRepository
                 .findAllByLocationWithOptionalFilters(
@@ -55,7 +54,7 @@ class TrashSpotCoreRepository(
         region: Region,
         location: TrashSpotLocation,
     ): List<TrashSpot.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotJpaRepository
                 .findAllByLocationWithOptionalFilters(
                     location.swLat!!,
@@ -68,7 +67,7 @@ class TrashSpotCoreRepository(
         }
 
     override fun findAllByType(type: TrashType): List<TrashSpot.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotJpaRepository
                 .findAllByTrashType(type)
                 .map { it.toTrashSpot() }
@@ -78,7 +77,7 @@ class TrashSpotCoreRepository(
         location: TrashSpotLocation,
         type: TrashType,
     ): List<TrashSpot.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotJpaRepository
                 .findAllByLocationWithOptionalFilters(
                     location.swLat!!,
@@ -91,28 +90,28 @@ class TrashSpotCoreRepository(
         }
 
     override fun findById(spotId: Long): TrashSpot.Info =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotJpaRepository
                 .findByIdOrElseThrow(spotId)
                 .toTrashSpot()
         }
 
     override fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotJpaRepository
                 .findAllByIdIn(spotIds)
                 .map { it.toTrashSpot() }
         }
 
     override fun findBySite(site: String): TrashSpot.Info? =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotJpaRepository
                 .findByAddressSite(site)
                 ?.toTrashSpot()
         }
 
     override fun findByPoint(point: Point): TrashSpot.Info? =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotJpaRepository
                 .findByPointAndDeletedAtIsNull(point)
                 ?.toTrashSpot()
@@ -121,7 +120,7 @@ class TrashSpotCoreRepository(
     override fun updateName(
         spotId: Long,
         name: String,
-    ) = txAdvice.write {
+    ) = Tx.writeable {
         trashSpotJpaRepository
             .findByIdOrElseThrow(spotId)
             .updateName(name)
@@ -130,7 +129,7 @@ class TrashSpotCoreRepository(
     override fun updateType(
         spotId: Long,
         type: TrashType,
-    ) = txAdvice.write {
+    ) = Tx.writeable {
         trashSpotJpaRepository
             .findByIdOrElseThrow(spotId)
             .updateType(type)
@@ -141,7 +140,7 @@ class TrashSpotCoreRepository(
         region: Region,
         point: Point,
     ) {
-        txAdvice.write {
+        Tx.writeable {
             trashSpotJpaRepository
                 .findByIdOrElseThrow(spotId)
                 .updateLocation(region, point)
@@ -149,7 +148,7 @@ class TrashSpotCoreRepository(
     }
 
     override fun existsByName(name: String): Boolean =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotJpaRepository.existsByName(name)
         }
 }

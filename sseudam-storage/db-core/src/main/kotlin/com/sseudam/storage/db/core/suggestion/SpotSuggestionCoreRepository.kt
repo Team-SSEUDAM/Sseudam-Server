@@ -3,11 +3,11 @@ package com.sseudam.storage.db.core.suggestion
 import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.suggestion.SpotSuggestion
-import com.sseudam.suggestion.SpotSuggestionRepository
 import com.sseudam.suggestion.SuggestionStatus
+import com.sseudam.suggestion.repository.SpotSuggestionRepository
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Repository
 
@@ -15,14 +15,13 @@ import org.springframework.stereotype.Repository
 class SpotSuggestionCoreRepository(
     private val spotSuggestionJpaRepository: SpotSuggestionJpaRepository,
     private val spotSuggestionCustomRepository: SpotSuggestionCustomRepository,
-    private val txAdvice: TxAdvice,
 ) : SpotSuggestionRepository {
     override fun create(
         imageUrl: String,
         point: Point,
         createSpotSuggestion: SpotSuggestion.Create,
     ): SpotSuggestion.Info =
-        txAdvice.write {
+        Tx.writeable {
             spotSuggestionJpaRepository
                 .save(
                     SpotSuggestionEntity(imageUrl, point, createSpotSuggestion),
@@ -30,28 +29,28 @@ class SpotSuggestionCoreRepository(
         }
 
     override fun findBy(suggestionId: Long): SpotSuggestion.Info =
-        txAdvice.readOnly {
+        Tx.readable {
             spotSuggestionJpaRepository
                 .findByIdOrElseThrow(suggestionId)
                 .toSpotSuggestion()
         }
 
     override fun findAllByUserId(userId: Long): List<SpotSuggestion.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             spotSuggestionJpaRepository
                 .findAllByUserId(userId)
                 .map { it.toSpotSuggestion() }
         }
 
     override fun findBySite(site: String): SpotSuggestion.Info? =
-        txAdvice.readOnly {
+        Tx.readable {
             spotSuggestionJpaRepository
                 .findByAddressSiteAndDeletedAtIsNull(site)
                 ?.toSpotSuggestion()
         }
 
     override fun findByPoint(point: Point): SpotSuggestion.Info? =
-        txAdvice.readOnly {
+        Tx.readable {
             spotSuggestionJpaRepository
                 .findByPointAndDeletedAtIsNull(point)
                 ?.toSpotSuggestion()
@@ -61,7 +60,7 @@ class SpotSuggestionCoreRepository(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
     ): Page<SpotSuggestion.Detail> =
-        txAdvice.readOnly {
+        Tx.readable {
             spotSuggestionCustomRepository.findAllBy(offsetPageRequest, searchStatus)
         }
 
@@ -69,18 +68,18 @@ class SpotSuggestionCoreRepository(
         suggestionId: Long,
         status: SuggestionStatus,
     ): SpotSuggestion.Info =
-        txAdvice.write {
+        Tx.writeable {
             val suggestion = spotSuggestionJpaRepository.findByIdOrElseThrow(suggestionId)
-            return@write suggestion.updateStatus(status).toSpotSuggestion()
+            return@writeable suggestion.updateStatus(status).toSpotSuggestion()
         }
 
     override fun existsByName(name: String): Boolean =
-        txAdvice.readOnly {
+        Tx.readable {
             spotSuggestionJpaRepository.existsBySpotName(name)
         }
 
     override fun deleteBy(suggestionId: Long) =
-        txAdvice.write {
+        Tx.writeable {
             val suggestion = spotSuggestionJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(suggestionId)
             suggestion.softDelete()
         }

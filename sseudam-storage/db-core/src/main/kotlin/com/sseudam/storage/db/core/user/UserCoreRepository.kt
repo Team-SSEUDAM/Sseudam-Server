@@ -5,14 +5,14 @@ import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.TxAdvice
-import com.sseudam.user.NewUser
-import com.sseudam.user.NewUserKey
+import com.sseudam.support.tx.Tx
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User
 import com.sseudam.user.UserCredentials
 import com.sseudam.user.UserProfile
-import com.sseudam.user.UserRepository
+import com.sseudam.user.command.UserCommand
+import com.sseudam.user.command.UserKeyCommand
+import com.sseudam.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
@@ -20,18 +20,17 @@ import org.springframework.stereotype.Repository
 class UserCoreRepository(
     private val userJpaRepository: UserJpaRepository,
     private val userCustomRepository: UserCustomRepository,
-    private val txAdvice: TxAdvice,
 ) : UserRepository {
     override fun create(
-        newUser: NewUser,
-        newUserKey: NewUserKey,
+        userCommand: UserCommand,
+        userKeyCommand: UserKeyCommand,
     ): User =
-        txAdvice.write {
-            userJpaRepository.save(UserEntity(newUser, newUserKey)).toUser()
+        Tx.writeable {
+            userJpaRepository.save(UserEntity(userCommand, userKeyCommand)).toUser()
         }
 
     override fun readUserById(id: Long): User? =
-        txAdvice.readOnly {
+        Tx.readable {
             userJpaRepository.findByIdOrNull(id)?.toUser()
         }
 
@@ -39,60 +38,60 @@ class UserCoreRepository(
         loginId: String,
         password: String,
     ): User =
-        txAdvice.readOnly {
+        Tx.readable {
             userJpaRepository.findByEmailAndDeletedAtIsNull(loginId)?.toUser()
                 ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
         }
 
     override fun readUserCredentials(loginId: String): UserCredentials =
-        txAdvice.readOnly {
+        Tx.readable {
             userJpaRepository.findByEmailAndDeletedAtIsNull(loginId)?.toUserCredentials()
                 ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
         }
 
     override fun readByUserIdOrNull(id: Long): UserProfile? =
-        txAdvice.readOnly {
+        Tx.readable {
             userJpaRepository.findByIdAndDeletedAtIsNull(id)?.toProfile()
         }
 
     override fun readAllByUserIds(userIds: List<Long>): List<UserProfile> =
-        txAdvice.readOnly {
+        Tx.readable {
             userJpaRepository.findAllByIdIn(userIds).map { it.toProfile() }
         }
 
     override fun readByUserKey(userKey: String): UserProfile =
-        txAdvice.readOnly {
+        Tx.readable {
             userJpaRepository.findByUserKeyAndDeletedAtIsNull(userKey)?.toProfile()
                 ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
         }
 
     override fun findProfileByUserId(id: Long): UserProfile? =
-        txAdvice.readOnly {
+        Tx.readable {
             userJpaRepository.findByIdAndDeletedAtIsNull(id)?.toProfile()
         }
 
     override fun readUserByEmail(email: String): SocialUser? =
-        txAdvice.readOnly {
+        Tx.readable {
             userJpaRepository.findByEmailAndDeletedAtIsNull(email)?.toSocialUser()
         }
 
     override fun findAll(): List<UserProfile> =
-        txAdvice.readOnly {
+        Tx.readable {
             userJpaRepository.findAllByDeletedAtIsNull().map { it.toProfile() }
         }
 
     override fun existsByEmail(email: String): Boolean =
-        txAdvice.readOnly {
+        Tx.readable {
             userJpaRepository.existsByEmailAndDeletedAtIsNull(email)
         }
 
     override fun readAllBy(offsetPageRequest: OffsetPageRequest): Page<UserProfile> =
-        txAdvice.readOnly {
+        Tx.readable {
             userCustomRepository.findAllBy(offsetPageRequest)
         }
 
     override fun existsByNickname(nickname: String): Boolean =
-        txAdvice.readOnly {
+        Tx.readable {
             userJpaRepository.existsByNicknameAndDeletedAtIsNull(nickname)
         }
 
@@ -100,28 +99,28 @@ class UserCoreRepository(
         userKey: String,
         nickname: String,
     ): UserProfile =
-        txAdvice.write {
+        Tx.writeable {
             val user = userJpaRepository.findByUserKeyAndDeletedAtIsNull(userKey) ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
             user.updateNickname(nickname)
-            return@write user.toProfile()
+            return@writeable user.toProfile()
         }
 
     override fun updateName(
         userKey: String,
         name: String,
     ): UserProfile =
-        txAdvice.write {
+        Tx.writeable {
             val user = userJpaRepository.findByUserKeyAndDeletedAtIsNull(userKey) ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
             user.updateName(name)
             user.updateNickname(name)
-            return@write user.toProfile()
+            return@writeable user.toProfile()
         }
 
     override fun updateAddress(
         userKey: String,
         address: Address,
     ): UserProfile =
-        txAdvice.write {
+        Tx.writeable {
             val user = userJpaRepository.findByUserKeyAndDeletedAtIsNull(userKey) ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
             user.updateAddress(address)
             user.toProfile()
@@ -131,14 +130,14 @@ class UserCoreRepository(
         userKey: String,
         email: String,
     ): UserProfile =
-        txAdvice.write {
+        Tx.writeable {
             val user = userJpaRepository.findByUserKeyAndDeletedAtIsNull(userKey) ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
             user.updateEmail(email)
             user.toProfile()
         }
 
     override fun delete(userKey: String) =
-        txAdvice.write {
+        Tx.writeable {
             val user = userJpaRepository.findByUserKeyAndDeletedAtIsNull(userKey) ?: throw ErrorException(ErrorType.NOT_FOUND_DATA)
             user.softDelete()
         }

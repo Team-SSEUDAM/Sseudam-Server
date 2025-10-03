@@ -1,17 +1,16 @@
 package com.sseudam.storage.db.core.trashspot.image
 
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import com.sseudam.trashspot.image.TrashSpotImage
-import com.sseudam.trashspot.image.TrashSpotImageRepository
+import com.sseudam.trashspot.repository.TrashSpotImageRepository
 import org.springframework.stereotype.Repository
 
 @Repository
 class TrashSpotImageCoreRepository(
     private val trashSpotImageJpaRepository: TrashSpotImageJpaRepository,
-    private val txAdvice: TxAdvice,
 ) : TrashSpotImageRepository {
     override fun save(createImage: TrashSpotImage.Create): TrashSpotImage.Info =
-        txAdvice.write {
+        Tx.writeable {
             trashSpotImageJpaRepository
                 .save(
                     TrashSpotImageEntity(createImage),
@@ -19,7 +18,7 @@ class TrashSpotImageCoreRepository(
         }
 
     override fun findAllByTrashSpotIds(spotIds: List<Long>): List<TrashSpotImage.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotImageJpaRepository
                 .findAllByTrashSpotIdIn(spotIds)
                 .filter { it.deletedAt == null }
@@ -27,7 +26,7 @@ class TrashSpotImageCoreRepository(
         }
 
     override fun findAllBySpotId(spotId: Long): List<TrashSpotImage.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             trashSpotImageJpaRepository
                 .findAllByTrashSpotId(spotId)
                 .filter { it.deletedAt == null }
@@ -38,7 +37,7 @@ class TrashSpotImageCoreRepository(
     override fun updateImage(
         spotId: Long,
         imageUrl: String,
-    ) = txAdvice.write {
+    ) = Tx.writeable {
         val trashSpotImages =
             trashSpotImageJpaRepository
                 .findAllByTrashSpotId(spotId)

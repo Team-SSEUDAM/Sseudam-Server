@@ -4,34 +4,26 @@ import com.sseudam.admin.domain.AdminToken
 import com.sseudam.admin.domain.AdminUserProfile
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.notification.NotificationService
-import com.sseudam.notification.NotificationStored
-import com.sseudam.notification.ReadStatus
+import com.sseudam.notification.command.CreateNotificationStoredCommand
+import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.fcm.FcmSender
-import com.sseudam.notification.fcm.NewFirebaseCloudMessage
-import com.sseudam.pet.PetPointAction
-import com.sseudam.pet.event.PetEventPublisher
 import com.sseudam.report.ReportFacade
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
-import com.sseudam.report.UpdateReport
+import com.sseudam.report.command.UpdateReportCommand
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
-import com.sseudam.suggestion.UpdateSuggestionCommand
-import com.sseudam.suggestion.event.SuggestionEventPublisher
-import com.sseudam.support.CacheRepository
+import com.sseudam.suggestion.command.UpdateSuggestionCommand
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.TxAdvice
 import com.sseudam.trashspot.TrashSpotService
-import com.sseudam.trashspot.image.TrashSpotImage
-import com.sseudam.trashspot.image.TrashSpotImageService
+import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserProfile
 import com.sseudam.user.UserService
-import com.sseudam.user.device.UserDeviceService
 import com.sseudam.visit.SpotVisitedService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -50,16 +42,7 @@ class AdminFacade(
     private val notificationService: NotificationService,
     private val passwordEncoder: PasswordEncoder,
     private val reportFacade: ReportFacade,
-    private val cacheRepository: CacheRepository,
-    private val trashSpotImageService: TrashSpotImageService,
-    private val petEventPublisher: PetEventPublisher,
-    private val suggestionEventPublisher: SuggestionEventPublisher,
-    private val txAdvice: TxAdvice,
 ) {
-    companion object {
-        private const val SPOT_DETAIL_CACHE_KEY_PREFIX = "spot:detail:"
-    }
-
     fun login(
         loginId: String,
         password: String,
@@ -109,39 +92,13 @@ class AdminFacade(
 
     fun findReportDetails(reportId: Long): SpotReport.Detail = reportFacade.findReportDetails(reportId)
 
-    fun updateSpotSuggestionStatus(command: UpdateSuggestionCommand): SpotSuggestion.UpdateResult =
-        txAdvice.write {
-            val suggestion = suggestionService.updateStatus(command.suggestionId, command.status)
-            val spotId: Long =
-                when (suggestion.status) {
-                    SuggestionStatus.APPROVE -> {
-                        val trashSpot = trashSpotService.createTrashSpotBySuggestion(suggestion)
-                        trashSpotImageService.append(
-                            TrashSpotImage.Create(trashSpot.id, suggestion.imageUrl),
-                        )
-                        petEventPublisher.publish(suggestion.userId, PetPointAction.SUGGESTION_APPROVED)
-                        cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + trashSpot.id)
-                        trashSpot.id
-                    }
-                    SuggestionStatus.REJECT -> {
-                        if (!command.reason.isNullOrBlank()) {
-                            suggestionService.appendReject(command.suggestionId, command.reason)
-                        }
-                        0L
-                    }
-                    else -> {
-                        0L
-                    }
-                }
-            suggestionEventPublisher.publish(suggestion)
-            return@write SpotSuggestion.UpdateResult.of(suggestion, spotId)
-        }
+    fun updateSpotSuggestionStatus(command: UpdateSuggestionCommand) =
+        SpotSuggestion.UpdateResult.of(
+            suggestionService.updateStatus(command.suggestionId, command.status, command.reason),
+        )
 
-    fun updateSpotReportStatus(updateReport: UpdateReport): SpotReport.Info {
-        val spotReportInfo = reportService.updateSpotReport(updateReport)
-        cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + spotReportInfo.spotId)
-        return spotReportInfo
-    }
+    fun updateSpotReportStatus(updateReportCommand: UpdateReportCommand): SpotReport.Info =
+        reportService.updateSpotReport(updateReportCommand)
 
     fun pushToAllUsers(
         topic: String,
@@ -155,7 +112,7 @@ class AdminFacade(
             userDevices
                 .filter { it.fcmToken.isNotBlank() }
                 .map { device ->
-                    NewFirebaseCloudMessage(
+                    FirebaseCloudMessageCommand(
                         fcmToken = device.fcmToken,
                         title = topic,
                         body = contents,
@@ -165,14 +122,13 @@ class AdminFacade(
         notificationService.appendAll(
             messages
                 .mapNotNull { message ->
-                    NotificationStored.Create(
+                    CreateNotificationStoredCommand(
                         userId = deviceTokenMap[message.fcmToken]?.userId ?: return@mapNotNull null,
                         notificationStoredKey = "",
                         type = "ADMIN_PUSH",
                         parameterValue = "/",
                         topic = message.title,
                         contents = message.body,
-                        readStatus = ReadStatus.UNREAD,
                     )
                 },
         )

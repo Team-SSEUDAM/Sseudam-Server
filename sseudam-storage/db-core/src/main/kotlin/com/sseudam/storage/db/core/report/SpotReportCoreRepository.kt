@@ -3,12 +3,12 @@ package com.sseudam.storage.db.core.report
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
-import com.sseudam.report.SpotReportRepository
+import com.sseudam.report.repository.SpotReportRepository
 import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.TxAdvice
+import com.sseudam.support.tx.Tx
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Repository
 
@@ -16,14 +16,13 @@ import org.springframework.stereotype.Repository
 class SpotReportCoreRepository(
     private val spotReportJpaRepository: SpotReportJpaRepository,
     private val spotReportCustomRepository: SpotReportCustomRepository,
-    private val txAdvice: TxAdvice,
 ) : SpotReportRepository {
     override fun create(
         imageUrl: String,
         point: Point,
         createSpotReport: SpotReport.Create,
     ): SpotReport.Info =
-        txAdvice.write {
+        Tx.writeable {
             spotReportJpaRepository
                 .save(
                     SpotReportEntity(imageUrl, point, createSpotReport),
@@ -31,14 +30,14 @@ class SpotReportCoreRepository(
         }
 
     override fun findById(reportId: Long): SpotReport.Info =
-        txAdvice.readOnly {
+        Tx.readable {
             spotReportJpaRepository
                 .findByIdOrElseThrow(reportId)
                 .toSpotReport()
         }
 
     override fun findAllInfoByUserId(userId: Long): List<SpotReport.Info> =
-        txAdvice.readOnly {
+        Tx.readable {
             spotReportJpaRepository
                 .findAllByUserId(userId)
                 .map { it.toSpotReport() }
@@ -48,12 +47,12 @@ class SpotReportCoreRepository(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
     ): Page<SpotReport.Detail> =
-        txAdvice.readOnly {
+        Tx.readable {
             spotReportCustomRepository.findAllBy(offsetPageRequest, searchType)
         }
 
     override fun findAllDetailsByUserId(userId: Long): List<SpotReport.Detail> =
-        txAdvice.readOnly {
+        Tx.readable {
             spotReportCustomRepository.findAllDetailsByUserId(userId)
         }
 
@@ -61,7 +60,7 @@ class SpotReportCoreRepository(
         reportId: Long,
         reportStatus: ReportStatus,
     ): SpotReport.Info =
-        txAdvice.write {
+        Tx.writeable {
             val report =
                 spotReportJpaRepository
                     .findByIdOrElseThrow(reportId)
@@ -69,12 +68,12 @@ class SpotReportCoreRepository(
         }
 
     override fun existsByName(name: String): Boolean =
-        txAdvice.readOnly {
+        Tx.readable {
             spotReportJpaRepository.existsBySpotName(name)
         }
 
     override fun deleteBy(reportId: Long) =
-        txAdvice.write {
+        Tx.writeable {
             val report = spotReportJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(reportId)
             report.softDelete()
         }
