@@ -1,5 +1,7 @@
 package com.sseudam.notification.command
 
+import com.sseudam.notification.ReadStatus
+
 data class CreateNotificationStoredCommand(
     val notificationStoredKey: String,
     val userId: Long,
@@ -7,4 +9,5 @@ data class CreateNotificationStoredCommand(
     val parameterValue: String,
     val topic: String,
     val contents: String,
+    val readStatus: ReadStatus = ReadStatus.UNREAD,
 )

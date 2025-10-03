@@ -11,6 +11,7 @@ import com.sseudam.support.error.ErrorType
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.Month
 
 @Service
 class UserPetFacade(
@@ -97,4 +98,13 @@ class UserPetFacade(
                     )
                 }
         }
+
+    fun createBatchUserPet(
+        currentYear: Int,
+        currentMonth: Month,
+    ) {
+        val createLevelOnePet = petService.createPetSeason(currentYear, currentMonth)
+        val allUserPet: List<UserPet.Info> = userPetService.findAll()
+        userPetService.initPointForAllUsers(allUserPet, createLevelOnePet.id)
+    }
 }

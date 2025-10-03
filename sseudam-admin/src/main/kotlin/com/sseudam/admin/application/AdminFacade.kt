@@ -4,8 +4,7 @@ import com.sseudam.admin.domain.AdminToken
 import com.sseudam.admin.domain.AdminUserProfile
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.notification.NotificationService
-import com.sseudam.notification.NotificationStored
-import com.sseudam.notification.ReadStatus
+import com.sseudam.notification.command.CreateNotificationStoredCommand
 import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.report.ReportFacade
@@ -123,14 +122,13 @@ class AdminFacade(
         notificationService.appendAll(
             messages
                 .mapNotNull { message ->
-                    NotificationStored.Create(
+                    CreateNotificationStoredCommand(
                         userId = deviceTokenMap[message.fcmToken]?.userId ?: return@mapNotNull null,
                         notificationStoredKey = "",
                         type = "ADMIN_PUSH",
                         parameterValue = "/",
                         topic = message.title,
                         contents = message.body,
-                        readStatus = ReadStatus.UNREAD,
                     )
                 },
         )
