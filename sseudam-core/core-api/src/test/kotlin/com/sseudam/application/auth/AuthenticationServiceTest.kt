@@ -2,14 +2,9 @@ package com.sseudam.application.auth
 
 import com.sseudam.DevelopTest
 import com.sseudam.auth.AuthenticationService
-import com.sseudam.auth.AuthorityType
-import com.sseudam.auth.Token
-import com.sseudam.auth.command.CredentialSseudamCommand
 import com.sseudam.auth.component.AuthenticationProcessor
-import com.sseudam.auth.dto.GrantedAuthority
-import com.sseudam.user.SocialType
-import com.sseudam.user.SocialUser
-import com.sseudam.user.User
+import com.sseudam.fixture.auth.AuthFixture
+import com.sseudam.fixture.user.UserFixture
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -25,9 +20,9 @@ class AuthenticationServiceTest :
         describe("일반 로그인") {
             context("유효한 사용자와 deviceId가 있는 경우") {
                 it("토큰을 생성하고 반환한다") {
-                    val user = User(1L, "userKey")
-                    val credential = CredentialSseudamCommand("test@test.com", "password")
-                    val token = Token("accessToken", "refreshToken")
+                    val user = UserFixture.user
+                    val credential = AuthFixture.credentialSseudamCommand
+                    val token = AuthFixture.token
 
                     every { authenticationProcessor.login("device123", user, credential) } returns token
 
@@ -40,9 +35,9 @@ class AuthenticationServiceTest :
 
             context("deviceId가 null인 경우") {
                 it("null deviceId로 토큰을 생성한다") {
-                    val user = User(1L, "userKey")
-                    val credential = CredentialSseudamCommand("test@test.com", "password")
-                    val token = Token("accessToken", "refreshToken")
+                    val user = UserFixture.user
+                    val credential = AuthFixture.credentialSseudamCommand
+                    val token = AuthFixture.token
 
                     every { authenticationProcessor.login(null, user, credential) } returns token
 
@@ -57,8 +52,8 @@ class AuthenticationServiceTest :
         describe("소셜 로그인") {
             context("유효한 소셜 사용자인 경우") {
                 it("토큰을 생성하고 반환한다") {
-                    val socialUser = SocialUser(1L, "userKey", "카카오유저", "socialId123", SocialType.KAKAO)
-                    val token = Token("accessToken", "refreshToken")
+                    val socialUser = AuthFixture.socialUser
+                    val token = AuthFixture.token
 
                     every { authenticationProcessor.login("device123", socialUser) } returns token
 
@@ -71,8 +66,8 @@ class AuthenticationServiceTest :
 
             context("빈 deviceId인 경우") {
                 it("빈 deviceId로 토큰을 생성한다") {
-                    val socialUser = SocialUser(1L, "userKey", "애플유저", "socialId456", SocialType.APPLE)
-                    val token = Token("accessToken", "refreshToken")
+                    val socialUser = AuthFixture.socialUser
+                    val token = AuthFixture.token
 
                     every { authenticationProcessor.login("", socialUser) } returns token
 
@@ -87,7 +82,7 @@ class AuthenticationServiceTest :
             context("유효한 refreshToken인 경우") {
                 it("새로운 토큰을 반환한다") {
                     val refreshToken = "validRefreshToken"
-                    val newToken = Token("newAccessToken", "newRefreshToken")
+                    val newToken = AuthFixture.token
 
                     every { authenticationProcessor.renew(refreshToken) } returns newToken
 
@@ -101,7 +96,7 @@ class AuthenticationServiceTest :
             context("빈 refreshToken인 경우") {
                 it("processor를 호출한다") {
                     val refreshToken = ""
-                    val token = Token("accessToken", "refreshToken")
+                    val token = AuthFixture.token
 
                     every { authenticationProcessor.renew(refreshToken) } returns token
 
@@ -171,8 +166,8 @@ class AuthenticationServiceTest :
             context("유효한 adminId인 경우") {
                 it("관리자 권한으로 토큰을 생성한다") {
                     val adminId = 1L
-                    val token = Token("adminAccessToken", "adminRefreshToken")
-                    val authorities = listOf(GrantedAuthority(AuthorityType.ADMIN))
+                    val token = AuthFixture.token
+                    val authorities = listOf(AuthFixture.grantedAuthority)
 
                     every { authenticationProcessor.adminLogin(adminId, authorities) } returns token
 
@@ -186,7 +181,7 @@ class AuthenticationServiceTest :
             context("adminId가 0인 경우") {
                 it("processor를 호출한다") {
                     val adminId = 0L
-                    val token = Token("accessToken", "refreshToken")
+                    val token = AuthFixture.token
 
                     every { authenticationProcessor.adminLogin(adminId, any()) } returns token
 
@@ -201,7 +196,7 @@ class AuthenticationServiceTest :
             context("유효한 refreshToken인 경우") {
                 it("새로운 관리자 토큰을 반환한다") {
                     val refreshToken = "adminRefreshToken"
-                    val newToken = Token("newAdminAccessToken", "newAdminRefreshToken")
+                    val newToken = AuthFixture.token
 
                     every { authenticationProcessor.adminRenew(refreshToken) } returns newToken
 
