@@ -4,7 +4,7 @@ import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.UserPetContextEvent
 import com.sseudam.report.component.ReportAppender
 import com.sseudam.report.component.ReportDeleter
-import com.sseudam.support.CacheRepository
+import com.sseudam.support.Cache
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component
 class SpotReportUpdateHandler(
     private val reportDeleter: ReportDeleter,
     private val reportAppender: ReportAppender,
-    private val cacheRepository: CacheRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     companion object {
@@ -26,13 +25,14 @@ class SpotReportUpdateHandler(
     )
     fun handleApprove(event: SpotReportUpdateEvent) {
         reportDeleter.deleteBy(event.report.id)
+        Cache.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + event.report.spotId)
+        Cache.delete("user:${event.report.userId}:histories")
         applicationEventPublisher.publishEvent(
             UserPetContextEvent(
                 userId = event.report.userId,
                 petPointAction = PetPointAction.REPORT_APPROVED,
             ),
         )
-        cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + event.report.spotId)
     }
 
     @ApplicationModuleListener(

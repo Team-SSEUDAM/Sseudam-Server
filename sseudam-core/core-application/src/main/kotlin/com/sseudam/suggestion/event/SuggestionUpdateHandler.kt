@@ -3,7 +3,7 @@ package com.sseudam.suggestion.event
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.UserPetContextEvent
 import com.sseudam.suggestion.SuggestionService
-import com.sseudam.support.CacheRepository
+import com.sseudam.support.Cache
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.image.TrashSpotImage
 import com.sseudam.trashspot.image.TrashSpotImageService
@@ -16,7 +16,6 @@ class SuggestionUpdateHandler(
     private val trashSpotService: TrashSpotService,
     private val trashSpotImageService: TrashSpotImageService,
     private val suggestionService: SuggestionService,
-    private val cacheRepository: CacheRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     companion object {
@@ -32,13 +31,14 @@ class SuggestionUpdateHandler(
         trashSpotImageService.append(
             TrashSpotImage.Create(trashSpot.id, event.suggestion.imageUrl),
         )
+        Cache.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + trashSpot.id)
+        Cache.delete("user:${event.suggestion.userId}:histories")
         applicationEventPublisher.publishEvent(
             UserPetContextEvent(
                 userId = event.suggestion.userId,
                 petPointAction = PetPointAction.SUGGESTION_APPROVED,
             ),
         )
-        cacheRepository.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + trashSpot.id)
     }
 
     @ApplicationModuleListener(
