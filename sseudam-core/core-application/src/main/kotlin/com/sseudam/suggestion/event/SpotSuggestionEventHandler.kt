@@ -5,6 +5,7 @@ import com.sseudam.notification.dto.NotificationMessages
 import com.sseudam.notification.dto.SendNotificationMessage
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.suggestion.SuggestionStatus
+import com.sseudam.suggestion.dto.SendMessageSuggestionDto
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
@@ -52,6 +53,14 @@ class SpotSuggestionEventHandler(
 
     @ApplicationModuleListener(id = "spot-suggestion-discord-notification")
     fun handleDiscordNotification(event: SpotSuggestionCreatedEvent) {
-        discordClient.sendSuggestionMessage(event.spotSuggestion)
+        val userProfile =
+            userService.getProfile(event.spotSuggestion.userId)
+                ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
+        discordClient.sendSuggestionMessage(
+            SendMessageSuggestionDto.of(
+                event.spotSuggestion,
+                userProfile,
+            ),
+        )
     }
 }

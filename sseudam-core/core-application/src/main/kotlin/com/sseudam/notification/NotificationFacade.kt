@@ -1,5 +1,6 @@
 package com.sseudam.notification
 
+import com.sseudam.notification.command.CreateNotificationStoredCommand
 import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.component.NotificationStoredKeyGenerator
 import com.sseudam.notification.dto.NotificationMessages
@@ -37,7 +38,7 @@ class NotificationFacade(
         notificationService.appendAll(
             messages
                 .map { message ->
-                    NotificationStored.Create(
+                    CreateNotificationStoredCommand(
                         userId =
                             userDevicesMap.entries
                                 .find { it.value.fcmToken == message.fcmToken }
@@ -49,7 +50,6 @@ class NotificationFacade(
                         parameterValue = "",
                         topic = message.title,
                         contents = message.body,
-                        readStatus = ReadStatus.UNREAD,
                     )
                 }.filterNotNull(),
         )

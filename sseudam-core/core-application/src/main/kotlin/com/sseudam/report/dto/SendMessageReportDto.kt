@@ -3,6 +3,7 @@ package com.sseudam.report.dto
 import com.sseudam.common.GeoJson
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
+import com.sseudam.user.UserProfile
 import java.time.LocalDateTime
 
 data class SendMessageReportDto(
@@ -16,11 +17,11 @@ data class SendMessageReportDto(
     companion object {
         fun of(
             report: SpotReport.Info,
-            nickname: String,
+            userProfile: UserProfile,
         ) = SendMessageReportDto(
             id = report.id,
             userId = report.userId,
-            nickname = nickname,
+            nickname = userProfile.nickname,
             reportType = report.reportType.displayName,
             reportBody = "**신고 내용:** ${
                 when (report.reportType) {

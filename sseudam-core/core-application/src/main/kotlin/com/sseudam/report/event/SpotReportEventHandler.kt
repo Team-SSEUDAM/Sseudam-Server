@@ -6,6 +6,7 @@ import com.sseudam.notification.dto.SendNotificationMessage
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
+import com.sseudam.report.dto.SendMessageReportDto
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
@@ -76,6 +77,11 @@ class SpotReportEventHandler(
         val userProfile =
             userService.getProfile(event.spotReport.userId)
                 ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
-        discordClient.sendReportMessage(event.spotReport)
+        discordClient.sendReportMessage(
+            SendMessageReportDto.of(
+                event.spotReport,
+                userProfile,
+            ),
+        )
     }
 }

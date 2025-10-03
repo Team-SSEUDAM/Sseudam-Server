@@ -2,6 +2,7 @@ package com.sseudam.suggestion.dto
 
 import com.sseudam.common.GeoJson
 import com.sseudam.suggestion.SpotSuggestion
+import com.sseudam.user.UserProfile
 import java.time.LocalDateTime
 
 data class SendMessageSuggestionDto(
@@ -10,11 +11,15 @@ data class SendMessageSuggestionDto(
     val spotName: String,
     val trashType: String,
     val userId: Long,
+    val nickname: String,
     val coordinateText: String,
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun from(suggestion: SpotSuggestion.Info): SendMessageSuggestionDto {
+        fun of(
+            suggestion: SpotSuggestion.Info,
+            userProfile: UserProfile,
+        ): SendMessageSuggestionDto {
             val pointCoordinate =
                 when (val point = suggestion.point) {
                     is GeoJson.Point -> point.coordinates
@@ -33,6 +38,7 @@ data class SendMessageSuggestionDto(
                 spotName = suggestion.spotName,
                 trashType = suggestion.trashType.displayName,
                 userId = suggestion.userId,
+                nickname = userProfile.nickname,
                 coordinateText = coordinateText,
                 createdAt = suggestion.createdAt,
             )

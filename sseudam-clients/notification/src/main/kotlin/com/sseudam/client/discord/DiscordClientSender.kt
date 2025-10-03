@@ -66,6 +66,7 @@ class DiscordClientSender(
             **신고 유형:** ${messageReportDto.reportType}
             ${messageReportDto.reportBody}
             **신고자 ID:** ${messageReportDto.userId}
+            **신고자 닉네임:** ${messageReportDto.nickname}
             **신고 일시:** ${messageReportDto.createdAt.toLocalDate()} ${messageReportDto.createdAt.toLocalTime()}
 
             확인하러 가기 -> $ADMIN_URL/reports/trash-cans
@@ -90,6 +91,7 @@ class DiscordClientSender(
             **제보된 장소 좌표:** ${messageSuggestionDto.coordinateText}
             **제보된 쓰레기통 타입:** ${messageSuggestionDto.trashType}
             **제보자 ID:** ${messageSuggestionDto.userId}
+            **제보자 닉네임:** ${messageSuggestionDto.nickname}
             **제보 일시:** ${messageSuggestionDto.createdAt.toLocalDate()} ${messageSuggestionDto.createdAt.toLocalTime()}
             확인하러 가기 -> $ADMIN_URL/suggestions/trash-cans
             """.trimIndent()
