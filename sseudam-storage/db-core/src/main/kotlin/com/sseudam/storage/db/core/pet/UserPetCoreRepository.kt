@@ -2,7 +2,7 @@ package com.sseudam.storage.db.core.pet
 
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.UserPet
-import com.sseudam.pet.UserPetRepository
+import com.sseudam.pet.repository.UserPetRepository
 import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType

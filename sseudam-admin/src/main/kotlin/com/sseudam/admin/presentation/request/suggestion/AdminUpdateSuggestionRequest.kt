@@ -1,7 +1,7 @@
 package com.sseudam.admin.presentation.request.suggestion
 
 import com.sseudam.suggestion.SuggestionStatus
-import com.sseudam.suggestion.UpdateSuggestionCommand
+import com.sseudam.suggestion.command.UpdateSuggestionCommand
 import io.swagger.v3.oas.annotations.media.Schema
 
 data class AdminUpdateSuggestionRequest(

@@ -1,7 +1,7 @@
 package com.sseudam.storage.db.core.pet
 
 import com.sseudam.pet.PetPointHistory
-import com.sseudam.pet.PetPointHistoryRepository
+import com.sseudam.pet.repository.PetPointHistoryRepository
 import com.sseudam.support.tx.Tx
 import org.springframework.stereotype.Repository
 

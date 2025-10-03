@@ -1,7 +1,7 @@
 package com.sseudam.storage.db.core.suggestion.reject
 
 import com.sseudam.suggestion.reject.SuggestionReject
-import com.sseudam.suggestion.reject.SuggestionRejectRepository
+import com.sseudam.suggestion.repository.SuggestionRejectRepository
 import com.sseudam.support.tx.Tx
 import org.springframework.stereotype.Repository
 

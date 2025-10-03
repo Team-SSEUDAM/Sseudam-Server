@@ -1,6 +1,6 @@
 package com.sseudam.presentation.v1.auth.response
 
-import com.sseudam.auth.token.Token
+import com.sseudam.auth.Token
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "토큰 응답 Json")

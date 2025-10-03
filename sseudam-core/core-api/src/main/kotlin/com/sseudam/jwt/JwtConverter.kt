@@ -1,7 +1,7 @@
 package com.sseudam.jwt
 
-import com.sseudam.auth.Provider
-import com.sseudam.auth.RedisTokenRepository
+import com.sseudam.auth.dto.Provider
+import com.sseudam.auth.repository.RedisTokenRepository
 import com.sseudam.support.error.AuthenticationErrorException
 import com.sseudam.support.error.AuthenticationErrorType
 import org.springframework.core.convert.converter.Converter

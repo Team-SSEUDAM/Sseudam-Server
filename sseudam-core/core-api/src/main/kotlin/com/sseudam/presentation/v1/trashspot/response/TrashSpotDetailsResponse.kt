@@ -3,8 +3,8 @@ package com.sseudam.presentation.v1.trashspot.response
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
-import com.sseudam.trashspot.TrashSpotDetail
 import com.sseudam.trashspot.TrashType
+import com.sseudam.trashspot.result.TrashSpotDetail
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 

@@ -8,8 +8,8 @@ import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.trashspot.TrashSpotFacade
-import com.sseudam.trashspot.TrashSpotLocation
 import com.sseudam.trashspot.TrashSpotService
+import com.sseudam.trashspot.dto.TrashSpotLocation
 import com.sseudam.trashspot.image.TrashSpotImageService
 import com.sseudam.user.UserProfile
 import com.sseudam.user.UserService

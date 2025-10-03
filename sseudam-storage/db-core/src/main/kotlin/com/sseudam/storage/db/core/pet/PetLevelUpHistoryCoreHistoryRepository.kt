@@ -1,7 +1,7 @@
 package com.sseudam.storage.db.core.pet
 
 import com.sseudam.pet.PetLevelUpHistory
-import com.sseudam.pet.PetLevelUpHistoryRepository
+import com.sseudam.pet.repository.PetLevelUpHistoryRepository
 import com.sseudam.support.tx.Tx
 import org.springframework.stereotype.Repository
 import java.time.Month

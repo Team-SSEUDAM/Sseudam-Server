@@ -23,6 +23,7 @@ include(
 include(
     "sseudam-core:core-api",
     "sseudam-core:core-domain",
+    "sseudam-core:core-application",
     "sseudam-core:core-contract",
 )
 

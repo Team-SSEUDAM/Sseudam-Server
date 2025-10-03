@@ -1,7 +1,7 @@
 package com.sseudam.presentation.v1.pet.response
 
 import com.sseudam.pet.Pet
-import com.sseudam.pet.UserPetLevelUpHistoryInfo
+import com.sseudam.pet.result.UserPetLevelUpHistoryInfo
 import java.time.LocalDateTime
 
 data class UserPetLevelHistoryResponse(

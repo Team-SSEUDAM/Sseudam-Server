@@ -1,10 +1,10 @@
 package com.sseudam.storage.redis
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.sseudam.auth.Provider
-import com.sseudam.auth.ProviderDetail
-import com.sseudam.auth.RedisTokenRepository
-import com.sseudam.auth.TokenWithAuthentication
+import com.sseudam.auth.dto.Provider
+import com.sseudam.auth.dto.ProviderDetail
+import com.sseudam.auth.repository.RedisTokenRepository
+import com.sseudam.auth.result.TokenWithAuthenticationResult
 import com.sseudam.support.error.AuthenticationErrorException
 import com.sseudam.support.error.AuthenticationErrorType
 import org.springframework.data.redis.core.RedisTemplate
@@ -23,9 +23,9 @@ class RedisTokenCoreRepository(
         providerDetail: ProviderDetail,
         accessTokenExpiration: Long,
         refreshTokenExpiration: Long,
-    ): TokenWithAuthentication {
-        val tokenWithAuthentication =
-            TokenWithAuthentication(
+    ): TokenWithAuthenticationResult {
+        val tokenWithAuthenticationResult =
+            TokenWithAuthenticationResult(
                 accessToken = accessToken,
                 refreshToken = refreshToken,
                 deviceId = deviceId,
@@ -35,30 +35,30 @@ class RedisTokenCoreRepository(
         redisTemplate.opsForValue().apply {
             set(
                 accessToken,
-                objectMapper.writeValueAsString(tokenWithAuthentication),
+                objectMapper.writeValueAsString(tokenWithAuthenticationResult),
                 Duration.ofSeconds(accessTokenExpiration * 60L),
             )
             set(
                 refreshToken,
-                objectMapper.writeValueAsString(tokenWithAuthentication),
+                objectMapper.writeValueAsString(tokenWithAuthenticationResult),
                 Duration.ofSeconds(refreshTokenExpiration * 60L),
             )
         }
-        return tokenWithAuthentication
+        return tokenWithAuthenticationResult
     }
 
-    override fun findByToken(token: String): TokenWithAuthentication {
+    override fun findByToken(token: String): TokenWithAuthenticationResult {
         redisTemplate.opsForValue().get(token)?.let {
-            return objectMapper.readValue(it, TokenWithAuthentication::class.java)
+            return objectMapper.readValue(it, TokenWithAuthenticationResult::class.java)
         } ?: throw AuthenticationErrorException(AuthenticationErrorType.INVALID_TOKEN)
     }
 
     override fun findBy(accessToken: String): Provider? =
         redisTemplate.opsForValue().get(accessToken)?.let {
-            val tokenWithAuthentication = objectMapper.readValue(it, TokenWithAuthentication::class.java)
+            val tokenWithAuthenticationResult = objectMapper.readValue(it, TokenWithAuthenticationResult::class.java)
             Provider(
-                userId = tokenWithAuthentication.provider.userId,
-                userKey = tokenWithAuthentication.provider.userKey,
+                userId = tokenWithAuthenticationResult.provider.userId,
+                userKey = tokenWithAuthenticationResult.provider.userKey,
             )
         }
 
@@ -67,12 +67,12 @@ class RedisTokenCoreRepository(
     }
 
     override fun deleteAllToken(token: String) {
-        val tokenWithAuthentication =
+        val tokenWithAuthenticationResult =
             redisTemplate.opsForValue().get(token)?.let {
-                objectMapper.readValue(it, TokenWithAuthentication::class.java)
+                objectMapper.readValue(it, TokenWithAuthenticationResult::class.java)
             }
 
-        tokenWithAuthentication?.accessToken?.let { redisTemplate.delete(it) }
-        tokenWithAuthentication?.refreshToken?.let { redisTemplate.delete(it) }
+        tokenWithAuthenticationResult?.accessToken?.let { redisTemplate.delete(it) }
+        tokenWithAuthenticationResult?.refreshToken?.let { redisTemplate.delete(it) }
     }
 }

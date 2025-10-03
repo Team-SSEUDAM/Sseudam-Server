@@ -1,9 +1,9 @@
 package com.sseudam.storage.db.core.auth
 
 import com.sseudam.auth.AuthenticationHistory
-import com.sseudam.auth.AuthenticationHistoryRepository
-import com.sseudam.auth.NewAuthenticationHistory
-import com.sseudam.auth.UpdateAuthenticationHistory
+import com.sseudam.auth.command.AuthenticationHistoryCommand
+import com.sseudam.auth.command.UpdateAuthenticationHistoryCommand
+import com.sseudam.auth.repository.AuthenticationHistoryRepository
 import com.sseudam.support.error.AuthenticationErrorException
 import com.sseudam.support.error.AuthenticationErrorType
 import org.springframework.stereotype.Repository
@@ -14,8 +14,8 @@ class AuthenticationHistoryCoreRepository(
     private val repository: AuthenticationHistoryJpaRepository,
 ) : AuthenticationHistoryRepository {
     @Transactional
-    override fun create(newAuthenticationHistory: NewAuthenticationHistory): AuthenticationHistory {
-        val saveHistory = repository.save(AuthenticationHistoryEntity(newAuthenticationHistory))
+    override fun create(authenticationHistoryCommand: AuthenticationHistoryCommand): AuthenticationHistory {
+        val saveHistory = repository.save(AuthenticationHistoryEntity(authenticationHistoryCommand))
         return saveHistory.toAuthenticationHistory()
     }
 
@@ -33,16 +33,16 @@ class AuthenticationHistoryCoreRepository(
     }
 
     @Transactional
-    override fun update(updateAuthenticationHistory: UpdateAuthenticationHistory): AuthenticationHistory? {
+    override fun update(updateAuthenticationHistoryCommand: UpdateAuthenticationHistoryCommand): AuthenticationHistory? {
         val histories =
             repository.findAllByUserKeyAndDeviceId(
-                userKey = updateAuthenticationHistory.userKey,
-                deviceId = updateAuthenticationHistory.deviceId,
+                userKey = updateAuthenticationHistoryCommand.userKey,
+                deviceId = updateAuthenticationHistoryCommand.deviceId,
             )
         return histories
             .find {
-                it.refreshToken == updateAuthenticationHistory.refreshToken
-            }?.updateRefreshToken(updateAuthenticationHistory.newToken.token)
+                it.refreshToken == updateAuthenticationHistoryCommand.refreshToken
+            }?.updateRefreshToken(updateAuthenticationHistoryCommand.tokenGenerateCommand.token)
     }
 
     @Transactional

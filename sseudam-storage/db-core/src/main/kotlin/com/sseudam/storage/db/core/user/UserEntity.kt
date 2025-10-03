@@ -2,13 +2,13 @@ package com.sseudam.storage.db.core.user
 
 import com.sseudam.common.Address
 import com.sseudam.storage.db.core.support.BaseEntity
-import com.sseudam.user.NewUser
-import com.sseudam.user.NewUserKey
 import com.sseudam.user.SocialType
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User
 import com.sseudam.user.UserCredentials
 import com.sseudam.user.UserProfile
+import com.sseudam.user.command.UserCommand
+import com.sseudam.user.command.UserKeyCommand
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
@@ -33,21 +33,21 @@ class UserEntity(
     val socialType: SocialType,
 ) : BaseEntity() {
     constructor(
-        newUser: NewUser,
-        newUserKey: NewUserKey,
+        userCommand: UserCommand,
+        userKeyCommand: UserKeyCommand,
     ) : this(
-        userKey = newUserKey.key,
-        email = newUser.email,
-        name = newUser.name,
-        nickname = newUser.nickname,
+        userKey = userKeyCommand.key,
+        email = userCommand.email,
+        name = userCommand.name,
+        nickname = userCommand.nickname,
         address =
-            newUser.address ?: Address(
+            userCommand.address ?: Address(
                 city = "",
                 site = "",
             ),
-        password = newUser.password,
-        socialId = newUser.socialId,
-        socialType = newUser.socialType,
+        password = userCommand.password,
+        socialId = userCommand.socialId,
+        socialType = userCommand.socialType,
     )
 
     fun toUser(): User =

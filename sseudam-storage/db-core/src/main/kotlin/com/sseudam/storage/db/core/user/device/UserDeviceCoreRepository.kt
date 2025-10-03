@@ -2,7 +2,7 @@ package com.sseudam.storage.db.core.user.device
 
 import com.sseudam.support.tx.Tx
 import com.sseudam.user.device.UserDevice
-import com.sseudam.user.device.UserDeviceRepository
+import com.sseudam.user.repository.UserDeviceRepository
 import org.springframework.stereotype.Repository
 
 @Repository

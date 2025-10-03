@@ -3,7 +3,7 @@ package com.sseudam.storage.db.core.version.app
 import com.sseudam.common.DeviceType
 import com.sseudam.support.tx.Tx
 import com.sseudam.version.app.AppVersion
-import com.sseudam.version.app.AppVersionRepository
+import com.sseudam.version.app.repository.AppVersionRepository
 import org.springframework.stereotype.Repository
 
 @Repository

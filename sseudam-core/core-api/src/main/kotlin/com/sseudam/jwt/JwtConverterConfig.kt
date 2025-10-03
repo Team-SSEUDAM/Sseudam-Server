@@ -1,6 +1,6 @@
 package com.sseudam.jwt
 
-import com.sseudam.auth.RedisTokenRepository
+import com.sseudam.auth.repository.RedisTokenRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter

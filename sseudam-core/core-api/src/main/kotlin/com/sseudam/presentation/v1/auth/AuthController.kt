@@ -2,7 +2,7 @@ package com.sseudam.presentation.v1.auth
 
 import com.sseudam.auth.AuthenticationFacade
 import com.sseudam.auth.AuthenticationService
-import com.sseudam.auth.CredentialSocial
+import com.sseudam.auth.command.CredentialSocialCommand
 import com.sseudam.client.oauth.OAuthService
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.auth.request.LoginRequest
@@ -73,7 +73,7 @@ class AuthController(
                 // TODO: deviceId 는 추후에 추가
                 deviceId = "",
                 credentialSocial =
-                    CredentialSocial(
+                    CredentialSocialCommand(
                         email = socialInfo.email,
                         name = socialInfo.name,
                         socialId = socialInfo.id,
@@ -94,7 +94,7 @@ class AuthController(
                 // TODO: deviceId 는 추후에 추가
                 deviceId = "",
                 credentialSocial =
-                    CredentialSocial(
+                    CredentialSocialCommand(
                         email = socialInfo.email,
                         name = "",
                         socialId = socialInfo.id,

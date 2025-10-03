@@ -2,9 +2,9 @@ package com.sseudam.presentation.v1.history.response
 
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
-import com.sseudam.history.HistoryStatus
-import com.sseudam.history.SpotActionType
-import com.sseudam.history.SpotHistory
+import com.sseudam.history.dto.HistoryStatus
+import com.sseudam.history.dto.SpotActionType
+import com.sseudam.history.dto.SpotHistory
 import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime

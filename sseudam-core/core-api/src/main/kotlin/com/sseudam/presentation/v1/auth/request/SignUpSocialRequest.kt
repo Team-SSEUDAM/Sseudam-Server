@@ -1,11 +1,11 @@
 package com.sseudam.presentation.v1.auth.request
 
 import com.sseudam.auth.AuthorityType
-import com.sseudam.auth.GrantedAuthority
-import com.sseudam.auth.NewAuthenticationSocial
+import com.sseudam.auth.command.AuthenticationSocialCommand
+import com.sseudam.auth.dto.GrantedAuthority
 import com.sseudam.common.Address
-import com.sseudam.user.NewUser
 import com.sseudam.user.SocialType
+import com.sseudam.user.command.UserCommand
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "소셜 회원가입 요청 Json")
@@ -20,8 +20,8 @@ data class SignUpSocialRequest(
     fun toNewUser(
         socialId: String,
         socialType: SocialType,
-    ): NewUser =
-        NewUser(
+    ): UserCommand =
+        UserCommand(
             email = email,
             name = name,
             socialId = socialId,
@@ -33,8 +33,8 @@ data class SignUpSocialRequest(
         socialId: String,
         socialType: SocialType,
         site: String,
-    ): NewUser =
-        NewUser(
+    ): UserCommand =
+        UserCommand(
             email = email,
             name = name,
             socialId = socialId,
@@ -49,8 +49,8 @@ data class SignUpSocialRequest(
     fun toNewAuthenticationSocial(
         socialId: String,
         socialType: SocialType,
-    ): NewAuthenticationSocial =
-        NewAuthenticationSocial(
+    ): AuthenticationSocialCommand =
+        AuthenticationSocialCommand(
             loginId = email,
             socialId = socialId,
             socialType = socialType,
