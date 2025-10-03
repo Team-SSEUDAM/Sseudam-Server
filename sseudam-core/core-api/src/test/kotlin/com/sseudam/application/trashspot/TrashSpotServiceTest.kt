@@ -1,4 +1,4 @@
-package com.sseudam.domain.trashspot
+package com.sseudam.application.trashspot
 
 import com.sseudam.DevelopTest
 import com.sseudam.common.Address
