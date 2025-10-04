@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import org.springframework.web.filter.CharacterEncodingFilter
+import org.springframework.web.method.support.HandlerMethodArgumentResolver
 
 @Tag("restdocs")
 @ExtendWith(RestDocumentationExtension::class)
@@ -36,6 +37,14 @@ abstract class RestDocsTestSuite {
         return RestAssuredMockMvc.given().mockMvc(mockMvc)
     }
 
+    protected fun mockController(
+        controller: Any,
+        argumentResolver: HandlerMethodArgumentResolver,
+    ): MockMvcRequestSpecification {
+        val mockMvc = createMockMvc(controller, argumentResolver)
+        return RestAssuredMockMvc.given().mockMvc(mockMvc)
+    }
+
     private fun createMockMvc(controller: Any): MockMvc {
         val converter = MappingJackson2HttpMessageConverter(objectMapper())
 
@@ -44,6 +53,20 @@ abstract class RestDocsTestSuite {
             .addFilter<StandaloneMockMvcBuilder>(CharacterEncodingFilter("UTF-8", true))
             .apply<StandaloneMockMvcBuilder>(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
             .setMessageConverters(converter)
+            .build()
+    }
+
+    private fun createMockMvc(
+        controller: Any,
+        argumentResolver: HandlerMethodArgumentResolver,
+    ): MockMvc {
+        val converter = MappingJackson2HttpMessageConverter(objectMapper())
+        return MockMvcBuilders
+            .standaloneSetup(controller)
+            .addFilter<StandaloneMockMvcBuilder>(CharacterEncodingFilter("UTF-8", true))
+            .apply<StandaloneMockMvcBuilder>(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
+            .setMessageConverters(converter)
+            .setCustomArgumentResolvers(argumentResolver)
             .build()
     }
 

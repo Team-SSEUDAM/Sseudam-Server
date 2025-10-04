@@ -2,10 +2,9 @@ package com.sseudam.application.auth
 
 import com.sseudam.DevelopTest
 import com.sseudam.client.oauth.AppleClient
-import com.sseudam.client.oauth.AppleClientResult
 import com.sseudam.client.oauth.KaKaoClient
-import com.sseudam.client.oauth.KaKaoClientResult
 import com.sseudam.client.oauth.OAuthService
+import com.sseudam.fixture.auth.AuthFixture
 import com.sseudam.support.error.AuthenticationErrorException
 import com.sseudam.support.error.AuthenticationErrorType
 import feign.FeignException
@@ -27,7 +26,7 @@ class OAuthServiceTest :
             context("유효한 토큰인 경우") {
                 it("카카오 사용자 정보를 반환한다") {
                     val token = "valid_kakao_token"
-                    val expected = KaKaoClientResult("kakaoId123", "test@kakao.com", "카카오유저", "닉네임")
+                    val expected = AuthFixture.kaKaoClientResult
 
                     every { kaKaoClient.getUserInfo(token) } returns expected
 
@@ -77,7 +76,7 @@ class OAuthServiceTest :
             context("빈 토큰인 경우") {
                 it("카카오 클라이언트를 호출한다") {
                     val token = ""
-                    val expected = KaKaoClientResult("id", "email@test.com", "name", "nickname")
+                    val expected = AuthFixture.kaKaoClientResult
 
                     every { kaKaoClient.getUserInfo(token) } returns expected
 
@@ -92,7 +91,7 @@ class OAuthServiceTest :
             context("유효한 토큰인 경우") {
                 it("애플 사용자 정보를 반환한다") {
                     val token = "valid_apple_token"
-                    val expected = AppleClientResult("appleId123", "test@apple.com")
+                    val expected = AuthFixture.appleClientResult
 
                     every { appleClient.verify(token) } returns true
                     every { appleClient.getUserInfo(token) } returns expected
