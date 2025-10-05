@@ -36,6 +36,8 @@ class SuggestionFacadeTest :
                 applicationEventPublisher = applicationEventPublisher,
             )
 
+        val imagePrefix = "suggestion"
+
         describe("제보 검증") {
             context("중복되지 않은 이름인 경우") {
                 it("제보 이름과 쓰레기통 이름을 검증하고 true를 반환한다") {
@@ -92,7 +94,7 @@ class SuggestionFacadeTest :
                     val createResult = CreateSpotSuggestionResult(suggestionInfo, uploadUrl)
 
                     every { trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude) } just Runs
-                    every { imageS3Caller.createUploadUrl(create.userId, "suggestion") } returns uploadUrl
+                    every { imageS3Caller.createUploadUrl(create.userId, imagePrefix) } returns uploadUrl
                     every { suggestionService.append(create, uploadUrl) } returns createResult
                     every { applicationEventPublisher.publishEvent(any<SpotSuggestionCreatedEvent>()) } just Runs
 
@@ -100,7 +102,7 @@ class SuggestionFacadeTest :
 
                     result shouldBe createResult
                     verify { trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude) }
-                    verify { imageS3Caller.createUploadUrl(create.userId, "suggestion") }
+                    verify { imageS3Caller.createUploadUrl(create.userId, imagePrefix) }
                     verify { suggestionService.append(create, uploadUrl) }
                     verify { applicationEventPublisher.publishEvent(any<SpotSuggestionCreatedEvent>()) }
                 }
@@ -131,14 +133,14 @@ class SuggestionFacadeTest :
                     val create = SuggestionFixture.spotSuggestionCreateRequest.toCommand(1L)
 
                     every { trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude) } just Runs
-                    every { imageS3Caller.createUploadUrl(create.userId, "suggestion") } throws RuntimeException("S3 오류")
+                    every { imageS3Caller.createUploadUrl(create.userId, imagePrefix) } throws RuntimeException("S3 오류")
 
                     shouldThrow<RuntimeException> {
                         suggestionFacade.createSpotSuggestion(create)
                     }
 
                     verify { trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude) }
-                    verify { imageS3Caller.createUploadUrl(create.userId, "suggestion") }
+                    verify { imageS3Caller.createUploadUrl(create.userId, imagePrefix) }
                 }
             }
 
@@ -148,7 +150,7 @@ class SuggestionFacadeTest :
                     val uploadUrl = SuggestionFixture.s3ImageUrl
 
                     every { trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude) } just Runs
-                    every { imageS3Caller.createUploadUrl(create.userId, "suggestion") } returns uploadUrl
+                    every { imageS3Caller.createUploadUrl(create.userId, imagePrefix) } returns uploadUrl
                     every { suggestionService.append(create, uploadUrl) } throws RuntimeException("제보 생성 실패")
 
                     shouldThrow<RuntimeException> {
@@ -156,7 +158,7 @@ class SuggestionFacadeTest :
                     }
 
                     verify { trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude) }
-                    verify { imageS3Caller.createUploadUrl(create.userId, "suggestion") }
+                    verify { imageS3Caller.createUploadUrl(create.userId, imagePrefix) }
                     verify { suggestionService.append(create, uploadUrl) }
                 }
             }
@@ -176,7 +178,7 @@ class SuggestionFacadeTest :
                             create.latitude,
                         )
                     } answers { callOrder.add("verify") }
-                    every { imageS3Caller.createUploadUrl(create.userId, "suggestion") } answers {
+                    every { imageS3Caller.createUploadUrl(create.userId, imagePrefix) } answers {
                         callOrder.add("url")
                         uploadUrl
                     }
@@ -202,7 +204,7 @@ class SuggestionFacadeTest :
                     val createResult = CreateSpotSuggestionResult(suggestionInfo, uploadUrl)
 
                     every { trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude) } just Runs
-                    every { imageS3Caller.createUploadUrl(create.userId, "suggestion") } returns uploadUrl
+                    every { imageS3Caller.createUploadUrl(create.userId, imagePrefix) } returns uploadUrl
                     every { suggestionService.append(create, uploadUrl) } returns createResult
                     every { applicationEventPublisher.publishEvent(any<SpotSuggestionCreatedEvent>()) } just Runs
 
