@@ -29,7 +29,7 @@ class SuggestionController(
     ): SuggestionImageUrlResponse {
         val suggestion =
             suggestionFacade.createSpotSuggestion(request.toCommand(user.id))
-        return SuggestionImageUrlResponse.of(suggestion.first, suggestion.second)
+        return SuggestionImageUrlResponse.of(suggestion.suggestionInfo, suggestion.uploadUrl)
     }
 
     // TODO: cursor pagination (infinity scroll)
