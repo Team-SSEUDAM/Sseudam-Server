@@ -6,17 +6,18 @@ import com.sseudam.suggestion.component.SuggestionReader
 import com.sseudam.suggestion.component.SuggestionUpdater
 import com.sseudam.suggestion.component.SuggestionValidator
 import com.sseudam.suggestion.event.SuggestionUpdateEvent
+import com.sseudam.suggestion.result.CreateSpotSuggestionResult
 import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.Tx
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
 import org.locationtech.jts.geom.PrecisionModel
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class SuggestionService(
@@ -33,7 +34,7 @@ class SuggestionService(
     fun append(
         create: SpotSuggestion.Create,
         uploadUrl: S3ImageUrl,
-    ): Pair<SpotSuggestion.Info, S3ImageUrl> {
+    ): CreateSpotSuggestionResult {
         val point =
             GEOMETRY_FACTORY.createPoint(
                 Coordinate(create.longitude, create.latitude),
@@ -42,7 +43,10 @@ class SuggestionService(
 
         val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)
 
-        return spotSuggestion to uploadUrl
+        return CreateSpotSuggestionResult(
+            suggestionInfo = spotSuggestion,
+            uploadUrl = uploadUrl,
+        )
     }
 
     fun appendReject(
@@ -65,23 +69,22 @@ class SuggestionService(
         return SpotSuggestion.Detail.of(suggestion, rejectSuggestion)
     }
 
+    @Transactional
     fun updateStatus(
         suggestionId: Long,
         status: SuggestionStatus,
         reason: String?,
     ): SpotSuggestion.Info =
-        Tx.writeable {
-            suggestionUpdater
-                .update(suggestionId, status)
-                .also {
-                    applicationEventPublisher.publishEvent(
-                        SuggestionUpdateEvent(
-                            suggestion = it,
-                            reason = reason,
-                        ),
-                    )
-                }
-        }
+        suggestionUpdater
+            .update(suggestionId, status)
+            .also {
+                applicationEventPublisher.publishEvent(
+                    SuggestionUpdateEvent(
+                        suggestion = it,
+                        reason = reason,
+                    ),
+                )
+            }
 
     fun validateSpotSuggestionName(name: String) {
         if (suggestionReader.existsByName(name)) {
