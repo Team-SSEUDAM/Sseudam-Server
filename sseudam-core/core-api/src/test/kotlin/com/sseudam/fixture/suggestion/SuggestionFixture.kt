@@ -5,10 +5,12 @@ import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.pet.PetPointAction
 import com.sseudam.presentation.v1.suggestion.request.SpotSuggestionCreateRequest
 import com.sseudam.presentation.v1.suggestion.request.SuggestionValidationRequest
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
+import com.sseudam.suggestion.event.SpotSuggestionCreatedEvent
 import com.sseudam.test.helper.fixtureBuilder
 import com.sseudam.trashspot.TrashType
 import net.jqwik.api.Arbitraries
@@ -48,6 +50,13 @@ object SuggestionFixture {
     val s3ImageUrl =
         fixtureBuilder<S3ImageUrl> {
             setExp(S3ImageUrl::presignedUrl, "https://example.com/presigned-url")
+        }
+
+    val spotSuggestionCreatedEvent =
+        fixtureBuilder<SpotSuggestionCreatedEvent> {
+            setExp(SpotSuggestionCreatedEvent::spotSuggestion, spotSuggestionInfo)
+            setExp(SpotSuggestionCreatedEvent::userId, 1L)
+            setExp(SpotSuggestionCreatedEvent::petPointAction, PetPointAction.SUGGESTION)
         }
 
     private fun randomPoint() =
