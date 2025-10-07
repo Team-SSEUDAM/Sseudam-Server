@@ -1,23 +1,13 @@
 package com.sseudam.visit
 
-import com.sseudam.common.GeoConverter
-import com.sseudam.common.GeoJson
-import com.sseudam.notification.dto.NotificationMessages
-import com.sseudam.notification.dto.SendNotificationMessage
-import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.pet.PetPointAction
-import com.sseudam.pet.event.UserPetContextEvent
-import com.sseudam.suggestion.SuggestionService
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
-import com.sseudam.support.extension.logger
-import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashSpotService
-import com.sseudam.user.UserService
+import com.sseudam.visit.event.SpotVisitedEvent
 import com.sseudam.visit.result.SpotVisitedResult
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -26,16 +16,8 @@ import java.time.LocalDateTime
 class SpotVisitedFacade(
     private val spotVisitedService: SpotVisitedService,
     private val trashSpotService: TrashSpotService,
-    private val suggestionService: SuggestionService,
-    private val userService: UserService,
-    private val fcmSender: FcmSender,
-    private val geoConverter: GeoConverter,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
-    companion object {
-        private val log by logger()
-    }
-
     @Transactional
     fun visitSpot(
         userId: Long,
@@ -60,36 +42,14 @@ class SpotVisitedFacade(
 
         val action = if (isToday) PetPointAction.TODAY_FIRST_SPOT_VISITED else PetPointAction.SPOT_VISITED
         applicationEventPublisher.publishEvent(
-            UserPetContextEvent(
+            SpotVisitedEvent(
+                spot = spot,
                 userId = userId,
                 petPointAction = action,
             ),
         )
 
-        sendVisitNotificationAsync(spot)
-
         return SpotVisitedResult(isToday, visited)
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    fun sendVisitNotificationAsync(spot: TrashSpot.Info) {
-        try {
-            val suggestion =
-                suggestionService.findSpotSuggestionByPoint(geoConverter.geoJsonPointToJtsPoint(spot.point as GeoJson.Point)) ?: return
-            val profile = userService.getProfile(suggestion.userId) ?: return
-            fcmSender.send(
-                sendNotificationMessage =
-                    SendNotificationMessage(
-                        userId = suggestion.userId,
-                        title = NotificationMessages.DEFAULT_TITLE,
-                        body = NotificationMessages.anonymousVisitedSpotContents(profile.nickname),
-                    ),
-                type = "SPOT_VISITED",
-                parameterValue = spot.id.toString(),
-            )
-        } catch (e: Exception) {
-            log.warn(e) { "Failed to send visit notification" }
-        }
     }
 
     fun findSpotVisitedByUserId(userId: Long): List<SpotVisited.Info> {

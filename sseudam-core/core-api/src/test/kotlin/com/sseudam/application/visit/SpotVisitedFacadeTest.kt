@@ -1,18 +1,14 @@
 package com.sseudam.application.visit
 
 import com.sseudam.DevelopTest
-import com.sseudam.common.GeoConverter
 import com.sseudam.fixture.visit.VisitedFixture
-import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.pet.PetPointAction
-import com.sseudam.pet.event.UserPetContextEvent
-import com.sseudam.suggestion.SuggestionService
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.trashspot.TrashSpotService
-import com.sseudam.user.UserService
 import com.sseudam.visit.SpotVisitedFacade
 import com.sseudam.visit.SpotVisitedService
+import com.sseudam.visit.event.SpotVisitedEvent
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -29,19 +25,11 @@ class SpotVisitedFacadeTest :
     DescribeSpec({
         val spotVisitedService: SpotVisitedService = mockk()
         val trashSpotService: TrashSpotService = mockk()
-        val suggestionService: SuggestionService = mockk()
-        val userService: UserService = mockk()
-        val fcmSender: FcmSender = mockk()
-        val geoConverter: GeoConverter = mockk()
         val applicationEventPublisher: ApplicationEventPublisher = mockk()
         val spotVisitedFacade =
             SpotVisitedFacade(
                 spotVisitedService = spotVisitedService,
                 trashSpotService = trashSpotService,
-                suggestionService = suggestionService,
-                userService = userService,
-                fcmSender = fcmSender,
-                geoConverter = geoConverter,
                 applicationEventPublisher = applicationEventPublisher,
             )
 
@@ -56,8 +44,7 @@ class SpotVisitedFacadeTest :
                     every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns emptyList()
                     every { trashSpotService.findBy(spotId) } returns spotInfo
                     every { spotVisitedService.append(any()) } returns visitedInfo
-                    every { applicationEventPublisher.publishEvent(any<UserPetContextEvent>()) } just Runs
-                    every { suggestionService.findSpotSuggestionByPoint(any()) } returns null
+                    every { applicationEventPublisher.publishEvent(any<SpotVisitedEvent>()) } just Runs
 
                     val result = spotVisitedFacade.visitSpot(userId, spotId)
 
@@ -68,8 +55,8 @@ class SpotVisitedFacadeTest :
                     verify { spotVisitedService.append(any()) }
                     verify {
                         applicationEventPublisher.publishEvent(
-                            match<UserPetContextEvent> {
-                                it.userId == userId && it.petPointAction == PetPointAction.TODAY_FIRST_SPOT_VISITED
+                            match<SpotVisitedEvent> {
+                                it.spot == spotInfo && it.userId == userId && it.petPointAction == PetPointAction.TODAY_FIRST_SPOT_VISITED
                             },
                         )
                     }
@@ -87,8 +74,7 @@ class SpotVisitedFacadeTest :
                     every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns todayVisits
                     every { trashSpotService.findBy(spotId) } returns spotInfo
                     every { spotVisitedService.append(any()) } returns visitedInfo
-                    every { applicationEventPublisher.publishEvent(any<UserPetContextEvent>()) } just Runs
-                    every { suggestionService.findSpotSuggestionByPoint(any()) } returns null
+                    every { applicationEventPublisher.publishEvent(any<SpotVisitedEvent>()) } just Runs
 
                     val result = spotVisitedFacade.visitSpot(userId, spotId)
 
@@ -96,8 +82,8 @@ class SpotVisitedFacadeTest :
                     result.visited shouldBe visitedInfo
                     verify {
                         applicationEventPublisher.publishEvent(
-                            match<UserPetContextEvent> {
-                                it.userId == userId && it.petPointAction == PetPointAction.SPOT_VISITED
+                            match<SpotVisitedEvent> {
+                                it.spot == spotInfo && it.userId == userId && it.petPointAction == PetPointAction.SPOT_VISITED
                             },
                         )
                     }
