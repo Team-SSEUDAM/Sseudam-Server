@@ -15,10 +15,14 @@ class SpotVisitedValidator {
         if (todayVisited.size >= 5 && todayVisitedSpot == null) {
             throw ErrorException(ErrorType.SPOT_VISITED_LIMIT_EXCEEDED)
         }
-
-        val lastVisitTime = todayVisited.maxBy { it.visitedAt }.visitedAt
-        if (lastVisitTime.isAfter(LocalDateTime.now().minusMinutes(5))) {
-            throw ErrorException(ErrorType.SPOT_VISITED_ALREADY)
+        if (todayVisitedSpot != null) {
+            val lastVisitTime = todayVisited.maxBy { it.visitedAt }.visitedAt
+            if (lastVisitTime.isAfter(LocalDateTime.now().minusMinutes(5))) {
+                throw ErrorException(ErrorType.SPOT_VISITED_ALREADY)
+            }
+            if (todayVisited.size >= 5) {
+                throw ErrorException(ErrorType.SPOT_VISITED_LIMIT_EXCEEDED)
+            }
         }
     }
 }
