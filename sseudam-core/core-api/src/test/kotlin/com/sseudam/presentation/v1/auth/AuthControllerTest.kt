@@ -4,6 +4,7 @@ import com.sseudam.RestDocsTest
 import com.sseudam.auth.AuthenticationFacade
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.auth.Token
+import com.sseudam.auth.result.SocialLoginResult
 import com.sseudam.client.oauth.AppleClientResult
 import com.sseudam.client.oauth.KaKaoClientResult
 import com.sseudam.client.oauth.OAuthService
@@ -143,7 +144,7 @@ class AuthControllerTest : RestDocsTestSuite() {
         val token = Token("accessToken", "refreshToken")
 
         every { oAuthService.getKaKaoUserInfo(any()) } returns socialInfo
-        every { authenticationFacade.socialLogin(any(), any()) } returns Pair(false, token)
+        every { authenticationFacade.socialLogin(any(), any()) } returns SocialLoginResult(token, false)
 
         val request = TokenRequest("kakao_access_token")
 
@@ -180,7 +181,7 @@ class AuthControllerTest : RestDocsTestSuite() {
         val token = Token("accessToken", "refreshToken")
 
         every { oAuthService.getAppleUserInfo(any()) } returns socialInfo
-        every { authenticationFacade.socialLogin(any(), any()) } returns Pair(false, token)
+        every { authenticationFacade.socialLogin(any(), any()) } returns SocialLoginResult(token, false)
 
         val request = TokenRequest("apple_id_token")
 

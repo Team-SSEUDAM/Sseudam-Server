@@ -30,10 +30,10 @@ class ReportController(
         @PathVariable spotId: Long,
         @RequestBody request: SpotReportCreateRequest,
     ): ReportImageUrlResponse {
-        val report = reportFacade.createSpotReport(create = request.toCommand(user.id, spotId))
+        val result = reportFacade.createSpotReport(create = request.toCommand(user.id, spotId))
         return ReportImageUrlResponse.of(
-            report = report.first,
-            presignedUrl = report.second,
+            report = result.spotReport,
+            presignedUrl = result.presignedUrl,
         )
     }
 

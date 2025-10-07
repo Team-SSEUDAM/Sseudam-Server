@@ -10,9 +10,9 @@ import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.Tx
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ReportService(
@@ -39,13 +39,12 @@ class ReportService(
 
     fun findRejectReportByReportId(reportId: Long): ReportReject.Info? = reportReader.readRejectByReportId(reportId)
 
+    @Transactional
     fun updateSpotReport(updateReportCommand: UpdateReportCommand): SpotReport.Info =
-        Tx.writeable {
-            reportUpdater.update(updateReportCommand.reportId, updateReportCommand.status).also { report ->
-                applicationEventPublisher.publishEvent(
-                    SpotReportUpdateEvent(report, updateReportCommand.reason),
-                )
-            }
+        reportUpdater.update(updateReportCommand.reportId, updateReportCommand.status).also { report ->
+            applicationEventPublisher.publishEvent(
+                SpotReportUpdateEvent(report, updateReportCommand.reason),
+            )
         }
 
     fun validateSpotReportName(name: String) {
