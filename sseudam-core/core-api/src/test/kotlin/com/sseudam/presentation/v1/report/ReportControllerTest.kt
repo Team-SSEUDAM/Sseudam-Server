@@ -23,6 +23,7 @@ import com.sseudam.report.ReportFacade
 import com.sseudam.report.ReportService
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
+import com.sseudam.report.result.CreateSpotReportResult
 import com.sseudam.trashspot.TrashType
 import com.sseudam.user.User
 import io.mockk.every
@@ -65,7 +66,7 @@ class ReportControllerTest : RestDocsTestSuite() {
         val reportInfo = ReportFixture.spotReportInfo
         val s3ImageUrl = ReportFixture.s3ImageUrl
 
-        every { reportFacade.createSpotReport(any()) } returns Pair(reportInfo, s3ImageUrl.presignedUrl)
+        every { reportFacade.createSpotReport(any()) } returns CreateSpotReportResult(reportInfo, s3ImageUrl.presignedUrl)
 
         val response =
             given()

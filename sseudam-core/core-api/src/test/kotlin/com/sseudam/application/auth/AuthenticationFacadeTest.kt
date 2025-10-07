@@ -30,7 +30,9 @@ class AuthenticationFacadeTest :
                     every { userService.getSocialUserByEmail("test@kakao.com") } returns existingUser
                     every { authenticationService.socialLogin("device123", existingUser) } returns token
 
-                    val (isNewUser, resultToken) = authenticationFacade.socialLogin("device123", credentialSocial)
+                    val socialLoginResult = authenticationFacade.socialLogin("device123", credentialSocial)
+                    val isNewUser = socialLoginResult.isNewUser
+                    val resultToken = socialLoginResult.token
 
                     isNewUser shouldBe false
                     resultToken shouldBe token
@@ -47,7 +49,9 @@ class AuthenticationFacadeTest :
                     every { userService.getSocialUserByEmail(credentialSocial.email) } returns existingUser
                     every { authenticationService.socialLogin("device123", existingUser) } returns token
 
-                    val (isNewUser, resultToken) = authenticationFacade.socialLogin("device123", credentialSocial)
+                    val socialLoginResult = authenticationFacade.socialLogin("device123", credentialSocial)
+                    val isNewUser = socialLoginResult.isNewUser
+                    val resultToken = socialLoginResult.token
 
                     isNewUser shouldBe true
                     resultToken shouldBe token
@@ -63,7 +67,9 @@ class AuthenticationFacadeTest :
                     every { userService.getSocialUserByEmail(credentialSocial.email) } returns existingUser
                     every { authenticationService.socialLogin("device123", existingUser) } returns token
 
-                    val (isNewUser, resultToken) = authenticationFacade.socialLogin("device123", credentialSocial)
+                    val socialLoginResult = authenticationFacade.socialLogin("device123", credentialSocial)
+                    val isNewUser = socialLoginResult.isNewUser
+                    val resultToken = socialLoginResult.token
 
                     isNewUser shouldBe true
                     resultToken shouldBe token
@@ -80,7 +86,9 @@ class AuthenticationFacadeTest :
                     every { userService.create(any()) } returns newUser
                     every { authenticationService.socialLogin("device123", any()) } returns token
 
-                    val (isNewUser, resultToken) = authenticationFacade.socialLogin("device123", credentialSocial)
+                    val socialLoginResult = authenticationFacade.socialLogin("device123", credentialSocial)
+                    val isNewUser = socialLoginResult.isNewUser
+                    val resultToken = socialLoginResult.token
 
                     isNewUser shouldBe true
                     resultToken shouldBe token
@@ -98,7 +106,9 @@ class AuthenticationFacadeTest :
                     every { userService.getSocialUserByEmail("test@kakao.com") } returns existingUser
                     every { authenticationService.socialLogin("", existingUser) } returns token
 
-                    val (isNewUser, resultToken) = authenticationFacade.socialLogin("", credentialSocial)
+                    val socialLoginResult = authenticationFacade.socialLogin("", credentialSocial)
+                    val isNewUser = socialLoginResult.isNewUser
+                    val resultToken = socialLoginResult.token
 
                     isNewUser shouldBe false
                     resultToken shouldBe token
@@ -113,7 +123,9 @@ class AuthenticationFacadeTest :
 
                 every { userService.create(any()) } returns newUser
 
-                val (socialUser, isUserNew) = authenticationFacade.createNewSocialUser(credentialSocial)
+                val createSocialUserResult = authenticationFacade.createNewSocialUser(credentialSocial)
+                val socialUser = createSocialUserResult.socialUser
+                val isUserNew = createSocialUserResult.isNewUser
 
                 isUserNew shouldBe true
                 socialUser.id shouldBe 1L
