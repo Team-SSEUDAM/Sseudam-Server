@@ -18,7 +18,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.springframework.context.ApplicationEventPublisher
-import java.time.LocalDateTime
 
 @DevelopTest
 class SpotVisitedFacadeTest :
@@ -42,6 +41,7 @@ class SpotVisitedFacadeTest :
                     val spotInfo = VisitedFixture.trashSpotInfo
 
                     every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns emptyList()
+                    every { spotVisitedService.verifyVisited(emptyList(), null) } just Runs
                     every { trashSpotService.findBy(spotId) } returns spotInfo
                     every { spotVisitedService.append(any()) } returns visitedInfo
                     every { applicationEventPublisher.publishEvent(any<SpotVisitedEvent>()) } just Runs
@@ -51,12 +51,13 @@ class SpotVisitedFacadeTest :
                     result.isToday shouldBe true
                     result.visited shouldBe visitedInfo
                     verify { spotVisitedService.findTodaySpotVisitedByUser(userId) }
+                    verify { spotVisitedService.verifyVisited(emptyList(), null) }
                     verify { trashSpotService.findBy(spotId) }
                     verify { spotVisitedService.append(any()) }
                     verify {
                         applicationEventPublisher.publishEvent(
                             match<SpotVisitedEvent> {
-                                it.spot == spotInfo && it.userId == userId && it.petPointAction == PetPointAction.TODAY_FIRST_SPOT_VISITED
+                                it.userId == userId && it.petPointAction == PetPointAction.TODAY_FIRST_SPOT_VISITED
                             },
                         )
                     }
@@ -72,6 +73,7 @@ class SpotVisitedFacadeTest :
                     val todayVisits = listOf(VisitedFixture.spotVisitedInfo.copy(spotId = 1L))
 
                     every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns todayVisits
+                    every { spotVisitedService.verifyVisited(todayVisits, null) } just Runs
                     every { trashSpotService.findBy(spotId) } returns spotInfo
                     every { spotVisitedService.append(any()) } returns visitedInfo
                     every { applicationEventPublisher.publishEvent(any<SpotVisitedEvent>()) } just Runs
@@ -80,28 +82,25 @@ class SpotVisitedFacadeTest :
 
                     result.isToday shouldBe false
                     result.visited shouldBe visitedInfo
+                    verify { spotVisitedService.verifyVisited(todayVisits, null) }
                     verify {
                         applicationEventPublisher.publishEvent(
                             match<SpotVisitedEvent> {
-                                it.spot == spotInfo && it.userId == userId && it.petPointAction == PetPointAction.SPOT_VISITED
+                                it.userId == userId && it.petPointAction == PetPointAction.SPOT_VISITED
                             },
                         )
                     }
                 }
             }
 
-            context("5분 이내에 같은 장소를 재방문하는 경우") {
-                it("예외가 발생한다") {
+            context("방문 검증에서 예외가 발생하는 경우") {
+                it("예외를 전파한다") {
                     val userId = 1L
                     val spotId = 1L
-                    val now = LocalDateTime.now()
-                    val recentVisit =
-                        VisitedFixture.spotVisitedInfo.copy(
-                            spotId = spotId,
-                            visitedAt = now.minusMinutes(3),
-                        )
+                    val todayVisits = listOf(VisitedFixture.spotVisitedInfo)
 
-                    every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns listOf(recentVisit)
+                    every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns todayVisits
+                    every { spotVisitedService.verifyVisited(todayVisits, todayVisits[0]) } throws ErrorException(ErrorType.SPOT_VISITED_ALREADY)
 
                     val exception =
                         shouldThrow<ErrorException> {
@@ -110,31 +109,7 @@ class SpotVisitedFacadeTest :
 
                     exception.errorType shouldBe ErrorType.SPOT_VISITED_ALREADY
                     verify { spotVisitedService.findTodaySpotVisitedByUser(userId) }
-                }
-            }
-
-            context("오늘 5개 장소를 이미 방문한 경우") {
-                it("예외가 발생한다") {
-                    val userId = 1L
-                    val spotId = 1L
-                    val now = LocalDateTime.now()
-                    val todayVisits =
-                        (1..5).map {
-                            VisitedFixture.spotVisitedInfo.copy(
-                                spotId = 1L,
-                                visitedAt = now.minusHours(it.toLong()),
-                            )
-                        }
-
-                    every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns todayVisits
-
-                    val exception =
-                        shouldThrow<ErrorException> {
-                            spotVisitedFacade.visitSpot(userId, spotId)
-                        }
-
-                    exception.errorType shouldBe ErrorType.SPOT_VISITED_LIMIT_EXCEEDED
-                    verify { spotVisitedService.findTodaySpotVisitedByUser(userId) }
+                    verify { spotVisitedService.verifyVisited(todayVisits, todayVisits[0]) }
                 }
             }
         }

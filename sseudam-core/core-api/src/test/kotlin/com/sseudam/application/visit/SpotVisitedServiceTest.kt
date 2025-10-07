@@ -5,9 +5,12 @@ import com.sseudam.fixture.visit.VisitedFixture
 import com.sseudam.visit.SpotVisitedService
 import com.sseudam.visit.component.SpotVisitedAppender
 import com.sseudam.visit.component.SpotVisitedReader
+import com.sseudam.visit.component.SpotVisitedValidator
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import java.time.LocalDate
@@ -17,7 +20,8 @@ class SpotVisitedServiceTest :
     DescribeSpec({
         val spotVisitedAppender: SpotVisitedAppender = mockk()
         val spotVisitedReader: SpotVisitedReader = mockk()
-        val spotVisitedService = SpotVisitedService(spotVisitedAppender, spotVisitedReader)
+        val spotVisitedValidator: SpotVisitedValidator = mockk()
+        val spotVisitedService = SpotVisitedService(spotVisitedAppender, spotVisitedReader, spotVisitedValidator)
 
         describe("방문 추가") {
             context("유효한 방문 정보인 경우") {
@@ -184,6 +188,21 @@ class SpotVisitedServiceTest :
 
                     result shouldBe 0L
                     verify { spotVisitedReader.countBySpotId(spotId) }
+                }
+            }
+        }
+
+        describe("방문 검증") {
+            context("유효한 방문인 경우") {
+                it("예외를 던지지 않는다") {
+                    val todayVisited = listOf(VisitedFixture.spotVisitedInfo)
+                    val todayVisitedSpot = VisitedFixture.spotVisitedInfo
+
+                    every { spotVisitedValidator.verifyVisited(todayVisited, todayVisitedSpot) } just Runs
+
+                    spotVisitedService.verifyVisited(todayVisited, todayVisitedSpot)
+
+                    verify { spotVisitedValidator.verifyVisited(todayVisited, todayVisitedSpot) }
                 }
             }
         }
