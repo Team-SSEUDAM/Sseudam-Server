@@ -18,6 +18,7 @@ import com.sseudam.fixture.visit.VisitedFixture
 import com.sseudam.user.User
 import com.sseudam.visit.SpotVisitedFacade
 import com.sseudam.visit.SpotVisitedService
+import com.sseudam.visit.result.SpotVisitedResult
 import io.mockk.every
 import io.mockk.mockk
 import io.restassured.http.ContentType
@@ -57,7 +58,7 @@ class VisitedControllerTest : RestDocsTestSuite() {
         val visitedInfo = VisitedFixture.spotVisitedInfo
         val isToday = true
 
-        every { spotVisitedFacade.visitSpot(any(), any()) } returns Pair(isToday, visitedInfo)
+        every { spotVisitedFacade.visitSpot(any(), any()) } returns SpotVisitedResult(isToday, visitedInfo)
 
         val response =
             given()

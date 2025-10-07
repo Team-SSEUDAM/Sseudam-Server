@@ -11,12 +11,14 @@ import com.sseudam.suggestion.SuggestionService
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
-import com.sseudam.support.tx.Tx
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.UserService
+import com.sseudam.visit.result.SpotVisitedResult
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -34,48 +36,43 @@ class SpotVisitedFacade(
         private val log by logger()
     }
 
+    @Transactional
     fun visitSpot(
         userId: Long,
         spotId: Long,
-    ): Pair<Boolean, SpotVisited.Info> {
-        val result =
-            Tx.writeable {
-                val todayVisits = spotVisitedService.findTodaySpotVisitedByUser(userId)
-                val todayVisitedSpot = todayVisits.find { it.spotId == spotId }
+    ): SpotVisitedResult {
+        val todayVisits = spotVisitedService.findTodaySpotVisitedByUser(userId)
+        val todayVisitedSpot = todayVisits.find { it.spotId == spotId }
 
-                if (todayVisitedSpot != null) {
-                    val lastVisitTime = todayVisits.maxBy { it.visitedAt }.visitedAt
-                    if (lastVisitTime.isAfter(LocalDateTime.now().minusMinutes(5))) {
-                        throw ErrorException(ErrorType.SPOT_VISITED_ALREADY)
-                    }
-                    if (todayVisits.size >= 5) {
-                        throw ErrorException(ErrorType.SPOT_VISITED_LIMIT_EXCEEDED)
-                    }
-                }
-
-                val isToday = todayVisitedSpot == null && todayVisits.isEmpty()
-                val spot = trashSpotService.findBy(spotId)
-                val visited = spotVisitedService.append(SpotVisited.Create(userId, spotId, LocalDate.now()))
-
-                val action = if (isToday) PetPointAction.TODAY_FIRST_SPOT_VISITED else PetPointAction.SPOT_VISITED
-                applicationEventPublisher.publishEvent(
-                    UserPetContextEvent(
-                        userId = userId,
-                        petPointAction = action,
-                    ),
-                )
-
-                Triple(isToday, visited, spot)
+        if (todayVisitedSpot != null) {
+            val lastVisitTime = todayVisits.maxBy { it.visitedAt }.visitedAt
+            if (lastVisitTime.isAfter(LocalDateTime.now().minusMinutes(5))) {
+                throw ErrorException(ErrorType.SPOT_VISITED_ALREADY)
             }
-
-        Tx.requiresNew {
-            sendVisitNotificationAsync(result.third)
+            if (todayVisits.size >= 5) {
+                throw ErrorException(ErrorType.SPOT_VISITED_LIMIT_EXCEEDED)
+            }
         }
 
-        return Pair(result.first, result.second)
+        val isToday = todayVisitedSpot == null && todayVisits.isEmpty()
+        val spot = trashSpotService.findBy(spotId)
+        val visited = spotVisitedService.append(SpotVisited.Create(userId, spotId, LocalDate.now()))
+
+        val action = if (isToday) PetPointAction.TODAY_FIRST_SPOT_VISITED else PetPointAction.SPOT_VISITED
+        applicationEventPublisher.publishEvent(
+            UserPetContextEvent(
+                userId = userId,
+                petPointAction = action,
+            ),
+        )
+
+        sendVisitNotificationAsync(spot)
+
+        return SpotVisitedResult(isToday, visited)
     }
 
-    private fun sendVisitNotificationAsync(spot: TrashSpot.Info) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    fun sendVisitNotificationAsync(spot: TrashSpot.Info) {
         try {
             val suggestion =
                 suggestionService.findSpotSuggestionByPoint(geoConverter.geoJsonPointToJtsPoint(spot.point as GeoJson.Point)) ?: return
