@@ -6,11 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface UserDeviceJpaRepository :
     JpaRepository<UserDeviceEntity, Long>,
     KotlinJdslJpqlExecutor {
-    fun findByUserId(userId: Long): List<UserDeviceEntity>
-
     fun findAllByDeletedAtIsNull(): List<UserDeviceEntity>
 
     fun findAllByUserKeyAndDeletedAtIsNull(userKey: String): List<UserDeviceEntity>
 
-    fun findByUserIdAndDeletedAtIsNull(userId: Long): List<UserDeviceEntity>
+    fun findAllByUserIdAndDeletedAtIsNull(userId: Long): List<UserDeviceEntity>
 }
