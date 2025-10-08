@@ -37,7 +37,7 @@ class UserDeviceCoreRepository(
     override fun findAllByUserKey(userKey: String): List<UserDevice.Info> =
         Tx.readable {
             userDeviceJpaRepository
-                .findAllByUserKey(userKey)
+                .findAllByUserKeyAndDeletedAtIsNull(userKey)
                 .map { it.toUserDevice() }
         }
 
