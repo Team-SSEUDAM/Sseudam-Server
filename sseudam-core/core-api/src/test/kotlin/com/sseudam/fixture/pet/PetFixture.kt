@@ -2,6 +2,7 @@ package com.sseudam.fixture.pet
 
 import com.navercorp.fixturemonkey.kotlin.setExp
 import com.sseudam.pet.Pet
+import com.sseudam.pet.PetLevelUpHistory
 import com.sseudam.pet.UserPet
 import com.sseudam.pet.component.LevelStandard
 import com.sseudam.pet.result.UserPetLevelUpCurrentSeasonHistoryInfo
@@ -36,6 +37,19 @@ object PetFixture {
             setExp(UserPet.Info::nickname, DEFAULT_NICKNAME)
             setExp(UserPet.Info::point, Arbitraries.longs().between(LevelStandard.LEVEL_4_MIN.toLong(), LevelStandard.LEVEL_4_MAX.toLong()))
         }
+
+    val userPetInfos =
+        fixtureBuilders<UserPet.Info>(
+            block = {
+                setExp(UserPet.Info::petId, DEFAULT_PET_ID)
+                setExp(UserPet.Info::nickname, DEFAULT_NICKNAME)
+                setExp(
+                    UserPet.Info::point,
+                    Arbitraries.longs().between(LevelStandard.LEVEL_1_MIN.toLong(), LevelStandard.SPECIAL_MIN.toLong()),
+                )
+            },
+            size = 2,
+        )
 
     val levelUpHistoryInfo =
         fixtureBuilder<UserPetLevelUpHistoryInfo> {
@@ -91,5 +105,31 @@ object PetFixture {
                 setExp(UserPetLevelUpCurrentSeasonHistoryInfo::levelType, Arbitraries.of(Pet.LevelType.entries))
             },
             size = 3,
+        )
+
+    val petLevelUpHistoryInfo =
+        fixtureBuilder<PetLevelUpHistory.Info> {
+            setExp(PetLevelUpHistory.Info::id, 1L)
+            setExp(PetLevelUpHistory.Info::userId, DEFAULT_USER_ID)
+            setExp(PetLevelUpHistory.Info::userPetId, DEFAULT_USER_ID)
+            setExp(PetLevelUpHistory.Info::nickname, DEFAULT_NICKNAME)
+            setExp(PetLevelUpHistory.Info::year, DEFAULT_YEAR)
+            setExp(PetLevelUpHistory.Info::monthly, DEFAULT_MONTH)
+            setExp(PetLevelUpHistory.Info::levelType, Pet.LevelType.LEVEL_2)
+            setExp(PetLevelUpHistory.Info::updatedAt, null)
+        }
+
+    val petLevelUpHistories =
+        fixtureBuilders<PetLevelUpHistory.Info>(
+            block = {
+                setExp(PetLevelUpHistory.Info::userId, DEFAULT_USER_ID)
+                setExp(PetLevelUpHistory.Info::userPetId, DEFAULT_USER_ID)
+                setExp(PetLevelUpHistory.Info::nickname, DEFAULT_NICKNAME)
+                setExp(PetLevelUpHistory.Info::year, DEFAULT_YEAR)
+                setExp(PetLevelUpHistory.Info::monthly, DEFAULT_MONTH)
+                setExp(PetLevelUpHistory.Info::levelType, Arbitraries.of(Pet.LevelType.entries))
+                setExp(PetLevelUpHistory.Info::updatedAt, null)
+            },
+            size = 2,
         )
 }
