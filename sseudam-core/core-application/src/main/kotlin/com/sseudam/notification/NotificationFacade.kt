@@ -22,7 +22,12 @@ class NotificationFacade(
     }
 
     fun createWeeklyNotificationMessages(): List<FirebaseCloudMessageCommand> {
-        val userDevices = userDeviceService.findAll().filter { it.fcmToken.isNotBlank() }
+        val userDevices =
+            userDeviceService
+                .findAll()
+                .sortedByDescending { it.createdAt }
+                .filter { it.fcmToken.isNotBlank() && it.fcmToken.isNotEmpty() }
+                .distinctBy { it.userId }
         if (userDevices.isEmpty()) {
             return listOf()
         }
@@ -67,7 +72,9 @@ class NotificationFacade(
         val userDevices =
             userDeviceService
                 .findAll()
-                .filter { it.fcmToken.isNotBlank() }
+                .sortedByDescending { it.createdAt }
+                .filter { it.fcmToken.isNotBlank() && it.fcmToken.isNotEmpty() }
+                .distinctBy { it.userId }
         if (userDevices.isEmpty()) return
         val userProfiles =
             userService
