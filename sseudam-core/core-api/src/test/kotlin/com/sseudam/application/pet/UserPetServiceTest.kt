@@ -144,6 +144,7 @@ class UserPetServiceTest :
                     val result = userPetService.updatePointByAction(userPet, action)
 
                     result.point shouldBe 52L
+                    verify { userPetUpdater.updatePointByAction(userPet.id, action) }
                 }
             }
         }
