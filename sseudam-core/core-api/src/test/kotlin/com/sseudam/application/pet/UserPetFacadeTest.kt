@@ -163,11 +163,15 @@ class UserPetFacadeTest :
             context("사용자의 히스토리가 있는 경우") {
                 it("시즌별 최고 레벨 기록을 반환한다") {
                     val userId = 1L
-                    val histories = PetFixture.petLevelUpHistories
+                    val histories =
+                        listOf(
+                            PetFixture.petLevelUpHistoryInfo.copy(levelType = Pet.LevelType.LEVEL_2),
+                            PetFixture.petLevelUpHistoryInfo.copy(id = 2L, levelType = Pet.LevelType.LEVEL_3),
+                        )
 
                     every { petLevelUpHistoryService.findAllByUser(userId) } returns histories
                     every { userPetPolicy.getSeasonByYearMonth(any(), any()) } returns "2025-06"
-                    every { userPetPolicy.getMinLevelStandard(any()) } returns 110L
+                    every { userPetPolicy.getMinLevelStandard(Pet.LevelType.LEVEL_3) } returns 110L
 
                     val result = userPetFacade.findAllPetHistory(userId)
 
@@ -231,7 +235,7 @@ class UserPetFacadeTest :
             }
 
             context("사용자가 없는 경우") {
-                it("펫만 생성하고 초기화는 스킨한다") {
+                it("사용자 목록이 비어도 초기화는 빈 목록으로 안전하게 호출된다") {
                     val currentYear = 2025
                     val currentMonth = Month.JULY
                     val level1Pet = PetFixture.petInfo.copy(levelType = Pet.LevelType.LEVEL_1)

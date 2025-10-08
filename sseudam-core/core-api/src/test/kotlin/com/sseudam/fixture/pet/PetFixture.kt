@@ -85,7 +85,14 @@ object PetFixture {
                     UserPetLevelUpHistoryInfo::point,
                     Arbitraries.longs().between(LevelStandard.LEVEL_1_MIN.toLong(), LevelStandard.SPECIAL_MIN.toLong()),
                 )
-                setExp(UserPetLevelUpHistoryInfo::season, Arbitraries.strings().withChars("0123456789-").ofLength(7))
+                setExp(
+                    UserPetLevelUpHistoryInfo::season,
+                    Arbitraries.integers().between(2020, 2030).flatMap { year ->
+                        Arbitraries.integers().between(1, 12).map { month ->
+                            String.format("%04d-%02d", year, month)
+                        }
+                    },
+                )
                 setExp(UserPetLevelUpHistoryInfo::levelType, Arbitraries.of(Pet.LevelType.entries))
             },
             size = 3,

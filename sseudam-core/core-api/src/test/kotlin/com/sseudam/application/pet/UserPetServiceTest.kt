@@ -202,7 +202,7 @@ class UserPetServiceTest :
             }
 
             context("사용자가 없는 경우") {
-                it("삭제와 생성을 스킨한다") {
+                it("빈 목록으로도 안전하게 호출한다") {
                     val emptyUserPets = emptyList<UserPet.Info>()
                     val newPetId = 10L
 
