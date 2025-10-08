@@ -104,13 +104,17 @@ class AdminFacade(
         topic: String,
         contents: String,
     ) {
-        val userDevices = userDeviceService.findAll()
+        val userDevice = userDeviceService.findAll()
+        val userDevices =
+            userDevice
+                .sortedByDescending { it.createdAt }
+                .filter { it.fcmToken.isNotBlank() && it.fcmToken.isNotEmpty() }
+                .distinctBy { it.userId }
         if (userDevices.isEmpty()) return
 
         val deviceTokenMap = userDevices.associateBy { it.fcmToken }
         val messages =
             userDevices
-                .filter { it.fcmToken.isNotBlank() }
                 .map { device ->
                     FirebaseCloudMessageCommand(
                         fcmToken = device.fcmToken,

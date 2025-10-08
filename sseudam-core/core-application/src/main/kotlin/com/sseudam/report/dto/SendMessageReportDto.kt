@@ -42,7 +42,7 @@ data class SendMessageReportDto(
                     ReportType.KIND -> report.trashType.displayName
                     ReportType.PHOTO -> report.imageUrl
                 }
-            }로 수정 요청",
+            } 로 수정 요청",
             createdAt = report.createdAt,
         )
     }
