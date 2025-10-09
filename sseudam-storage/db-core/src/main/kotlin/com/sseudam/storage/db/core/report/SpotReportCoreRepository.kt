@@ -67,15 +67,13 @@ class SpotReportCoreRepository(
             report.updateStatus(reportStatus).toSpotReport()
         }
 
-    override fun cancel(
-        reportId: Long,
-        reportStatus: ReportStatus,
-    ) = Tx.writeable {
-        val report =
-            spotReportJpaRepository
-                .findByIdAndDeletedAtIsNullOrElseThrow(reportId)
-        report.cancel(reportStatus)
-    }
+    override fun cancel(reportId: Long) =
+        Tx.writeable {
+            val report =
+                spotReportJpaRepository
+                    .findByIdAndDeletedAtIsNullOrElseThrow(reportId)
+            report.cancel()
+        }
 
     override fun existsByName(name: String): Boolean =
         Tx.readable {

@@ -259,13 +259,13 @@ class ReportServiceTest :
 
                     every { reportReader.readBy(command.reportId) } returns reportInfo
                     every { reportValidator.verifyReport(command.userId, reportInfo) } just Runs
-                    every { reportUpdater.cancel(command.reportId, ReportStatus.CANCEL) } just Runs
+                    every { reportUpdater.cancel(command.reportId) } just Runs
 
                     reportService.cancel(command)
 
                     verify { reportReader.readBy(command.reportId) }
                     verify { reportValidator.verifyReport(command.userId, reportInfo) }
-                    verify { reportUpdater.cancel(command.reportId, ReportStatus.CANCEL) }
+                    verify { reportUpdater.cancel(command.reportId) }
                 }
             }
 

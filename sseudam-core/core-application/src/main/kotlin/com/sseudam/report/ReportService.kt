@@ -59,6 +59,6 @@ class ReportService(
     fun cancel(command: CancelReportCommand) {
         val report = reportReader.readBy(command.reportId)
         reportValidator.verifyReport(command.userId, report)
-        reportUpdater.cancel(command.reportId, ReportStatus.CANCEL)
+        reportUpdater.cancel(command.reportId)
     }
 }

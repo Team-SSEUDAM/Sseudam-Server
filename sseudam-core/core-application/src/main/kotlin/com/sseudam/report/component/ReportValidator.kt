@@ -15,7 +15,7 @@ class ReportValidator {
         if (report.userId != userId) {
             throw ErrorException(ErrorType.UNAUTHORIZED_REPORT)
         }
-        if (report.status != ReportStatus.APPROVE) {
+        if (report.status == ReportStatus.APPROVE) {
             throw ErrorException(ErrorType.ALREADY_APPROVED_REPORT)
         }
     }

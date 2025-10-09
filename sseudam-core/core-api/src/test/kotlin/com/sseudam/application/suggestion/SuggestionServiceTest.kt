@@ -285,13 +285,13 @@ class SuggestionServiceTest :
 
                     every { suggestionReader.readBy(command.suggestionId) } returns suggestionInfo
                     every { suggestionValidator.verifySuggestion(command.userId, suggestionInfo) } just Runs
-                    every { suggestionUpdater.cancel(command.suggestionId, SuggestionStatus.CANCEL) } just Runs
+                    every { suggestionUpdater.cancel(command.suggestionId) } just Runs
 
                     suggestionService.cancel(command)
 
                     verify { suggestionReader.readBy(command.suggestionId) }
                     verify { suggestionValidator.verifySuggestion(command.userId, suggestionInfo) }
-                    verify { suggestionUpdater.cancel(command.suggestionId, SuggestionStatus.CANCEL) }
+                    verify { suggestionUpdater.cancel(command.suggestionId) }
                 }
             }
 

@@ -14,8 +14,5 @@ class SuggestionUpdater(
         status: SuggestionStatus,
     ): SpotSuggestion.Info = spotSuggestionRepository.update(suggestionId, status)
 
-    fun cancel(
-        suggestionId: Long,
-        status: SuggestionStatus,
-    ) = spotSuggestionRepository.cancel(suggestionId, status)
+    fun cancel(suggestionId: Long) = spotSuggestionRepository.cancel(suggestionId)
 }

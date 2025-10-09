@@ -83,13 +83,11 @@ class SpotSuggestionCoreRepository(
             return@writeable suggestion.updateStatus(status).toSpotSuggestion()
         }
 
-    override fun cancel(
-        suggestionId: Long,
-        status: SuggestionStatus,
-    ) = Tx.writeable {
-        val suggestion = spotSuggestionJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(suggestionId)
-        suggestion.cancel(status)
-    }
+    override fun cancel(suggestionId: Long) =
+        Tx.writeable {
+            val suggestion = spotSuggestionJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(suggestionId)
+            suggestion.cancel()
+        }
 
     override fun existsByName(name: String): Boolean =
         Tx.readable {

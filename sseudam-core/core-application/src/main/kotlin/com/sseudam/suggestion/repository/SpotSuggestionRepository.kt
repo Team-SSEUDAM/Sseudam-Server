@@ -36,10 +36,7 @@ interface SpotSuggestionRepository {
         status: SuggestionStatus,
     ): SpotSuggestion.Info
 
-    fun cancel(
-        suggestionId: Long,
-        status: SuggestionStatus,
-    )
+    fun cancel(suggestionId: Long)
 
     fun existsByName(name: String): Boolean
 

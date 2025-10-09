@@ -101,6 +101,6 @@ class SuggestionService(
     fun cancel(command: CancelSuggestionCommand) {
         val suggestion = suggestionReader.readBy(command.suggestionId)
         suggestionValidator.verifySuggestion(command.userId, suggestion)
-        suggestionUpdater.cancel(command.suggestionId, SuggestionStatus.CANCEL)
+        suggestionUpdater.cancel(command.suggestionId)
     }
 }
