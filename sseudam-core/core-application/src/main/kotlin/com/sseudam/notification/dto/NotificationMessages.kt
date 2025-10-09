@@ -22,4 +22,16 @@ object NotificationMessages {
     fun anonymousVisitedSpotContents(nickname: String) = "누군가 ${nickname}님이 제보한 쓰레기통에 쓰레기를 버렸어요! 지금 바로 확인해보러 가볼까요?"
 
     fun randomMessage(): Pair<String, String> = messages.random()
+
+    fun approveSuggestionContents(nickname: String) =
+        "${nickname}님이 제보한 쓰레기통이 승인되었어요!\n" +
+            "지금 바로 확인하러 가볼까요?"
+
+    fun rejectSuggestionContents(nickname: String) = "검토 결과, ${nickname}님이 제보한 쓰레기통이 반려되었어요. 반려 사유를 확인하고 다시 제보해보세요!"
+
+    fun approveReportContents(nickname: String) =
+        "${nickname}님이 신고한 쓰레기통이 승인되었어요!\n" +
+            "지금 바로 확인하러 가볼까요?"
+
+    fun rejectReportContents(nickname: String) = "검토 결과, ${nickname}님이 신고한 쓰레기통이 반려되었어요. 반려 사유를 확인하고 다시 신고해보세요!"
 }

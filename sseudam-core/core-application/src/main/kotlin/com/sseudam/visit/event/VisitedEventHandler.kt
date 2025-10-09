@@ -2,11 +2,13 @@ package com.sseudam.visit.event
 
 import com.sseudam.common.GeoConverter
 import com.sseudam.common.GeoJson
+import com.sseudam.notification.NotificationType
 import com.sseudam.notification.dto.NotificationMessages
 import com.sseudam.notification.dto.SendNotificationMessage
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.pet.event.UserPetContextEvent
 import com.sseudam.suggestion.SuggestionService
+import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.extension.logger
 import com.sseudam.user.UserService
 import org.springframework.context.ApplicationEventPublisher
@@ -43,8 +45,10 @@ class VisitedEventHandler(
     fun handleSendVisitNotification(event: SpotVisitedEvent) {
         try {
             val suggestion =
-                suggestionService.findSpotSuggestionByPoint(geoConverter.geoJsonPointToJtsPoint(event.spot.point as GeoJson.Point))
-                    ?: return
+                suggestionService.findSpotSuggestionByPointAndStatus(
+                    geoConverter.geoJsonPointToJtsPoint(event.spot.point as GeoJson.Point),
+                    status = SuggestionStatus.APPROVE,
+                ) ?: return
             val profile = userService.getProfile(suggestion.userId) ?: return
             fcmSender.send(
                 sendNotificationMessage =
@@ -53,7 +57,7 @@ class VisitedEventHandler(
                         title = NotificationMessages.DEFAULT_TITLE,
                         body = NotificationMessages.anonymousVisitedSpotContents(profile.nickname),
                     ),
-                type = "SPOT_VISITED",
+                type = NotificationType.ANONYMOUS_VISITED_SPOT,
                 parameterValue = event.spot.id.toString(),
             )
         } catch (e: Exception) {

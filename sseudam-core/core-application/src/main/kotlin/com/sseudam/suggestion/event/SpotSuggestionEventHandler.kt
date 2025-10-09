@@ -1,5 +1,6 @@
 package com.sseudam.suggestion.event
 
+import com.sseudam.notification.NotificationType
 import com.sseudam.notification.discord.DiscordClient
 import com.sseudam.notification.dto.NotificationMessages
 import com.sseudam.notification.dto.SendNotificationMessage
@@ -27,23 +28,30 @@ class SpotSuggestionEventHandler(
     fun suggestionUpdateNotificationListener(event: SuggestionUpdateEvent) {
         try {
             val suggestion = event.suggestion
-            val body =
-                when (suggestion.status) {
-                    SuggestionStatus.APPROVE -> NotificationMessages.APPROVE_SUGGESTION_CONTENTS
-                    SuggestionStatus.REJECT -> NotificationMessages.REJECT_SUGGESTION_CONTENTS
-                    else -> throw ErrorException(ErrorType.INVALID_UPDATE_SUGGESTION_STATUS)
-                }
             val userProfile =
                 userService.getProfile(suggestion.userId)
                     ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
+            val body =
+                when (suggestion.status) {
+                    SuggestionStatus.APPROVE -> NotificationMessages.approveSuggestionContents(userProfile.nickname)
+                    SuggestionStatus.REJECT -> NotificationMessages.rejectSuggestionContents(userProfile.nickname)
+                    else -> throw ErrorException(ErrorType.INVALID_UPDATE_SUGGESTION_STATUS)
+                }
+
+            val type =
+                when (suggestion.status) {
+                    SuggestionStatus.APPROVE -> NotificationType.APPROVE_SUGGESTION
+                    SuggestionStatus.REJECT -> NotificationType.REJECT_SUGGESTION
+                    else -> throw ErrorException(ErrorType.INVALID_UPDATE_SUGGESTION_STATUS)
+                }
 
             fcmSender.send(
                 SendNotificationMessage(
                     userId = suggestion.userId,
                     title = NotificationMessages.DEFAULT_TITLE,
-                    body = userProfile.nickname + body,
+                    body = body,
                 ),
-                type = "SUGGESTION",
+                type = type,
                 parameterValue = suggestion.id.toString(),
             )
         } catch (e: Exception) {

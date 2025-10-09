@@ -8,9 +8,9 @@ import com.sseudam.suggestion.component.SuggestionUpdater
 import com.sseudam.suggestion.component.SuggestionValidator
 import com.sseudam.suggestion.event.SuggestionUpdateEvent
 import com.sseudam.suggestion.result.CreateSpotSuggestionResult
-import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory

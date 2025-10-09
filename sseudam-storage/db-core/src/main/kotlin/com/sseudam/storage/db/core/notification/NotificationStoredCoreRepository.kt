@@ -4,12 +4,15 @@ import com.sseudam.notification.NotificationStored
 import com.sseudam.notification.ReadStatus
 import com.sseudam.notification.repository.NotificationStoredRepository
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
+import com.sseudam.support.cursor.Cursor
+import com.sseudam.support.cursor.CursorRequest
 import com.sseudam.support.tx.Tx
 import org.springframework.stereotype.Repository
 
 @Repository
 class NotificationStoredCoreRepository(
     private val notificationStoredJpaRepository: NotificationStoredJpaRepository,
+    private val notificationStoredCustomRepository: NotificationStoredCustomRepository,
 ) : NotificationStoredRepository {
     override fun save(notificationStored: NotificationStored.Create): NotificationStored.Info =
         Tx.writeable {
@@ -44,6 +47,11 @@ class NotificationStoredCoreRepository(
                 .map { it.toNotificationStoredInfo() }
         }
 
+    override fun findAllBy(
+        userId: Long,
+        cursorRequest: CursorRequest,
+    ): Cursor<NotificationStored.Info> = notificationStoredCustomRepository.findAllBy(userId, cursorRequest)
+
     override fun countByUserIdAndReadStatus(
         userId: Long,
         readStatus: ReadStatus?,
@@ -53,7 +61,7 @@ class NotificationStoredCoreRepository(
                 .countByUserIdAndReadStatus(userId, readStatus)
         }
 
-    override fun read(notificationStoredId: Long) =
+    override fun readBy(notificationStoredId: Long) =
         Tx.writeable {
             val notificationStored =
                 notificationStoredJpaRepository

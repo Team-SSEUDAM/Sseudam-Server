@@ -5,7 +5,7 @@ import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.reject.SuggestionReject
 import com.sseudam.suggestion.repository.SpotSuggestionRepository
 import com.sseudam.suggestion.repository.SuggestionRejectRepository
-import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Component

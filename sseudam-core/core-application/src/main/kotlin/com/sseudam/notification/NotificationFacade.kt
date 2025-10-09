@@ -5,6 +5,8 @@ import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.component.NotificationStoredKeyGenerator
 import com.sseudam.notification.dto.NotificationMessages
 import com.sseudam.notification.fcm.FcmSender
+import com.sseudam.support.cursor.Cursor
+import com.sseudam.support.cursor.CursorRequest
 import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserService
 import org.springframework.stereotype.Service
@@ -57,7 +59,7 @@ class NotificationFacade(
                                 ?.userId
                                 ?: return@map null,
                         notificationStoredKey = notificationStoredKeyGenerator.generate(),
-                        type = "REGULAR",
+                        type = NotificationType.REGULAR,
                         parameterValue = "",
                         topic = message.title,
                         contents = message.body,
@@ -103,7 +105,7 @@ class NotificationFacade(
                                     ?.userId
                                     ?: return@map null,
                             notificationStoredKey = notificationStoredKeyGenerator.generate(),
-                            type = "PET_SEASON",
+                            type = NotificationType.NEW_PET_SEASON,
                             parameterValue = "",
                             topic = message.title,
                             contents = message.body,
@@ -111,5 +113,14 @@ class NotificationFacade(
                     }.filterNotNull(),
             )
         }
+    }
+
+    fun getNotifications(
+        userId: Long,
+        cursorRequest: CursorRequest,
+    ): Cursor<NotificationStored.Info> {
+        val notifications = notificationService.findAllNotifications(userId, cursorRequest)
+        if (notifications.content.isEmpty()) return Cursor(listOf(), null, cursorRequest.size)
+        return notifications
     }
 }
