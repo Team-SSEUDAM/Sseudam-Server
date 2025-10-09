@@ -7,6 +7,7 @@ import com.sseudam.common.Region
 import com.sseudam.common.S3ImageUrl
 import com.sseudam.pet.PetPointAction
 import com.sseudam.presentation.v1.suggestion.request.SpotSuggestionCreateRequest
+import com.sseudam.presentation.v1.suggestion.request.SuggestionCancelRequest
 import com.sseudam.presentation.v1.suggestion.request.SuggestionValidationRequest
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
@@ -31,6 +32,11 @@ object SuggestionFixture {
     val suggestionValidationRequest =
         fixtureBuilder<SuggestionValidationRequest> {
             setExp(SuggestionValidationRequest::name, "테스트 쓰레기통")
+        }
+
+    val suggestionCancelRequest =
+        fixtureBuilder<SuggestionCancelRequest> {
+            setExp(SuggestionCancelRequest::suggestionId, 1L)
         }
 
     val spotSuggestionInfo =

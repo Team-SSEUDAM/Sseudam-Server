@@ -25,7 +25,9 @@ import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.result.CreateSpotSuggestionResult
 import com.sseudam.trashspot.TrashType
 import com.sseudam.user.User
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.BeforeEach
@@ -169,6 +171,39 @@ class SuggestionControllerTest : RestDocsTestSuite() {
             ),
             responseBody(
                 "isValid" type BOOLEAN means "검증 결과" example "true",
+            ),
+        )
+    }
+
+    @DisplayName("제보 취소 - 200")
+    @Test
+    fun t4() {
+        val request = SuggestionFixture.suggestionCancelRequest
+
+        every { suggestionFacade.cancelSpotSuggestion(any(), any()) } just Runs
+
+        val response =
+            given()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                .contentType(ContentType.JSON)
+                .body(request)
+                .post("/api/v1/suggestions/cancel")
+                .then()
+                .status(HttpStatus.OK)
+
+        response.makeDocument(
+            "제보 취소",
+            DocsTag.SUGGESTION,
+            headers(
+                "Authorization" headerType Authorization,
+            ),
+            "SuggestionCancelRequest",
+            "SuggestionMessageResponse",
+            requestBody(
+                "suggestionId" type NUMBER means "취소할 제보 ID" example "1",
+            ),
+            responseBody(
+                "message" type STRING means "취소 완료 메시지" example "제보가 취소되었습니다.",
             ),
         )
     }

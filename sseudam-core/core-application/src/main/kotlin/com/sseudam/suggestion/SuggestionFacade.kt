@@ -46,4 +46,11 @@ class SuggestionFacade(
                 )
             }
     }
+
+    fun cancelSpotSuggestion(
+        userId: Long,
+        suggestionId: Long,
+    ) {
+        suggestionService.cancel(userId, suggestionId)
+    }
 }

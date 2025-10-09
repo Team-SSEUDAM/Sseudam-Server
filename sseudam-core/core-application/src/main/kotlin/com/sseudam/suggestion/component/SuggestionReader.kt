@@ -28,5 +28,10 @@ class SuggestionReader(
 
     fun readByPoint(point: Point): SpotSuggestion.Info? = spotSuggestionRepository.findByPoint(point)
 
-    fun findRejectBySuggestionId(suggestionId: Long): SuggestionReject.Info? = suggestionRejectRepository.findBySuggestionId(suggestionId)
+    fun readByPointAndStatus(
+        point: Point,
+        status: SuggestionStatus,
+    ): SpotSuggestion.Info? = spotSuggestionRepository.findByPointAndStatus(point, status)
+
+    fun readRejectBySuggestionId(suggestionId: Long): SuggestionReject.Info? = suggestionRejectRepository.findBySuggestionId(suggestionId)
 }

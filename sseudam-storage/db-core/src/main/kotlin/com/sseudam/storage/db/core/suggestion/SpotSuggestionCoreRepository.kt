@@ -31,14 +31,14 @@ class SpotSuggestionCoreRepository(
     override fun findBy(suggestionId: Long): SpotSuggestion.Info =
         Tx.readable {
             spotSuggestionJpaRepository
-                .findByIdOrElseThrow(suggestionId)
+                .findByIdAndDeletedAtIsNullOrElseThrow(suggestionId)
                 .toSpotSuggestion()
         }
 
     override fun findAllByUserId(userId: Long): List<SpotSuggestion.Info> =
         Tx.readable {
             spotSuggestionJpaRepository
-                .findAllByUserId(userId)
+                .findAllByUserIdAndDeletedAtIsNull(userId)
                 .map { it.toSpotSuggestion() }
         }
 
@@ -53,6 +53,16 @@ class SpotSuggestionCoreRepository(
         Tx.readable {
             spotSuggestionJpaRepository
                 .findByPointAndDeletedAtIsNull(point)
+                ?.toSpotSuggestion()
+        }
+
+    override fun findByPointAndStatus(
+        point: Point,
+        status: SuggestionStatus,
+    ): SpotSuggestion.Info? =
+        Tx.readable {
+            spotSuggestionJpaRepository
+                .findByPointAndStatusAndDeletedAtIsNull(point, status)
                 ?.toSpotSuggestion()
         }
 
@@ -73,9 +83,17 @@ class SpotSuggestionCoreRepository(
             return@writeable suggestion.updateStatus(status).toSpotSuggestion()
         }
 
+    override fun cancel(
+        suggestionId: Long,
+        status: SuggestionStatus,
+    ) = Tx.writeable {
+        val suggestion = spotSuggestionJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(suggestionId)
+        suggestion.cancel(status)
+    }
+
     override fun existsByName(name: String): Boolean =
         Tx.readable {
-            spotSuggestionJpaRepository.existsBySpotName(name)
+            spotSuggestionJpaRepository.existsBySpotNameAndDeletedAtIsNull(name)
         }
 
     override fun deleteBy(suggestionId: Long) =

@@ -58,6 +58,11 @@ class SuggestionService(
 
     fun findSpotSuggestionByPoint(point: Point): SpotSuggestion.Info? = suggestionReader.readByPoint(point)
 
+    fun findSpotSuggestionByPointAndStatus(
+        point: Point,
+        status: SuggestionStatus,
+    ): SpotSuggestion.Info? = suggestionReader.readByPointAndStatus(point, status)
+
     fun findSuggestionsBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
@@ -65,7 +70,7 @@ class SuggestionService(
 
     fun findSpotSuggestionById(suggestionId: Long): SpotSuggestion.Detail {
         val suggestion = suggestionReader.readBy(suggestionId)
-        val rejectSuggestion = suggestionReader.findRejectBySuggestionId(suggestionId)
+        val rejectSuggestion = suggestionReader.readRejectBySuggestionId(suggestionId)
         return SpotSuggestion.Detail.of(suggestion, rejectSuggestion)
     }
 
@@ -90,5 +95,14 @@ class SuggestionService(
         if (suggestionReader.existsByName(name)) {
             throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
         }
+    }
+
+    fun cancel(
+        userId: Long,
+        suggestionId: Long,
+    ) {
+        val suggestion = suggestionReader.readBy(suggestionId)
+        suggestionValidator.verifySuggestion(userId, suggestion)
+        suggestionUpdater.cancel(suggestionId, SuggestionStatus.CANCEL)
     }
 }

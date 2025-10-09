@@ -134,6 +134,18 @@ enum class ErrorType(
         "이미 존재하는 쓰레기통 장소입니다.",
         ErrorLevel.WARN,
     ),
+    UNAUTHORIZED_SUGGESTION(
+        400,
+        ErrorKind.CLIENT_ERROR,
+        "해당 제보에 대한 제보자가 아닙니다.",
+        ErrorLevel.WARN,
+    ),
+    ALREADY_APPROVED_SUGGESTION(
+        409,
+        ErrorKind.CLIENT_ERROR,
+        "이미 승인된 제보입니다.",
+        ErrorLevel.WARN,
+    ),
 
     /** SPOT */
     ALREADY_EXIST_SPOT_SITE(

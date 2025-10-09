@@ -116,6 +116,7 @@ class HistoryFacadeTest :
                             SuggestionFixture.spotSuggestionInfo.copy(status = SuggestionStatus.APPROVE),
                             SuggestionFixture.spotSuggestionInfo.copy(id = 2L, status = SuggestionStatus.REJECT),
                             SuggestionFixture.spotSuggestionInfo.copy(id = 3L, status = SuggestionStatus.WAITING),
+                            SuggestionFixture.spotSuggestionInfo.copy(id = 4L, status = SuggestionStatus.CANCEL),
                         )
 
                     every { reportService.findAllReportByUserId(userId) } returns emptyList()
@@ -123,10 +124,11 @@ class HistoryFacadeTest :
 
                     val result = historyFacade.findHistories(userId)
 
-                    result shouldHaveSize 3
+                    result shouldHaveSize 4
                     result.count { it.status == HistoryStatus.APPROVE } shouldBe 1
                     result.count { it.status == HistoryStatus.REJECT } shouldBe 1
                     result.count { it.status == HistoryStatus.WAITING } shouldBe 1
+                    result.count { it.status == HistoryStatus.CANCEL } shouldBe 1
                 }
             }
         }
