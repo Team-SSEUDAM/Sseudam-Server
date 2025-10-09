@@ -30,7 +30,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
-import org.springframework.restdocs.RestDocumentationContextProvider
 import java.util.UUID
 
 @RestDocsTest
@@ -43,7 +42,7 @@ class PetControllerTest : RestDocsTestSuite() {
     private lateinit var userArgumentResolver: UserArgumentResolver
 
     @BeforeEach
-    fun setUpTest(restDocumentation: RestDocumentationContextProvider) {
+    fun setUpTest() {
         userArgumentResolver = mockk()
         petService = mockk()
         userPetService = mockk()

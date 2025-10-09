@@ -176,6 +176,7 @@ class SuggestionServiceTest :
 
                     val result = suggestionService.findSpotSuggestionById(suggestionId)
 
+                    result shouldBe SpotSuggestion.Detail.of(suggestionInfo, null)
                     verify { suggestionReader.readBy(suggestionId) }
                     verify { suggestionReader.readRejectBySuggestionId(suggestionId) }
                 }

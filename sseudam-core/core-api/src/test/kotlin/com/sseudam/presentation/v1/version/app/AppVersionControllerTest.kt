@@ -21,7 +21,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import org.springframework.restdocs.RestDocumentationContextProvider
 
 @RestDocsTest
 class AppVersionControllerTest : RestDocsTestSuite() {
@@ -29,7 +28,7 @@ class AppVersionControllerTest : RestDocsTestSuite() {
     private lateinit var appVersionService: AppVersionService
 
     @BeforeEach
-    fun setUpTest(restDocumentation: RestDocumentationContextProvider) {
+    fun setUpTest() {
         appVersionService = mockk()
         appVersionController = AppVersionController(appVersionService)
         mockMvcSpec = mockController(appVersionController)

@@ -32,7 +32,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.security.crypto.password.PasswordEncoder
 
 @RestDocsTest
@@ -45,7 +44,7 @@ class AuthControllerTest : RestDocsTestSuite() {
     private lateinit var userService: UserService
 
     @BeforeEach
-    fun setUpTest(restDocumentation: RestDocumentationContextProvider) {
+    fun setUpTest() {
         passwordEncoder = mockk()
         authenticationService = mockk()
         authenticationFacade = mockk()
