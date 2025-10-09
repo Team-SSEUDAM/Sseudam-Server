@@ -272,7 +272,7 @@ class ReportServiceTest :
             context("다른 사용자의 신고를 취소하려는 경우") {
                 it("예외가 발생한다") {
                     val command = ReportFixture.cancelReportCommand
-                    val reportInfo = ReportFixture.spotReportInfo.copy(userId = 2L)
+                    val reportInfo = ReportFixture.spotReportInfo.copy(userId = command.userId + 1)
 
                     every { reportReader.readBy(command.reportId) } returns reportInfo
                     every { reportValidator.verifyReport(command.userId, reportInfo) } throws ErrorException(ErrorType.UNAUTHORIZED_REPORT)
@@ -283,6 +283,7 @@ class ReportServiceTest :
 
                     verify { reportReader.readBy(command.reportId) }
                     verify { reportValidator.verifyReport(command.userId, reportInfo) }
+                    verify { reportUpdater.cancel(command.reportId) }
                 }
             }
         }

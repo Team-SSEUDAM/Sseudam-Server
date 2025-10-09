@@ -298,7 +298,7 @@ class SuggestionServiceTest :
             context("다른 사용자의 제보를 취소하려는 경우") {
                 it("예외가 발생한다") {
                     val command = SuggestionFixture.cancelSuggestionCommand
-                    val suggestionInfo = SuggestionFixture.spotSuggestionInfo.copy(userId = 2L)
+                    val suggestionInfo = SuggestionFixture.spotSuggestionInfo.copy(userId = command.userId + 1)
 
                     every { suggestionReader.readBy(command.suggestionId) } returns suggestionInfo
                     every { suggestionValidator.verifySuggestion(command.userId, suggestionInfo) } throws ErrorException(ErrorType.UNAUTHORIZED_SUGGESTION)
@@ -309,6 +309,7 @@ class SuggestionServiceTest :
 
                     verify { suggestionReader.readBy(command.suggestionId) }
                     verify { suggestionValidator.verifySuggestion(command.userId, suggestionInfo) }
+                    verify { suggestionUpdater.cancel(command.suggestionId) }
                 }
             }
         }
