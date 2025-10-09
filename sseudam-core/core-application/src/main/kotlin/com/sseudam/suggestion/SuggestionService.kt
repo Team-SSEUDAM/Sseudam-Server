@@ -1,6 +1,7 @@
 package com.sseudam.suggestion
 
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.suggestion.command.CancelSuggestionCommand
 import com.sseudam.suggestion.component.SuggestionAppender
 import com.sseudam.suggestion.component.SuggestionReader
 import com.sseudam.suggestion.component.SuggestionUpdater
@@ -58,6 +59,11 @@ class SuggestionService(
 
     fun findSpotSuggestionByPoint(point: Point): SpotSuggestion.Info? = suggestionReader.readByPoint(point)
 
+    fun findSpotSuggestionByPointAndStatus(
+        point: Point,
+        status: SuggestionStatus,
+    ): SpotSuggestion.Info? = suggestionReader.readByPointAndStatus(point, status)
+
     fun findSuggestionsBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
@@ -65,7 +71,7 @@ class SuggestionService(
 
     fun findSpotSuggestionById(suggestionId: Long): SpotSuggestion.Detail {
         val suggestion = suggestionReader.readBy(suggestionId)
-        val rejectSuggestion = suggestionReader.findRejectBySuggestionId(suggestionId)
+        val rejectSuggestion = suggestionReader.readRejectBySuggestionId(suggestionId)
         return SpotSuggestion.Detail.of(suggestion, rejectSuggestion)
     }
 
@@ -90,5 +96,11 @@ class SuggestionService(
         if (suggestionReader.existsByName(name)) {
             throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
         }
+    }
+
+    fun cancel(command: CancelSuggestionCommand) {
+        val suggestion = suggestionReader.readBy(command.suggestionId)
+        suggestionValidator.verifySuggestion(command.userId, suggestion)
+        suggestionUpdater.cancel(command.suggestionId)
     }
 }

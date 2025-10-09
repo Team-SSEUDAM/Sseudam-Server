@@ -26,7 +26,9 @@ import com.sseudam.report.ReportType
 import com.sseudam.report.result.CreateSpotReportResult
 import com.sseudam.trashspot.TrashType
 import com.sseudam.user.User
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.BeforeEach
@@ -34,7 +36,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
-import org.springframework.restdocs.RestDocumentationContextProvider
 import java.util.UUID
 
 @RestDocsTest
@@ -45,7 +46,7 @@ class ReportControllerTest : RestDocsTestSuite() {
     private lateinit var userArgumentResolver: UserArgumentResolver
 
     @BeforeEach
-    fun setUpTest(restDocumentation: RestDocumentationContextProvider) {
+    fun setUpTest() {
         userArgumentResolver = mockk()
         reportService = mockk()
         reportFacade = mockk()
@@ -220,6 +221,39 @@ class ReportControllerTest : RestDocsTestSuite() {
             ),
             responseBody(
                 "isValid" type BOOLEAN means "검증 결과" example "true",
+            ),
+        )
+    }
+
+    @DisplayName("신고 취소 - 200")
+    @Test
+    fun t5() {
+        val request = ReportFixture.reportCancelRequest
+
+        every { reportService.cancel(any()) } just Runs
+
+        val response =
+            given()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                .contentType(ContentType.JSON)
+                .body(request)
+                .post("/api/v1/reports/cancel")
+                .then()
+                .status(HttpStatus.OK)
+
+        response.makeDocument(
+            "신고 취소",
+            DocsTag.REPORT,
+            headers(
+                "Authorization" headerType Authorization,
+            ),
+            "ReportCancelRequest",
+            "ReportMessageResponse",
+            requestBody(
+                "reportId" type NUMBER means "취소할 신고 ID" example "1",
+            ),
+            responseBody(
+                "message" type STRING means "취소 완료 메시지" example "신고가 취소되었습니다.",
             ),
         )
     }

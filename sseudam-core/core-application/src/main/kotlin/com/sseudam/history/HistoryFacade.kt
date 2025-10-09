@@ -52,6 +52,7 @@ class HistoryFacade(
                     ReportStatus.APPROVE -> HistoryStatus.APPROVE
                     ReportStatus.REJECT -> HistoryStatus.REJECT
                     ReportStatus.WAITING -> HistoryStatus.WAITING
+                    ReportStatus.CANCEL -> HistoryStatus.CANCEL
                 },
             createdAt = this.createdAt,
         )
@@ -72,6 +73,7 @@ class HistoryFacade(
                     SuggestionStatus.APPROVE -> HistoryStatus.APPROVE
                     SuggestionStatus.REJECT -> HistoryStatus.REJECT
                     SuggestionStatus.WAITING -> HistoryStatus.WAITING
+                    SuggestionStatus.CANCEL -> HistoryStatus.CANCEL
                 },
             createdAt = this.createdAt,
         )

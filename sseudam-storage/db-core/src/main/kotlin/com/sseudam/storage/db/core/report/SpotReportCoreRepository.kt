@@ -32,14 +32,14 @@ class SpotReportCoreRepository(
     override fun findById(reportId: Long): SpotReport.Info =
         Tx.readable {
             spotReportJpaRepository
-                .findByIdOrElseThrow(reportId)
+                .findByIdAndDeletedAtIsNullOrElseThrow(reportId)
                 .toSpotReport()
         }
 
     override fun findAllInfoByUserId(userId: Long): List<SpotReport.Info> =
         Tx.readable {
             spotReportJpaRepository
-                .findAllByUserId(userId)
+                .findAllByUserIdAndDeletedAtIsNull(userId)
                 .map { it.toSpotReport() }
         }
 
@@ -65,6 +65,14 @@ class SpotReportCoreRepository(
                 spotReportJpaRepository
                     .findByIdOrElseThrow(reportId)
             report.updateStatus(reportStatus).toSpotReport()
+        }
+
+    override fun cancel(reportId: Long) =
+        Tx.writeable {
+            val report =
+                spotReportJpaRepository
+                    .findByIdAndDeletedAtIsNullOrElseThrow(reportId)
+            report.cancel()
         }
 
     override fun existsByName(name: String): Boolean =

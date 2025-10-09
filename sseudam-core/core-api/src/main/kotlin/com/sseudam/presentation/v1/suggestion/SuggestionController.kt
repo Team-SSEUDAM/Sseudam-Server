@@ -2,9 +2,11 @@ package com.sseudam.presentation.v1.suggestion
 
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.suggestion.request.SpotSuggestionCreateRequest
+import com.sseudam.presentation.v1.suggestion.request.SuggestionCancelRequest
 import com.sseudam.presentation.v1.suggestion.request.SuggestionValidationRequest
 import com.sseudam.presentation.v1.suggestion.response.SpotSuggestionAllResponse
 import com.sseudam.presentation.v1.suggestion.response.SuggestionImageUrlResponse
+import com.sseudam.presentation.v1.suggestion.response.SuggestionMessageResponse
 import com.sseudam.presentation.v1.suggestion.response.SuggestionValidationResponse
 import com.sseudam.suggestion.SuggestionFacade
 import com.sseudam.suggestion.SuggestionService
@@ -48,5 +50,15 @@ class SuggestionController(
     ): SuggestionValidationResponse {
         val isValid = suggestionFacade.validateSpotSuggestion(request.name)
         return SuggestionValidationResponse.of(isValid)
+    }
+
+    @Operation(summary = "제보 취소", description = "제보를 취소합니다.")
+    @PostMapping("/suggestions/cancel")
+    fun suggestionSpotCancel(
+        user: User,
+        @RequestBody request: SuggestionCancelRequest,
+    ): SuggestionMessageResponse {
+        suggestionService.cancel(request.toCommand(userId = user.id))
+        return SuggestionMessageResponse(message = "제보가 취소되었습니다.")
     }
 }

@@ -30,6 +30,8 @@ interface SpotReportRepository {
         reportStatus: ReportStatus,
     ): SpotReport.Info
 
+    fun cancel(reportId: Long)
+
     fun existsByName(name: String): Boolean
 
     fun deleteBy(reportId: Long)

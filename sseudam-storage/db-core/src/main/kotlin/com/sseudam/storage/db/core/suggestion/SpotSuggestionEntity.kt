@@ -71,4 +71,9 @@ class SpotSuggestionEntity(
         this.status = status
         return this
     }
+
+    fun cancel() {
+        this.status = SuggestionStatus.CANCEL
+        softDelete()
+    }
 }

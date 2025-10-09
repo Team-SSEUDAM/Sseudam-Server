@@ -6,11 +6,13 @@ import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
 import com.sseudam.common.S3ImageUrl
 import com.sseudam.pet.PetPointAction
+import com.sseudam.presentation.v1.report.request.ReportCancelRequest
 import com.sseudam.presentation.v1.report.request.ReportValidationRequest
 import com.sseudam.presentation.v1.report.request.SpotReportCreateRequest
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
+import com.sseudam.report.command.CancelReportCommand
 import com.sseudam.report.command.UpdateReportCommand
 import com.sseudam.report.event.SpotReportCreatedEvent
 import com.sseudam.report.event.SpotReportUpdateEvent
@@ -37,6 +39,17 @@ object ReportFixture {
     val reportValidationRequest =
         fixtureBuilder<ReportValidationRequest> {
             setExp(ReportValidationRequest::name, "테스트 쓰레기통")
+        }
+
+    val reportCancelRequest =
+        fixtureBuilder<ReportCancelRequest> {
+            setExp(ReportCancelRequest::reportId, 1L)
+        }
+
+    val cancelReportCommand =
+        fixtureBuilder<CancelReportCommand> {
+            setExp(CancelReportCommand::userId, 1L)
+            setExp(CancelReportCommand::reportId, 1L)
         }
 
     val spotReportInfo =
