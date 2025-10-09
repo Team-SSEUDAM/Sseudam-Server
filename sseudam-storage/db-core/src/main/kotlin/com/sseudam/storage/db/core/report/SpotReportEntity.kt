@@ -80,4 +80,9 @@ class SpotReportEntity(
         this.status = status
         return this
     }
+
+    fun cancel(status: ReportStatus) {
+        this.status = status
+        softDelete()
+    }
 }

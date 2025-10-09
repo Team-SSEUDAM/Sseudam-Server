@@ -280,37 +280,35 @@ class SuggestionServiceTest :
         describe("제보 취소") {
             context("본인의 제보를 취소하는 경우") {
                 it("제보 상태를 취소로 변경한다") {
-                    val userId = 1L
-                    val suggestionId = 1L
-                    val suggestionInfo = SuggestionFixture.spotSuggestionInfo.copy(userId = userId)
+                    val command = SuggestionFixture.cancelSuggestionCommand
+                    val suggestionInfo = SuggestionFixture.spotSuggestionInfo
 
-                    every { suggestionReader.readBy(suggestionId) } returns suggestionInfo
-                    every { suggestionValidator.verifySuggestion(userId, suggestionInfo) } just Runs
-                    every { suggestionUpdater.cancel(suggestionId, SuggestionStatus.CANCEL) } just Runs
+                    every { suggestionReader.readBy(command.suggestionId) } returns suggestionInfo
+                    every { suggestionValidator.verifySuggestion(command.userId, suggestionInfo) } just Runs
+                    every { suggestionUpdater.cancel(command.suggestionId, SuggestionStatus.CANCEL) } just Runs
 
-                    suggestionService.cancel(userId, suggestionId)
+                    suggestionService.cancel(command)
 
-                    verify { suggestionReader.readBy(suggestionId) }
-                    verify { suggestionValidator.verifySuggestion(userId, suggestionInfo) }
-                    verify { suggestionUpdater.cancel(suggestionId, SuggestionStatus.CANCEL) }
+                    verify { suggestionReader.readBy(command.suggestionId) }
+                    verify { suggestionValidator.verifySuggestion(command.userId, suggestionInfo) }
+                    verify { suggestionUpdater.cancel(command.suggestionId, SuggestionStatus.CANCEL) }
                 }
             }
 
             context("다른 사용자의 제보를 취소하려는 경우") {
                 it("예외가 발생한다") {
-                    val userId = 1L
-                    val suggestionId = 1L
+                    val command = SuggestionFixture.cancelSuggestionCommand
                     val suggestionInfo = SuggestionFixture.spotSuggestionInfo.copy(userId = 2L)
 
-                    every { suggestionReader.readBy(suggestionId) } returns suggestionInfo
-                    every { suggestionValidator.verifySuggestion(userId, suggestionInfo) } throws ErrorException(ErrorType.UNAUTHORIZED_SUGGESTION)
+                    every { suggestionReader.readBy(command.suggestionId) } returns suggestionInfo
+                    every { suggestionValidator.verifySuggestion(command.userId, suggestionInfo) } throws ErrorException(ErrorType.UNAUTHORIZED_SUGGESTION)
 
                     shouldThrow<ErrorException> {
-                        suggestionService.cancel(userId, suggestionId)
+                        suggestionService.cancel(command)
                     }
 
-                    verify { suggestionReader.readBy(suggestionId) }
-                    verify { suggestionValidator.verifySuggestion(userId, suggestionInfo) }
+                    verify { suggestionReader.readBy(command.suggestionId) }
+                    verify { suggestionValidator.verifySuggestion(command.userId, suggestionInfo) }
                 }
             }
         }

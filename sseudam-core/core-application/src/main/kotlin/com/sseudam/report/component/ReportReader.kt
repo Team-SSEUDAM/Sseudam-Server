@@ -16,7 +16,7 @@ class ReportReader(
 ) {
     fun readAllByUserId(userId: Long): List<SpotReport.Info> = reportRepository.findAllInfoByUserId(userId)
 
-    fun readById(reportId: Long): SpotReport.Info = reportRepository.findById(reportId)
+    fun readBy(reportId: Long): SpotReport.Info = reportRepository.findById(reportId)
 
     fun readAllBy(
         offsetPageRequest: OffsetPageRequest,

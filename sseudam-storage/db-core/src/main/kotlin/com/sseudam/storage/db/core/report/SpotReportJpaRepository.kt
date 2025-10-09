@@ -8,5 +8,7 @@ interface SpotReportJpaRepository :
     KotlinJdslJpqlExecutor {
     fun findAllByUserId(userId: Long): List<SpotReportEntity>
 
+    fun findAllByUserIdAndDeletedAtIsNull(userId: Long): List<SpotReportEntity>
+
     fun existsBySpotName(name: String): Boolean
 }

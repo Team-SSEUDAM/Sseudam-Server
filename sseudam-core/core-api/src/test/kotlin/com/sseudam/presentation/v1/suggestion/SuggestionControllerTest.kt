@@ -180,7 +180,7 @@ class SuggestionControllerTest : RestDocsTestSuite() {
     fun t4() {
         val request = SuggestionFixture.suggestionCancelRequest
 
-        every { suggestionFacade.cancelSpotSuggestion(any(), any()) } just Runs
+        every { suggestionService.cancel(any()) } just Runs
 
         val response =
             given()

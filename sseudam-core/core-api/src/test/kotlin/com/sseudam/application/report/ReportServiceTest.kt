@@ -10,6 +10,7 @@ import com.sseudam.report.SpotReport
 import com.sseudam.report.component.ReportAppender
 import com.sseudam.report.component.ReportReader
 import com.sseudam.report.component.ReportUpdater
+import com.sseudam.report.component.ReportValidator
 import com.sseudam.report.event.SpotReportUpdateEvent
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
@@ -30,9 +31,10 @@ class ReportServiceTest :
         val reportAppender: ReportAppender = mockk()
         val reportReader: ReportReader = mockk()
         val reportUpdater: ReportUpdater = mockk()
+        val reportValidator: ReportValidator = mockk()
         val applicationEventPublisher: ApplicationEventPublisher = mockk()
 
-        val reportService = ReportService(reportAppender, reportReader, reportUpdater, applicationEventPublisher)
+        val reportService = ReportService(reportAppender, reportReader, reportUpdater, reportValidator, applicationEventPublisher)
 
         describe("신고 추가") {
             context("유효한 신고 정보인 경우") {
@@ -146,12 +148,12 @@ class ReportServiceTest :
                     val reportId = 1L
                     val reportInfo = ReportFixture.spotReportInfo
 
-                    every { reportReader.readById(reportId) } returns reportInfo
+                    every { reportReader.readBy(reportId) } returns reportInfo
 
                     val result = reportService.findSpotReportById(reportId)
 
                     result shouldBe reportInfo
-                    verify { reportReader.readById(reportId) }
+                    verify { reportReader.readBy(reportId) }
                 }
             }
         }
@@ -245,6 +247,42 @@ class ReportServiceTest :
 
                     exception.errorType shouldBe ErrorType.DUPLICATE_SPOT_NAME
                     verify { reportReader.existsByName(name) }
+                }
+            }
+        }
+
+        describe("신고 취소") {
+            context("본인의 신고를 취소하는 경우") {
+                it("신고 상태를 취소로 변경한다") {
+                    val command = ReportFixture.cancelReportCommand
+                    val reportInfo = ReportFixture.spotReportInfo
+
+                    every { reportReader.readBy(command.reportId) } returns reportInfo
+                    every { reportValidator.verifyReport(command.userId, reportInfo) } just Runs
+                    every { reportUpdater.cancel(command.reportId, ReportStatus.CANCEL) } just Runs
+
+                    reportService.cancel(command)
+
+                    verify { reportReader.readBy(command.reportId) }
+                    verify { reportValidator.verifyReport(command.userId, reportInfo) }
+                    verify { reportUpdater.cancel(command.reportId, ReportStatus.CANCEL) }
+                }
+            }
+
+            context("다른 사용자의 신고를 취소하려는 경우") {
+                it("예외가 발생한다") {
+                    val command = ReportFixture.cancelReportCommand
+                    val reportInfo = ReportFixture.spotReportInfo.copy(userId = 2L)
+
+                    every { reportReader.readBy(command.reportId) } returns reportInfo
+                    every { reportValidator.verifyReport(command.userId, reportInfo) } throws ErrorException(ErrorType.UNAUTHORIZED_REPORT)
+
+                    shouldThrow<ErrorException> {
+                        reportService.cancel(command)
+                    }
+
+                    verify { reportReader.readBy(command.reportId) }
+                    verify { reportValidator.verifyReport(command.userId, reportInfo) }
                 }
             }
         }

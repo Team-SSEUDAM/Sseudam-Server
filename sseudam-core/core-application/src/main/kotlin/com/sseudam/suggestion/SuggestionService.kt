@@ -1,6 +1,7 @@
 package com.sseudam.suggestion
 
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.suggestion.command.CancelSuggestionCommand
 import com.sseudam.suggestion.component.SuggestionAppender
 import com.sseudam.suggestion.component.SuggestionReader
 import com.sseudam.suggestion.component.SuggestionUpdater
@@ -97,12 +98,9 @@ class SuggestionService(
         }
     }
 
-    fun cancel(
-        userId: Long,
-        suggestionId: Long,
-    ) {
-        val suggestion = suggestionReader.readBy(suggestionId)
-        suggestionValidator.verifySuggestion(userId, suggestion)
-        suggestionUpdater.cancel(suggestionId, SuggestionStatus.CANCEL)
+    fun cancel(command: CancelSuggestionCommand) {
+        val suggestion = suggestionReader.readBy(command.suggestionId)
+        suggestionValidator.verifySuggestion(command.userId, suggestion)
+        suggestionUpdater.cancel(command.suggestionId, SuggestionStatus.CANCEL)
     }
 }

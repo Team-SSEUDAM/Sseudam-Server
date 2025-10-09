@@ -58,7 +58,7 @@ class SuggestionController(
         user: User,
         @RequestBody request: SuggestionCancelRequest,
     ): SuggestionMessageResponse {
-        suggestionFacade.cancelSpotSuggestion(user.id, request.suggestionId)
+        suggestionService.cancel(request.toCommand(userId = user.id))
         return SuggestionMessageResponse(message = "제보가 취소되었습니다.")
     }
 }

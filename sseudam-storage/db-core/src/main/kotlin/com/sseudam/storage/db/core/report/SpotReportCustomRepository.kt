@@ -75,8 +75,9 @@ class SpotReportCustomRepository(
                         path(SpotReportEntity::id)
                             .eq(path(ReportRejectEntity::reportId)),
                     ),
-                ).where(
+                ).whereAnd(
                     path(SpotReportEntity::userId).eq(userId),
+                    path(SpotReportEntity::deletedAt).isNull(),
                 ).orderBy(
                     path(SpotReportEntity::createdAt).desc(),
                 )

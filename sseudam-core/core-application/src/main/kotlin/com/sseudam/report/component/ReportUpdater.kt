@@ -12,4 +12,9 @@ class ReportUpdater(
         reportId: Long,
         reportStatus: ReportStatus,
     ) = reportRepository.update(reportId, reportStatus)
+
+    fun cancel(
+        reportId: Long,
+        reportStatus: ReportStatus,
+    ) = reportRepository.cancel(reportId, reportStatus)
 }
