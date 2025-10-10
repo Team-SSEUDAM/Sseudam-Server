@@ -36,6 +36,14 @@ fi
 
 echo "Deploying to $NEW_COLOR ($NEW_PORT)..."
 
+# 이전 컨테이너 먼저 정리 (메모리 확보)
+OLD_CONTAINER="${CONTAINER_NAME}-${NEW_COLOR}"
+if docker ps -a --format '{{.Names}}' | grep -q "^${OLD_CONTAINER}$"; then
+    echo "Removing old container: $OLD_CONTAINER"
+    docker stop $OLD_CONTAINER || true
+    docker rm $OLD_CONTAINER || true
+fi
+
 # 새 컨테이너 배포
 export IMAGE_FULL_URL=$IMAGE_URL
 export DOCKERHUB_IMAGE_NAME="${CONTAINER_NAME}-${NEW_COLOR}"
@@ -67,11 +75,11 @@ sudo nginx -t && sudo systemctl reload nginx
 
 echo "Deployment successful! Active: $NEW_COLOR ($NEW_PORT)"
 
-# 이전 컨테이너 정리
+# 이전 색상 컨테이너 정리
 sleep 5
 OLD_CONTAINER="${CONTAINER_NAME}-${OLD_COLOR}"
 if docker ps -a --format '{{.Names}}' | grep -q "^${OLD_CONTAINER}$"; then
-    echo "Removing old container: $OLD_CONTAINER"
+    echo "Removing previous color container: $OLD_CONTAINER"
     docker stop $OLD_CONTAINER || true
     docker rm $OLD_CONTAINER || true
 fi

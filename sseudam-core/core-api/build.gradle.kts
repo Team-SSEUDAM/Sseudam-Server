@@ -34,11 +34,11 @@ jib {
     container {
         jvmFlags =
             listOf(
-                "-Xmx1024m",
-                "-Xms512m",
+                "-Xmx512m",
+                "-Xms256m",
                 "-XX:+UseG1GC",
                 "-XX:+UseContainerSupport",
-                "-XX:MaxRAMPercentage=75.0",
+                "-XX:MaxRAMPercentage=50.0",
                 "-Dfile.encoding=UTF-8",
                 "-Duser.timezone=Asia/Seoul",
                 "-Djava.security.egd=file:/dev/./urandom",
