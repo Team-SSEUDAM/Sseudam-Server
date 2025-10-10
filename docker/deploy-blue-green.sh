@@ -44,14 +44,6 @@ fi
 
 echo "Deploying to $NEW_COLOR ($NEW_PORT)..."
 
-# 이전 컨테이너 먼저 정리 (메모리 확보)
-OLD_CONTAINER="${CONTAINER_NAME}-${NEW_COLOR}"
-if docker ps -a --format '{{.Names}}' | grep -q "^${OLD_CONTAINER}$"; then
-    echo "Removing old container: $OLD_CONTAINER"
-    docker stop $OLD_CONTAINER || true
-    docker rm $OLD_CONTAINER || true
-fi
-
 # 새 컨테이너 배포
 export IMAGE_FULL_URL=$IMAGE_URL
 export DOCKERHUB_IMAGE_NAME="${CONTAINER_NAME}-${NEW_COLOR}"
@@ -87,8 +79,8 @@ echo "Deployment successful! Active: $NEW_COLOR ($NEW_PORT)"
 if [ -n "$OLD_COLOR" ]; then
     OLD_CONTAINER="${CONTAINER_NAME}-${OLD_COLOR}"
     if docker ps -a --format '{{.Names}}' | grep -q "^${OLD_CONTAINER}$"; then
-        echo "Waiting 30 seconds for connection draining..."
-        sleep 30
+        echo "Waiting 10 seconds for connection draining..."
+        sleep 10
         echo "Gracefully stopping previous container: $OLD_CONTAINER"
         docker stop -t 30 $OLD_CONTAINER || true
         docker rm $OLD_CONTAINER || true
