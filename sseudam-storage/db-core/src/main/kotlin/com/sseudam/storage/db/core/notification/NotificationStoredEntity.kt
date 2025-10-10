@@ -16,7 +16,7 @@ class NotificationStoredEntity(
     val notificationStoredKey: String,
     val userId: Long,
     @Enumerated(value = EnumType.STRING)
-    @Column(length = 10)
+    @Column(length = 30)
     val type: NotificationType,
     val parameterValue: String,
     val topic: String,

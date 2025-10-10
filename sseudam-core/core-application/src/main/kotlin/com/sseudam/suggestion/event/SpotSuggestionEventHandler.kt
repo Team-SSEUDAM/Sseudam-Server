@@ -31,17 +31,14 @@ class SpotSuggestionEventHandler(
             val userProfile =
                 userService.getProfile(suggestion.userId)
                     ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
-            val body =
+            val (body, type) =
                 when (suggestion.status) {
-                    SuggestionStatus.APPROVE -> NotificationMessages.approveSuggestionContents(userProfile.nickname)
-                    SuggestionStatus.REJECT -> NotificationMessages.rejectSuggestionContents(userProfile.nickname)
-                    else -> throw ErrorException(ErrorType.INVALID_UPDATE_SUGGESTION_STATUS)
-                }
-
-            val type =
-                when (suggestion.status) {
-                    SuggestionStatus.APPROVE -> NotificationType.APPROVE_SUGGESTION
-                    SuggestionStatus.REJECT -> NotificationType.REJECT_SUGGESTION
+                    SuggestionStatus.APPROVE ->
+                        NotificationMessages.approveSuggestionContents(userProfile.nickname) to
+                            NotificationType.APPROVE_SUGGESTION
+                    SuggestionStatus.REJECT ->
+                        NotificationMessages.rejectSuggestionContents(userProfile.nickname) to
+                            NotificationType.REJECT_SUGGESTION
                     else -> throw ErrorException(ErrorType.INVALID_UPDATE_SUGGESTION_STATUS)
                 }
 

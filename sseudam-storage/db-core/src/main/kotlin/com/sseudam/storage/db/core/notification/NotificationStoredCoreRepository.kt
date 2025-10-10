@@ -50,7 +50,10 @@ class NotificationStoredCoreRepository(
     override fun findAllBy(
         userId: Long,
         cursorRequest: CursorRequest,
-    ): Cursor<NotificationStored.Info> = notificationStoredCustomRepository.findAllBy(userId, cursorRequest)
+    ): Cursor<NotificationStored.Info> =
+        Tx.readable {
+            notificationStoredCustomRepository.findAllBy(userId, cursorRequest)
+        }
 
     override fun countByUserIdAndReadStatus(
         userId: Long,
