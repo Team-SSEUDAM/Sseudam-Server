@@ -8,7 +8,7 @@ ENVIRONMENT=${3:-dev}
 
 BLUE_PORT=8080
 GREEN_PORT=8081
-HEALTH_CHECK_PATH="/actuator/health"
+HEALTH_CHECK_PATH="/ping"
 
 # 환경별 Nginx 설정 파일 경로
 if [ "$ENVIRONMENT" == "prod" ]; then
