@@ -27,5 +27,5 @@ interface NotificationStoredRepository {
         readStatus: ReadStatus?,
     ): Long
 
-    fun readBy(notificationStoredId: Long)
+    fun markAsRead(notificationId: Long)
 }

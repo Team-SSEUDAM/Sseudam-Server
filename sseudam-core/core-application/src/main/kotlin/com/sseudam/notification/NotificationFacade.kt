@@ -126,4 +126,9 @@ class NotificationFacade(
             notifications
         }
     }
+
+    fun markNotificationAsRead(
+        userId: Long,
+        notificationId: Long,
+    ) = notificationService.markAsRead(userId, notificationId)
 }

@@ -61,11 +61,15 @@ class NotificationStoredCoreRepository(
                 .countByUserIdAndReadStatus(userId, readStatus)
         }
 
-    override fun readBy(notificationStoredId: Long) =
+    override fun markAsRead(notificationId: Long) =
         Tx.writeable {
             val notificationStored =
                 notificationStoredJpaRepository
-                    .findByIdOrElseThrow(notificationStoredId)
+                    .findByIdOrElseThrow(notificationId)
+
+            if (notificationStored.readStatus == ReadStatus.READ) {
+                return@writeable
+            }
 
             notificationStored.read()
         }
