@@ -67,7 +67,7 @@ class FirebaseCloudMessageSender(
                         .setAps(
                             Aps
                                 .builder()
-                                .setAlert("$title\n$body")
+                                .setAlert(body)
                                 .setBadge(1)
                                 .setSound("default")
                                 .build(),

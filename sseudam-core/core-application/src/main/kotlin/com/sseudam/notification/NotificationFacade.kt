@@ -120,7 +120,10 @@ class NotificationFacade(
         cursorRequest: CursorRequest,
     ): Cursor<NotificationStored.Info> {
         val notifications = notificationService.findAllNotifications(userId, cursorRequest)
-        if (notifications.content.isEmpty()) return Cursor(listOf(), null, cursorRequest.size)
-        return notifications
+        return if (notifications.content.isEmpty()) {
+            Cursor(emptyList(), null, cursorRequest.size)
+        } else {
+            notifications
+        }
     }
 }
