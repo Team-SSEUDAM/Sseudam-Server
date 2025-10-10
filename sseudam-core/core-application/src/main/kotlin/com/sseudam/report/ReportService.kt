@@ -46,7 +46,7 @@ class ReportService(
     fun updateSpotReport(updateReportCommand: UpdateReportCommand): SpotReport.Info =
         reportUpdater.update(updateReportCommand.reportId, updateReportCommand.status).also { report ->
             applicationEventPublisher.publishEvent(
-                SpotReportUpdateEvent(report, updateReportCommand.reason),
+                SpotReportUpdateEvent(report, updateReportCommand.rejectReason),
             )
         }
 

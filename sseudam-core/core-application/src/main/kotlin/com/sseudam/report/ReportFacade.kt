@@ -40,20 +40,20 @@ class ReportFacade(
 
     @Transactional
     fun createSpotReport(create: SpotReport.Create): CreateSpotReportResult {
-        val presignedUrl: String?
         val images = trashSpotImageService.findBySpotId(create.spotId)
         var imageUrl =
             images
                 .filter { it.updatedAt != null }
                 .maxByOrNull { it.updatedAt!! }
                 ?.imageUrl ?: DEFAULT_REPORT_IMAGE_URL
-        if (create.reportType == ReportType.PHOTO) {
-            val s3ImageUrl: S3ImageUrl = imageS3Caller.createUploadUrl(create.userId, REPORT_IMAGE_PATH + "/${create.spotId}")
-            presignedUrl = s3ImageUrl.presignedUrl
-            imageUrl = s3ImageUrl.imageUrl
-        } else {
-            presignedUrl = null
-        }
+        val presignedUrl =
+            if (create.reportType == ReportType.PHOTO) {
+                val s3ImageUrl: S3ImageUrl = imageS3Caller.createUploadUrl(create.userId, REPORT_IMAGE_PATH + "/${create.spotId}")
+                imageUrl = s3ImageUrl.imageUrl
+                s3ImageUrl.presignedUrl
+            } else {
+                null
+            }
 
         val spotReport =
             reportService.appendReport(imageUrl, create).apply {

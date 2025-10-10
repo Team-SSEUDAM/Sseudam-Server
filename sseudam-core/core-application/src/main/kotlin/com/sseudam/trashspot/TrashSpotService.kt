@@ -6,6 +6,7 @@ import com.sseudam.common.Region
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.suggestion.SpotSuggestion
+import com.sseudam.support.Cache
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.trashspot.component.FindTrashSpotPolicyCondition
@@ -79,6 +80,13 @@ class TrashSpotService(
             ReportType.POINT -> {
                 val jtsPoint = geoConverter.geoJsonPointToJtsPoint(report.point as GeoJson.Point)
                 trashSpotUpdater.updateLocation(report.spotId, report.region, jtsPoint)
+            }
+            ReportType.EMPTY_SPOT -> {
+                trashSpotUpdater
+                    .updateAsEmptySpot(report.spotId)
+                    .also {
+                        Cache.delete("spot:detail:${report.spotId}")
+                    }
             }
             else -> {}
         }

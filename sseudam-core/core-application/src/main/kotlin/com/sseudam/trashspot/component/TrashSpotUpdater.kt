@@ -31,4 +31,8 @@ class TrashSpotUpdater(
     ) {
         trashSpotRepository.updateLocation(spotId, region, point)
     }
+
+    fun updateAsEmptySpot(spotId: Long) {
+        trashSpotRepository.updateAsEmptySpot(spotId)
+    }
 }

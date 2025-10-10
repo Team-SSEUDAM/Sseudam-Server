@@ -206,7 +206,7 @@ class ReportServiceTest :
 
             context("거절 사유와 함께 상태 변경하는 경우") {
                 it("상태를 업데이트하고 사유와 함께 이벤트를 발행한다") {
-                    val updateCommand = ReportFixture.updateReportCommand.copy(status = ReportStatus.REJECT, reason = "부적절한 위치")
+                    val updateCommand = ReportFixture.updateReportCommand.copy(status = ReportStatus.REJECT, rejectReason = "부적절한 위치")
                     val reportInfo = ReportFixture.spotReportInfo
 
                     every { reportUpdater.update(updateCommand.reportId, updateCommand.status) } returns reportInfo
@@ -216,7 +216,7 @@ class ReportServiceTest :
 
                     result shouldBe reportInfo
                     verify { reportUpdater.update(updateCommand.reportId, updateCommand.status) }
-                    verify { applicationEventPublisher.publishEvent(SpotReportUpdateEvent(reportInfo, updateCommand.reason)) }
+                    verify { applicationEventPublisher.publishEvent(SpotReportUpdateEvent(reportInfo, updateCommand.rejectReason)) }
                 }
             }
         }

@@ -34,6 +34,7 @@ object ReportFixture {
             setExp(SpotReportCreateRequest::city, "강남구")
             setExp(SpotReportCreateRequest::site, "서울시 강남구 강남동 1-4")
             setExp(SpotReportCreateRequest::trashType, TrashType.GENERAL)
+            setExp(SpotReportCreateRequest::reason, "잘못된 위치에 있어요")
         }
 
     val reportValidationRequest =
@@ -103,6 +104,7 @@ object ReportFixture {
             setExp(SpotReport.Create::city, "강남구")
             setExp(SpotReport.Create::site, "서울시 강남구 강남동 1-4")
             setExp(SpotReport.Create::trashType, TrashType.GENERAL)
+            setExp(SpotReport.Create::reason, "잘못된 위치에 있어요")
         }
 
     val trashSpotImageInfo =
@@ -125,7 +127,7 @@ object ReportFixture {
             setExp(UpdateReportCommand::reportId, 1L)
             setExp(UpdateReportCommand::spotId, 1L)
             setExp(UpdateReportCommand::status, ReportStatus.APPROVE)
-            setExp(UpdateReportCommand::reason, null)
+            setExp(UpdateReportCommand::rejectReason, null)
         }
 
     val spotReportUpdateEvent =

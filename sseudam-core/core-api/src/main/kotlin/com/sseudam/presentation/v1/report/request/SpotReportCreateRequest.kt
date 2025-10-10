@@ -24,6 +24,8 @@ data class SpotReportCreateRequest(
     val site: String,
     @Schema(description = "쓰레기통 유형", example = "GENERAL")
     val trashType: TrashType,
+    @Schema(description = "기타 신고 사유", example = "잘못된 위치에 있어요")
+    val reason: String? = null,
 ) {
     fun toCommand(
         userId: Long,
@@ -40,5 +42,6 @@ data class SpotReportCreateRequest(
             city = city,
             site = site,
             trashType = trashType,
+            reason = reason,
         )
 }
