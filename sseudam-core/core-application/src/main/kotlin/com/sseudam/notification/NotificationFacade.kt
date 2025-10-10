@@ -5,8 +5,6 @@ import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.component.NotificationStoredKeyGenerator
 import com.sseudam.notification.dto.NotificationMessages
 import com.sseudam.notification.fcm.FcmSender
-import com.sseudam.support.cursor.Cursor
-import com.sseudam.support.cursor.CursorRequest
 import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserService
 import org.springframework.stereotype.Service
@@ -114,21 +112,4 @@ class NotificationFacade(
             )
         }
     }
-
-    fun getNotifications(
-        userId: Long,
-        cursorRequest: CursorRequest,
-    ): Cursor<NotificationStored.Info> {
-        val notifications = notificationService.findAllNotifications(userId, cursorRequest)
-        return if (notifications.content.isEmpty()) {
-            Cursor(emptyList(), null, cursorRequest.size)
-        } else {
-            notifications
-        }
-    }
-
-    fun markNotificationAsRead(
-        userId: Long,
-        notificationId: Long,
-    ) = notificationService.markAsRead(userId, notificationId)
 }

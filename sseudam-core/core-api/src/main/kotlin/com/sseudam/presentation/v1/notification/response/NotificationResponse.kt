@@ -9,8 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 data class NotificationResponse(
     @Schema(description = "알림 ID", example = "1")
     val id: Long,
-    @Schema(description = "알림 저장된 키", example = "1")
-    val notificationStoredKey: String,
     @Schema(description = "사용자 ID", example = "1")
     val userId: Long,
     @Schema(description = "알림 타입", example = "APPROVE_SUGGESTION")
@@ -30,7 +28,6 @@ data class NotificationResponse(
         fun from(info: NotificationStored.Info) =
             NotificationResponse(
                 id = info.id,
-                notificationStoredKey = info.notificationStoredKey,
                 userId = info.userId,
                 type = info.type,
                 parameterValue = if (info.parameterValue.isNotEmpty()) info.parameterValue.toLong() else 0L,

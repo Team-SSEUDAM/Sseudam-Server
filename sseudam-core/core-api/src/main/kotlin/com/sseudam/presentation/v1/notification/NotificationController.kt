@@ -1,6 +1,6 @@
 package com.sseudam.presentation.v1.notification
 
-import com.sseudam.notification.NotificationFacade
+import com.sseudam.notification.NotificationService
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.notification.response.NotificationAllCursorResponse
 import com.sseudam.presentation.v1.notification.response.NotificationMessageResponse
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @Tag(name = "🔔 Notification API", description = "알림 관련 API")
 @ApiV1Controller
 class NotificationController(
-    private val notificationFacade: NotificationFacade,
+    private val notificationService: NotificationService,
 ) {
     @Operation(summary = "알림 조회", description = "사용자의 알림 목록을 조회합니다.")
     @GetMapping("/notifications")
@@ -26,7 +26,7 @@ class NotificationController(
         @RequestParam lastId: Long?,
     ): NotificationAllCursorResponse =
         NotificationAllCursorResponse.from(
-            notificationFacade.getNotifications(user.id, CursorRequest(size = size, lastId = lastId)),
+            notificationService.findAllNotifications(user.id, CursorRequest(size = size, lastId = lastId)),
         )
 
     @Operation(summary = "알림 읽음 처리", description = "사용자의 알림을 읽음 처리합니다.")
@@ -35,7 +35,7 @@ class NotificationController(
         user: User,
         @PathVariable notificationId: Long,
     ): NotificationMessageResponse {
-        notificationFacade.markNotificationAsRead(user.id, notificationId)
+        notificationService.markAsRead(user.id, notificationId)
         return NotificationMessageResponse("알림이 읽음 처리되었습니다.")
     }
 }

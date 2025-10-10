@@ -12,4 +12,5 @@ enum class DocsTag(
     VERSION("📱 Version API"),
     PET("😽 Pet API"),
     HISTORY("📑 History API"),
+    NOTIFICATION("🔔 Notification API"),
 }
