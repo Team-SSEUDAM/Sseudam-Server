@@ -206,4 +206,43 @@ class SuggestionControllerTest : RestDocsTestSuite() {
             ),
         )
     }
+
+    @DisplayName("제보 상세 조회 - 200")
+    @Test
+    fun t5() {
+        val suggestionDetail = SuggestionFixture.spotSuggestionDetail
+
+        every { suggestionService.findSpotSuggestionById(any()) } returns suggestionDetail
+
+        val response =
+            given()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                .get("/api/v1/suggestions/{suggestionId}", 1L)
+                .then()
+                .status(HttpStatus.OK)
+
+        response.makeDocument(
+            "제보 상세 조회",
+            DocsTag.SUGGESTION,
+            headers(
+                "Authorization" headerType Authorization,
+            ),
+            "SpotSuggestionDetailResponse",
+            responseBody(
+                "id" type NUMBER means "제보 ID" example "1",
+                "point" type OBJECT means "제보 위치",
+                "point.type" type STRING means "좌표 타입" example "Point",
+                "point.coordinates" type ARRAY means "좌표 배열" example "[126.977969, 37.566535]",
+                "region" type ENUM(Region::class) means "제보 지역" example "SEOUL",
+                "address" type OBJECT means "제보 주소",
+                "address.city" type STRING means "도시" example "강남구",
+                "address.site" type STRING means "상세 주소" example "서울시 강남구 강남동 1-4",
+                "trashType" type ENUM(TrashType::class) means "제보 쓰레기통 타입" example "GENERAL",
+                "imageUrl" type STRING means "제보된 쓰레기통 이미지" example "https://example.com/image.jpg",
+                "status" type ENUM(SuggestionStatus::class) means "제보 상태" example "WAITING",
+                "rejectReason" type STRING means "반려 사유" example "정보가 잘못되었어요" isOptional true,
+                "createdAt" type STRING means "제보 시간" example "2024-01-01T00:00:00",
+            ),
+        )
+    }
 }

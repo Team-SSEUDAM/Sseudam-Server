@@ -9,8 +9,8 @@ import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
-@Schema(description = "제보 내역 응답")
-data class SpotSuggestionResponse(
+@Schema(description = "제보 상세 내역 응답")
+data class SpotSuggestionDetailResponse(
     @Schema(description = "제보 ID")
     val id: Long,
     @Schema(description = "제보 위치")
@@ -25,20 +25,23 @@ data class SpotSuggestionResponse(
     val imageUrl: String,
     @Schema(description = "제보 상태")
     val status: SuggestionStatus,
+    @Schema(description = "반려 사유")
+    val rejectReason: String?,
     @Schema(description = "제보 시간")
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun from(suggestion: SpotSuggestion.Info) =
-            SpotSuggestionResponse(
-                id = suggestion.id,
-                point = suggestion.point,
-                region = suggestion.region,
-                address = suggestion.address,
-                trashType = suggestion.trashType,
-                imageUrl = suggestion.imageUrl,
-                status = suggestion.status,
-                createdAt = suggestion.createdAt,
+        fun from(detail: SpotSuggestion.Detail) =
+            SpotSuggestionDetailResponse(
+                id = detail.id,
+                point = detail.point,
+                region = detail.region,
+                address = detail.address,
+                trashType = detail.trashType,
+                imageUrl = detail.imageUrl,
+                status = detail.status,
+                rejectReason = detail.rejectReason,
+                createdAt = detail.createdAt,
             )
     }
 }
