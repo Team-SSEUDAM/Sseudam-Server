@@ -1,7 +1,7 @@
 package com.sseudam.fixture.common
 
 import com.navercorp.fixturemonkey.kotlin.setExp
-import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.test.helper.fixtureBuilder
 
 object PageFixture {

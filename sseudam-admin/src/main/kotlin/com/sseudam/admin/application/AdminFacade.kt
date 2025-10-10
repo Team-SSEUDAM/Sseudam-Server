@@ -4,6 +4,7 @@ import com.sseudam.admin.domain.AdminToken
 import com.sseudam.admin.domain.AdminUserProfile
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.notification.NotificationService
+import com.sseudam.notification.NotificationType
 import com.sseudam.notification.command.CreateNotificationStoredCommand
 import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.fcm.FcmSender
@@ -16,9 +17,9 @@ import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.command.UpdateSuggestionCommand
-import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.UserDeviceService
@@ -129,8 +130,8 @@ class AdminFacade(
                     CreateNotificationStoredCommand(
                         userId = deviceTokenMap[message.fcmToken]?.userId ?: return@mapNotNull null,
                         notificationStoredKey = "",
-                        type = "ADMIN_PUSH",
-                        parameterValue = "/",
+                        type = NotificationType.ADMIN_PUSH,
+                        parameterValue = "",
                         topic = message.title,
                         contents = message.body,
                     )

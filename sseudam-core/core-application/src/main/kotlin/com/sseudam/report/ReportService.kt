@@ -8,9 +8,9 @@ import com.sseudam.report.component.ReportUpdater
 import com.sseudam.report.component.ReportValidator
 import com.sseudam.report.event.SpotReportUpdateEvent
 import com.sseudam.report.reject.ReportReject
-import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service

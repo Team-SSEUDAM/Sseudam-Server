@@ -2,7 +2,7 @@ package com.sseudam.suggestion.repository
 
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
-import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import org.locationtech.jts.geom.Point
 

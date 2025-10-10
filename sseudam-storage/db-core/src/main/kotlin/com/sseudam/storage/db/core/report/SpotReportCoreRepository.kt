@@ -6,7 +6,7 @@ import com.sseudam.report.SpotReport
 import com.sseudam.report.repository.SpotReportRepository
 import com.sseudam.storage.db.core.support.findByIdAndDeletedAtIsNullOrElseThrow
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
-import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import com.sseudam.support.tx.Tx
 import org.locationtech.jts.geom.Point

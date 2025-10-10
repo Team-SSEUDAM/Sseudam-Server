@@ -57,7 +57,7 @@ class NotificationFacade(
                                 ?.userId
                                 ?: return@map null,
                         notificationStoredKey = notificationStoredKeyGenerator.generate(),
-                        type = "REGULAR",
+                        type = NotificationType.REGULAR,
                         parameterValue = "",
                         topic = message.title,
                         contents = message.body,
@@ -103,7 +103,7 @@ class NotificationFacade(
                                     ?.userId
                                     ?: return@map null,
                             notificationStoredKey = notificationStoredKeyGenerator.generate(),
-                            type = "PET_SEASON",
+                            type = NotificationType.NEW_PET_SEASON,
                             parameterValue = "",
                             topic = message.title,
                             contents = message.body,

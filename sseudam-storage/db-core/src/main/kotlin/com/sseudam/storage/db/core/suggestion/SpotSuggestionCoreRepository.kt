@@ -5,7 +5,7 @@ import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.repository.SpotSuggestionRepository
-import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import com.sseudam.support.tx.Tx
 import org.locationtech.jts.geom.Point
