@@ -46,11 +46,14 @@ echo "Deploying to $NEW_COLOR ($NEW_PORT)..."
 
 # 새 컨테이너 배포
 export IMAGE_FULL_URL=$IMAGE_URL
-export DOCKERHUB_IMAGE_NAME="${CONTAINER_NAME}-${NEW_COLOR}"
-export SERVER_PORT=$NEW_PORT
+export DOCKERHUB_IMAGE_NAME="${CONTAINER_NAME}"
 
 cd ~/app
-docker compose -f docker/docker-compose-dev.yml up -d
+if [ "$NEW_COLOR" == "BLUE" ]; then
+    docker compose -f docker/docker-compose-blue.yml up -d
+else
+    docker compose -f docker/docker-compose-green.yml up -d
+fi
 
 # 헬스체크 (최대 3분)
 echo "Health checking on port $NEW_PORT..."
@@ -61,7 +64,11 @@ for i in {1..90}; do
     fi
     if [ $i -eq 90 ]; then
         echo "Health check failed after 90 attempts (3 minutes)"
-        docker compose -f docker/docker-compose-dev.yml down
+        if [ "$NEW_COLOR" == "BLUE" ]; then
+            docker compose -f docker/docker-compose-blue.yml down
+        else
+            docker compose -f docker/docker-compose-green.yml down
+        fi
         exit 1
     fi
     echo "Waiting for application to be ready... ($i/90)"

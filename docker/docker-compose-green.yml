@@ -1,0 +1,11 @@
+services:
+  backend:
+    image: ${IMAGE_FULL_URL}
+    container_name: ${DOCKERHUB_IMAGE_NAME}-GREEN
+    restart: always
+    environment:
+      - TZ=Asia/Seoul
+      - SERVER_PORT=8081
+    network_mode: host
+    env_file:
+      - ~/.env

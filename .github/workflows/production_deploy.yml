@@ -99,7 +99,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./docker/docker-compose-prod.yml,./docker/deploy-blue-green.sh"
+          source: "./docker/docker-compose-blue.yml,./docker/docker-compose-green.yml,./docker/deploy-blue-green.sh"
           target: "~/app"
           overwrite: true
 
