@@ -20,18 +20,26 @@ fi
 echo "Starting Blue/Green deployment...$NGINX_CONF"
 
 # 현재 활성 포트 확인
-CURRENT_PORT=$(grep -oP 'server 127.0.0.1:\K[0-9]+' $NGINX_CONF | head -1)
-echo "Current active port: $CURRENT_PORT"
+CURRENT_PORT=$(grep -oP 'server 127.0.0.1:\K[0-9]+' $NGINX_CONF | head -1 || echo "")
 
-# 새로운 배포 포트 결정
-if [ "$CURRENT_PORT" == "$BLUE_PORT" ]; then
-    NEW_PORT=$GREEN_PORT
-    NEW_COLOR="GREEN"
-    OLD_COLOR="BLUE"
-else
+# 컨테이너가 없는 경우 기본값 설정
+if [ -z "$CURRENT_PORT" ]; then
+    echo "No active port found. Starting initial deployment on BLUE ($BLUE_PORT)"
     NEW_PORT=$BLUE_PORT
     NEW_COLOR="BLUE"
-    OLD_COLOR="BLUE"
+    OLD_COLOR=""
+else
+    echo "Current active port: $CURRENT_PORT"
+    # 새로운 배포 포트 결정
+    if [ "$CURRENT_PORT" == "$BLUE_PORT" ]; then
+        NEW_PORT=$GREEN_PORT
+        NEW_COLOR="GREEN"
+        OLD_COLOR="BLUE"
+    else
+        NEW_PORT=$BLUE_PORT
+        NEW_COLOR="BLUE"
+        OLD_COLOR="GREEN"
+    fi
 fi
 
 echo "Deploying to $NEW_COLOR ($NEW_PORT)..."
@@ -75,13 +83,14 @@ sudo nginx -t && sudo systemctl reload nginx
 
 echo "Deployment successful! Active: $NEW_COLOR ($NEW_PORT)"
 
-# 이전 색상 컨테이너 정리
-sleep 5
-OLD_CONTAINER="${CONTAINER_NAME}-${OLD_COLOR}"
-if docker ps -a --format '{{.Names}}' | grep -q "^${OLD_CONTAINER}$"; then
-    echo "Removing previous color container: $OLD_CONTAINER"
-    docker stop $OLD_CONTAINER || true
-    docker rm $OLD_CONTAINER || true
+# 이전 색상 컨테이너 정리 (Graceful shutdown)
+if [ -n "$OLD_COLOR" ]; then
+    OLD_CONTAINER="${CONTAINER_NAME}-${OLD_COLOR}"
+    if docker ps -a --format '{{.Names}}' | grep -q "^${OLD_CONTAINER}$"; then
+        echo "Gracefully stopping previous container: $OLD_CONTAINER"
+        docker stop -t 30 $OLD_CONTAINER || true
+        docker rm $OLD_CONTAINER || true
+    fi
 fi
 
 docker image prune -a -f

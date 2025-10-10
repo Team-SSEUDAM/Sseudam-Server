@@ -25,6 +25,7 @@ spring:
   web.resources.add-mappings: false
 
 server:
+  shutdown: graceful
   tomcat:
     max-connections: 20000
     threads:
@@ -34,3 +35,5 @@ server:
     encoding:
       charset: UTF-8
       force: true
+
+spring.lifecycle.timeout-per-shutdown-phase: 30s
