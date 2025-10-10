@@ -50,9 +50,9 @@ export DOCKERHUB_IMAGE_NAME="${CONTAINER_NAME}"
 
 cd ~/app
 if [ "$NEW_COLOR" == "BLUE" ]; then
-    docker compose -f docker/docker-compose-blue.yml up -d
+    docker compose -p sseudam-blue -f docker/docker-compose-blue.yml up -d
 else
-    docker compose -f docker/docker-compose-green.yml up -d
+    docker compose -p sseudam-green -f docker/docker-compose-green.yml up -d
 fi
 
 # 헬스체크 (최대 3분)
@@ -65,9 +65,9 @@ for i in {1..90}; do
     if [ $i -eq 90 ]; then
         echo "Health check failed after 90 attempts (3 minutes)"
         if [ "$NEW_COLOR" == "BLUE" ]; then
-            docker compose -f docker/docker-compose-blue.yml down
+            docker compose -p sseudam-blue -f docker/docker-compose-blue.yml down
         else
-            docker compose -f docker/docker-compose-green.yml down
+            docker compose -p sseudam-green -f docker/docker-compose-green.yml down
         fi
         exit 1
     fi
