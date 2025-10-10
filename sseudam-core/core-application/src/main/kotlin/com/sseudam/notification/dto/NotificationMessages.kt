@@ -1,5 +1,7 @@
 package com.sseudam.notification.dto
 
+import com.sseudam.pet.PetPointAction
+
 object NotificationMessages {
     private val messages: List<Pair<String, String>> =
         listOf(
@@ -19,19 +21,19 @@ object NotificationMessages {
 
     fun newPetContents(nickname: String) = "새로운 고양이가 ${nickname}님 곁을 찾아왔어요! \n지금 만나러 가볼까요?"
 
-    fun anonymousVisitedSpotContents(nickname: String) = "누군가 ${nickname}님이 제보한 쓰레기통에 쓰레기를 버렸어요! 지금 바로 확인해보러 가볼까요?"
+    fun anonymousVisitedSpotContents(nickname: String) =
+        "${nickname}님이 제보한 \n" +
+            "쓰레기통에 쓰레기가 버려졌어요."
 
     fun randomMessage(): Pair<String, String> = messages.random()
 
     fun approveSuggestionContents(nickname: String) =
-        "${nickname}님이 제보한 쓰레기통이 승인되었어요!\n" +
-            "지금 바로 확인하러 가볼까요?"
+        "${nickname}님이 제보한 쓰레기통이 승인되어 ${PetPointAction.SUGGESTION_APPROVED.point}포인트를 추가로 받았어요!"
 
-    fun rejectSuggestionContents(nickname: String) = "검토 결과, ${nickname}님이 제보한 쓰레기통이 반려되었어요. 반려 사유를 확인하고 다시 제보해보세요!"
+    fun rejectSuggestionContents(nickname: String) = "${nickname}님이 제보한 쓰레기통이 반려되었어요. 사유를 확인해볼까요?"
 
     fun approveReportContents(nickname: String) =
-        "${nickname}님이 신고한 쓰레기통이 승인되었어요!\n" +
-            "지금 바로 확인하러 가볼까요?"
+        "${nickname}님이 수정 제안한 쓰레기통이 승인되어 ${PetPointAction.SUGGESTION_APPROVED.point}포인트를 추가로 받았어요!"
 
-    fun rejectReportContents(nickname: String) = "검토 결과, ${nickname}님이 신고한 쓰레기통이 반려되었어요. 반려 사유를 확인하고 다시 신고해보세요!"
+    fun rejectReportContents(nickname: String) = "${nickname}님이 수정 제안한 쓰레기통이 반려되었어요. 사유를 확인해볼까요?"
 }

@@ -63,7 +63,7 @@ class AttendanceControllerTest : RestDocsTestSuite() {
 
         response.makeDocument(
             "출석 체크",
-            DocsTag.HISTORY,
+            DocsTag.ATTENDANCE,
             headers(
                 "Authorization" headerType Authorization,
             ),
