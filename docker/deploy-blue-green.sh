@@ -17,6 +17,8 @@ else
     NGINX_CONF="/etc/nginx/conf.d/dev-api.sseudam.me.conf"
 fi
 
+echo "Starting Blue/Green deployment...$NGINX_CONF"
+
 # 현재 활성 포트 확인
 CURRENT_PORT=$(grep -oP 'server 127.0.0.1:\K[0-9]+' $NGINX_CONF | head -1)
 echo "Current active port: $CURRENT_PORT"

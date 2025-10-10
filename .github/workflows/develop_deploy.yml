@@ -111,12 +111,12 @@ jobs:
           debug: true
           script: |
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
-            
+
             # Nginx 설정 업데이트 (최초 1회만)
-            if ! grep -q "upstream backend" /etc/nginx/sites-available/default; then
-              sudo cp ~/app/docker/nginx-https.conf /etc/nginx/sites-available/default
+            if ! grep -q "upstream backend" /etc/nginx/conf.d/dev-api.sseudam.me.conf; then
+              sudo cp ~/app/docker/nginx-https.conf /etc/nginx/conf.d/dev-api.sseudam.me.conf
               sudo nginx -t && sudo systemctl reload nginx
             fi
-            
+
             chmod +x ~/app/docker/deploy-blue-green.sh
             ~/app/docker/deploy-blue-green.sh "$IMAGE_FULL_URL" "$DOCKERHUB_IMAGE_NAME" "dev"
