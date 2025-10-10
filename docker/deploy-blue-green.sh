@@ -69,3 +69,5 @@ fi
 
 docker image prune -a -f
 echo "Blue/Green deployment completed!"
+
+docker run -d --name sseudam-redis -p 6379:6379 --restart always redis:alpine
