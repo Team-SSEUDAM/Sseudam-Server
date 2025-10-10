@@ -87,6 +87,8 @@ echo "Deployment successful! Active: $NEW_COLOR ($NEW_PORT)"
 if [ -n "$OLD_COLOR" ]; then
     OLD_CONTAINER="${CONTAINER_NAME}-${OLD_COLOR}"
     if docker ps -a --format '{{.Names}}' | grep -q "^${OLD_CONTAINER}$"; then
+        echo "Waiting 30 seconds for connection draining..."
+        sleep 30
         echo "Gracefully stopping previous container: $OLD_CONTAINER"
         docker stop -t 30 $OLD_CONTAINER || true
         docker rm $OLD_CONTAINER || true
