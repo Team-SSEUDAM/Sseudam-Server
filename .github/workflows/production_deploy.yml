@@ -119,4 +119,4 @@ jobs:
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
             mkdir -p ~/app
             chmod +x ~/app/docker/deploy-blue-green.sh
-            ~/app/docker/deploy-blue-green.sh "$IMAGE_FULL_URL" "$DOCKERHUB_IMAGE_NAME"
+            ~/app/docker/deploy-blue-green.sh "$IMAGE_FULL_URL" "$DOCKERHUB_IMAGE_NAME" "prod"

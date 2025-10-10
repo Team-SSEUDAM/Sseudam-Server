@@ -119,4 +119,4 @@ jobs:
             fi
             
             chmod +x ~/app/docker/deploy-blue-green.sh
-            ~/app/docker/deploy-blue-green.sh "$IMAGE_FULL_URL" "$DOCKERHUB_IMAGE_NAME"
+            ~/app/docker/deploy-blue-green.sh "$IMAGE_FULL_URL" "$DOCKERHUB_IMAGE_NAME" "dev"

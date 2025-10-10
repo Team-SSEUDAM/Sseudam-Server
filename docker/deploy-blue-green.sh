@@ -4,11 +4,18 @@ set -e
 
 IMAGE_URL=$1
 CONTAINER_NAME=$2
+ENVIRONMENT=${3:-dev}
 
 BLUE_PORT=8080
 GREEN_PORT=8081
 HEALTH_CHECK_PATH="/actuator/health"
-NGINX_CONF="/etc/nginx/nginx.conf"
+
+# 환경별 Nginx 설정 파일 경로
+if [ "$ENVIRONMENT" == "prod" ]; then
+    NGINX_CONF="/etc/nginx/nginx.conf"
+else
+    NGINX_CONF="/etc/nginx/conf.d/dev-api.sseudam.me.conf"
+fi
 
 # 현재 활성 포트 확인
 CURRENT_PORT=$(grep -oP 'server 127.0.0.1:\K[0-9]+' $NGINX_CONF | head -1)
@@ -35,19 +42,19 @@ export SERVER_PORT=$NEW_PORT
 cd ~/app
 docker compose -f docker/docker-compose-dev.yml up -d
 
-# 헬스체크
+# 헬스체크 (최대 3분)
 echo "Health checking on port $NEW_PORT..."
-for i in {1..30}; do
+for i in {1..90}; do
     if curl -f http://localhost:$NEW_PORT$HEALTH_CHECK_PATH > /dev/null 2>&1; then
         echo "Health check passed!"
         break
     fi
-    if [ $i -eq 30 ]; then
-        echo "Health check failed after 30 attempts"
+    if [ $i -eq 90 ]; then
+        echo "Health check failed after 90 attempts (3 minutes)"
         docker compose -f docker/docker-compose-dev.yml down
         exit 1
     fi
-    echo "Waiting for application to be ready... ($i/30)"
+    echo "Waiting for application to be ready... ($i/90)"
     sleep 2
 done
 
@@ -69,5 +76,3 @@ fi
 
 docker image prune -a -f
 echo "Blue/Green deployment completed!"
-
-docker run -d --name sseudam-redis -p 6379:6379 --restart always redis:alpine
