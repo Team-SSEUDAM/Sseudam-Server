@@ -3,7 +3,7 @@ name: Development Build & Deploy
 on:
   push:
     branches:
-      - develop
+      - chore/blue-green-deploy
 
 # permission can be added at job level or workflow level
 permissions:
@@ -86,19 +86,19 @@ jobs:
             -Djib.to.auth.password=${{ secrets.DOCKERHUB_ACCESS_TOKEN }} \
             -Djib.container.environment=SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }},SPRING_PROFILES_ACTIVE=dev
 
-      # docker-compose-dev.yml 파일을 EC2에 복사
-      - name: Copy docker-compose-dev.yml to EC2
+      # 배포 파일들을 EC2에 복사
+      - name: Copy deployment files to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./docker/docker-compose-dev.yml"
-          target: "/home/ec2-user"
+          source: "./docker/docker-compose-dev.yml,./docker/deploy-blue-green.sh,./docker/nginx-https.conf"
+          target: "~/app"
           overwrite: true
 
-      # EC2로 배포
-      - name: Deploy to EC2 Server
+      # EC2로 Blue/Green 배포
+      - name: Deploy to EC2 with Blue/Green
         uses: appleboy/ssh-action@master
         env:
           IMAGE_FULL_URL: ${{ steps.metadata.outputs.tags }}
@@ -111,6 +111,12 @@ jobs:
           debug: true
           script: |
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
-            cd ~/app
-            docker compose up -d
-            docker image prune -a -f
+            
+            # Nginx 설정 업데이트 (최초 1회만)
+            if ! grep -q "upstream backend" /etc/nginx/sites-available/default; then
+              sudo cp ~/app/docker/nginx-https.conf /etc/nginx/sites-available/default
+              sudo nginx -t && sudo systemctl reload nginx
+            fi
+            
+            chmod +x ~/app/docker/deploy-blue-green.sh
+            ~/app/docker/deploy-blue-green.sh "$IMAGE_FULL_URL" "$DOCKERHUB_IMAGE_NAME"

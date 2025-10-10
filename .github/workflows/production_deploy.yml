@@ -92,19 +92,19 @@ jobs:
             -Djib.container.environment=SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }},SPRING_PROFILES_ACTIVE=prod \
             -Djib.from.platforms=linux/arm64
 
-      # docker-compose-dev.yml 파일을 EC2에 복사
-      - name: Copy docker-compose-prod.yml to EC2
+      # 배포 파일들을 EC2에 복사
+      - name: Copy deployment files to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./docker/docker-compose-prod.yml"
+          source: "./docker/docker-compose-prod.yml,./docker/deploy-blue-green.sh"
           target: "~/app"
           overwrite: true
 
-      # EC2로 배포
-      - name: Deploy to EC2 Server
+      # EC2로 Blue/Green 배포
+      - name: Deploy to EC2 with Blue/Green
         uses: appleboy/ssh-action@master
         env:
           IMAGE_FULL_URL: ${{ steps.metadata.outputs.tags }}
@@ -118,6 +118,5 @@ jobs:
           script: |
             echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
             mkdir -p ~/app
-            cd ~/app
-            docker compose up -d
-            docker image prune -a -f
+            chmod +x ~/app/docker/deploy-blue-green.sh
+            ~/app/docker/deploy-blue-green.sh "$IMAGE_FULL_URL" "$DOCKERHUB_IMAGE_NAME"
