@@ -60,6 +60,21 @@ object SuggestionFixture {
             setExp(SpotSuggestion.Info::createdAt, LocalDateTime.now())
         }
 
+    val spotSuggestionDetail =
+        fixtureBuilder<SpotSuggestion.Detail> {
+            setExp(SpotSuggestion.Detail::id, 1L)
+            setExp(SpotSuggestion.Detail::userId, 1L)
+            setExp(SpotSuggestion.Detail::spotName, "테스트 쓰레기통")
+            setExp(SpotSuggestion.Detail::point, randomPoint())
+            setExp(SpotSuggestion.Detail::region, Region.SEOUL)
+            setExp(SpotSuggestion.Detail::address, Address("강남구", "서울시 강남구 강남동 1-4"))
+            setExp(SpotSuggestion.Detail::trashType, TrashType.GENERAL)
+            setExp(SpotSuggestion.Detail::imageUrl, "https://example.com/image.jpg")
+            setExp(SpotSuggestion.Detail::status, SuggestionStatus.WAITING)
+            setExp(SpotSuggestion.Detail::rejectReason, null)
+            setExp(SpotSuggestion.Detail::createdAt, LocalDateTime.now())
+        }
+
     val s3ImageUrl =
         fixtureBuilder<S3ImageUrl> {
             setExp(S3ImageUrl::presignedUrl, "https://example.com/presigned-url")
