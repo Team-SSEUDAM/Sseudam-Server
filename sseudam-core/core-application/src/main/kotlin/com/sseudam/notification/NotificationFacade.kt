@@ -34,7 +34,7 @@ class NotificationFacade(
 
         val userIds = userDevices.map { it.userId }.distinct()
         val users = userService.findAllBy(userIds)
-        val (title, bodySuffix) = NotificationMessages.randomMessage()
+        val (title, bodySuffix) = NotificationMessages.randomRegularMessage()
 
         val userDevicesMap = userDevices.associateBy { it.userId }
         val messages =
@@ -43,6 +43,7 @@ class NotificationFacade(
                     fcmToken = userDevicesMap[it.id]?.fcmToken.orEmpty(),
                     title = title,
                     body = "${it.nickname}$bodySuffix",
+                    destination = "/",
                 )
             }
 
@@ -90,6 +91,7 @@ class NotificationFacade(
                             userProfiles[device.userId]?.nickname
                                 ?: DEFAULT_USER_NICKNAME,
                         ),
+                    destination = "pet-info",
                 )
             }
         fcmSender.sendAll(messages.toSet()).apply {

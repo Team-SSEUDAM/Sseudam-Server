@@ -16,15 +16,17 @@ class FcmClientRepository(
                         it.fcmToken,
                         it.title,
                         it.body,
+                        it.destination,
                     )
                 }.toList()
 
         val tokens = fcmRequests.map { it.fcmToken }
         val batchResult =
             firebaseCloudMessageSender.sendEachForMulticastAll(
-                fcmRequests[0].title,
-                fcmRequests[0].body,
-                tokens,
+                title = fcmRequests[0].title,
+                body = fcmRequests[0].body,
+                destination = firebaseCloudMessages[0].destination,
+                fcmTokens = tokens,
             )
 
         val result =
@@ -34,6 +36,7 @@ class FcmClientRepository(
                     fcmToken = pushMessage.fcmToken,
                     title = pushMessage.title,
                     body = pushMessage.body,
+                    destination = pushMessage.destination,
                     tryCount = pushMessage.tryCount + 1,
                     sent = batchResult?.responses?.get(index)?.isSuccessful ?: false,
                 )
@@ -47,6 +50,7 @@ class FcmClientRepository(
                 fcmToken = firebaseCloudMessage.fcmToken,
                 title = firebaseCloudMessage.title,
                 body = firebaseCloudMessage.body,
+                destination = firebaseCloudMessage.destination,
             )
         val sendResult = firebaseCloudMessageSender.sendAsync(request).get()
         return FirebaseCloudMessage(
@@ -54,6 +58,7 @@ class FcmClientRepository(
             fcmToken = firebaseCloudMessage.fcmToken,
             title = firebaseCloudMessage.title,
             body = firebaseCloudMessage.body,
+            destination = firebaseCloudMessage.destination,
             tryCount = firebaseCloudMessage.tryCount + 1,
             sent = sendResult.isNotBlank(),
         )

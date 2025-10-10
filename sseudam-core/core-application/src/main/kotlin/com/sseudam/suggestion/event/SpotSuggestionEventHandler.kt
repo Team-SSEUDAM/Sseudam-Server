@@ -47,6 +47,7 @@ class SpotSuggestionEventHandler(
                     userId = suggestion.userId,
                     title = NotificationMessages.DEFAULT_TITLE,
                     body = body,
+                    destination = "notifications",
                 ),
                 type = type,
                 parameterValue = suggestion.id.toString(),
