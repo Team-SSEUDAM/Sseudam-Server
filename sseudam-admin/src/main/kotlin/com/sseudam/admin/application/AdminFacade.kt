@@ -121,7 +121,7 @@ class AdminFacade(
                         fcmToken = device.fcmToken,
                         title = topic,
                         body = contents,
-                        destination = "",
+                        destination = "HomeView",
                     )
                 }.toSet()
         fcmSender.sendAll(messages)

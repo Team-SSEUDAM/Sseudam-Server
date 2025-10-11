@@ -66,7 +66,7 @@ class SpotReportEventHandler(
                         userId = userId,
                         title = NotificationMessages.DEFAULT_TITLE,
                         body = body,
-                        destination = "notifications",
+                        destination = "MyPageView",
                     ),
                 type = type,
                 parameterValue = targetId.toString(),

@@ -56,7 +56,7 @@ class VisitedEventHandler(
                         userId = suggestion.userId,
                         title = NotificationMessages.DEFAULT_TITLE,
                         body = NotificationMessages.anonymousVisitedSpotContents(profile.nickname),
-                        destination = "notifications",
+                        destination = "MyPageView",
                     ),
                 type = NotificationType.ANONYMOUS_VISITED_SPOT,
                 parameterValue = event.spot.id.toString(),

@@ -43,7 +43,7 @@ class NotificationFacade(
                     fcmToken = userDevicesMap[it.id]?.fcmToken.orEmpty(),
                     title = title,
                     body = "${it.nickname}$bodySuffix",
-                    destination = "/",
+                    destination = "HomeView",
                 )
             }
 
@@ -91,7 +91,7 @@ class NotificationFacade(
                             userProfiles[device.userId]?.nickname
                                 ?: DEFAULT_USER_NICKNAME,
                         ),
-                    destination = "pet-info",
+                    destination = "MyPetView",
                 )
             }
         fcmSender.sendAll(messages.toSet()).apply {
