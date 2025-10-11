@@ -51,6 +51,38 @@ class ReportServiceTest :
                     verify { reportAppender.append(imageUrl, create) }
                 }
             }
+
+            context("기타 사유와 함께 신고하는 경우") {
+                it("reason 필드를 포함하여 신고를 생성한다") {
+                    val imageUrl = "https://example.com/image.jpg"
+                    val create = ReportFixture.spotReportCreate.copy(reason = "기타 사유입니다")
+                    val reportInfo = ReportFixture.spotReportInfo.copy(reason = "기타 사유입니다")
+
+                    every { reportAppender.append(imageUrl, create) } returns reportInfo
+
+                    val result = reportService.appendReport(imageUrl, create)
+
+                    result shouldBe reportInfo
+                    result.reason shouldBe "기타 사유입니다"
+                    verify { reportAppender.append(imageUrl, create) }
+                }
+            }
+
+            context("EMPTY_SPOT 타입으로 신고하는 경우") {
+                it("쓰레기통이 없는 장소로 신고를 생성한다") {
+                    val imageUrl = "https://example.com/image.jpg"
+                    val create = ReportFixture.spotReportCreate.copy(reportType = ReportType.EMPTY_SPOT)
+                    val reportInfo = ReportFixture.emptySpotReportInfo
+
+                    every { reportAppender.append(imageUrl, create) } returns reportInfo
+
+                    val result = reportService.appendReport(imageUrl, create)
+
+                    result shouldBe reportInfo
+                    result.reportType shouldBe ReportType.EMPTY_SPOT
+                    verify { reportAppender.append(imageUrl, create) }
+                }
+            }
         }
 
         describe("사용자별 신고 내역 조회") {
