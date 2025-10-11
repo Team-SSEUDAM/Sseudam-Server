@@ -34,6 +34,7 @@ object ReportFixture {
             setExp(SpotReportCreateRequest::city, "강남구")
             setExp(SpotReportCreateRequest::site, "서울시 강남구 강남동 1-4")
             setExp(SpotReportCreateRequest::trashType, TrashType.GENERAL)
+            setExp(SpotReportCreateRequest::reason, "잘못된 위치에 있어요")
         }
 
     val reportValidationRequest =
@@ -65,6 +66,41 @@ object ReportFixture {
             setExp(SpotReport.Info::trashType, TrashType.GENERAL)
             setExp(SpotReport.Info::imageUrl, "https://example.com/image.jpg")
             setExp(SpotReport.Info::status, ReportStatus.WAITING)
+            setExp(SpotReport.Info::reason, "잘못된 위치에 있어요")
+            setExp(SpotReport.Info::createdAt, LocalDateTime.now())
+        }
+
+    val emptySpotReportInfo =
+        fixtureBuilder<SpotReport.Info> {
+            setExp(SpotReport.Info::id, 2L)
+            setExp(SpotReport.Info::spotId, 1L)
+            setExp(SpotReport.Info::userId, 1L)
+            setExp(SpotReport.Info::reportType, ReportType.EMPTY_SPOT)
+            setExp(SpotReport.Info::point, randomPoint())
+            setExp(SpotReport.Info::spotName, "테스트 쓰레기통")
+            setExp(SpotReport.Info::region, Region.SEOUL)
+            setExp(SpotReport.Info::address, Address("강남구", "서울시 강남구 강남동 1-4"))
+            setExp(SpotReport.Info::trashType, TrashType.GENERAL)
+            setExp(SpotReport.Info::imageUrl, "https://example.com/image.jpg")
+            setExp(SpotReport.Info::status, ReportStatus.WAITING)
+            setExp(SpotReport.Info::reason, null)
+            setExp(SpotReport.Info::createdAt, LocalDateTime.now())
+        }
+
+    val etcReportInfo =
+        fixtureBuilder<SpotReport.Info> {
+            setExp(SpotReport.Info::id, 3L)
+            setExp(SpotReport.Info::spotId, 1L)
+            setExp(SpotReport.Info::userId, 1L)
+            setExp(SpotReport.Info::reportType, ReportType.ETC)
+            setExp(SpotReport.Info::point, randomPoint())
+            setExp(SpotReport.Info::spotName, "테스트 쓰레기통")
+            setExp(SpotReport.Info::region, Region.SEOUL)
+            setExp(SpotReport.Info::address, Address("강남구", "서울시 강남구 강남동 1-4"))
+            setExp(SpotReport.Info::trashType, TrashType.GENERAL)
+            setExp(SpotReport.Info::imageUrl, "https://example.com/image.jpg")
+            setExp(SpotReport.Info::status, ReportStatus.WAITING)
+            setExp(SpotReport.Info::reason, "기타 사유입니다")
             setExp(SpotReport.Info::createdAt, LocalDateTime.now())
         }
 
@@ -82,6 +118,7 @@ object ReportFixture {
             setExp(SpotReport.Detail::imageUrl, "https://example.com/image.jpg")
             setExp(SpotReport.Detail::status, ReportStatus.WAITING)
             setExp(SpotReport.Detail::rejectReason, null)
+            setExp(SpotReport.Detail::reason, "잘못된 위치에 있어요")
             setExp(SpotReport.Detail::createdAt, LocalDateTime.now())
         }
 
@@ -103,6 +140,7 @@ object ReportFixture {
             setExp(SpotReport.Create::city, "강남구")
             setExp(SpotReport.Create::site, "서울시 강남구 강남동 1-4")
             setExp(SpotReport.Create::trashType, TrashType.GENERAL)
+            setExp(SpotReport.Create::reason, "잘못된 위치에 있어요")
         }
 
     val trashSpotImageInfo =
@@ -125,7 +163,7 @@ object ReportFixture {
             setExp(UpdateReportCommand::reportId, 1L)
             setExp(UpdateReportCommand::spotId, 1L)
             setExp(UpdateReportCommand::status, ReportStatus.APPROVE)
-            setExp(UpdateReportCommand::reason, null)
+            setExp(UpdateReportCommand::rejectReason, null)
         }
 
     val spotReportUpdateEvent =
