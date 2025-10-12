@@ -39,13 +39,16 @@ class NotificationStoredCustomRepository(
                         path(NotificationStoredEntity::id).desc(),
                     )
             }
+        val content =
+            notifications.content
+                .filterNotNull()
+                .map { it.toNotificationStoredInfo() }
+        val nextCursor = if (content.size < cursorRequest.size) null else notifications.lastOrNull()?.id
+
         return Cursor.of(
-            nextCursor = notifications.lastOrNull()?.id,
+            nextCursor = nextCursor,
             size = notifications.totalElements,
-            content =
-                notifications.content
-                    .filterNotNull()
-                    .map { it.toNotificationStoredInfo() },
+            content = content,
         )
     }
 }
