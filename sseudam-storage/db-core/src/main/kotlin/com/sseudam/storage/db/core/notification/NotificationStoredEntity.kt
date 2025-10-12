@@ -1,6 +1,7 @@
 package com.sseudam.storage.db.core.notification
 
 import com.sseudam.notification.NotificationStored
+import com.sseudam.notification.NotificationType
 import com.sseudam.notification.ReadStatus
 import com.sseudam.storage.db.core.support.BaseEntity
 import jakarta.persistence.Column
@@ -14,7 +15,9 @@ import jakarta.persistence.Table
 class NotificationStoredEntity(
     val notificationStoredKey: String,
     val userId: Long,
-    val type: String,
+    @Enumerated(value = EnumType.STRING)
+    @Column(length = 30)
+    val type: NotificationType,
     val parameterValue: String,
     val topic: String,
     val contents: String,

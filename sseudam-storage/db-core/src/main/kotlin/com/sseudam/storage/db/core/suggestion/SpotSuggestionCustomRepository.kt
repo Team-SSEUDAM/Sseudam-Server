@@ -5,7 +5,7 @@ import com.sseudam.storage.db.core.suggestion.reject.SuggestionRejectEntity
 import com.sseudam.storage.db.core.support.JDSLExtensions
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
-import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort

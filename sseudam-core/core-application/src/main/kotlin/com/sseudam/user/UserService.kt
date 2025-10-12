@@ -1,9 +1,8 @@
 package com.sseudam.user
 
 import com.sseudam.common.Address
-import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
-import com.sseudam.support.tx.Tx
 import com.sseudam.user.command.UpdateNicknameCommand
 import com.sseudam.user.command.UserCommand
 import com.sseudam.user.command.UserWithdrawalCommand
@@ -15,6 +14,7 @@ import com.sseudam.user.component.UserValidator
 import com.sseudam.user.event.UserSignUpEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserService(
@@ -25,17 +25,18 @@ class UserService(
     private val userValidator: UserValidator,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
-    fun create(userCommand: UserCommand): User =
-        Tx.writeable {
-            userValidator.verifyEmail(userCommand.email)
-            val createdUser = userAppender.create(userCommand)
-            return@writeable createdUser
-        }
+    @Transactional
+    fun create(userCommand: UserCommand): User {
+        userValidator.verifyEmail(userCommand.email)
+        val createdUser = userAppender.create(userCommand)
+        return createdUser
+    }
 
+    @Transactional
     fun socialSignUp(
         socialUser: SocialUser,
         userCommand: UserCommand,
-    ) = Tx.writeable {
+    ) {
         updateName(socialUser.key, userCommand.name)
         userCommand.address?.let { address ->
             updateAddress(socialUser.key, address)

@@ -22,14 +22,19 @@ class NotificationFacade(
     }
 
     fun createWeeklyNotificationMessages(): List<FirebaseCloudMessageCommand> {
-        val userDevices = userDeviceService.findAll().filter { it.fcmToken.isNotBlank() }
+        val userDevices =
+            userDeviceService
+                .findAll()
+                .sortedByDescending { it.createdAt }
+                .filter { it.fcmToken.isNotBlank() && it.fcmToken.isNotEmpty() }
+                .distinctBy { it.userId }
         if (userDevices.isEmpty()) {
             return listOf()
         }
 
         val userIds = userDevices.map { it.userId }.distinct()
         val users = userService.findAllBy(userIds)
-        val (title, bodySuffix) = NotificationMessages.randomMessage()
+        val (title, bodySuffix) = NotificationMessages.randomRegularMessage()
 
         val userDevicesMap = userDevices.associateBy { it.userId }
         val messages =
@@ -38,6 +43,7 @@ class NotificationFacade(
                     fcmToken = userDevicesMap[it.id]?.fcmToken.orEmpty(),
                     title = title,
                     body = "${it.nickname}$bodySuffix",
+                    destination = "HomeView",
                 )
             }
 
@@ -52,7 +58,7 @@ class NotificationFacade(
                                 ?.userId
                                 ?: return@map null,
                         notificationStoredKey = notificationStoredKeyGenerator.generate(),
-                        type = "REGULAR",
+                        type = NotificationType.REGULAR,
                         parameterValue = "",
                         topic = message.title,
                         contents = message.body,
@@ -67,7 +73,9 @@ class NotificationFacade(
         val userDevices =
             userDeviceService
                 .findAll()
-                .filter { it.fcmToken.isNotBlank() }
+                .sortedByDescending { it.createdAt }
+                .filter { it.fcmToken.isNotBlank() && it.fcmToken.isNotEmpty() }
+                .distinctBy { it.userId }
         if (userDevices.isEmpty()) return
         val userProfiles =
             userService
@@ -83,6 +91,7 @@ class NotificationFacade(
                             userProfiles[device.userId]?.nickname
                                 ?: DEFAULT_USER_NICKNAME,
                         ),
+                    destination = "MyPetView",
                 )
             }
         fcmSender.sendAll(messages.toSet()).apply {
@@ -96,7 +105,7 @@ class NotificationFacade(
                                     ?.userId
                                     ?: return@map null,
                             notificationStoredKey = notificationStoredKeyGenerator.generate(),
-                            type = "PET_SEASON",
+                            type = NotificationType.NEW_PET_SEASON,
                             parameterValue = "",
                             topic = message.title,
                             contents = message.body,

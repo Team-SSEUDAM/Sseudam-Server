@@ -3,11 +3,17 @@ package com.sseudam.notification
 import com.sseudam.notification.command.CreateNotificationStoredCommand
 import com.sseudam.notification.component.NotificationStoredAppender
 import com.sseudam.notification.component.NotificationStoredKeyGenerator
+import com.sseudam.notification.component.NotificationStoredReader
+import com.sseudam.notification.component.NotificationStoredUpdater
+import com.sseudam.support.cursor.Cursor
+import com.sseudam.support.cursor.CursorRequest
 import org.springframework.stereotype.Service
 
 @Service
 class NotificationService(
     private val notificationStoredAppender: NotificationStoredAppender,
+    private val notificationStoredReader: NotificationStoredReader,
+    private val notificationStoredUpdater: NotificationStoredUpdater,
     private val notificationStoredKeyGenerator: NotificationStoredKeyGenerator,
 ) {
     fun append(notificationStored: NotificationStored.Create): NotificationStored.Info =
@@ -31,4 +37,14 @@ class NotificationService(
                 )
             },
         )
+
+    fun findAllNotifications(
+        userId: Long,
+        cursorRequest: CursorRequest,
+    ): Cursor<NotificationStored.Info> = notificationStoredReader.findAllBy(userId, cursorRequest)
+
+    fun markAsRead(
+        userId: Long,
+        notificationId: Long,
+    ) = notificationStoredUpdater.markAsRead(userId, notificationId)
 }

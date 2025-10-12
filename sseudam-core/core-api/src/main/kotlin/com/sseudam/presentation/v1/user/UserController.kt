@@ -32,9 +32,7 @@ class UserController(
 ) {
     @Operation(summary = "내 정보 조회", description = "내 정보를 조회합니다.")
     @GetMapping("/users/me")
-    fun me(
-        @Parameter(hidden = true, required = false) user: User,
-    ): UserProfileResponse {
+    fun me(user: User): UserProfileResponse {
         val userProfile = userService.getProfile(user.id) ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
         return UserProfileResponse.of(userProfile)
     }

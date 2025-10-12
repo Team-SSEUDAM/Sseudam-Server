@@ -1,5 +1,6 @@
 package com.sseudam.report.event
 
+import com.sseudam.notification.NotificationType
 import com.sseudam.notification.discord.DiscordClient
 import com.sseudam.notification.dto.NotificationMessages
 import com.sseudam.notification.dto.SendNotificationMessage
@@ -47,22 +48,25 @@ class SpotReportEventHandler(
     fun reportUpdateNotificationListener(event: SpotReportUpdateEvent) {
         try {
             val userId = event.report.userId
-            val type = "REPORT"
             val targetId = event.report.id
-            val body =
+            val userProfile = userService.getProfile(userId) ?: return
+
+            val (body, type) =
                 when (event.report.status) {
-                    ReportStatus.APPROVE -> NotificationMessages.APPROVE_REPORT_CONTENTS
-                    ReportStatus.REJECT -> NotificationMessages.REJECT_REPORT_CONTENTS
+                    ReportStatus.APPROVE ->
+                        NotificationMessages.approveReportContents(userProfile.nickname) to NotificationType.APPROVE_REPORT
+                    ReportStatus.REJECT ->
+                        NotificationMessages.rejectReportContents(userProfile.nickname) to NotificationType.REJECT_REPORT
                     else -> throw IllegalArgumentException("Invalid report status: ${event.report.status}")
                 }
-            val userProfile = userService.getProfile(userId) ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
 
             fcmSender.send(
                 sendNotificationMessage =
                     SendNotificationMessage(
                         userId = userId,
                         title = NotificationMessages.DEFAULT_TITLE,
-                        body = userProfile.nickname + body,
+                        body = body,
+                        destination = "MyPageView",
                     ),
                 type = type,
                 parameterValue = targetId.toString(),
