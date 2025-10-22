@@ -161,7 +161,6 @@ dependencies {
     testImplementation(project(":sseudam-tests:api-docs"))
     testImplementation(project(":sseudam-tests:test-helper"))
     testImplementation(testFixtures(project(":sseudam-tests:test-container")))
-    testImplementation(libs.bundles.openfeign)
 }
 
 dependencyManagement {

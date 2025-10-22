@@ -1,9 +1,9 @@
 package com.sseudam.storage.db.core.user
 
 import com.sseudam.common.Address
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
-import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import com.sseudam.support.tx.Tx
 import com.sseudam.user.SocialUser

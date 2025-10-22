@@ -59,7 +59,7 @@ enum class ErrorType(
     INVALID_PET_NICKNAME(400, ErrorKind.CLIENT_ERROR, "펫 이름은 2자 이상 12자 이하로 입력해주세요.", ErrorLevel.WARN),
 
     INVALID_TRASH_SPOT_NAME_TWO(400, ErrorKind.CLIENT_ERROR, "쓰레기통 이름은 2자 이상 입력해주세요.", ErrorLevel.WARN),
-    INVALID_TRASH_SPOT_NAME_THIRTY(400, ErrorKind.CLIENT_ERROR, "쓰레기통 이름은 30자 이하로 입력해주세요.", ErrorLevel.WARN),
+    INVALID_TRASH_SPOT_NAME_TWELVE(400, ErrorKind.CLIENT_ERROR, "쓰레기통 이름은 12자 이하로 입력해주세요.", ErrorLevel.WARN),
 
     SPOT_NAME_IS_BLANK(400, ErrorKind.CLIENT_ERROR, "쓰레기통 이름은 비워둘 수 없습니다.", ErrorLevel.WARN),
     DUPLICATE_SPOT_NAME(409, ErrorKind.CLIENT_ERROR, "이미 존재하는 쓰레기통 이름입니다.", ErrorLevel.WARN),
@@ -104,18 +104,6 @@ enum class ErrorType(
         "잘못된 신고 상태입니다.",
         ErrorLevel.WARN,
     ),
-    UNAUTHORIZED_REPORT(
-        400,
-        ErrorKind.CLIENT_ERROR,
-        "해당 신고에 대한 신고자가 아닙니다.",
-        ErrorLevel.WARN,
-    ),
-    ALREADY_APPROVED_REPORT(
-        409,
-        ErrorKind.CLIENT_ERROR,
-        "이미 승인된 신고입니다.",
-        ErrorLevel.WARN,
-    ),
 
     /** Visited */
     SPOT_VISITED_ALREADY(
@@ -144,18 +132,6 @@ enum class ErrorType(
         409,
         ErrorKind.CLIENT_ERROR,
         "이미 존재하는 쓰레기통 장소입니다.",
-        ErrorLevel.WARN,
-    ),
-    UNAUTHORIZED_SUGGESTION(
-        400,
-        ErrorKind.CLIENT_ERROR,
-        "해당 제보에 대한 제보자가 아닙니다.",
-        ErrorLevel.WARN,
-    ),
-    ALREADY_APPROVED_SUGGESTION(
-        409,
-        ErrorKind.CLIENT_ERROR,
-        "이미 승인된 제보입니다.",
         ErrorLevel.WARN,
     ),
 

@@ -1,24 +1,17 @@
 package com.sseudam.support.cursor
 
-data class Cursor<T>(
-    val content: List<T>,
+data class Cursor(
     val nextCursor: Long?,
-    val size: Long,
+    val size: Int?,
 ) {
+    fun toCursor() =
+        Cursor(
+            nextCursor = nextCursor ?: DEFAULT_CURSOR,
+            size = size ?: DEFAULT_SIZE,
+        )
+
     companion object {
         const val DEFAULT_CURSOR = 0L
-        const val DEFAULT_SIZE = 20
-
-        fun <T> of(
-            content: List<T>,
-            nextCursor: Long?,
-            size: Long,
-        ): Cursor<T> {
-            require(size >= 0) { "size ($size) must be greater than or equal to 0" }
-            require(size >= content.size) {
-                "totalCount ($size) cannot be smaller than content.size (${content.size})"
-            }
-            return Cursor(content, nextCursor, size)
-        }
+        const val DEFAULT_SIZE = 10
     }
 }

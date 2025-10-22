@@ -29,8 +29,7 @@
 📦 Sseudam-Server
 ├── 🎯 sseudam-core/
 │   ├── core-api/          # REST API 엔드포인트
-│   ├── core-application/  # 비즈니스 로직 구현
-│   ├── core-domain/       # 도메인 모델 정의 (POJO)
+│   ├── core-domain/       # 도메인 모델 및 비즈니스 로직
 │   └── core-contract/     # 공통 DTO 및 예외 처리 정의
 ├── 💾 sseudam-storage/
 │   ├── db-core/           # JPA 엔티티 및 리포지토리

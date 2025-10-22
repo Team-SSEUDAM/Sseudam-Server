@@ -8,7 +8,7 @@ import com.sseudam.report.SpotReport
 import com.sseudam.storage.db.core.report.model.SpotReportEntityWithReject
 import com.sseudam.storage.db.core.report.reject.ReportRejectEntity
 import com.sseudam.storage.db.core.support.JDSLExtensions
-import com.sseudam.support.page.OffsetPageRequest
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
 import jakarta.persistence.EntityManager
 import org.springframework.data.domain.PageRequest
@@ -75,9 +75,8 @@ class SpotReportCustomRepository(
                         path(SpotReportEntity::id)
                             .eq(path(ReportRejectEntity::reportId)),
                     ),
-                ).whereAnd(
+                ).where(
                     path(SpotReportEntity::userId).eq(userId),
-                    path(SpotReportEntity::deletedAt).isNull(),
                 ).orderBy(
                     path(SpotReportEntity::createdAt).desc(),
                 )

@@ -1,4 +1,4 @@
-package com.sseudam.application.trashspot
+package com.sseudam.domain.trashspot
 
 import com.sseudam.DevelopTest
 import com.sseudam.common.GeoConverter
@@ -73,12 +73,7 @@ class TrashSpotFacadeTest :
 
                 every { service.findBy(1L) } returns spot
                 every { imageService.findBySpotId(1L) } returns listOf(image)
-                every {
-                    suggestionService.findSpotSuggestionByPointAndStatus(
-                        geoConverter.geoJsonPointToJtsPoint(spot.point as GeoJson.Point),
-                        SuggestionStatus.APPROVE,
-                    )
-                } returns suggestion
+                every { suggestionService.findSpotSuggestionByPoint(geoConverter.geoJsonPointToJtsPoint(spot.point as GeoJson.Point)) } returns suggestion
                 every { userService.getProfile(123L) } returns userProfile
                 every { visitedService.countBySpotId(1L) } returns 5L
 

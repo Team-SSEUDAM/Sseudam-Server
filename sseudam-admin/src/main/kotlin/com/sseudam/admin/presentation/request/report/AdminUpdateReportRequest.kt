@@ -11,13 +11,13 @@ data class AdminUpdateReportRequest(
     @Schema(description = "신고 상태", example = "APPROVE")
     val status: ReportStatus,
     @Schema(description = "반려 사유", example = "장소가 다름.")
-    val rejectReason: String? = null,
+    val reason: String? = null,
 ) {
     fun toCommand(reportId: Long) =
         UpdateReportCommand(
             reportId = reportId,
             spotId = spotId,
             status = status,
-            rejectReason = rejectReason,
+            reason = reason,
         )
 }

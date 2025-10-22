@@ -2,12 +2,9 @@ package com.sseudam.presentation.v1.suggestion
 
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.suggestion.request.SpotSuggestionCreateRequest
-import com.sseudam.presentation.v1.suggestion.request.SuggestionCancelRequest
 import com.sseudam.presentation.v1.suggestion.request.SuggestionValidationRequest
 import com.sseudam.presentation.v1.suggestion.response.SpotSuggestionAllResponse
-import com.sseudam.presentation.v1.suggestion.response.SpotSuggestionDetailResponse
 import com.sseudam.presentation.v1.suggestion.response.SuggestionImageUrlResponse
-import com.sseudam.presentation.v1.suggestion.response.SuggestionMessageResponse
 import com.sseudam.presentation.v1.suggestion.response.SuggestionValidationResponse
 import com.sseudam.suggestion.SuggestionFacade
 import com.sseudam.suggestion.SuggestionService
@@ -15,7 +12,6 @@ import com.sseudam.user.User
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
@@ -33,17 +29,7 @@ class SuggestionController(
     ): SuggestionImageUrlResponse {
         val suggestion =
             suggestionFacade.createSpotSuggestion(request.toCommand(user.id))
-        return SuggestionImageUrlResponse.of(suggestion.suggestionInfo, suggestion.uploadUrl)
-    }
-
-    @Operation(summary = "제보 상세 조회", description = "제보한 장소에 대한 상세 정보를 조회합니다.")
-    @GetMapping("/suggestions/{suggestionId}")
-    fun suggestionSpotDetail(
-        user: User,
-        @PathVariable suggestionId: Long,
-    ): SpotSuggestionDetailResponse {
-        val suggestion = suggestionService.findSpotSuggestionById(suggestionId)
-        return SpotSuggestionDetailResponse.from(suggestion)
+        return SuggestionImageUrlResponse.of(suggestion.first, suggestion.second)
     }
 
     // TODO: cursor pagination (infinity scroll)
@@ -62,15 +48,5 @@ class SuggestionController(
     ): SuggestionValidationResponse {
         val isValid = suggestionFacade.validateSpotSuggestion(request.name)
         return SuggestionValidationResponse.of(isValid)
-    }
-
-    @Operation(summary = "제보 취소", description = "제보를 취소합니다.")
-    @PostMapping("/suggestions/cancel")
-    fun suggestionSpotCancel(
-        user: User,
-        @RequestBody request: SuggestionCancelRequest,
-    ): SuggestionMessageResponse {
-        suggestionService.cancel(request.toCommand(userId = user.id))
-        return SuggestionMessageResponse(message = "제보가 취소되었습니다.")
     }
 }

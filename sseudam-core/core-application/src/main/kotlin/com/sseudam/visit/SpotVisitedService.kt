@@ -2,7 +2,6 @@ package com.sseudam.visit
 
 import com.sseudam.visit.component.SpotVisitedAppender
 import com.sseudam.visit.component.SpotVisitedReader
-import com.sseudam.visit.component.SpotVisitedValidator
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
@@ -10,7 +9,6 @@ import java.time.LocalDate
 class SpotVisitedService(
     private val spotVisitedAppender: SpotVisitedAppender,
     private val spotVisitedReader: SpotVisitedReader,
-    private val spotVisitedValidator: SpotVisitedValidator,
 ) {
     fun append(spotVisited: SpotVisited.Create) = spotVisitedAppender.append(spotVisited)
 
@@ -29,11 +27,4 @@ class SpotVisitedService(
     ): SpotVisited.Info? = spotVisitedReader.readLastVisited(userId, spotId)
 
     fun countBySpotId(spotId: Long): Long = spotVisitedReader.countBySpotId(spotId)
-
-    fun verifyVisited(
-        todayVisited: List<SpotVisited.Info>,
-        todayVisitedSpot: SpotVisited.Info?,
-    ) {
-        spotVisitedValidator.verifyVisited(todayVisited, todayVisitedSpot)
-    }
 }

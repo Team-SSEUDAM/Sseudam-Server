@@ -5,7 +5,7 @@ import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.reject.SuggestionReject
 import com.sseudam.suggestion.repository.SpotSuggestionRepository
 import com.sseudam.suggestion.repository.SuggestionRejectRepository
-import com.sseudam.support.page.OffsetPageRequest
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Component
@@ -28,10 +28,5 @@ class SuggestionReader(
 
     fun readByPoint(point: Point): SpotSuggestion.Info? = spotSuggestionRepository.findByPoint(point)
 
-    fun readByPointAndStatus(
-        point: Point,
-        status: SuggestionStatus,
-    ): SpotSuggestion.Info? = spotSuggestionRepository.findByPointAndStatus(point, status)
-
-    fun readRejectBySuggestionId(suggestionId: Long): SuggestionReject.Info? = suggestionRejectRepository.findBySuggestionId(suggestionId)
+    fun findRejectBySuggestionId(suggestionId: Long): SuggestionReject.Info? = suggestionRejectRepository.findBySuggestionId(suggestionId)
 }

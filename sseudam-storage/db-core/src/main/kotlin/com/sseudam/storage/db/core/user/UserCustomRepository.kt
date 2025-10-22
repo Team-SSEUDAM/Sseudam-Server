@@ -1,7 +1,7 @@
 package com.sseudam.storage.db.core.user
 
 import com.sseudam.storage.db.core.support.JDSLExtensions
-import com.sseudam.support.page.OffsetPageRequest
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
 import com.sseudam.user.UserProfile
 import org.springframework.data.domain.PageRequest

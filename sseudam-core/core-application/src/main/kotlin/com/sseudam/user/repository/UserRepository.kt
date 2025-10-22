@@ -1,7 +1,7 @@
 package com.sseudam.user.repository
 
 import com.sseudam.common.Address
-import com.sseudam.support.page.OffsetPageRequest
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User

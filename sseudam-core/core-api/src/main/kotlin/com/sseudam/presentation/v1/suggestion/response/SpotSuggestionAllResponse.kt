@@ -9,6 +9,6 @@ data class SpotSuggestionAllResponse(
 ) {
     companion object {
         fun of(spots: List<SpotSuggestion.Info>): SpotSuggestionAllResponse =
-            SpotSuggestionAllResponse(spots.map { SpotSuggestionResponse.from(it) })
+            SpotSuggestionAllResponse(spots.map { SpotSuggestionResponse.of(it) })
     }
 }
