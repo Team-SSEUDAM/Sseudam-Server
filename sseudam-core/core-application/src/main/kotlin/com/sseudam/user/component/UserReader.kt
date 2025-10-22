@@ -1,8 +1,8 @@
 package com.sseudam.user.component
 
-import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User

@@ -41,8 +41,10 @@ data class SendMessageReportDto(
                     ReportType.NAME -> report.spotName
                     ReportType.KIND -> report.trashType.displayName
                     ReportType.PHOTO -> report.imageUrl
+                    ReportType.EMPTY_SPOT -> "잘못된 쓰레기통 장소"
+                    ReportType.ETC -> "기타 사유"
                 }
-            }로 수정 요청",
+            } 로 수정 요청",
             createdAt = report.createdAt,
         )
     }

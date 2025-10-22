@@ -11,6 +11,8 @@ import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.Cache
+import com.sseudam.support.extension.parZipWithMDC
+import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,15 +26,14 @@ class HistoryFacade(
             ttl = 10,
             typeReference = object : TypeReference<List<SpotHistory.Info>>() {},
         ) {
-            val reports =
-                reportService
-                    .findAllReportByUserId(userId)
-                    .map { it.toSpotHistoryInfo() }
-            val suggestions =
-                suggestionService
-                    .findAllSpotSuggestionByUser(userId)
-                    .map { it.toSpotHistoryInfo() }
-            return@cache (reports + suggestions).sortedByDescending { it.createdAt }
+            runBlocking {
+                parZipWithMDC(
+                    { reportService.findAllReportByUserId(userId).map { it.toSpotHistoryInfo() } },
+                    { suggestionService.findAllSpotSuggestionByUser(userId).map { it.toSpotHistoryInfo() } },
+                ) { reports, suggestions ->
+                    (reports + suggestions).sortedByDescending { it.createdAt }
+                }
+            }
         }
 
     private fun SpotReport.Info.toSpotHistoryInfo() =
@@ -51,6 +52,7 @@ class HistoryFacade(
                     ReportStatus.APPROVE -> HistoryStatus.APPROVE
                     ReportStatus.REJECT -> HistoryStatus.REJECT
                     ReportStatus.WAITING -> HistoryStatus.WAITING
+                    ReportStatus.CANCEL -> HistoryStatus.CANCEL
                 },
             createdAt = this.createdAt,
         )
@@ -71,6 +73,7 @@ class HistoryFacade(
                     SuggestionStatus.APPROVE -> HistoryStatus.APPROVE
                     SuggestionStatus.REJECT -> HistoryStatus.REJECT
                     SuggestionStatus.WAITING -> HistoryStatus.WAITING
+                    SuggestionStatus.CANCEL -> HistoryStatus.CANCEL
                 },
             createdAt = this.createdAt,
         )

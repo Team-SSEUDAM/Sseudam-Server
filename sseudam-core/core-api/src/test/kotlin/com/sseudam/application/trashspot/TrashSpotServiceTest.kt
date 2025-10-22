@@ -1,4 +1,4 @@
-package com.sseudam.domain.trashspot
+package com.sseudam.application.trashspot
 
 import com.sseudam.DevelopTest
 import com.sseudam.common.Address
@@ -10,7 +10,6 @@ import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.TrashType
 import com.sseudam.trashspot.component.TrashSpotAppender
 import com.sseudam.trashspot.component.TrashSpotReader
-import com.sseudam.trashspot.component.TrashSpotUpdater
 import com.sseudam.trashspot.component.TrashSpotValidator
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import io.kotest.core.spec.style.DescribeSpec
@@ -23,11 +22,10 @@ class TrashSpotServiceTest :
     DescribeSpec({
         val reader: TrashSpotReader = mockk()
         val appender: TrashSpotAppender = mockk()
-        val updater: TrashSpotUpdater = mockk(relaxed = true)
         val validator: TrashSpotValidator = mockk(relaxed = true)
         val geoConverter: GeoConverter = mockk(relaxed = true)
 
-        val service = TrashSpotService(reader, appender, updater, validator, geoConverter)
+        val service = TrashSpotService(reader, appender, validator, geoConverter)
 
         describe("findAll") {
             it("delegates condition lookup to reader and returns results") {

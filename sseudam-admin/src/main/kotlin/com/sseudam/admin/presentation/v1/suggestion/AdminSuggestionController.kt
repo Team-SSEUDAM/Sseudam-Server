@@ -7,7 +7,7 @@ import com.sseudam.admin.presentation.response.suggestion.SpotSuggestionAllAdmin
 import com.sseudam.admin.presentation.v1.annotation.AdminTagDocs
 import com.sseudam.admin.presentation.v1.annotation.ApiAdminV1Controller
 import com.sseudam.suggestion.SuggestionStatus
-import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.OffsetPageRequest
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

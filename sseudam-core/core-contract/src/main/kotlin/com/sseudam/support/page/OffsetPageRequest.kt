@@ -1,4 +1,4 @@
-package com.sseudam.support.cursor
+package com.sseudam.support.page
 
 data class OffsetPageRequest(
     val page: Int,

@@ -6,5 +6,5 @@ data class UpdateReportCommand(
     val reportId: Long,
     val spotId: Long,
     val status: ReportStatus,
-    val reason: String?,
+    val rejectReason: String?,
 )

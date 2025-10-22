@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class UserDeviceReader(
     private val userDeviceRepository: UserDeviceRepository,
 ) {
-    fun readByUserId(userId: Long): UserDevice.Info? = userDeviceRepository.findByUserId(userId)
+    fun readLastByUserId(userId: Long): UserDevice.Info? = userDeviceRepository.findLastByUserId(userId)
 
     fun readAllByUserKey(userKey: String): List<UserDevice.Info> = userDeviceRepository.findAllByUserKey(userKey)
 

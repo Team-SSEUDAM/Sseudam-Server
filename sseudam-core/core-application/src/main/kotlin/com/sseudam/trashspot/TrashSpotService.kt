@@ -3,15 +3,12 @@ package com.sseudam.trashspot
 import com.sseudam.common.GeoConverter
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
-import com.sseudam.report.ReportType
-import com.sseudam.report.SpotReport
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.trashspot.component.FindTrashSpotPolicyCondition
 import com.sseudam.trashspot.component.TrashSpotAppender
 import com.sseudam.trashspot.component.TrashSpotReader
-import com.sseudam.trashspot.component.TrashSpotUpdater
 import com.sseudam.trashspot.component.TrashSpotValidator
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import com.sseudam.trashspot.dto.isNotSet
@@ -24,7 +21,6 @@ import org.springframework.stereotype.Service
 class TrashSpotService(
     private val trashSpotReader: TrashSpotReader,
     private val trashSpotAppender: TrashSpotAppender,
-    private val trashSpotUpdater: TrashSpotUpdater,
     private val trashSpotValidator: TrashSpotValidator,
     private val geoConverter: GeoConverter,
 ) {
@@ -67,22 +63,6 @@ class TrashSpotService(
     fun findBy(spotId: Long): TrashSpot.Info = trashSpotReader.readBy(spotId)
 
     fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> = trashSpotReader.readAllByIds(spotIds)
-
-    fun updateByReport(report: SpotReport.Info) {
-        when (report.reportType) {
-            ReportType.KIND -> {
-                trashSpotUpdater.updateType(report.spotId, report.trashType)
-            }
-            ReportType.NAME -> {
-                trashSpotUpdater.updateName(report.spotId, report.spotName)
-            }
-            ReportType.POINT -> {
-                val jtsPoint = geoConverter.geoJsonPointToJtsPoint(report.point as GeoJson.Point)
-                trashSpotUpdater.updateLocation(report.spotId, report.region, jtsPoint)
-            }
-            else -> {}
-        }
-    }
 
     fun validateSpotName(name: String) {
         if (trashSpotReader.existsByName(name)) {

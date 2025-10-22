@@ -2,6 +2,8 @@ package com.sseudam.notification.repository
 
 import com.sseudam.notification.NotificationStored
 import com.sseudam.notification.ReadStatus
+import com.sseudam.support.cursor.Cursor
+import com.sseudam.support.cursor.CursorRequest
 
 interface NotificationStoredRepository {
     fun save(notificationStored: NotificationStored.Create): NotificationStored.Info
@@ -15,10 +17,15 @@ interface NotificationStoredRepository {
         readStatus: ReadStatus,
     ): List<NotificationStored.Info>
 
+    fun findAllBy(
+        userId: Long,
+        cursorRequest: CursorRequest,
+    ): Cursor<NotificationStored.Info>
+
     fun countByUserIdAndReadStatus(
         userId: Long,
         readStatus: ReadStatus?,
     ): Long
 
-    fun read(notificationStoredId: Long)
+    fun markAsRead(notificationId: Long)
 }

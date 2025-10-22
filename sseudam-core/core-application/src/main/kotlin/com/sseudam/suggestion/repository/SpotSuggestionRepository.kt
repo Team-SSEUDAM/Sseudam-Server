@@ -2,7 +2,7 @@ package com.sseudam.suggestion.repository
 
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
-import com.sseudam.support.cursor.OffsetPageRequest
+import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import org.locationtech.jts.geom.Point
 
@@ -21,6 +21,11 @@ interface SpotSuggestionRepository {
 
     fun findByPoint(point: Point): SpotSuggestion.Info?
 
+    fun findByPointAndStatus(
+        point: Point,
+        status: SuggestionStatus,
+    ): SpotSuggestion.Info?
+
     fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
@@ -30,6 +35,8 @@ interface SpotSuggestionRepository {
         suggestionId: Long,
         status: SuggestionStatus,
     ): SpotSuggestion.Info
+
+    fun cancel(suggestionId: Long)
 
     fun existsByName(name: String): Boolean
 
