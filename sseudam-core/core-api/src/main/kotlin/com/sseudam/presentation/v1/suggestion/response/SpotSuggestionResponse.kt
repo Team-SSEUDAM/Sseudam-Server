@@ -29,7 +29,7 @@ data class SpotSuggestionResponse(
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun from(suggestion: SpotSuggestion.Info) =
+        fun of(suggestion: SpotSuggestion.Info) =
             SpotSuggestionResponse(
                 id = suggestion.id,
                 point = suggestion.point,

@@ -147,14 +147,6 @@ class TrashSpotCoreRepository(
         }
     }
 
-    override fun updateAsEmptySpot(spotId: Long) =
-        Tx.writeable {
-            val trashSpot =
-                trashSpotJpaRepository
-                    .findByIdOrElseThrow(spotId)
-            trashSpot.softDelete()
-        }
-
     override fun existsByName(name: String): Boolean =
         Tx.readable {
             trashSpotJpaRepository.existsByName(name)

@@ -1,11 +1,9 @@
 package com.sseudam.presentation.v1.report
 
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
-import com.sseudam.presentation.v1.report.request.ReportCancelRequest
 import com.sseudam.presentation.v1.report.request.ReportValidationRequest
 import com.sseudam.presentation.v1.report.request.SpotReportCreateRequest
 import com.sseudam.presentation.v1.report.response.ReportImageUrlResponse
-import com.sseudam.presentation.v1.report.response.ReportMessageResponse
 import com.sseudam.presentation.v1.report.response.ReportValidationResponse
 import com.sseudam.presentation.v1.report.response.SpotReportAllResponse
 import com.sseudam.presentation.v1.report.response.SpotReportResponse
@@ -32,10 +30,10 @@ class ReportController(
         @PathVariable spotId: Long,
         @RequestBody request: SpotReportCreateRequest,
     ): ReportImageUrlResponse {
-        val result = reportFacade.createSpotReport(create = request.toCommand(user.id, spotId))
+        val report = reportFacade.createSpotReport(create = request.toCommand(user.id, spotId))
         return ReportImageUrlResponse.of(
-            report = result.spotReport,
-            presignedUrl = result.presignedUrl,
+            report = report.first,
+            presignedUrl = report.second,
         )
     }
 
@@ -62,15 +60,5 @@ class ReportController(
     ): ReportValidationResponse {
         val isValid = reportFacade.validateSpotReport(request.name)
         return ReportValidationResponse.of(isValid)
-    }
-
-    @Operation(summary = "신고 취소", description = "신고를 취소합니다.")
-    @PostMapping("/reports/cancel")
-    fun reportSpotCancel(
-        user: User,
-        @RequestBody request: ReportCancelRequest,
-    ): ReportMessageResponse {
-        reportService.cancel(request.toCommand(user.id))
-        return ReportMessageResponse(message = "신고가 취소되었습니다.")
     }
 }

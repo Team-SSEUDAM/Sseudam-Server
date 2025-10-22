@@ -51,7 +51,5 @@ interface TrashSpotRepository {
         point: Point,
     )
 
-    fun updateAsEmptySpot(spotId: Long)
-
     fun existsByName(name: String): Boolean
 }

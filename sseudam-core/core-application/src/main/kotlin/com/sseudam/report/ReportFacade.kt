@@ -4,13 +4,12 @@ import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
 import com.sseudam.pet.PetPointAction
 import com.sseudam.report.event.SpotReportCreatedEvent
-import com.sseudam.report.result.CreateSpotReportResult
 import com.sseudam.support.Cache
+import com.sseudam.support.tx.Tx
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.image.TrashSpotImageService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ReportFacade(
@@ -38,36 +37,38 @@ class ReportFacade(
         return true
     }
 
-    @Transactional
-    fun createSpotReport(create: SpotReport.Create): CreateSpotReportResult {
-        val images = trashSpotImageService.findBySpotId(create.spotId)
-        var imageUrl =
-            images
-                .filter { it.updatedAt != null }
-                .maxByOrNull { it.updatedAt!! }
-                ?.imageUrl ?: DEFAULT_REPORT_IMAGE_URL
-        val presignedUrl =
+    fun createSpotReport(create: SpotReport.Create): Pair<SpotReport.Info, String?> =
+        Tx.writeable {
+            val presignedUrl: String?
+            val images = trashSpotImageService.findBySpotId(create.spotId)
+            var imageUrl =
+                images
+                    .filter { it.updatedAt != null }
+                    .maxByOrNull { it.updatedAt!! }
+                    ?.imageUrl ?: DEFAULT_REPORT_IMAGE_URL
             if (create.reportType == ReportType.PHOTO) {
                 val s3ImageUrl: S3ImageUrl = imageS3Caller.createUploadUrl(create.userId, REPORT_IMAGE_PATH + "/${create.spotId}")
+                presignedUrl = s3ImageUrl.presignedUrl
                 imageUrl = s3ImageUrl.imageUrl
-                s3ImageUrl.presignedUrl
             } else {
-                null
+                presignedUrl = null
             }
 
-        val spotReport =
-            reportService.appendReport(imageUrl, create).apply {
-                Cache.delete("user:${create.userId}:histories")
-            }
+            val spotReport =
+                reportService.appendReport(imageUrl, create).apply {
+                    Cache.delete("user:${create.userId}:histories")
+                }
 
-        return CreateSpotReportResult(spotReport, presignedUrl).also {
-            applicationEventPublisher.publishEvent(
-                SpotReportCreatedEvent(
-                    spotReport = spotReport,
-                    userId = create.userId,
-                    petPointAction = PetPointAction.REPORT,
-                ),
-            )
+            return@writeable spotReport to
+                presignedUrl
+                    .also {
+                        applicationEventPublisher.publishEvent(
+                            SpotReportCreatedEvent(
+                                spotReport = spotReport,
+                                userId = create.userId,
+                                petPointAction = PetPointAction.REPORT,
+                            ),
+                        )
+                    }
         }
-    }
 }

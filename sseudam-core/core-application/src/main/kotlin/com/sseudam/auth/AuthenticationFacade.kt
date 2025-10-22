@@ -1,8 +1,6 @@
 package com.sseudam.auth
 
 import com.sseudam.auth.command.CredentialSocialCommand
-import com.sseudam.auth.result.CreateSocialUserResult
-import com.sseudam.auth.result.SocialLoginResult
 import com.sseudam.user.SocialUser
 import com.sseudam.user.UserService
 import com.sseudam.user.command.UserCommand
@@ -16,28 +14,28 @@ class AuthenticationFacade(
     fun socialLogin(
         deviceId: String,
         credentialSocial: CredentialSocialCommand,
-    ): SocialLoginResult {
+    ): Pair<Boolean, Token> {
         val existingUser = userService.getSocialUserByEmail(credentialSocial.email)
 
-        val socialUserResult =
+        val (socialUser, isUserNew) =
             if (existingUser != null) {
-                CreateSocialUserResult(socialUser = existingUser, isNewUser = false)
+                existingUser to false
             } else {
                 createNewSocialUser(credentialSocial)
             }
 
-        val isNewUser = socialUserResult.isNewUser || socialUserResult.socialUser.name.isNullOrBlank()
+        val isNewUser = isUserNew || socialUser.name.isNullOrBlank()
 
         val token =
             authenticationService.socialLogin(
                 deviceId = deviceId,
-                socialUser = socialUserResult.socialUser,
+                socialUser = socialUser,
             )
 
-        return SocialLoginResult(token = token, isNewUser = isNewUser)
+        return isNewUser to token
     }
 
-    fun createNewSocialUser(credentialSocial: CredentialSocialCommand): CreateSocialUserResult {
+    fun createNewSocialUser(credentialSocial: CredentialSocialCommand): Pair<SocialUser, Boolean> {
         val userCommand =
             userService.create(
                 UserCommand(
@@ -58,6 +56,6 @@ class AuthenticationFacade(
                 socialType = credentialSocial.socialType,
             )
 
-        return CreateSocialUserResult(socialUser = socialUser, isNewUser = true)
+        return socialUser to true
     }
 }

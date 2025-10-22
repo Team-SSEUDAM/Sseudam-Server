@@ -1,11 +1,10 @@
-package com.sseudam.application.trashspot
+package com.sseudam.domain.trashspot
 
 import com.sseudam.DevelopTest
 import com.sseudam.common.Address
 import com.sseudam.common.GeoConverter
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
-import com.sseudam.fixture.report.ReportFixture
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.TrashType
@@ -18,7 +17,6 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 
 @DevelopTest
 class TrashSpotServiceTest :
@@ -49,20 +47,6 @@ class TrashSpotServiceTest :
                 val actual = service.findAll(region = Region.SEOUL, trashType = null, location = TrashSpotLocation.notSet())
 
                 actual.shouldContainExactly(expected)
-            }
-        }
-
-        describe("updateSpotByReport") {
-            context("EMPTY_SPOT 타입의 신고인 경우") {
-                it("쓰레기통을 삭제 처리한다") {
-                    val report = ReportFixture.emptySpotReportInfo
-
-                    every { updater.updateAsEmptySpot(report.spotId) } returns Unit
-
-                    service.updateByReport(report)
-
-                    verify { updater.updateAsEmptySpot(report.spotId) }
-                }
             }
         }
     })

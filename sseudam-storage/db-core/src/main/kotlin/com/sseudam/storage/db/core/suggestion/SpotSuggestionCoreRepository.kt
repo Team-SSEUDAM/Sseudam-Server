@@ -5,7 +5,7 @@ import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.repository.SpotSuggestionRepository
-import com.sseudam.support.page.OffsetPageRequest
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
 import com.sseudam.support.tx.Tx
 import org.locationtech.jts.geom.Point
@@ -31,14 +31,14 @@ class SpotSuggestionCoreRepository(
     override fun findBy(suggestionId: Long): SpotSuggestion.Info =
         Tx.readable {
             spotSuggestionJpaRepository
-                .findByIdAndDeletedAtIsNullOrElseThrow(suggestionId)
+                .findByIdOrElseThrow(suggestionId)
                 .toSpotSuggestion()
         }
 
     override fun findAllByUserId(userId: Long): List<SpotSuggestion.Info> =
         Tx.readable {
             spotSuggestionJpaRepository
-                .findAllByUserIdAndDeletedAtIsNull(userId)
+                .findAllByUserId(userId)
                 .map { it.toSpotSuggestion() }
         }
 
@@ -53,16 +53,6 @@ class SpotSuggestionCoreRepository(
         Tx.readable {
             spotSuggestionJpaRepository
                 .findByPointAndDeletedAtIsNull(point)
-                ?.toSpotSuggestion()
-        }
-
-    override fun findByPointAndStatus(
-        point: Point,
-        status: SuggestionStatus,
-    ): SpotSuggestion.Info? =
-        Tx.readable {
-            spotSuggestionJpaRepository
-                .findByPointAndStatusAndDeletedAtIsNull(point, status)
                 ?.toSpotSuggestion()
         }
 
@@ -83,15 +73,9 @@ class SpotSuggestionCoreRepository(
             return@writeable suggestion.updateStatus(status).toSpotSuggestion()
         }
 
-    override fun cancel(suggestionId: Long) =
-        Tx.writeable {
-            val suggestion = spotSuggestionJpaRepository.findByIdAndDeletedAtIsNullOrElseThrow(suggestionId)
-            suggestion.cancel()
-        }
-
     override fun existsByName(name: String): Boolean =
         Tx.readable {
-            spotSuggestionJpaRepository.existsBySpotNameAndDeletedAtIsNull(name)
+            spotSuggestionJpaRepository.existsBySpotName(name)
         }
 
     override fun deleteBy(suggestionId: Long) =

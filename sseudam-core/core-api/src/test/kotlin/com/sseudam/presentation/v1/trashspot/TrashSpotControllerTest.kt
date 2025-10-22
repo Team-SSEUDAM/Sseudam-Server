@@ -29,6 +29,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import org.springframework.restdocs.RestDocumentationContextProvider
 
 @RestDocsTest
 class TrashSpotControllerTest : RestDocsTestSuite() {
@@ -36,7 +37,7 @@ class TrashSpotControllerTest : RestDocsTestSuite() {
     private lateinit var trashSpotFacade: TrashSpotFacade
 
     @BeforeEach
-    fun setUpTest() {
+    fun setUpTest(restDocumentation: RestDocumentationContextProvider) {
         trashSpotFacade = mockk()
         trashSpotController = TrashSpotController(trashSpotFacade)
         mockMvcSpec = mockController(trashSpotController)

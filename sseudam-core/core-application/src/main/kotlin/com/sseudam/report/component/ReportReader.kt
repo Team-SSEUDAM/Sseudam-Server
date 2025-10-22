@@ -5,7 +5,7 @@ import com.sseudam.report.SpotReport
 import com.sseudam.report.reject.ReportReject
 import com.sseudam.report.repository.ReportRejectRepository
 import com.sseudam.report.repository.SpotReportRepository
-import com.sseudam.support.page.OffsetPageRequest
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
 import org.springframework.stereotype.Component
 
@@ -16,7 +16,7 @@ class ReportReader(
 ) {
     fun readAllByUserId(userId: Long): List<SpotReport.Info> = reportRepository.findAllInfoByUserId(userId)
 
-    fun readBy(reportId: Long): SpotReport.Info = reportRepository.findById(reportId)
+    fun readById(reportId: Long): SpotReport.Info = reportRepository.findById(reportId)
 
     fun readAllBy(
         offsetPageRequest: OffsetPageRequest,

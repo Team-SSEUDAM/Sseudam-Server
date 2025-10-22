@@ -68,7 +68,7 @@ class AuthController(
         @RequestBody request: TokenRequest,
     ): TokenResponse {
         val socialInfo = oAuthService.getKaKaoUserInfo(request.token)
-        val socialLoginResult =
+        val (isTemporaryToken, token) =
             authenticationFacade.socialLogin(
                 // TODO: deviceId 는 추후에 추가
                 deviceId = "",
@@ -80,7 +80,7 @@ class AuthController(
                         socialType = SocialType.KAKAO,
                     ),
             )
-        return TokenResponse.toResponse(socialLoginResult.isNewUser, socialLoginResult.token)
+        return TokenResponse.toResponse(isTemporaryToken, token)
     }
 
     @Operation(summary = "애플 소셜 로그인", description = "애플 소셜 로그인합니다.")
@@ -89,7 +89,7 @@ class AuthController(
         @RequestBody request: TokenRequest,
     ): TokenResponse {
         val socialInfo = oAuthService.getAppleUserInfo(request.token)
-        val socialLoginResult =
+        val (isTemporaryToken, token) =
             authenticationFacade.socialLogin(
                 // TODO: deviceId 는 추후에 추가
                 deviceId = "",
@@ -101,7 +101,7 @@ class AuthController(
                         socialType = SocialType.APPLE,
                     ),
             )
-        return TokenResponse.toResponse(socialLoginResult.isNewUser, socialLoginResult.token)
+        return TokenResponse.toResponse(isTemporaryToken, token)
     }
 
     @Operation(summary = "소셜 회원가입", description = "소셜 회원 가입합니다.")

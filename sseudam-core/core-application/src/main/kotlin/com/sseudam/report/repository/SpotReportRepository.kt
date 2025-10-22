@@ -3,7 +3,7 @@ package com.sseudam.report.repository
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
-import com.sseudam.support.page.OffsetPageRequest
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.page.Page
 import org.locationtech.jts.geom.Point
 
@@ -29,8 +29,6 @@ interface SpotReportRepository {
         reportId: Long,
         reportStatus: ReportStatus,
     ): SpotReport.Info
-
-    fun cancel(reportId: Long)
 
     fun existsByName(name: String): Boolean
 

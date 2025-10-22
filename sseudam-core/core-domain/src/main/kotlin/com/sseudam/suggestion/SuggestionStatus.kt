@@ -6,5 +6,4 @@ enum class SuggestionStatus(
     APPROVE("승인"),
     REJECT("반려"),
     WAITING("대기"),
-    CANCEL("취소"),
 }

@@ -1,7 +1,6 @@
 package com.sseudam.notification.fcm
 
 import com.sseudam.notification.NotificationStored
-import com.sseudam.notification.NotificationType
 import com.sseudam.notification.ReadStatus
 import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.component.NotificationStoredAppender
@@ -24,7 +23,7 @@ class FcmSender(
     @Async
     fun send(
         sendNotificationMessage: SendNotificationMessage,
-        type: NotificationType,
+        type: String,
         parameterValue: String,
     ) {
         val mobileDevices = userDeviceReader.readAllByUserId(sendNotificationMessage.userId)
@@ -35,7 +34,6 @@ class FcmSender(
                 fcmToken = mobileDevice.fcmToken,
                 title = sendNotificationMessage.title,
                 body = sendNotificationMessage.body,
-                destination = sendNotificationMessage.destination,
                 tryCount = 0,
                 sent = false,
             )
@@ -67,7 +65,6 @@ class FcmSender(
                         fcmToken = it.fcmToken,
                         title = it.title,
                         body = it.body,
-                        destination = it.destination,
                         tryCount = 0,
                         sent = false,
                     )

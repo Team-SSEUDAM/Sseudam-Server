@@ -1,14 +1,14 @@
 package com.sseudam.suggestion
 
 import com.sseudam.common.ImageS3Caller
+import com.sseudam.common.S3ImageUrl
 import com.sseudam.pet.PetPointAction
 import com.sseudam.suggestion.event.SpotSuggestionCreatedEvent
-import com.sseudam.suggestion.result.CreateSpotSuggestionResult
 import com.sseudam.support.Cache
+import com.sseudam.support.tx.Tx
 import com.sseudam.trashspot.TrashSpotService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class SuggestionFacade(
@@ -27,23 +27,23 @@ class SuggestionFacade(
         return true
     }
 
-    @Transactional
-    fun createSpotSuggestion(create: SpotSuggestion.Create): CreateSpotSuggestionResult {
-        trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude)
-        val uploadUrl = imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PREFIX)
+    fun createSpotSuggestion(create: SpotSuggestion.Create): Pair<SpotSuggestion.Info, S3ImageUrl> =
+        Tx.writeable {
+            trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude)
+            val uploadUrl = imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PREFIX)
 
-        return suggestionService
-            .append(create, uploadUrl)
-            .apply {
-                Cache.delete("user:${create.userId}:histories")
-            }.also {
-                applicationEventPublisher.publishEvent(
-                    SpotSuggestionCreatedEvent(
-                        userId = create.userId,
-                        spotSuggestion = it.suggestionInfo,
-                        petPointAction = PetPointAction.SUGGESTION,
-                    ),
-                )
-            }
-    }
+            return@writeable suggestionService
+                .append(create, uploadUrl)
+                .apply {
+                    Cache.delete("user:${create.userId}:histories")
+                }.also {
+                    applicationEventPublisher.publishEvent(
+                        SpotSuggestionCreatedEvent(
+                            userId = create.userId,
+                            spotSuggestion = it.first,
+                            petPointAction = PetPointAction.SUGGESTION,
+                        ),
+                    )
+                }
+        }
 }

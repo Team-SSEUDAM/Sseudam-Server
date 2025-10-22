@@ -4,7 +4,6 @@ import com.sseudam.admin.domain.AdminToken
 import com.sseudam.admin.domain.AdminUserProfile
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.notification.NotificationService
-import com.sseudam.notification.NotificationType
 import com.sseudam.notification.command.CreateNotificationStoredCommand
 import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.fcm.FcmSender
@@ -17,9 +16,9 @@ import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.command.UpdateSuggestionCommand
+import com.sseudam.support.cursor.OffsetPageRequest
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
-import com.sseudam.support.page.OffsetPageRequest
 import com.sseudam.support.page.Page
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.UserDeviceService
@@ -105,23 +104,18 @@ class AdminFacade(
         topic: String,
         contents: String,
     ) {
-        val userDevice = userDeviceService.findAll()
-        val userDevices =
-            userDevice
-                .sortedByDescending { it.createdAt }
-                .filter { it.fcmToken.isNotBlank() && it.fcmToken.isNotEmpty() }
-                .distinctBy { it.userId }
+        val userDevices = userDeviceService.findAll()
         if (userDevices.isEmpty()) return
 
         val deviceTokenMap = userDevices.associateBy { it.fcmToken }
         val messages =
             userDevices
+                .filter { it.fcmToken.isNotBlank() }
                 .map { device ->
                     FirebaseCloudMessageCommand(
                         fcmToken = device.fcmToken,
                         title = topic,
                         body = contents,
-                        destination = "HomeView",
                     )
                 }.toSet()
         fcmSender.sendAll(messages)
@@ -131,8 +125,8 @@ class AdminFacade(
                     CreateNotificationStoredCommand(
                         userId = deviceTokenMap[message.fcmToken]?.userId ?: return@mapNotNull null,
                         notificationStoredKey = "",
-                        type = NotificationType.ADMIN_PUSH,
-                        parameterValue = "",
+                        type = "ADMIN_PUSH",
+                        parameterValue = "/",
                         topic = message.title,
                         contents = message.body,
                     )

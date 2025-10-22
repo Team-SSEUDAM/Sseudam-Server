@@ -24,6 +24,7 @@ class SpotReportUpdateHandler(
         condition = "#event.report.status.name() == 'APPROVE'",
     )
     fun handleApprove(event: SpotReportUpdateEvent) {
+        reportDeleter.deleteBy(event.report.id)
         Cache.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + event.report.spotId)
         Cache.delete("user:${event.report.userId}:histories")
         applicationEventPublisher.publishEvent(
@@ -40,6 +41,6 @@ class SpotReportUpdateHandler(
     )
     fun handleReject(event: SpotReportUpdateEvent) {
         val reason = event.reason ?: return
-        reportAppender.appendReject(event.report.id, reason)
+        reportAppender.appendReject(event.report.id, event.reason)
     }
 }

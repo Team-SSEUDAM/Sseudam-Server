@@ -12,14 +12,13 @@ class SpotReport {
      * @property spotId 쓰레기통 위치 id
      * @property userId 신고자 id
      * @property reportType 신고 타입
-     * @property latitude 신고 위치 위도
-     * @property longitude 신고 위치 경도
+     * @property latitude 제보 위치 위도
+     * @property longitude 제보 위치 경도
      * @property spotName 쓰레기통 이름
-     * @property region 신고 지역
-     * @property city 신고 지역
-     * @property site 신고 주소
+     * @property region 제보 지역
+     * @property city 제보 지역
+     * @property site 제보 주소
      * @property trashType 쓰레기통 타입
-     * @property reason 신고 사유
      */
     data class Create(
         val spotId: Long,
@@ -32,7 +31,6 @@ class SpotReport {
         val city: String,
         val site: String,
         val trashType: TrashType,
-        val reason: String?,
     )
 
     /** SpotReport Info
@@ -42,7 +40,7 @@ class SpotReport {
      * @property reportType 신고 타입
      * @property point 신고 위치
      * @property spotName 쓰레기통 이름
-     * @property region 신고 지역
+     * @property region 제보 지역
      * @property address 신고 주소
      * @property trashType 쓰레기통 타입
      * @property imageUrl 신고된 S3 imageUrl
@@ -61,7 +59,6 @@ class SpotReport {
         val trashType: TrashType,
         val imageUrl: String,
         val status: ReportStatus = ReportStatus.WAITING,
-        val reason: String?,
         val createdAt: LocalDateTime,
     )
 
@@ -72,7 +69,7 @@ class SpotReport {
      * @property reportType 신고 타입
      * @property point 신고 위치
      * @property spotName 쓰레기통 이름
-     * @property region 신고 지역
+     * @property region 제보 지역
      * @property address 신고 주소
      * @property trashType 쓰레기통 타입
      * @property imageUrl 신고된 S3 imageUrl
@@ -93,7 +90,6 @@ class SpotReport {
         val imageUrl: String,
         val status: ReportStatus = ReportStatus.WAITING,
         val rejectReason: String?,
-        val reason: String?,
         val createdAt: LocalDateTime,
     ) {
         companion object {
@@ -115,7 +111,6 @@ class SpotReport {
                         imageUrl = imageUrl,
                         status = status,
                         rejectReason = reject?.reason,
-                        reason = reason,
                         createdAt = createdAt,
                     )
                 }

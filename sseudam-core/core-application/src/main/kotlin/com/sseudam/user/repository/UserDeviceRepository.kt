@@ -7,7 +7,7 @@ interface UserDeviceRepository {
 
     fun findAll(): List<UserDevice.Info>
 
-    fun findLastByUserId(userId: Long): UserDevice.Info?
+    fun findByUserId(userId: Long): UserDevice.Info?
 
     fun findAllByUserKey(userKey: String): List<UserDevice.Info>
 

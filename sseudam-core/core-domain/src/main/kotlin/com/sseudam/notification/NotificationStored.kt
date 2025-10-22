@@ -4,7 +4,7 @@ class NotificationStored {
     data class Create(
         val notificationStoredKey: String,
         val userId: Long,
-        val type: NotificationType,
+        val type: String,
         val parameterValue: String,
         val topic: String,
         val contents: String,
@@ -15,20 +15,6 @@ class NotificationStored {
         val id: Long,
         val notificationStoredKey: String,
         val userId: Long,
-        val type: NotificationType,
-        val parameterValue: String,
-        val topic: String,
-        val contents: String,
-        val readStatus: ReadStatus,
-        val createdAt: String,
-    )
-
-    data class Result(
-        val id: Long,
-        val userId: Long,
-        val nickname: String?,
-        val spotName: String?,
-        val site: String?,
         val type: String,
         val parameterValue: String,
         val topic: String,
