@@ -28,6 +28,7 @@ object SuggestionFixture {
             setExp(SpotSuggestionCreateRequest::city, "강남구")
             setExp(SpotSuggestionCreateRequest::site, "서울시 강남구 강남동 1-4")
             setExp(SpotSuggestionCreateRequest::trashType, TrashType.GENERAL)
+            setExp(SpotSuggestionCreateRequest::isPhotoSelected, true)
         }
 
     val suggestionValidationRequest =

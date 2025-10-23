@@ -33,7 +33,7 @@ class SuggestionController(
     ): SuggestionImageUrlResponse {
         val suggestion =
             suggestionFacade.createSpotSuggestion(request.toCommand(user.id))
-        return SuggestionImageUrlResponse.of(suggestion.suggestionInfo, suggestion.uploadUrl)
+        return SuggestionImageUrlResponse.of(suggestion.suggestionInfo, suggestion.uploadImageUrl, request.isPhotoSelected)
     }
 
     @Operation(summary = "제보 상세 조회", description = "제보한 장소에 대한 상세 정보를 조회합니다.")
