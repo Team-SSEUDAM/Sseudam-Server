@@ -10,38 +10,28 @@ class FcmClientRepository(
 ) : FcmRepository {
     override fun sendAll(firebaseCloudMessages: List<FirebaseCloudMessage>): List<FirebaseCloudMessage> {
         val fcmRequests =
-            firebaseCloudMessages
-                .map {
-                    FcmSendRequest(
-                        it.fcmToken,
-                        it.title,
-                        it.body,
-                        it.destination,
-                    )
-                }.toList()
-
-        val tokens = fcmRequests.map { it.fcmToken }
-        val batchResult =
-            firebaseCloudMessageSender.sendEachForMulticastAll(
-                title = fcmRequests[0].title,
-                body = fcmRequests[0].body,
-                destination = firebaseCloudMessages[0].destination,
-                fcmTokens = tokens,
-            )
-
-        val result =
-            firebaseCloudMessages.mapIndexed { index, pushMessage ->
-                FirebaseCloudMessage(
-                    fcmKey = pushMessage.fcmKey,
-                    fcmToken = pushMessage.fcmToken,
-                    title = pushMessage.title,
-                    body = pushMessage.body,
-                    destination = pushMessage.destination,
-                    tryCount = pushMessage.tryCount + 1,
-                    sent = batchResult?.responses?.get(index)?.isSuccessful ?: false,
+            firebaseCloudMessages.map {
+                FcmSendRequest(
+                    it.fcmToken,
+                    it.title,
+                    it.body,
+                    it.destination,
                 )
             }
-        return result
+
+        val batchResult = firebaseCloudMessageSender.sendAsync(fcmRequests).get()
+
+        return firebaseCloudMessages.mapIndexed { index, pushMessage ->
+            FirebaseCloudMessage(
+                fcmKey = pushMessage.fcmKey,
+                fcmToken = pushMessage.fcmToken,
+                title = pushMessage.title,
+                body = pushMessage.body,
+                destination = pushMessage.destination,
+                tryCount = pushMessage.tryCount + 1,
+                sent = batchResult.responses[index].isSuccessful,
+            )
+        }
     }
 
     override fun send(firebaseCloudMessage: FirebaseCloudMessage): FirebaseCloudMessage {
