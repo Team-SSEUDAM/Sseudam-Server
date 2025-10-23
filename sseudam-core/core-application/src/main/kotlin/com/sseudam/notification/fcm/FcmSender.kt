@@ -35,6 +35,7 @@ class FcmSender(
                 fcmToken = mobileDevice.fcmToken,
                 title = sendNotificationMessage.title,
                 body = sendNotificationMessage.body,
+                destination = sendNotificationMessage.destination,
                 tryCount = 0,
                 sent = false,
             )
@@ -66,6 +67,7 @@ class FcmSender(
                         fcmToken = it.fcmToken,
                         title = it.title,
                         body = it.body,
+                        destination = it.destination,
                         tryCount = 0,
                         sent = false,
                     )

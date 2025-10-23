@@ -38,6 +38,7 @@ class SpotReportEntity(
     @Enumerated(value = EnumType.STRING)
     @Column(length = 15)
     var status: ReportStatus,
+    val reason: String?,
 ) : BaseEntity() {
     constructor(
         imageUrl: String,
@@ -58,6 +59,7 @@ class SpotReportEntity(
         trashType = createSpotReport.trashType,
         imageUrl = imageUrl,
         status = ReportStatus.WAITING,
+        reason = createSpotReport.reason,
     )
 
     fun toSpotReport(): SpotReport.Info =
@@ -74,6 +76,7 @@ class SpotReportEntity(
             imageUrl = imageUrl,
             status = status,
             createdAt = createdAt,
+            reason = reason,
         )
 
     fun updateStatus(status: ReportStatus): SpotReportEntity {

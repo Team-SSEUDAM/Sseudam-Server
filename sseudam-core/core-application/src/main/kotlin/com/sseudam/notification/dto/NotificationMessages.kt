@@ -3,7 +3,7 @@ package com.sseudam.notification.dto
 import com.sseudam.pet.PetPointAction
 
 object NotificationMessages {
-    private val messages: List<Pair<String, String>> =
+    private val regularMessages: List<Pair<String, String>> =
         listOf(
             "쓰담" to ", 널 기다리고 있어~ \n오늘도 너랑 놀 수 있으면 좋겠다!",
             "쓰담" to "! 오늘 쓰담해주면 \n내가 엄청 귀여운 표정 보여줄게",
@@ -25,7 +25,7 @@ object NotificationMessages {
         "${nickname}님이 제보한 \n" +
             "쓰레기통에 쓰레기가 버려졌어요."
 
-    fun randomMessage(): Pair<String, String> = messages.random()
+    fun randomRegularMessage(): Pair<String, String> = regularMessages.random()
 
     fun approveSuggestionContents(nickname: String) =
         "${nickname}님이 제보한 쓰레기통이 승인되어 ${PetPointAction.SUGGESTION_APPROVED.point}포인트를 추가로 받았어요!"

@@ -8,19 +8,17 @@ import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.dto.SendMessageReportDto
+import com.sseudam.report.strategy.ReportTypeStrategyProvider
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
-import com.sseudam.trashspot.TrashSpotService
-import com.sseudam.trashspot.image.TrashSpotImageService
 import com.sseudam.user.UserService
 import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 
 @Component
 class SpotReportEventHandler(
-    private val trashSpotService: TrashSpotService,
-    private val trashSpotImageService: TrashSpotImageService,
+    private val reportTypeStrategyProvider: MutableList<ReportTypeStrategyProvider>,
     private val userService: UserService,
     private val fcmSender: FcmSender,
     private val discordClient: DiscordClient,
@@ -31,17 +29,8 @@ class SpotReportEventHandler(
 
     @ApplicationModuleListener(id = "update-report-trash-spot")
     fun updateReportListener(event: SpotReportUpdateEvent) {
-        when (event.report.reportType) {
-            ReportType.PHOTO -> {
-                trashSpotImageService.updateImage(
-                    event.report.spotId,
-                    event.report.imageUrl,
-                )
-            }
-            else -> {
-                trashSpotService.updateByReport(event.report)
-            }
-        }
+        routingReportTypeStrategyProvider(event.report.reportType)
+            .update(report = event.report)
     }
 
     @ApplicationModuleListener(id = "report-update-fcm-notification")
@@ -66,6 +55,7 @@ class SpotReportEventHandler(
                         userId = userId,
                         title = NotificationMessages.DEFAULT_TITLE,
                         body = body,
+                        destination = "MyPageView",
                     ),
                 type = type,
                 parameterValue = targetId.toString(),
@@ -87,4 +77,9 @@ class SpotReportEventHandler(
             ),
         )
     }
+
+    private fun routingReportTypeStrategyProvider(reportType: ReportType): ReportTypeStrategyProvider =
+        reportTypeStrategyProvider.firstOrNull {
+            it.supports(reportType)
+        } ?: throw ErrorException(ErrorType.NOT_FOUND_DATA, reportType.displayName)
 }

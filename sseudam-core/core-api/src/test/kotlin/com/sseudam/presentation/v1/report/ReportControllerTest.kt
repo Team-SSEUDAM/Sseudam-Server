@@ -95,6 +95,7 @@ class ReportControllerTest : RestDocsTestSuite() {
                 "city" type STRING means "구/군/시" example "강남구",
                 "site" type STRING means "주소" example "서울시 강남구 강남동 1-4",
                 "trashType" type ENUM(TrashType::class) means "쓰레기통 유형" example "GENERAL",
+                "reason" type STRING means "기타 신고 사유" example "잘못된 위치에 있어요" isOptional true,
             ),
             responseBody(
                 "reportId" type NUMBER means "신고 ID" example "1",
