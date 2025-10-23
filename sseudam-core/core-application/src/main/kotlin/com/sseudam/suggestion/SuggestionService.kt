@@ -1,6 +1,5 @@
 package com.sseudam.suggestion
 
-import com.sseudam.common.S3ImageUrl
 import com.sseudam.suggestion.command.CancelSuggestionCommand
 import com.sseudam.suggestion.component.SuggestionAppender
 import com.sseudam.suggestion.component.SuggestionReader
@@ -34,7 +33,7 @@ class SuggestionService(
 
     fun append(
         create: SpotSuggestion.Create,
-        uploadUrl: S3ImageUrl,
+        uploadImageUrl: String,
     ): CreateSpotSuggestionResult {
         val point =
             GEOMETRY_FACTORY.createPoint(
@@ -42,11 +41,11 @@ class SuggestionService(
             )
         suggestionValidator.verifyPoint(point)
 
-        val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)
+        val spotSuggestion = suggestionAppender.append(uploadImageUrl, create)
 
         return CreateSpotSuggestionResult(
             suggestionInfo = spotSuggestion,
-            uploadUrl = uploadUrl,
+            uploadImageUrl = uploadImageUrl,
         )
     }
 

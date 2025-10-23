@@ -19,6 +19,7 @@ class SuggestionFacade(
 ) {
     companion object {
         private const val SUGGESTION_IMAGE_PREFIX = "suggestion"
+        private const val SUGGESTION_EMPTY_DEFAULT_IMAGE_URL = "https://img.sseudam.me/dev/default_image_trash_spot.webp"
     }
 
     fun validateSpotSuggestion(name: String): Boolean {
@@ -30,7 +31,12 @@ class SuggestionFacade(
     @Transactional
     fun createSpotSuggestion(create: SpotSuggestion.Create): CreateSpotSuggestionResult {
         trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude)
-        val uploadUrl = imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PREFIX)
+        val uploadUrl =
+            if (create.isPhotoSelected) {
+                imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PREFIX).imageUrl
+            } else {
+                SUGGESTION_EMPTY_DEFAULT_IMAGE_URL
+            }
 
         return suggestionService
             .append(create, uploadUrl)

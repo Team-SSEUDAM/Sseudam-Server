@@ -1,6 +1,5 @@
 package com.sseudam.presentation.v1.suggestion.response
 
-import com.sseudam.common.S3ImageUrl
 import com.sseudam.suggestion.SpotSuggestion
 import io.swagger.v3.oas.annotations.media.Schema
 
@@ -9,12 +8,17 @@ data class SuggestionImageUrlResponse(
     @Schema(description = "제보 ID")
     val suggestionId: Long,
     @Schema(description = "PresignedUrl")
-    val presignedUrl: String,
+    val presignedUrl: String?,
 ) {
     companion object {
         fun of(
             suggestion: SpotSuggestion.Info,
-            s3ImageUrl: S3ImageUrl,
-        ): SuggestionImageUrlResponse = SuggestionImageUrlResponse(suggestion.id, s3ImageUrl.presignedUrl)
+            presignedUrl: String,
+            isPhotoSelected: Boolean = true,
+        ): SuggestionImageUrlResponse =
+            SuggestionImageUrlResponse(
+                suggestionId = suggestion.id,
+                presignedUrl = if (isPhotoSelected) presignedUrl else null,
+            )
     }
 }

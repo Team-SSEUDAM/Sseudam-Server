@@ -52,10 +52,10 @@ class SuggestionServiceTest :
                     every { suggestionValidator.verifyPoint(any()) } just Runs
                     every { suggestionAppender.append(uploadUrl.imageUrl, create) } returns suggestionInfo
 
-                    val result = suggestionService.append(create, uploadUrl)
+                    val result = suggestionService.append(create, uploadUrl.imageUrl)
 
                     result.suggestionInfo shouldBe suggestionInfo
-                    result.uploadUrl shouldBe uploadUrl
+                    result.uploadImageUrl shouldBe uploadUrl.imageUrl
                     verify { suggestionValidator.verifyPoint(any()) }
                     verify { suggestionAppender.append(uploadUrl.imageUrl, create) }
                 }
@@ -69,7 +69,7 @@ class SuggestionServiceTest :
                     every { suggestionValidator.verifyPoint(any()) } throws ErrorException(ErrorType.ALREADY_EXIST_SPOT_POINT)
 
                     shouldThrow<ErrorException> {
-                        suggestionService.append(create, uploadUrl)
+                        suggestionService.append(create, uploadUrl.imageUrl)
                     }
 
                     verify { suggestionValidator.verifyPoint(any()) }

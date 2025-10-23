@@ -12,7 +12,7 @@ arrow_fx = "1.2.1"
 jwt = "0.12.6"
 bouncycastle = "1.70"
 # Spring
-spring_boot = "3.4.5"
+spring_boot = "3.4.11"
 spring_dependency_management = "1.1.7"
 spring_cloud_dependencies = "2024.0.0"
 jakartaAnnotation = "3.0.0"

@@ -18,6 +18,7 @@ class SpotSuggestion {
      * @property city 제보 지역
      * @property site 제보 주소
      * @property trashType 제보된 쓰레기통 타입
+     * @property isPhotoSelected 사진 첨부 여부
      */
     data class Create(
         val userId: Long,
@@ -28,6 +29,7 @@ class SpotSuggestion {
         val city: String,
         val site: String,
         val trashType: TrashType,
+        val isPhotoSelected: Boolean = true,
     )
 
     /**

@@ -29,7 +29,7 @@ class ImageS3Processor(
                 awsProperties.s3.bucket,
                 imageFilePath,
                 imageFileName,
-                Duration.ofSeconds(30),
+                Duration.ofMinutes(10),
             )
         return S3ImageUrl(
             presignedUrl,
