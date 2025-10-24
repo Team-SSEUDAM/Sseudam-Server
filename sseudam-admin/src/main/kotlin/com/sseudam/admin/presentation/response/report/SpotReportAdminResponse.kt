@@ -1,10 +1,10 @@
 package com.sseudam.admin.presentation.response.report
 
+import com.sseudam.admin.application.report.AdminSpotReportDetail
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
-import com.sseudam.report.SpotReport
 import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
@@ -17,6 +17,8 @@ data class SpotReportAdminResponse(
     val spotId: Long,
     @Schema(description = "신고자 ID")
     val userId: Long,
+    @Schema(description = "신고자 이름")
+    val userName: String?,
     @Schema(description = "신고 타입")
     val reportType: ReportType,
     @Schema(description = "신고 위치")
@@ -37,11 +39,12 @@ data class SpotReportAdminResponse(
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun of(detail: SpotReport.Detail) =
+        fun of(detail: AdminSpotReportDetail) =
             SpotReportAdminResponse(
                 id = detail.id,
                 spotId = detail.spotId,
                 userId = detail.userId,
+                userName = detail.userName,
                 reportType = detail.reportType,
                 point = detail.point,
                 address = detail.address,
