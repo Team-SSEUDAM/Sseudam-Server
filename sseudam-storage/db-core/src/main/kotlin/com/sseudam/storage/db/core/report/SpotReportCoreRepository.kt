@@ -46,9 +46,10 @@ class SpotReportCoreRepository(
     override fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
+        status: ReportStatus?,
     ): Page<SpotReport.Detail> =
         Tx.readable {
-            spotReportCustomRepository.findAllBy(offsetPageRequest, searchType)
+            spotReportCustomRepository.findAllBy(offsetPageRequest, searchType, status)
         }
 
     override fun findAllDetailsByUserId(userId: Long): List<SpotReport.Detail> =

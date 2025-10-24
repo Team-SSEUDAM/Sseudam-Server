@@ -1,5 +1,6 @@
 package com.sseudam.report.component
 
+import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.report.reject.ReportReject
@@ -21,7 +22,8 @@ class ReportReader(
     fun readAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): Page<SpotReport.Detail> = reportRepository.findAllBy(offsetPageRequest, searchType)
+        status: ReportStatus?,
+    ): Page<SpotReport.Detail> = reportRepository.findAllBy(offsetPageRequest, searchType, status)
 
     fun existsByName(name: String): Boolean = reportRepository.existsByName(name)
 
