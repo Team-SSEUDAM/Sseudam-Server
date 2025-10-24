@@ -1,9 +1,9 @@
 package com.sseudam.admin.presentation.response.suggestion
 
+import com.sseudam.admin.application.suggestion.AdminSpotSuggestionDetail
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
-import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
@@ -13,6 +13,10 @@ import java.time.LocalDateTime
 data class SpotSuggestionAdminResponse(
     @Schema(description = "제보 ID")
     val id: Long,
+    @Schema(description = "제보자 ID")
+    val userId: Long,
+    @Schema(description = "제보자 이름")
+    val userName: String?,
     @Schema(description = "제보 위치")
     val point: GeoJson,
     @Schema(description = "제보 장소 이름")
@@ -33,9 +37,11 @@ data class SpotSuggestionAdminResponse(
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun of(suggestion: SpotSuggestion.Detail) =
+        fun of(suggestion: AdminSpotSuggestionDetail) =
             SpotSuggestionAdminResponse(
                 id = suggestion.id,
+                userId = suggestion.userId,
+                userName = suggestion.userName,
                 point = suggestion.point,
                 spotName = suggestion.spotName,
                 region = suggestion.region,

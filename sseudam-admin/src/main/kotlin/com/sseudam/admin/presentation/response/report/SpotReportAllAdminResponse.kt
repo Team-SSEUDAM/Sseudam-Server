@@ -1,6 +1,6 @@
 package com.sseudam.admin.presentation.response.report
 
-import com.sseudam.report.SpotReport
+import com.sseudam.admin.application.report.AdminSpotReportDetail
 import com.sseudam.support.page.Page
 import io.swagger.v3.oas.annotations.media.Schema
 
@@ -10,7 +10,7 @@ data class SpotReportAllAdminResponse(
     val totalCount: Long,
 ) {
     companion object {
-        fun of(page: Page<SpotReport.Detail>): SpotReportAllAdminResponse =
+        fun of(page: Page<AdminSpotReportDetail>): SpotReportAllAdminResponse =
             SpotReportAllAdminResponse(
                 list = page.content.map { SpotReportAdminResponse.of(it) },
                 totalCount = page.totalCount,

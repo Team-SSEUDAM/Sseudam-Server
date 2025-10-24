@@ -1,5 +1,7 @@
 package com.sseudam.admin.application
 
+import com.sseudam.admin.application.report.AdminSpotReportDetail
+import com.sseudam.admin.application.suggestion.AdminSpotSuggestionDetail
 import com.sseudam.admin.domain.AdminToken
 import com.sseudam.admin.domain.AdminUserProfile
 import com.sseudam.auth.AuthenticationService
@@ -83,17 +85,53 @@ class AdminFacade(
     fun findSuggestions(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,
-    ): Page<SpotSuggestion.Detail> = suggestionService.findSuggestionsBy(offsetPageRequest, searchStatus)
+    ): Page<AdminSpotSuggestionDetail> {
+        val pages = suggestionService.findSuggestionsBy(offsetPageRequest, searchStatus)
+        val users = userService.findAllBy(pages.content.map { it.userId }).associateBy { it.id }
+        val contents =
+            pages.content.map { suggestion ->
+                AdminSpotSuggestionDetail.of(
+                    suggestion,
+                    users[suggestion.userId],
+                )
+            }
+        return Page.of(
+            content = contents,
+            totalCount = pages.totalCount,
+        )
+    }
 
-    fun findSuggestionDetails(suggestionId: Long): SpotSuggestion.Detail = suggestionService.findSpotSuggestionById(suggestionId)
+    fun findSuggestionDetails(suggestionId: Long): AdminSpotSuggestionDetail {
+        val detail = suggestionService.findSpotSuggestionById(suggestionId)
+        val user = userService.getProfile(detail.userId)
+        return AdminSpotSuggestionDetail.of(detail, user)
+    }
 
     fun findReports(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
         status: ReportStatus?,
-    ): Page<SpotReport.Detail> = reportService.findReportsBy(offsetPageRequest, searchType, status)
+    ): Page<AdminSpotReportDetail> {
+        val pages = reportService.findReportsBy(offsetPageRequest, searchType, status)
+        val users = userService.findAllBy(pages.content.map { it.userId }).associateBy { it.id }
+        val contents =
+            pages.content.map { report ->
+                AdminSpotReportDetail.of(
+                    report,
+                    users[report.userId],
+                )
+            }
+        return Page.of(
+            content = contents,
+            totalCount = pages.totalCount,
+        )
+    }
 
-    fun findReportDetails(reportId: Long): SpotReport.Detail = reportFacade.findReportDetails(reportId)
+    fun findReportDetails(reportId: Long): AdminSpotReportDetail {
+        val detail = reportFacade.findReportDetails(reportId)
+        val user = userService.getProfile(detail.userId)
+        return AdminSpotReportDetail.of(detail, user)
+    }
 
     fun updateSpotSuggestionStatus(command: UpdateSuggestionCommand) =
         SpotSuggestion.UpdateResult.of(
