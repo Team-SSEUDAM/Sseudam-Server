@@ -10,6 +10,7 @@ import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.report.ReportFacade
 import com.sseudam.report.ReportService
+import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.report.command.UpdateReportCommand
@@ -89,7 +90,8 @@ class AdminFacade(
     fun findReports(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
-    ): Page<SpotReport.Detail> = reportService.findReportsBy(offsetPageRequest, searchType)
+        status: ReportStatus?,
+    ): Page<SpotReport.Detail> = reportService.findReportsBy(offsetPageRequest, searchType, status)
 
     fun findReportDetails(reportId: Long): SpotReport.Detail = reportFacade.findReportDetails(reportId)
 

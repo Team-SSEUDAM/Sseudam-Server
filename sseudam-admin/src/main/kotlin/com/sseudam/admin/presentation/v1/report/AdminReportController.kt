@@ -6,6 +6,7 @@ import com.sseudam.admin.presentation.response.report.SpotReportAdminResponse
 import com.sseudam.admin.presentation.response.report.SpotReportAllAdminResponse
 import com.sseudam.admin.presentation.v1.annotation.AdminTagDocs
 import com.sseudam.admin.presentation.v1.annotation.ApiAdminV1Controller
+import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.support.page.OffsetPageRequest
 import io.swagger.v3.oas.annotations.Operation
@@ -27,9 +28,10 @@ class AdminReportController(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "20") size: Int,
         @RequestParam(required = false) searchType: ReportType?,
+        @RequestParam(required = false) status: ReportStatus?,
     ): SpotReportAllAdminResponse =
         SpotReportAllAdminResponse.of(
-            adminFacade.findReports(OffsetPageRequest(page, size), searchType),
+            adminFacade.findReports(OffsetPageRequest(page, size), searchType, status),
         )
 
     @Operation(summary = "신고 내역 상세 조회", description = "신고 내역을 상세 조회합니다.")

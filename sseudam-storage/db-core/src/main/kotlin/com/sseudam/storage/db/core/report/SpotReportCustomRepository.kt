@@ -3,6 +3,7 @@ package com.sseudam.storage.db.core.report
 import com.linecorp.kotlinjdsl.dsl.jpql.jpql
 import com.linecorp.kotlinjdsl.render.RenderContext
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.extension.createQuery
+import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
 import com.sseudam.storage.db.core.report.model.SpotReportEntityWithReject
@@ -24,6 +25,7 @@ class SpotReportCustomRepository(
     fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
+        status: ReportStatus?,
     ): Page<SpotReport.Detail> {
         val pageable =
             PageRequest.of(
@@ -45,6 +47,9 @@ class SpotReportCustomRepository(
                 ).whereAnd(
                     searchType?.let {
                         path(SpotReportEntity::reportType).eq(it)
+                    },
+                    status?.let {
+                        path(SpotReportEntity::status).eq(it)
                     },
                 ).orderBy(
                     path(SpotReportEntity::createdAt).desc(),
