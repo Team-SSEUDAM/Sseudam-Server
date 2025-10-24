@@ -148,12 +148,12 @@ class ReportServiceTest :
                     val reportDetail: SpotReport.Detail = mockk()
                     val page = Page(listOf(reportDetail), 1)
 
-                    every { reportReader.readAllBy(offsetPageRequest, null) } returns page
+                    every { reportReader.readAllBy(offsetPageRequest, null, null) } returns page
 
-                    val result = reportService.findReportsBy(offsetPageRequest, null)
+                    val result = reportService.findReportsBy(offsetPageRequest, null, null)
 
                     result shouldBe page
-                    verify { reportReader.readAllBy(offsetPageRequest, null) }
+                    verify { reportReader.readAllBy(offsetPageRequest, null, null) }
                 }
             }
 
@@ -164,12 +164,12 @@ class ReportServiceTest :
                     val reportDetail: SpotReport.Detail = mockk()
                     val page = Page(listOf(reportDetail), 1)
 
-                    every { reportReader.readAllBy(offsetPageRequest, reportType) } returns page
+                    every { reportReader.readAllBy(offsetPageRequest, reportType, null) } returns page
 
-                    val result = reportService.findReportsBy(offsetPageRequest, reportType)
+                    val result = reportService.findReportsBy(offsetPageRequest, reportType, null)
 
                     result shouldBe page
-                    verify { reportReader.readAllBy(offsetPageRequest, reportType) }
+                    verify { reportReader.readAllBy(offsetPageRequest, reportType, null) }
                 }
             }
         }
