@@ -1,6 +1,7 @@
 package com.sseudam.suggestion
 
 import com.sseudam.common.ImageS3Caller
+import com.sseudam.common.S3ImageUrl
 import com.sseudam.pet.PetPointAction
 import com.sseudam.suggestion.event.SpotSuggestionCreatedEvent
 import com.sseudam.suggestion.result.CreateSpotSuggestionResult
@@ -31,15 +32,18 @@ class SuggestionFacade(
     @Transactional
     fun createSpotSuggestion(create: SpotSuggestion.Create): CreateSpotSuggestionResult {
         trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude)
-        val uploadUrl =
+        val s3ImageUrl =
             if (create.isPhotoSelected) {
-                imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PREFIX).imageUrl
+                imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PREFIX)
             } else {
-                SUGGESTION_EMPTY_DEFAULT_IMAGE_URL
+                S3ImageUrl(
+                    presignedUrl = "",
+                    imageUrl = SUGGESTION_EMPTY_DEFAULT_IMAGE_URL,
+                )
             }
 
         return suggestionService
-            .append(create, uploadUrl)
+            .append(create, s3ImageUrl)
             .apply {
                 Cache.delete("user:${create.userId}:histories")
             }.also {
