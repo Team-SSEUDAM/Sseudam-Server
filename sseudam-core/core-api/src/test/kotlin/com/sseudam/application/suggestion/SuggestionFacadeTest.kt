@@ -91,7 +91,7 @@ class SuggestionFacadeTest :
                     val create = SuggestionFixture.spotSuggestionCreateRequest.toCommand(1L)
                     val uploadUrl = SuggestionFixture.s3ImageUrl
                     val suggestionInfo = SuggestionFixture.spotSuggestionInfo
-                    val createResult = CreateSpotSuggestionResult(suggestionInfo, uploadUrl)
+                    val createResult = CreateSpotSuggestionResult(suggestionInfo, uploadUrl.imageUrl)
 
                     every { trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude) } just Runs
                     every { imageS3Caller.createUploadUrl(create.userId, imagePrefix) } returns uploadUrl
@@ -168,7 +168,7 @@ class SuggestionFacadeTest :
                     val create = SuggestionFixture.spotSuggestionCreateRequest.toCommand(1L)
                     val uploadUrl = SuggestionFixture.s3ImageUrl
                     val suggestionInfo = SuggestionFixture.spotSuggestionInfo
-                    val createResult = CreateSpotSuggestionResult(suggestionInfo, uploadUrl)
+                    val createResult = CreateSpotSuggestionResult(suggestionInfo, uploadUrl.imageUrl)
                     val callOrder = mutableListOf<String>()
 
                     every {
@@ -201,7 +201,7 @@ class SuggestionFacadeTest :
                     val create = SuggestionFixture.spotSuggestionCreateRequest.toCommand(1L)
                     val uploadUrl = SuggestionFixture.s3ImageUrl
                     val suggestionInfo = SuggestionFixture.spotSuggestionInfo
-                    val createResult = CreateSpotSuggestionResult(suggestionInfo, uploadUrl)
+                    val createResult = CreateSpotSuggestionResult(suggestionInfo, uploadUrl.imageUrl)
 
                     every { trashSpotService.appendVerifySpot(create.site, create.longitude, create.latitude) } just Runs
                     every { imageS3Caller.createUploadUrl(create.userId, imagePrefix) } returns uploadUrl

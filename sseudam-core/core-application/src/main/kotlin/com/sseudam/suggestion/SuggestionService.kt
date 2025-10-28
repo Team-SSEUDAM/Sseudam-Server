@@ -34,7 +34,7 @@ class SuggestionService(
 
     fun append(
         create: SpotSuggestion.Create,
-        uploadUrl: S3ImageUrl,
+        s3ImageUrl: S3ImageUrl,
     ): CreateSpotSuggestionResult {
         val point =
             GEOMETRY_FACTORY.createPoint(
@@ -42,11 +42,11 @@ class SuggestionService(
             )
         suggestionValidator.verifyPoint(point)
 
-        val spotSuggestion = suggestionAppender.append(uploadUrl.imageUrl, create)
+        val spotSuggestion = suggestionAppender.append(s3ImageUrl.imageUrl, create)
 
         return CreateSpotSuggestionResult(
             suggestionInfo = spotSuggestion,
-            uploadUrl = uploadUrl,
+            presignedUrl = s3ImageUrl.presignedUrl,
         )
     }
 

@@ -66,7 +66,7 @@ class SuggestionControllerTest : RestDocsTestSuite() {
         val suggestionInfo = SuggestionFixture.spotSuggestionInfo
         val s3ImageUrl = SuggestionFixture.s3ImageUrl
 
-        every { suggestionFacade.createSpotSuggestion(any()) } returns CreateSpotSuggestionResult(suggestionInfo, s3ImageUrl)
+        every { suggestionFacade.createSpotSuggestion(any()) } returns CreateSpotSuggestionResult(suggestionInfo, s3ImageUrl.imageUrl)
 
         val response =
             given()
@@ -93,6 +93,7 @@ class SuggestionControllerTest : RestDocsTestSuite() {
                 "city" type STRING means "구/군/시" example "강남구/거창군/동두천시",
                 "site" type STRING means "주소" example "서울시 강남구 강남동 1-4",
                 "trashType" type ENUM(TrashType::class) means "쓰레기통 유형" example "GENERAL",
+                "isPhotoSelected" type BOOLEAN means "이미지 업로드 여부" example "true",
             ),
             responseBody(
                 "suggestionId" type NUMBER means "제보 ID",

@@ -21,6 +21,7 @@ interface SpotReportRepository {
     fun findAllBy(
         offsetPageRequest: OffsetPageRequest,
         searchType: ReportType?,
+        status: ReportStatus?,
     ): Page<SpotReport.Detail>
 
     fun findAllDetailsByUserId(userId: Long): List<SpotReport.Detail>

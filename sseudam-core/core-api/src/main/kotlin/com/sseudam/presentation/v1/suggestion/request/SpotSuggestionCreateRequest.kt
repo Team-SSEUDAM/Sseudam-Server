@@ -21,6 +21,8 @@ data class SpotSuggestionCreateRequest(
     val site: String,
     @Schema(description = "쓰레기통 유형", example = "GENERAL")
     val trashType: TrashType,
+    @Schema(description = "이미지 여부", example = "true")
+    val isPhotoSelected: Boolean = true,
 ) {
     fun toCommand(userId: Long): SpotSuggestion.Create =
         SpotSuggestion.Create(
@@ -32,5 +34,6 @@ data class SpotSuggestionCreateRequest(
             city = city,
             site = site,
             trashType = trashType,
+            isPhotoSelected = isPhotoSelected,
         )
 }

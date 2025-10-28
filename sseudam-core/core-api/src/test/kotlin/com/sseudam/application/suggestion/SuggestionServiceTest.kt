@@ -55,7 +55,7 @@ class SuggestionServiceTest :
                     val result = suggestionService.append(create, uploadUrl)
 
                     result.suggestionInfo shouldBe suggestionInfo
-                    result.uploadUrl shouldBe uploadUrl
+                    result.presignedUrl shouldBe uploadUrl.presignedUrl
                     verify { suggestionValidator.verifyPoint(any()) }
                     verify { suggestionAppender.append(uploadUrl.imageUrl, create) }
                 }
