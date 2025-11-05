@@ -21,7 +21,7 @@ class UserArgumentResolver(
         nativeWebRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?,
     ): User? {
-        val authentication = SecurityContextHolder.getContext().authentication.principal
+        val authentication = SecurityContextHolder.getContext().authentication?.principal
 
         if (authentication != "anonymousUser") {
             val provider = authentication as Provider

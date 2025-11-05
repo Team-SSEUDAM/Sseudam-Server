@@ -33,7 +33,7 @@ class LoggingFilter(
         val isFirstRequest = !this.isAsyncDispatch(request)
         var wrapper = request
         if (isFirstRequest && request !is ContentCachingRequestWrapper) {
-            wrapper = ContentCachingRequestWrapper(request)
+            wrapper = ContentCachingRequestWrapper(request, 1024)
         }
         try {
             filterChain.doFilter(wrapper, response)

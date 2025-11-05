@@ -25,8 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
-import org.springframework.security.web.util.matcher.OrRequestMatcher
 import org.springframework.security.web.util.matcher.RequestMatcher
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -84,11 +82,12 @@ class SecurityConfig(
     }
 
     fun getSwaggerUrls(): RequestMatcher =
-        OrRequestMatcher(
-            AntPathRequestMatcher("/swagger-ui/**"),
-            AntPathRequestMatcher("/v3/api-docs/**"),
-            AntPathRequestMatcher("/swagger-resources/**"),
-        )
+        RequestMatcher { request ->
+            val uri = request.requestURI
+            uri.startsWith("/swagger-ui/") ||
+                uri.startsWith("/v3/api-docs/") ||
+                uri.startsWith("/swagger-resources/")
+        }
 
     @Bean
     fun inMemoryUserDetailsManager(): InMemoryUserDetailsManager {

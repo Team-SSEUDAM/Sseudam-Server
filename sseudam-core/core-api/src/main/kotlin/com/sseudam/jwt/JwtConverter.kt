@@ -23,7 +23,7 @@ class JwtConverter(
     override fun convert(jwt: Jwt): AbstractAuthenticationToken {
         val authority: Collection<GrantedAuthority>? = customJwtGrantedAuthoritiesConverter.convert(jwt)
         val provider: Provider = findProvider(jwt)
-        return UsernamePasswordAuthenticationToken(provider, null, authority)
+        return UsernamePasswordAuthenticationToken(provider, null, authority ?: emptyList())
     }
 
     private fun setCustomJwtGrantedAuthoritiesConverter(
