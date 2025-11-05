@@ -1,4 +1,4 @@
 dependencies {
-    implementation(libs.spring.boot.starter.aop)
+    implementation(libs.spring.boot.starter.aspectj)
     implementation(project(":sseudam-core:core-application"))
 }
