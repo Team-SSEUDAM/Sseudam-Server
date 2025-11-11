@@ -1,6 +1,5 @@
 package com.sseudam.pet
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.sseudam.pet.component.UserPetPolicy
 import com.sseudam.pet.result.UserPetCurrentSeasonHistoryResult
 import com.sseudam.pet.result.UserPetLevelUpCurrentSeasonHistoryInfo
@@ -9,6 +8,7 @@ import com.sseudam.support.Cache
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import org.springframework.stereotype.Service
+import tools.jackson.core.type.TypeReference
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Month

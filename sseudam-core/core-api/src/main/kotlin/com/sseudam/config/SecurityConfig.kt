@@ -1,13 +1,5 @@
 package com.sseudam.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer
-import com.fasterxml.jackson.datatype.jsr310.ser.YearMonthSerializer
-import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.sseudam.swagger.SwaggerProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,45 +18,14 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.util.matcher.RequestMatcher
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.YearMonth
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import tools.jackson.databind.ObjectMapper
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
     private val swaggerProperties: SwaggerProperties,
+    private val objectMapper: ObjectMapper,
 ) {
-    @Bean
-    fun objectMapper(): ObjectMapper =
-        jacksonObjectMapper().registerModules(
-            JavaTimeModule().apply {
-                addSerializer(
-                    LocalDate::class.java,
-                    LocalDateSerializer(DateTimeFormatter.ISO_DATE),
-                )
-                addSerializer(
-                    LocalDateTime::class.java,
-                    LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")),
-                )
-                addSerializer(
-                    ZonedDateTime::class.java,
-                    ZonedDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")),
-                )
-                addSerializer(
-                    LocalTime::class.java,
-                    LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss.SSS")),
-                )
-                addSerializer(
-                    YearMonth::class.java,
-                    YearMonthSerializer(DateTimeFormatter.ofPattern("yyyy-MM")),
-                )
-            },
-        )
-
     @Bean
     fun grantedAuthorityDefaults(): GrantedAuthorityDefaults = GrantedAuthorityDefaults("")
 
@@ -120,7 +81,7 @@ class SecurityConfig(
             .csrf { it.disable() }
             .formLogin { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .exceptionHandling { it.authenticationEntryPoint(CustomAuthenticationEntryPoint(objectMapper())) }
+            .exceptionHandling { it.authenticationEntryPoint(CustomAuthenticationEntryPoint(objectMapper)) }
 
         http.httpBasic { it.realmName("Swagger Realm") }
 

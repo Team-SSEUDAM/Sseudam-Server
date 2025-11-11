@@ -1,6 +1,5 @@
 package com.sseudam.client.oauth
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.nimbusds.jose.crypto.RSASSAVerifier
 import com.nimbusds.jose.jwk.JWK
 import com.nimbusds.jose.jwk.RSAKey
@@ -9,6 +8,7 @@ import com.nimbusds.jwt.SignedJWT
 import com.sseudam.support.error.AuthenticationErrorException
 import com.sseudam.support.error.AuthenticationErrorType
 import org.springframework.stereotype.Component
+import tools.jackson.databind.ObjectMapper
 import java.text.ParseException
 import java.util.Date
 

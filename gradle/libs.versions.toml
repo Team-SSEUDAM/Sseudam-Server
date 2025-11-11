@@ -38,7 +38,7 @@ testcontainers = "1.21.3"
 asciidoctor_convert = "4.0.5"
 epages_restdocs_api_spec = "0.17.1"
 hidetake_swagger_generator = "2.18.2"
-swaggerVersion = "2.8.5"
+swaggerVersion = "3.0.0-RC1"
 restassured = "5.5.0"
 
 # AWS version
@@ -58,8 +58,9 @@ spring_mockk = "4.0.2"
 firebase = "9.5.0"
 
 # sentry
-sentry = "5.8.1"
-sentry_logback = "8.14.0"
+sentry = "6.0.0-beta.1"  # Gradle plugin version
+sentry_sdk = "8.25.0"     # SDK version
+sentry_logback = "8.25.0"
 
 # OpenFeign
 spring_cloud_openfeign = "4.2.0"
@@ -68,6 +69,9 @@ openfeign_micrometer = "13.1"
 
 # Spring Retry
 spring_retry = "2.0.11"
+
+# Jackson
+jackson = "3.0.1"
 
 micrometer = "1.5.1"
 micrometer-registry-prometheus = "1.15.1"
@@ -172,9 +176,10 @@ fixture_monkey_starter_kotlin = { module = "com.navercorp.fixturemonkey:fixture-
 # Redisson Library
 redisson = { module = "org.redisson:redisson-spring-boot-starter", version.ref = "redisson" }
 
-# Jackson Libraries
-jackson_kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
-jackson_datatype_jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" }
+# Jackson 3 Libraries
+# Note: jackson-annotations는 여전히 com.fasterxml.jackson.core를 사용합니다
+# Jackson 3.0에서 jackson-datatype-jsr310은 jackson-databind에 병합되어 별도 의존성 불필요
+jackson_kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 
 # DataBase Libraries
 # postgresql
@@ -200,6 +205,7 @@ openfeign_micrometer = { module = "io.github.openfeign:feign-micrometer", versio
 spring_retry = { module = "org.springframework.retry:spring-retry", version.ref = "spring_retry" }
 
 # Sentry
+sentry_spring_boot_jakarta = { module = "io.sentry:sentry-spring-boot-starter-jakarta", version.ref = "sentry_sdk" }
 sentry_logback = { module = "io.sentry:sentry-logback", version.ref = "sentry_logback"}
 
 # Test Libraries

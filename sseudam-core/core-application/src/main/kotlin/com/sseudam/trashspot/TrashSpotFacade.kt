@@ -1,6 +1,5 @@
 package com.sseudam.trashspot
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.sseudam.common.GeoConverter
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
@@ -13,6 +12,7 @@ import com.sseudam.trashspot.result.TrashSpotDetail
 import com.sseudam.user.UserService
 import com.sseudam.visit.SpotVisitedService
 import org.springframework.stereotype.Service
+import tools.jackson.core.type.TypeReference
 
 @Service
 class TrashSpotFacade(

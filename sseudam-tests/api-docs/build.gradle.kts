@@ -4,7 +4,7 @@ dependencies {
     api(libs.spring.restdocs.mockmvc)
     api(libs.restassured.spring.mock.mvc)
     api(libs.epages.restdocs.api.spec.mock.mvc)
-    api(libs.jackson.datatype.jsr310)
+    // Jackson 3.0에서 jackson-datatype-jsr310은 jackson-databind에 통합됨
     api(libs.bundles.kotest)
     api(libs.kotest.runner.junit5)
     api(libs.kotest.extensions)
