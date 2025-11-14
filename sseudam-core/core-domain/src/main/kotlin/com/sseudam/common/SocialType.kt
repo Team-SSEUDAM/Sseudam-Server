@@ -1,4 +1,4 @@
-package com.sseudam.user
+package com.sseudam.common
 
 enum class SocialType {
     SSEUDAM,

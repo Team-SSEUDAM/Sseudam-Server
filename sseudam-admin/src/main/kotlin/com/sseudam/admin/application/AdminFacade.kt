@@ -135,7 +135,12 @@ class AdminFacade(
 
     fun updateSpotSuggestionStatus(command: UpdateSuggestionCommand) =
         SpotSuggestion.UpdateResult.of(
-            suggestionService.updateStatus(command.suggestionId, command.status, command.reason),
+            suggestionService.updateStatus(
+                suggestionId = command.suggestionId,
+                status = command.status,
+                reason = command.reason,
+                rewardPoint = command.rewardPoint,
+            ),
         )
 
     fun updateSpotReportStatus(updateReportCommand: UpdateReportCommand): SpotReport.Info =

@@ -80,6 +80,7 @@ class SuggestionService(
         suggestionId: Long,
         status: SuggestionStatus,
         reason: String?,
+        rewardPoint: Long = 0L,
     ): SpotSuggestion.Info =
         suggestionUpdater
             .update(suggestionId, status)
@@ -88,6 +89,7 @@ class SuggestionService(
                     SuggestionUpdateEvent(
                         suggestion = it,
                         reason = reason,
+                        rewardPoint = rewardPoint,
                     ),
                 )
             }

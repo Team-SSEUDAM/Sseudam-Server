@@ -43,7 +43,8 @@ class SpotReportEventHandler(
             val (body, type) =
                 when (event.report.status) {
                     ReportStatus.APPROVE ->
-                        NotificationMessages.approveReportContents(userProfile.nickname) to NotificationType.APPROVE_REPORT
+                        NotificationMessages.approveReportContents(userProfile.nickname, event.rewardPoint) to
+                            NotificationType.APPROVE_REPORT
                     ReportStatus.REJECT ->
                         NotificationMessages.rejectReportContents(userProfile.nickname) to NotificationType.REJECT_REPORT
                     else -> throw IllegalArgumentException("Invalid report status: ${event.report.status}")

@@ -3,9 +3,9 @@ package com.sseudam.application.auth
 import com.sseudam.DevelopTest
 import com.sseudam.auth.AuthenticationFacade
 import com.sseudam.auth.AuthenticationService
+import com.sseudam.common.SocialType
 import com.sseudam.fixture.auth.AuthFixture
 import com.sseudam.fixture.user.UserFixture
-import com.sseudam.user.SocialType
 import com.sseudam.user.UserService
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe

@@ -1,7 +1,7 @@
 package com.sseudam.user.command
 
 import com.sseudam.common.Address
-import com.sseudam.user.SocialType
+import com.sseudam.common.SocialType
 
 /**
  * NewUser

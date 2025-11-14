@@ -34,7 +34,7 @@ class SpotSuggestionEventHandler(
             val (body, type) =
                 when (suggestion.status) {
                     SuggestionStatus.APPROVE ->
-                        NotificationMessages.approveSuggestionContents(userProfile.nickname) to
+                        NotificationMessages.approveSuggestionContents(userProfile.nickname, event.rewardPoint) to
                             NotificationType.APPROVE_SUGGESTION
                     SuggestionStatus.REJECT ->
                         NotificationMessages.rejectSuggestionContents(userProfile.nickname) to
