@@ -1,24 +1,21 @@
 package com.sseudam.suggestion.event
 
-import com.sseudam.notification.NotificationType
-import com.sseudam.notification.discord.DiscordClient
-import com.sseudam.notification.dto.NotificationMessages
-import com.sseudam.notification.dto.SendNotificationMessage
-import com.sseudam.notification.fcm.FcmSender
+import com.sseudam.common.GeoJson
+import com.sseudam.notification.event.SuggestionDiscordNotificationRequestedEvent
+import com.sseudam.notification.event.SuggestionFcmNotificationRequestedEvent
 import com.sseudam.suggestion.SuggestionStatus
-import com.sseudam.suggestion.dto.SendMessageSuggestionDto
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
 import com.sseudam.user.UserService
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 
 @Component
 class SpotSuggestionEventHandler(
     private val userService: UserService,
-    private val fcmSender: FcmSender,
-    private val discordClient: DiscordClient,
+    private val eventPublisher: ApplicationEventPublisher,
 ) {
     companion object {
         private val log by logger()
@@ -33,24 +30,26 @@ class SpotSuggestionEventHandler(
                     ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
             val (body, type) =
                 when (suggestion.status) {
-                    SuggestionStatus.APPROVE ->
-                        NotificationMessages.approveSuggestionContents(userProfile.nickname, event.rewardPoint) to
-                            NotificationType.APPROVE_SUGGESTION
-                    SuggestionStatus.REJECT ->
-                        NotificationMessages.rejectSuggestionContents(userProfile.nickname) to
-                            NotificationType.REJECT_SUGGESTION
+                    SuggestionStatus.APPROVE -> {
+                        val approveBody = "${userProfile.nickname}님의 제보가 승인되어 ${event.rewardPoint}포인트를 받았어요!"
+                        approveBody to "APPROVE_SUGGESTION"
+                    }
+                    SuggestionStatus.REJECT -> {
+                        val rejectBody = "${userProfile.nickname}님의 제보가 반려되었어요."
+                        rejectBody to "REJECT_SUGGESTION"
+                    }
                     else -> throw ErrorException(ErrorType.INVALID_UPDATE_SUGGESTION_STATUS)
                 }
 
-            fcmSender.send(
-                SendNotificationMessage(
+            eventPublisher.publishEvent(
+                SuggestionFcmNotificationRequestedEvent(
                     userId = suggestion.userId,
-                    title = NotificationMessages.DEFAULT_TITLE,
+                    title = "쓰담쓰담",
                     body = body,
                     destination = "MyPageView",
+                    notificationType = type,
+                    parameterValue = suggestion.id.toString(),
                 ),
-                type = type,
-                parameterValue = suggestion.id.toString(),
             )
         } catch (e: Exception) {
             log.warn(e) { "Failed to send notification for user ${event.suggestion.userId}" }
@@ -62,10 +61,30 @@ class SpotSuggestionEventHandler(
         val userProfile =
             userService.getProfile(event.spotSuggestion.userId)
                 ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
-        discordClient.sendSuggestionMessage(
-            SendMessageSuggestionDto.of(
-                event.spotSuggestion,
-                userProfile,
+        val suggestion = event.spotSuggestion
+
+        val pointCoordinate =
+            when (val point = suggestion.point) {
+                is GeoJson.Point -> point.coordinates
+                else -> emptyList()
+            }
+        val coordinateText =
+            if (pointCoordinate.size >= 2) {
+                "${pointCoordinate[0]}, ${pointCoordinate[1]} (경도, 위도)"
+            } else {
+                "좌표 정보 없음"
+            }
+
+        eventPublisher.publishEvent(
+            SuggestionDiscordNotificationRequestedEvent(
+                id = suggestion.id,
+                site = suggestion.address.site,
+                spotName = suggestion.spotName,
+                trashType = suggestion.trashType.displayName,
+                userId = suggestion.userId,
+                nickname = userProfile.nickname,
+                coordinateText = coordinateText,
+                createdAt = suggestion.createdAt,
             ),
         )
     }

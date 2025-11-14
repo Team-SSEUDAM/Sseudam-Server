@@ -3,12 +3,12 @@ package com.sseudam.fixture.history
 import com.navercorp.fixturemonkey.kotlin.setExp
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
+import com.sseudam.common.TrashType
 import com.sseudam.history.dto.HistoryStatus
 import com.sseudam.history.dto.SpotActionType
 import com.sseudam.history.dto.SpotHistory
 import com.sseudam.test.helper.fixtureBuilder
 import com.sseudam.test.helper.fixtureBuilders
-import com.sseudam.common.TrashType
 import net.jqwik.api.Arbitraries
 
 object HistoryFixture {

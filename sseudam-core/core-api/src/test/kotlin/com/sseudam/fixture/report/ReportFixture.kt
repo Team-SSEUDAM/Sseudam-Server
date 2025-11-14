@@ -5,6 +5,7 @@ import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.common.TrashType
 import com.sseudam.pet.PetPointAction
 import com.sseudam.presentation.v1.report.request.ReportCancelRequest
 import com.sseudam.presentation.v1.report.request.ReportValidationRequest
@@ -18,7 +19,6 @@ import com.sseudam.report.event.SpotReportCreatedEvent
 import com.sseudam.report.event.SpotReportUpdateEvent
 import com.sseudam.report.reject.ReportReject
 import com.sseudam.test.helper.fixtureBuilder
-import com.sseudam.common.TrashType
 import com.sseudam.trashspot.image.TrashSpotImage
 import net.jqwik.api.Arbitraries
 import java.time.LocalDateTime

@@ -64,6 +64,9 @@ class SuggestionService(
         status: SuggestionStatus,
     ): SpotSuggestion.Info? = suggestionReader.readByPointAndStatus(point, status)
 
+    fun findApprovedSpotSuggestionByPoint(point: Point): SpotSuggestion.Info? =
+        suggestionReader.readByPointAndStatus(point, SuggestionStatus.APPROVE)
+
     fun findSuggestionsBy(
         offsetPageRequest: OffsetPageRequest,
         searchStatus: SuggestionStatus?,

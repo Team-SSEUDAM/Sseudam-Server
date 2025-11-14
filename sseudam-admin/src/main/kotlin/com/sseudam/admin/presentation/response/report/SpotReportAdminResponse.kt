@@ -3,9 +3,9 @@ package com.sseudam.admin.presentation.response.report
 import com.sseudam.admin.application.report.AdminSpotReportDetail
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
+import com.sseudam.common.TrashType
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
-import com.sseudam.common.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 

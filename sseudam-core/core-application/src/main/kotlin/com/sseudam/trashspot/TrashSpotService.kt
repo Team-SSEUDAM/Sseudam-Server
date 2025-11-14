@@ -3,6 +3,7 @@ package com.sseudam.trashspot
 import com.sseudam.common.GeoConverter
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
@@ -12,7 +13,6 @@ import com.sseudam.trashspot.component.TrashSpotReader
 import com.sseudam.trashspot.component.TrashSpotValidator
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import com.sseudam.trashspot.dto.isNotSet
-import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.PrecisionModel
 import org.springframework.stereotype.Service
@@ -68,18 +68,5 @@ class TrashSpotService(
         if (trashSpotReader.existsByName(name)) {
             throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
         }
-    }
-
-    fun appendVerifySpot(
-        site: String,
-        longitude: Double,
-        latitude: Double,
-    ) {
-        val point =
-            GEOMETRY_FACTORY.createPoint(
-                Coordinate(longitude, latitude),
-            )
-
-        trashSpotValidator.verifyPoint(point)
     }
 }

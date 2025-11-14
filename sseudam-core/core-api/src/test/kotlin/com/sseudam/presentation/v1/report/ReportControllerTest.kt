@@ -2,6 +2,7 @@ package com.sseudam.presentation.v1.report
 
 import com.sseudam.RestDocsTest
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.config.UserArgumentResolver
 import com.sseudam.docs.RestDocsTestSuite
 import com.sseudam.docs.support.ARRAY
@@ -24,7 +25,6 @@ import com.sseudam.report.ReportService
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.result.CreateSpotReportResult
-import com.sseudam.common.TrashType
 import com.sseudam.user.User
 import io.mockk.Runs
 import io.mockk.every

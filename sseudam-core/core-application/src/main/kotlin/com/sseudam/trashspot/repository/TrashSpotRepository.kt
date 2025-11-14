@@ -1,8 +1,8 @@
 package com.sseudam.trashspot.repository
 
 import com.sseudam.common.Region
-import com.sseudam.trashspot.TrashSpot
 import com.sseudam.common.TrashType
+import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import org.locationtech.jts.geom.Point
 

@@ -3,6 +3,7 @@ package com.sseudam.trashspot
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import org.locationtech.jts.geom.Point
 import java.time.LocalDateTime
 

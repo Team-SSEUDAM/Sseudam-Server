@@ -3,9 +3,9 @@ package com.sseudam.storage.db.core.trashspot
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.storage.db.core.support.BaseEntity
 import com.sseudam.trashspot.TrashSpot
-import com.sseudam.common.TrashType
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity

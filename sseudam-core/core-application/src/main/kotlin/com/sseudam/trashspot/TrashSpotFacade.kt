@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.sseudam.common.GeoConverter
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.suggestion.SuggestionService
-import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.Cache
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import com.sseudam.trashspot.image.TrashSpotImageService
@@ -41,9 +41,8 @@ class TrashSpotFacade(
             val spot = trashSpotService.findBy(spotId)
             val image = trashSpotImageService.findBySpotId(spotId).lastOrNull()
             val suggestion =
-                suggestionService.findSpotSuggestionByPointAndStatus(
+                suggestionService.findApprovedSpotSuggestionByPoint(
                     geoConverter.geoJsonPointToJtsPoint(spot.point as GeoJson.Point),
-                    SuggestionStatus.APPROVE,
                 )
             val suggestioner = suggestion?.let { userService.getProfile(it.userId) }
             val visitedCount = visitedService.countBySpotId(spotId)
