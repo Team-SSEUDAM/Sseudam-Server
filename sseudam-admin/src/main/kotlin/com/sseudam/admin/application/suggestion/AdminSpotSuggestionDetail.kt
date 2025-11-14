@@ -5,7 +5,7 @@ import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import com.sseudam.user.UserProfile
 import java.time.LocalDateTime
 

@@ -20,7 +20,7 @@ import com.sseudam.docs.support.parameterType
 import com.sseudam.docs.support.type
 import com.sseudam.fixture.trashspot.TrashSpotFixture
 import com.sseudam.trashspot.TrashSpotFacade
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import com.sseudam.trashspot.result.TrashSpotDetail
 import io.mockk.every
 import io.mockk.mockk

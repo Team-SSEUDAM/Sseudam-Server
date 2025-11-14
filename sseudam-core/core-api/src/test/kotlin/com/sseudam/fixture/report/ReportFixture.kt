@@ -18,7 +18,7 @@ import com.sseudam.report.event.SpotReportCreatedEvent
 import com.sseudam.report.event.SpotReportUpdateEvent
 import com.sseudam.report.reject.ReportReject
 import com.sseudam.test.helper.fixtureBuilder
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import com.sseudam.trashspot.image.TrashSpotImage
 import net.jqwik.api.Arbitraries
 import java.time.LocalDateTime

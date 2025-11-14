@@ -6,7 +6,7 @@ import com.sseudam.presentation.v1.trashspot.response.TrashSpotAllResponse
 import com.sseudam.presentation.v1.trashspot.response.TrashSpotDetailsResponse
 import com.sseudam.presentation.v1.trashspot.response.TrashSpotResponse
 import com.sseudam.trashspot.TrashSpotFacade
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter

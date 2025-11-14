@@ -2,7 +2,7 @@ package com.sseudam.presentation.v1.suggestion.request
 
 import com.sseudam.common.Region
 import com.sseudam.suggestion.SpotSuggestion
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "제보하기 요청 Json")

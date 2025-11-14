@@ -6,7 +6,7 @@ import com.sseudam.common.Region
 import com.sseudam.storage.db.core.support.BaseEntity
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.suggestion.SuggestionStatus
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType

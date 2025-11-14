@@ -23,7 +23,7 @@ import com.sseudam.suggestion.SuggestionFacade
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.result.CreateSpotSuggestionResult
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import com.sseudam.user.User
 import io.mockk.Runs
 import io.mockk.every

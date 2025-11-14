@@ -4,7 +4,7 @@ import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
 import com.sseudam.report.reject.ReportReject
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import java.time.LocalDateTime
 
 class SpotReport {

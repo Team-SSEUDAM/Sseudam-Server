@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.sseudam.common.Region
 import com.sseudam.support.Cache
 import com.sseudam.trashspot.TrashSpot
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import com.sseudam.trashspot.repository.TrashSpotRepository
 import org.springframework.stereotype.Component

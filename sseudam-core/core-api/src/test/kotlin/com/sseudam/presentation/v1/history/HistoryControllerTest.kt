@@ -19,7 +19,7 @@ import com.sseudam.fixture.history.HistoryFixture
 import com.sseudam.history.HistoryFacade
 import com.sseudam.history.dto.HistoryStatus
 import com.sseudam.history.dto.SpotActionType
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import com.sseudam.user.User
 import io.mockk.every
 import io.mockk.mockk
