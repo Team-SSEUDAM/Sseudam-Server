@@ -2,10 +2,8 @@ package com.sseudam.trashspot
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.sseudam.common.GeoConverter
-import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
 import com.sseudam.common.TrashType
-import com.sseudam.suggestion.SuggestionService
 import com.sseudam.support.Cache
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import com.sseudam.trashspot.image.TrashSpotImageService
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service
 class TrashSpotFacade(
     private val trashSpotService: TrashSpotService,
     private val trashSpotImageService: TrashSpotImageService,
-    private val suggestionService: SuggestionService,
     private val userService: UserService,
     private val visitedService: SpotVisitedService,
     private val geoConverter: GeoConverter,
@@ -40,12 +37,7 @@ class TrashSpotFacade(
         ) {
             val spot = trashSpotService.findBy(spotId)
             val image = trashSpotImageService.findBySpotId(spotId).lastOrNull()
-            val suggestion =
-                suggestionService.findApprovedSpotSuggestionByPoint(
-                    geoConverter.geoJsonPointToJtsPoint(spot.point as GeoJson.Point),
-                )
-            val suggestioner = suggestion?.let { userService.getProfile(it.userId) }
             val visitedCount = visitedService.countBySpotId(spotId)
-            return@cache TrashSpotDetail(spot, image, suggestioner, visitedCount)
+            return@cache TrashSpotDetail(spot, image, null, visitedCount)
         }
 }

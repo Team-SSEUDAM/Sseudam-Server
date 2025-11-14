@@ -9,7 +9,6 @@ import com.sseudam.notification.component.NotificationStoredKeyGenerator
 import com.sseudam.notification.dto.FirebaseCloudMessage
 import com.sseudam.notification.dto.SendNotificationMessage
 import com.sseudam.notification.repository.FcmRepository
-import com.sseudam.user.component.UserDeviceReader
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 
@@ -18,7 +17,6 @@ class FcmSender(
     private val fcmRepository: FcmRepository,
     private val fcmMessageKeyGenerator: FcmMessageKeyGenerator,
     private val notificationStoredKeyGenerator: NotificationStoredKeyGenerator,
-    private val userDeviceReader: UserDeviceReader,
     private val notificationStoredAppender: NotificationStoredAppender,
 ) {
     @Async
@@ -26,13 +24,14 @@ class FcmSender(
         sendNotificationMessage: SendNotificationMessage,
         type: NotificationType,
         parameterValue: String,
+        fcmToken: String,
     ) {
-        val mobileDevices = userDeviceReader.readAllByUserId(sendNotificationMessage.userId)
-        val mobileDevice = mobileDevices.lastOrNull() ?: return
+        if (fcmToken.isBlank()) return
+
         val messages =
             FirebaseCloudMessage(
                 fcmKey = fcmMessageKeyGenerator.generateFcmKey(),
-                fcmToken = mobileDevice.fcmToken,
+                fcmToken = fcmToken,
                 title = sendNotificationMessage.title,
                 body = sendNotificationMessage.body,
                 destination = sendNotificationMessage.destination,

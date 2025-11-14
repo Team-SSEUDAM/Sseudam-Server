@@ -36,6 +36,7 @@ class TrashSpotService(
                 trashType = suggestionInfo.trashType,
                 address = suggestionInfo.address,
                 point = geoConverter.geoJsonPointToJtsPoint(suggestionInfo.point as GeoJson.Point),
+                suggesterId = suggestionInfo.userId,
             ),
         )
 

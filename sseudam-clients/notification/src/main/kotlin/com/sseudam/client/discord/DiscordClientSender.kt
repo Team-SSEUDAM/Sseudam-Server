@@ -3,7 +3,7 @@ package com.sseudam.client.discord
 import com.sseudam.notification.discord.DiscordClient
 import com.sseudam.notification.dto.SendMessageReportDto
 import com.sseudam.notification.dto.SendMessageSuggestionDto
-import com.sseudam.user.dto.SendMessageUserProfileDto
+import com.sseudam.notification.dto.SendMessageUserProfileDto
 import org.springframework.core.env.Environment
 import org.springframework.retry.annotation.Backoff
 import org.springframework.retry.annotation.Retryable
