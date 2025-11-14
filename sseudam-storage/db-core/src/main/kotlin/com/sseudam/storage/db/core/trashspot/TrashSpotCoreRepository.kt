@@ -4,7 +4,7 @@ import com.sseudam.common.Region
 import com.sseudam.storage.db.core.support.findByIdOrElseThrow
 import com.sseudam.support.tx.Tx
 import com.sseudam.trashspot.TrashSpot
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import com.sseudam.trashspot.repository.TrashSpotRepository
 import org.locationtech.jts.geom.Point

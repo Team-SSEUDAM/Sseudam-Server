@@ -8,7 +8,7 @@ import com.sseudam.history.dto.SpotActionType
 import com.sseudam.history.dto.SpotHistory
 import com.sseudam.test.helper.fixtureBuilder
 import com.sseudam.test.helper.fixtureBuilders
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import net.jqwik.api.Arbitraries
 
 object HistoryFixture {

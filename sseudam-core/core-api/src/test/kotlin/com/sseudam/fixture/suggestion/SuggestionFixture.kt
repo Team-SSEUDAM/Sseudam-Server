@@ -14,7 +14,7 @@ import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.command.CancelSuggestionCommand
 import com.sseudam.suggestion.event.SpotSuggestionCreatedEvent
 import com.sseudam.test.helper.fixtureBuilder
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import net.jqwik.api.Arbitraries
 import java.time.LocalDateTime
 

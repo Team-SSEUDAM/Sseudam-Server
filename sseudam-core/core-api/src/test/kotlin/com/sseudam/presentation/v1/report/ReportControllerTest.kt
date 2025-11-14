@@ -24,7 +24,7 @@ import com.sseudam.report.ReportService
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.result.CreateSpotReportResult
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import com.sseudam.user.User
 import io.mockk.Runs
 import io.mockk.every

@@ -5,7 +5,7 @@ import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.test.helper.fixtureBuilder
 import com.sseudam.trashspot.TrashSpot
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import com.sseudam.user.UserProfile
 import com.sseudam.visit.SpotVisited
 import com.sseudam.visit.result.SpotVisitedResult
