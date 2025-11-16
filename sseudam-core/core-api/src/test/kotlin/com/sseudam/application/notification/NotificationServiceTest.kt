@@ -3,6 +3,8 @@ package com.sseudam.application.notification
 import com.sseudam.DevelopTest
 import com.sseudam.fixture.notification.NotificationFixture
 import com.sseudam.notification.NotificationService
+import com.sseudam.notification.NotificationStored
+import com.sseudam.notification.command.CreateNotificationStoredCommand
 import com.sseudam.notification.component.NotificationStoredAppender
 import com.sseudam.notification.component.NotificationStoredKeyGenerator
 import com.sseudam.notification.component.NotificationStoredReader
@@ -69,7 +71,7 @@ class NotificationServiceTest :
 
             context("빈 목록인 경우") {
                 it("빈 목록을 반환한다") {
-                    val commands = emptyList<com.sseudam.notification.command.CreateNotificationStoredCommand>()
+                    val commands = emptyList<CreateNotificationStoredCommand>()
 
                     every { notificationStoredAppender.appendAll(any()) } returns emptyList()
 
@@ -103,7 +105,7 @@ class NotificationServiceTest :
                     val cursorRequest = CursorRequest(size = 10, lastId = null)
                     val emptyCursor =
                         com.sseudam.support.cursor
-                            .Cursor(emptyList<com.sseudam.notification.NotificationStored.Info>(), null, 10)
+                            .Cursor(emptyList<NotificationStored.Info>(), null, 10)
 
                     every { notificationStoredReader.findAllBy(userId, cursorRequest) } returns emptyCursor
 

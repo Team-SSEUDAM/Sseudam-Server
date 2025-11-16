@@ -15,6 +15,7 @@ import com.sseudam.docs.support.STRING
 import com.sseudam.docs.support.headerType
 import com.sseudam.docs.support.type
 import com.sseudam.fixture.visit.VisitedFixture
+import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.User
 import com.sseudam.visit.SpotVisitedFacade
 import com.sseudam.visit.SpotVisitedService
@@ -41,7 +42,7 @@ class VisitedControllerTest : RestDocsTestSuite() {
         userArgumentResolver = mockk()
         spotVisitedService = mockk()
         spotVisitedFacade = mockk()
-        val trashSpotService = mockk<com.sseudam.trashspot.TrashSpotService>()
+        val trashSpotService = mockk<TrashSpotService>()
         visitedController = VisitedController(spotVisitedService, spotVisitedFacade, trashSpotService)
         mockMvcSpec = mockController(visitedController, userArgumentResolver)
         every { userArgumentResolver.supportsParameter(any()) } returns true

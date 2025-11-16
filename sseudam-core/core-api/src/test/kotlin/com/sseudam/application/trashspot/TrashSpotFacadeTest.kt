@@ -41,6 +41,7 @@ class TrashSpotFacadeTest :
 
                 every { service.findBy(1L) } returns spot
                 every { imageService.findBySpotId(1L) } returns listOf(image)
+                every { userService.getProfile(any()) } returns null
                 every { visitedService.countBySpotId(1L) } returns 5L
 
                 val actual = trashSpotFacade.findDetails(1L)
