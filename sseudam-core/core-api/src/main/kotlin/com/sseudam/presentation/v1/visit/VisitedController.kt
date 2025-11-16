@@ -28,8 +28,7 @@ class VisitedController(
         user: User,
         @PathVariable spotId: Long,
     ): SpotVisitedDetailResponse {
-        val spot = trashSpotService.findBy(spotId)
-        val result = spotVisitedFacade.visitSpot(user.id, spotId, spot.suggesterId)
+        val result = spotVisitedFacade.visitSpot(user.id, spotId)
         return SpotVisitedDetailResponse.of(
             isToday = result.isToday,
             visited = result.visited,

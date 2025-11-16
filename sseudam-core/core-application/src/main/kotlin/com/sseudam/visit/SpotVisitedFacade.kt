@@ -19,8 +19,8 @@ class SpotVisitedFacade(
     fun visitSpot(
         userId: Long,
         spotId: Long,
-        suggesterId: Long?,
     ): SpotVisitedResult {
+        val spot = trashSpotService.findById(spotId)
         val todayVisited = spotVisitedService.findTodaySpotVisitedByUser(userId)
         val todayVisitedSpot = todayVisited.find { it.spotId == spotId }
 
@@ -33,7 +33,7 @@ class SpotVisitedFacade(
         applicationEventPublisher.publishEvent(
             SpotVisitedEvent(
                 spotId = spotId,
-                suggesterId = suggesterId,
+                suggesterId = spot.suggesterId,
                 userId = userId,
                 petPointAction = action,
             ),

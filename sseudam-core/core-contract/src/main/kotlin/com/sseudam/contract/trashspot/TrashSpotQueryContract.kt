@@ -10,4 +10,6 @@ import com.sseudam.trashspot.TrashSpot
  */
 interface TrashSpotQueryContract {
     fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info>
+
+    fun findById(spotId: Long): TrashSpot.Info
 }

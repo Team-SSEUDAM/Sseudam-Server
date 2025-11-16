@@ -11,24 +11,16 @@ import com.sseudam.support.error.ErrorType
 import com.sseudam.trashspot.component.FindTrashSpotPolicyCondition
 import com.sseudam.trashspot.component.TrashSpotAppender
 import com.sseudam.trashspot.component.TrashSpotReader
-import com.sseudam.trashspot.component.TrashSpotValidator
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import com.sseudam.trashspot.dto.isNotSet
-import org.locationtech.jts.geom.GeometryFactory
-import org.locationtech.jts.geom.PrecisionModel
 import org.springframework.stereotype.Service
 
 @Service
 class TrashSpotService(
     private val trashSpotReader: TrashSpotReader,
     private val trashSpotAppender: TrashSpotAppender,
-    private val trashSpotValidator: TrashSpotValidator,
     private val geoConverter: GeoConverter,
 ) : TrashSpotQueryContract {
-    companion object {
-        private val GEOMETRY_FACTORY = GeometryFactory(PrecisionModel(), 4326)
-    }
-
     fun createTrashSpotBySuggestion(suggestionInfo: SpotSuggestion.Info): TrashSpot.Info =
         trashSpotAppender.append(
             TrashSpot.Create(
@@ -64,11 +56,13 @@ class TrashSpotService(
 
     fun findBy(spotId: Long): TrashSpot.Info = trashSpotReader.readBy(spotId)
 
-    override fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> = trashSpotReader.readAllByIds(spotIds)
-
     fun validateSpotName(name: String) {
         if (trashSpotReader.existsByName(name)) {
             throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
         }
     }
+
+    override fun findById(spotId: Long): TrashSpot.Info = trashSpotReader.readBy(spotId)
+
+    override fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> = trashSpotReader.readAllByIds(spotIds)
 }

@@ -31,7 +31,6 @@ class SuggestionFacade(
 
     fun validateSpotSuggestion(name: String): Boolean {
         suggestionService.validateSpotSuggestionName(name)
-        // Validate that spot name doesn't already exist
         if (trashSpotValidator.existsByName(name)) {
             throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
         }
@@ -40,7 +39,6 @@ class SuggestionFacade(
 
     @Transactional
     fun createSpotSuggestion(create: SpotSuggestion.Create): CreateSpotSuggestionResult {
-        // Validate that the point doesn't already exist
         val point = GEOMETRY_FACTORY.createPoint(Coordinate(create.longitude, create.latitude))
         trashSpotValidator.verifyPoint(point)
         val s3ImageUrl =

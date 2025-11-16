@@ -60,7 +60,7 @@ class VisitedControllerTest : RestDocsTestSuite() {
         val visitedInfo = VisitedFixture.spotVisitedInfo
         val isToday = true
 
-        every { spotVisitedFacade.visitSpot(any(), any(), any()) } returns SpotVisitedResult(isToday, visitedInfo)
+        every { spotVisitedFacade.visitSpot(any(), any()) } returns SpotVisitedResult(isToday, visitedInfo)
 
         val response =
             given()

@@ -43,8 +43,6 @@ class TrashSpotSuggestionEventHandler(
             )
         } catch (e: Exception) {
             log.warn(e) { "Failed to create trashspot from suggestion: ${event.suggestion.id}" }
-            // If creation fails, log the error but don't throw to prevent transaction rollback
-            // Admin should handle this case manually
         }
     }
 }

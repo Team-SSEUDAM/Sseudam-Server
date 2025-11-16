@@ -27,7 +27,6 @@ import org.springframework.test.context.TestConstructor
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class ModulithArchitectureTest :
     BehaviorSpec({
-
         given("Spring Modulith 모듈 구조") {
             val modules = ApplicationModules.of(SseudamApplication::class.java)
 

@@ -43,6 +43,7 @@ object VisitedFixture {
             setExp(TrashSpot.Info::point, randomPoint())
             setExp(TrashSpot.Info::address, Address("강남구", "서울시 강남구 강남동 1-4"))
             setExp(TrashSpot.Info::trashType, TrashType.GENERAL)
+            setExp(TrashSpot.Info::suggesterId, 1L)
         }
 
     val userProfile =
