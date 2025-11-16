@@ -1,11 +1,11 @@
 package com.sseudam.application.visit
 
 import com.sseudam.DevelopTest
+import com.sseudam.contract.trashspot.TrashSpotQueryContract
 import com.sseudam.fixture.visit.VisitedFixture
 import com.sseudam.pet.PetPointAction
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
-import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.visit.SpotVisitedFacade
 import com.sseudam.visit.SpotVisitedService
 import com.sseudam.visit.event.SpotVisitedEvent
@@ -23,7 +23,7 @@ import org.springframework.context.ApplicationEventPublisher
 class SpotVisitedFacadeTest :
     DescribeSpec({
         val spotVisitedService: SpotVisitedService = mockk()
-        val trashSpotService: TrashSpotService = mockk()
+        val trashSpotService: TrashSpotQueryContract = mockk()
         val applicationEventPublisher: ApplicationEventPublisher = mockk()
         val spotVisitedFacade =
             SpotVisitedFacade(
@@ -38,21 +38,18 @@ class SpotVisitedFacadeTest :
                     val userId = 1L
                     val spotId = 1L
                     val visitedInfo = VisitedFixture.spotVisitedInfo
-                    val spotInfo = VisitedFixture.trashSpotInfo
 
                     every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns emptyList()
                     every { spotVisitedService.verifyVisited(emptyList(), null) } just Runs
-                    every { trashSpotService.findBy(spotId) } returns spotInfo
                     every { spotVisitedService.append(any()) } returns visitedInfo
                     every { applicationEventPublisher.publishEvent(any<SpotVisitedEvent>()) } just Runs
 
-                    val result = spotVisitedFacade.visitSpot(userId, spotId)
+                    val result = spotVisitedFacade.visitSpot(userId, spotId, null)
 
                     result.isToday shouldBe true
                     result.visited shouldBe visitedInfo
                     verify { spotVisitedService.findTodaySpotVisitedByUser(userId) }
                     verify { spotVisitedService.verifyVisited(emptyList(), null) }
-                    verify { trashSpotService.findBy(spotId) }
                     verify { spotVisitedService.append(any()) }
                     verify {
                         applicationEventPublisher.publishEvent(
@@ -69,16 +66,14 @@ class SpotVisitedFacadeTest :
                     val userId = 1L
                     val spotId = 2L
                     val visitedInfo = VisitedFixture.spotVisitedInfo
-                    val spotInfo = VisitedFixture.trashSpotInfo
                     val todayVisits = listOf(VisitedFixture.spotVisitedInfo.copy(spotId = 1L))
 
                     every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns todayVisits
                     every { spotVisitedService.verifyVisited(todayVisits, null) } just Runs
-                    every { trashSpotService.findBy(spotId) } returns spotInfo
                     every { spotVisitedService.append(any()) } returns visitedInfo
                     every { applicationEventPublisher.publishEvent(any<SpotVisitedEvent>()) } just Runs
 
-                    val result = spotVisitedFacade.visitSpot(userId, spotId)
+                    val result = spotVisitedFacade.visitSpot(userId, spotId, null)
 
                     result.isToday shouldBe false
                     result.visited shouldBe visitedInfo
@@ -104,7 +99,7 @@ class SpotVisitedFacadeTest :
 
                     val exception =
                         shouldThrow<ErrorException> {
-                            spotVisitedFacade.visitSpot(userId, spotId)
+                            spotVisitedFacade.visitSpot(userId, spotId, null)
                         }
 
                     exception.errorType shouldBe ErrorType.SPOT_VISITED_ALREADY

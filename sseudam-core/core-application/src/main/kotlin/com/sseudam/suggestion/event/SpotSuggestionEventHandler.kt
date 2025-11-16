@@ -7,6 +7,7 @@ import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
+import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.modulith.events.ApplicationModuleListener
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component
 @Component
 class SpotSuggestionEventHandler(
     private val userService: UserService,
+    private val userDeviceService: UserDeviceService,
     private val eventPublisher: ApplicationEventPublisher,
 ) {
     companion object {
@@ -28,6 +30,9 @@ class SpotSuggestionEventHandler(
             val userProfile =
                 userService.getProfile(suggestion.userId)
                     ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
+            val userDevices = userDeviceService.findAllByUserId(userProfile.id)
+            val fcmToken = userDevices.lastOrNull()?.fcmToken ?: return
+
             val (body, type) =
                 when (suggestion.status) {
                     SuggestionStatus.APPROVE -> {
@@ -49,6 +54,7 @@ class SpotSuggestionEventHandler(
                     destination = "MyPageView",
                     notificationType = type,
                     parameterValue = suggestion.id.toString(),
+                    fcmToken = fcmToken,
                 ),
             )
         } catch (e: Exception) {

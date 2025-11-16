@@ -1,9 +1,10 @@
-package com.sseudam.trashspot.event
+package com.sseudam.trashspot.internal
 
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.UserPetContextEvent
 import com.sseudam.suggestion.event.SuggestionUpdateEvent
 import com.sseudam.support.Cache
+import com.sseudam.support.extension.logger
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.image.TrashSpotImage
 import com.sseudam.trashspot.image.TrashSpotImageService
@@ -19,6 +20,7 @@ class TrashSpotSuggestionEventHandler(
 ) {
     companion object {
         private const val SPOT_DETAIL_CACHE_KEY_PREFIX = "spot:detail:"
+        private val log by logger()
     }
 
     @ApplicationModuleListener(
@@ -26,17 +28,23 @@ class TrashSpotSuggestionEventHandler(
         condition = "#event.suggestion.status.name() == 'APPROVE'",
     )
     fun handleApprovedSuggestion(event: SuggestionUpdateEvent) {
-        val trashSpot = trashSpotService.createTrashSpotBySuggestion(event.suggestion)
-        trashSpotImageService.append(
-            TrashSpotImage.Create(trashSpot.id, event.suggestion.imageUrl),
-        )
-        Cache.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + trashSpot.id)
-        Cache.delete("user:${event.suggestion.userId}:histories")
-        applicationEventPublisher.publishEvent(
-            UserPetContextEvent(
-                userId = event.suggestion.userId,
-                petPointAction = PetPointAction.SUGGESTION_APPROVED,
-            ),
-        )
+        try {
+            val trashSpot = trashSpotService.createTrashSpotBySuggestion(event.suggestion)
+            trashSpotImageService.append(
+                TrashSpotImage.Create(trashSpot.id, event.suggestion.imageUrl),
+            )
+            Cache.delete(SPOT_DETAIL_CACHE_KEY_PREFIX + trashSpot.id)
+            Cache.delete("user:${event.suggestion.userId}:histories")
+            applicationEventPublisher.publishEvent(
+                UserPetContextEvent(
+                    userId = event.suggestion.userId,
+                    petPointAction = PetPointAction.SUGGESTION_APPROVED,
+                ),
+            )
+        } catch (e: Exception) {
+            log.warn(e) { "Failed to create trashspot from suggestion: ${event.suggestion.id}" }
+            // If creation fails, log the error but don't throw to prevent transaction rollback
+            // Admin should handle this case manually
+        }
     }
 }

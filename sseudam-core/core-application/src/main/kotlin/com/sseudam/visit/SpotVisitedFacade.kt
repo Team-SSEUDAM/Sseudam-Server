@@ -1,7 +1,7 @@
 package com.sseudam.visit
 
+import com.sseudam.contract.trashspot.TrashSpotQueryContract
 import com.sseudam.pet.PetPointAction
-import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.visit.event.SpotVisitedEvent
 import com.sseudam.visit.result.SpotVisitedResult
 import org.springframework.context.ApplicationEventPublisher
@@ -12,13 +12,14 @@ import java.time.LocalDate
 @Service
 class SpotVisitedFacade(
     private val spotVisitedService: SpotVisitedService,
-    private val trashSpotService: TrashSpotService,
+    private val trashSpotService: TrashSpotQueryContract,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @Transactional
     fun visitSpot(
         userId: Long,
         spotId: Long,
+        suggesterId: Long?,
     ): SpotVisitedResult {
         val todayVisited = spotVisitedService.findTodaySpotVisitedByUser(userId)
         val todayVisitedSpot = todayVisited.find { it.spotId == spotId }
@@ -26,13 +27,13 @@ class SpotVisitedFacade(
         spotVisitedService.verifyVisited(todayVisited, todayVisitedSpot)
 
         val isToday = todayVisitedSpot == null && todayVisited.isEmpty()
-        val spot = trashSpotService.findBy(spotId)
         val visited = spotVisitedService.append(SpotVisited.Create(userId, spotId, LocalDate.now()))
 
         val action = if (isToday) PetPointAction.TODAY_FIRST_SPOT_VISITED else PetPointAction.SPOT_VISITED
         applicationEventPublisher.publishEvent(
             SpotVisitedEvent(
-                spot = spot,
+                spotId = spotId,
+                suggesterId = suggesterId,
                 userId = userId,
                 petPointAction = action,
             ),

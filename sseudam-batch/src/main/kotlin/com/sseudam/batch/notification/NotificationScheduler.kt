@@ -1,5 +1,7 @@
-package com.sseudam.notification
+package com.sseudam.batch.notification
 
+import com.sseudam.notification.NotificationService
+import com.sseudam.notification.NotificationType
 import com.sseudam.notification.command.CreateNotificationStoredCommand
 import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.component.NotificationStoredKeyGenerator

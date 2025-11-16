@@ -2,14 +2,13 @@ package com.sseudam.suggestion
 
 import com.sseudam.common.ImageS3Caller
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.contract.trashspot.TrashSpotValidationContract
 import com.sseudam.pet.PetPointAction
 import com.sseudam.suggestion.event.SpotSuggestionCreatedEvent
 import com.sseudam.suggestion.result.CreateSpotSuggestionResult
 import com.sseudam.support.Cache
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
-import com.sseudam.trashspot.component.TrashSpotReader
-import com.sseudam.trashspot.component.TrashSpotValidator
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.PrecisionModel
@@ -20,8 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class SuggestionFacade(
     private val suggestionService: SuggestionService,
-    private val trashSpotReader: TrashSpotReader,
-    private val trashSpotValidator: TrashSpotValidator,
+    private val trashSpotValidator: TrashSpotValidationContract,
     private val imageS3Caller: ImageS3Caller,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
@@ -33,7 +31,8 @@ class SuggestionFacade(
 
     fun validateSpotSuggestion(name: String): Boolean {
         suggestionService.validateSpotSuggestionName(name)
-        if (trashSpotReader.existsByName(name)) {
+        // Validate that spot name doesn't already exist
+        if (trashSpotValidator.existsByName(name)) {
             throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
         }
         return true
@@ -41,9 +40,9 @@ class SuggestionFacade(
 
     @Transactional
     fun createSpotSuggestion(create: SpotSuggestion.Create): CreateSpotSuggestionResult {
+        // Validate that the point doesn't already exist
         val point = GEOMETRY_FACTORY.createPoint(Coordinate(create.longitude, create.latitude))
         trashSpotValidator.verifyPoint(point)
-
         val s3ImageUrl =
             if (create.isPhotoSelected) {
                 imageS3Caller.createUploadUrl(create.userId, SUGGESTION_IMAGE_PREFIX)

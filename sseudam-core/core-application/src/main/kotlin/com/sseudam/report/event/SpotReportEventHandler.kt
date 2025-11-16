@@ -9,6 +9,7 @@ import com.sseudam.report.strategy.ReportTypeStrategyProvider
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
+import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.modulith.events.ApplicationModuleListener
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component
 class SpotReportEventHandler(
     private val reportTypeStrategyProvider: MutableList<ReportTypeStrategyProvider>,
     private val userService: UserService,
+    private val userDeviceService: UserDeviceService,
     private val eventPublisher: ApplicationEventPublisher,
 ) {
     companion object {
@@ -36,6 +38,8 @@ class SpotReportEventHandler(
             val userId = event.report.userId
             val targetId = event.report.id
             val userProfile = userService.getProfile(userId) ?: return
+            val userDevices = userDeviceService.findAllByUserId(userId)
+            val fcmToken = userDevices.lastOrNull()?.fcmToken ?: return
 
             val (body, type) =
                 when (event.report.status) {
@@ -58,6 +62,7 @@ class SpotReportEventHandler(
                     destination = "MyPageView",
                     notificationType = type,
                     parameterValue = targetId.toString(),
+                    fcmToken = fcmToken,
                 ),
             )
         } catch (e: Exception) {

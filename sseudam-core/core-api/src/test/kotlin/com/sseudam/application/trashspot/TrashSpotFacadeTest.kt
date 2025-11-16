@@ -1,14 +1,13 @@
 package com.sseudam.application.trashspot
 
 import com.sseudam.DevelopTest
-import com.sseudam.common.GeoConverter
+import com.sseudam.contract.visit.SpotVisitedQueryContract
 import com.sseudam.fixture.trashspot.TrashSpotFixture
 import com.sseudam.trashspot.TrashSpotFacade
 import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import com.sseudam.trashspot.image.TrashSpotImageService
 import com.sseudam.user.UserService
-import com.sseudam.visit.SpotVisitedService
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -20,10 +19,9 @@ class TrashSpotFacadeTest :
         val service: TrashSpotService = mockk()
         val imageService: TrashSpotImageService = mockk()
         val userService: UserService = mockk()
-        val visitedService: SpotVisitedService = mockk()
-        val geoConverter: GeoConverter = mockk()
+        val visitedService: SpotVisitedQueryContract = mockk()
 
-        val trashSpotFacade = TrashSpotFacade(service, imageService, userService, visitedService, geoConverter)
+        val trashSpotFacade = TrashSpotFacade(service, imageService, userService, visitedService)
 
         describe("장소 전체 조회") {
             it("FindAll 요청 결과를 반환하여 검증한다.") {

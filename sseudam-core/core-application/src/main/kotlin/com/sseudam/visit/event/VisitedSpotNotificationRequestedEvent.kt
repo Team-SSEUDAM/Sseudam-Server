@@ -7,4 +7,5 @@ data class VisitedSpotNotificationRequestedEvent(
     val destination: String,
     val notificationType: String,
     val parameterValue: String,
+    val fcmToken: String?,
 )

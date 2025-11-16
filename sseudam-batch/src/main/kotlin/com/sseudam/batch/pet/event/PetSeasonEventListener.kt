@@ -1,6 +1,7 @@
-package com.sseudam.pet.event
+package com.sseudam.batch.pet.event
 
 import com.sseudam.notification.event.NewPetNotificationRequestedEvent
+import com.sseudam.pet.event.NewPetSeasonCreatedEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component

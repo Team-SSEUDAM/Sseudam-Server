@@ -5,6 +5,7 @@ import com.sseudam.presentation.v1.visit.response.SpotLatestVisitedResponse
 import com.sseudam.presentation.v1.visit.response.SpotVisitedAllResponse
 import com.sseudam.presentation.v1.visit.response.SpotVisitedCountResponse
 import com.sseudam.presentation.v1.visit.response.SpotVisitedDetailResponse
+import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.User
 import com.sseudam.visit.SpotVisitedFacade
 import com.sseudam.visit.SpotVisitedService
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping
 class VisitedController(
     private val spotVisitedService: SpotVisitedService,
     private val spotVisitedFacade: SpotVisitedFacade,
+    private val trashSpotService: TrashSpotService,
 ) {
     @Operation(summary = "방문하기", description = "장소에 방문합니다.")
     @PostMapping("/visited/{spotId}")
@@ -26,7 +28,8 @@ class VisitedController(
         user: User,
         @PathVariable spotId: Long,
     ): SpotVisitedDetailResponse {
-        val result = spotVisitedFacade.visitSpot(user.id, spotId)
+        val spot = trashSpotService.findBy(spotId)
+        val result = spotVisitedFacade.visitSpot(user.id, spotId, spot.suggesterId)
         return SpotVisitedDetailResponse.of(
             isToday = result.isToday,
             visited = result.visited,

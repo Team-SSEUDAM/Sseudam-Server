@@ -1,5 +1,6 @@
-package com.sseudam.pet
+package com.sseudam.batch.pet
 
+import com.sseudam.pet.UserPetFacade
 import com.sseudam.pet.event.NewPetSeasonCreatedEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.annotation.Scheduled

@@ -4,6 +4,7 @@ import com.sseudam.common.GeoConverter
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
 import com.sseudam.common.TrashType
+import com.sseudam.contract.trashspot.TrashSpotQueryContract
 import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
@@ -23,7 +24,7 @@ class TrashSpotService(
     private val trashSpotAppender: TrashSpotAppender,
     private val trashSpotValidator: TrashSpotValidator,
     private val geoConverter: GeoConverter,
-) {
+) : TrashSpotQueryContract {
     companion object {
         private val GEOMETRY_FACTORY = GeometryFactory(PrecisionModel(), 4326)
     }
@@ -63,7 +64,7 @@ class TrashSpotService(
 
     fun findBy(spotId: Long): TrashSpot.Info = trashSpotReader.readBy(spotId)
 
-    fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> = trashSpotReader.readAllByIds(spotIds)
+    override fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> = trashSpotReader.readAllByIds(spotIds)
 
     fun validateSpotName(name: String) {
         if (trashSpotReader.existsByName(name)) {

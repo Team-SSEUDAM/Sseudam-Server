@@ -4,6 +4,7 @@ import com.sseudam.notification.NotificationType
 import com.sseudam.notification.dto.NotificationMessages
 import com.sseudam.pet.event.UserPetContextEvent
 import com.sseudam.support.extension.logger
+import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.modulith.events.ApplicationModuleListener
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 class VisitedEventHandler(
     private val userService: UserService,
+    private val userDeviceService: UserDeviceService,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     companion object {
@@ -35,8 +37,11 @@ class VisitedEventHandler(
     )
     fun handleSendVisitNotification(event: SpotVisitedEvent) {
         try {
-            val suggesterId = event.spot.suggesterId ?: return
+            val suggesterId = event.suggesterId ?: return
             val profile = userService.getProfile(suggesterId) ?: return
+            val userDevices = userDeviceService.findAllByUserId(suggesterId)
+            val fcmToken = userDevices.lastOrNull()?.fcmToken ?: return
+
             applicationEventPublisher.publishEvent(
                 VisitedSpotNotificationRequestedEvent(
                     suggesterId = suggesterId,
@@ -44,7 +49,8 @@ class VisitedEventHandler(
                     body = NotificationMessages.anonymousVisitedSpotContents(profile.nickname),
                     destination = "MyPageView",
                     notificationType = NotificationType.ANONYMOUS_VISITED_SPOT.name,
-                    parameterValue = event.spot.id.toString(),
+                    parameterValue = event.spotId.toString(),
+                    fcmToken = fcmToken,
                 ),
             )
         } catch (e: Exception) {

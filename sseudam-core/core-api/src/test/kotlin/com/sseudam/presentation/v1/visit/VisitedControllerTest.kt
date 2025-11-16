@@ -41,7 +41,8 @@ class VisitedControllerTest : RestDocsTestSuite() {
         userArgumentResolver = mockk()
         spotVisitedService = mockk()
         spotVisitedFacade = mockk()
-        visitedController = VisitedController(spotVisitedService, spotVisitedFacade)
+        val trashSpotService = mockk<com.sseudam.trashspot.TrashSpotService>()
+        visitedController = VisitedController(spotVisitedService, spotVisitedFacade, trashSpotService)
         mockMvcSpec = mockController(visitedController, userArgumentResolver)
         every { userArgumentResolver.supportsParameter(any()) } returns true
         every { userArgumentResolver.resolveArgument(any(), any(), any(), any()) } returns
@@ -49,6 +50,7 @@ class VisitedControllerTest : RestDocsTestSuite() {
                 id = 1L,
                 key = UUID.randomUUID().toString(),
             )
+        every { trashSpotService.findBy(any()) } returns mockk(relaxed = true)
     }
 
     @DisplayName("방문하기 - 200")
@@ -57,7 +59,7 @@ class VisitedControllerTest : RestDocsTestSuite() {
         val visitedInfo = VisitedFixture.spotVisitedInfo
         val isToday = true
 
-        every { spotVisitedFacade.visitSpot(any(), any()) } returns SpotVisitedResult(isToday, visitedInfo)
+        every { spotVisitedFacade.visitSpot(any(), any(), any()) } returns SpotVisitedResult(isToday, visitedInfo)
 
         val response =
             given()

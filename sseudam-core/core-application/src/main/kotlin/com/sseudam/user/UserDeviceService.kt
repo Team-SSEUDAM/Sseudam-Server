@@ -18,5 +18,7 @@ class UserDeviceService(
 
     fun findByUserId(userId: Long): UserDevice.Info? = userDeviceReader.readLastByUserId(userId)
 
+    fun findAllByUserId(userId: Long): List<UserDevice.Info> = userDeviceReader.readAllByUserId(userId)
+
     fun findAllByUserKey(userKey: String): List<UserDevice.Info> = userDeviceReader.readAllByUserKey(userKey)
 }
