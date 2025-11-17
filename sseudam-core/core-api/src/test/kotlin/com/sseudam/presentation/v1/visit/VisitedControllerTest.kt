@@ -15,7 +15,6 @@ import com.sseudam.docs.support.STRING
 import com.sseudam.docs.support.headerType
 import com.sseudam.docs.support.type
 import com.sseudam.fixture.visit.VisitedFixture
-import com.sseudam.trashspot.TrashSpotService
 import com.sseudam.user.User
 import com.sseudam.visit.SpotVisitedFacade
 import com.sseudam.visit.SpotVisitedService
@@ -42,8 +41,7 @@ class VisitedControllerTest : RestDocsTestSuite() {
         userArgumentResolver = mockk()
         spotVisitedService = mockk()
         spotVisitedFacade = mockk()
-        val trashSpotService = mockk<TrashSpotService>()
-        visitedController = VisitedController(spotVisitedService, spotVisitedFacade, trashSpotService)
+        visitedController = VisitedController(spotVisitedService, spotVisitedFacade)
         mockMvcSpec = mockController(visitedController, userArgumentResolver)
         every { userArgumentResolver.supportsParameter(any()) } returns true
         every { userArgumentResolver.resolveArgument(any(), any(), any(), any()) } returns
@@ -51,7 +49,6 @@ class VisitedControllerTest : RestDocsTestSuite() {
                 id = 1L,
                 key = UUID.randomUUID().toString(),
             )
-        every { trashSpotService.findById(any()) } returns mockk(relaxed = true)
     }
 
     @DisplayName("방문하기 - 200")
