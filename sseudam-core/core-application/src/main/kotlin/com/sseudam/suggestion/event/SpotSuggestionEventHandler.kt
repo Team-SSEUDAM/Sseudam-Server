@@ -1,9 +1,9 @@
 package com.sseudam.suggestion.event
 
 import com.sseudam.common.GeoJson
+import com.sseudam.contract.suggestion.SuggestionUpdateEvent
 import com.sseudam.notification.event.SuggestionDiscordNotificationRequestedEvent
 import com.sseudam.notification.event.SuggestionFcmNotificationRequestedEvent
-import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.extension.logger
@@ -35,11 +35,11 @@ class SpotSuggestionEventHandler(
 
             val (body, type) =
                 when (suggestion.status) {
-                    SuggestionStatus.APPROVE -> {
+                    "APPROVE" -> {
                         val approveBody = "${userProfile.nickname}님의 제보가 승인되어 ${event.rewardPoint}포인트를 받았어요!"
                         approveBody to "APPROVE_SUGGESTION"
                     }
-                    SuggestionStatus.REJECT -> {
+                    "REJECT" -> {
                         val rejectBody = "${userProfile.nickname}님의 제보가 반려되었어요."
                         rejectBody to "REJECT_SUGGESTION"
                     }

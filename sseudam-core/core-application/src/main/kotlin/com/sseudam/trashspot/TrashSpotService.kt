@@ -4,8 +4,9 @@ import com.sseudam.common.GeoConverter
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
 import com.sseudam.common.TrashType
+import com.sseudam.contract.suggestion.SuggestionDto
+import com.sseudam.contract.trashspot.TrashSpotDto
 import com.sseudam.contract.trashspot.TrashSpotQueryContract
-import com.sseudam.suggestion.SpotSuggestion
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.trashspot.component.FindTrashSpotPolicyCondition
@@ -21,15 +22,15 @@ class TrashSpotService(
     private val trashSpotAppender: TrashSpotAppender,
     private val geoConverter: GeoConverter,
 ) : TrashSpotQueryContract {
-    fun createTrashSpotBySuggestion(suggestionInfo: SpotSuggestion.Info): TrashSpot.Info =
+    fun createTrashSpotBySuggestion(suggestionDto: SuggestionDto): TrashSpot.Info =
         trashSpotAppender.append(
             TrashSpot.Create(
-                name = suggestionInfo.spotName,
-                region = suggestionInfo.region,
-                trashType = suggestionInfo.trashType,
-                address = suggestionInfo.address,
-                point = geoConverter.geoJsonPointToJtsPoint(suggestionInfo.point as GeoJson.Point),
-                suggesterId = suggestionInfo.userId,
+                name = suggestionDto.spotName,
+                region = suggestionDto.region,
+                trashType = suggestionDto.trashType,
+                address = suggestionDto.address,
+                point = geoConverter.geoJsonPointToJtsPoint(suggestionDto.point as GeoJson.Point),
+                suggesterId = suggestionDto.userId,
             ),
         )
 
@@ -62,7 +63,19 @@ class TrashSpotService(
         }
     }
 
-    override fun findById(spotId: Long): TrashSpot.Info = trashSpotReader.readBy(spotId)
+    override fun findById(spotId: Long): TrashSpotDto = trashSpotReader.readBy(spotId).toDto()
 
-    override fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> = trashSpotReader.readAllByIds(spotIds)
+    override fun findAllByIds(spotIds: List<Long>): List<TrashSpotDto> = trashSpotReader.readAllByIds(spotIds).map { it.toDto() }
+
+    private fun TrashSpot.Info.toDto() =
+        TrashSpotDto(
+            id = id,
+            name = name,
+            region = region,
+            address = address,
+            point = point,
+            trashType = trashType,
+            suggesterId = suggesterId,
+            updatedAt = updatedAt,
+        )
 }

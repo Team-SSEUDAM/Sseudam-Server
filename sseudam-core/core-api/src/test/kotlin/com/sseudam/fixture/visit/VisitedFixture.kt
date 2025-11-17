@@ -3,7 +3,9 @@ package com.sseudam.fixture.visit
 import com.navercorp.fixturemonkey.kotlin.setExp
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
+import com.sseudam.common.Region
 import com.sseudam.common.TrashType
+import com.sseudam.contract.trashspot.TrashSpotDto
 import com.sseudam.test.helper.fixtureBuilder
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.user.UserProfile
@@ -44,6 +46,17 @@ object VisitedFixture {
             setExp(TrashSpot.Info::address, Address("강남구", "서울시 강남구 강남동 1-4"))
             setExp(TrashSpot.Info::trashType, TrashType.GENERAL)
             setExp(TrashSpot.Info::suggesterId, 1L)
+        }
+
+    val trashSpotDto =
+        fixtureBuilder<TrashSpotDto> {
+            setExp(TrashSpotDto::id, 1L)
+            setExp(TrashSpotDto::name, "테스트 쓰레기통")
+            setExp(TrashSpotDto::region, Region.SEOUL)
+            setExp(TrashSpotDto::point, randomPoint())
+            setExp(TrashSpotDto::address, Address("강남구", "서울시 강남구 강남동 1-4"))
+            setExp(TrashSpotDto::trashType, TrashType.GENERAL)
+            setExp(TrashSpotDto::suggesterId, 1L)
         }
 
     val userProfile =

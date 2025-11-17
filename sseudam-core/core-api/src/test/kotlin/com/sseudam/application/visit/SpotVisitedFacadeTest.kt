@@ -39,7 +39,7 @@ class SpotVisitedFacadeTest :
                     val spotId = 1L
                     val visitedInfo = VisitedFixture.spotVisitedInfo
 
-                    every { trashSpotService.findById(spotId) } returns VisitedFixture.trashSpotInfo
+                    every { trashSpotService.findById(spotId) } returns VisitedFixture.trashSpotDto
                     every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns emptyList()
                     every { spotVisitedService.verifyVisited(emptyList(), null) } just Runs
                     every { spotVisitedService.append(any()) } returns visitedInfo
@@ -69,7 +69,7 @@ class SpotVisitedFacadeTest :
                     val visitedInfo = VisitedFixture.spotVisitedInfo
                     val todayVisits = listOf(VisitedFixture.spotVisitedInfo.copy(spotId = 1L))
 
-                    every { trashSpotService.findById(spotId) } returns VisitedFixture.trashSpotInfo
+                    every { trashSpotService.findById(spotId) } returns VisitedFixture.trashSpotDto
                     every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns todayVisits
                     every { spotVisitedService.verifyVisited(todayVisits, null) } just Runs
                     every { spotVisitedService.append(any()) } returns visitedInfo
@@ -96,7 +96,7 @@ class SpotVisitedFacadeTest :
                     val spotId = 1L
                     val todayVisits = listOf(VisitedFixture.spotVisitedInfo)
 
-                    every { trashSpotService.findById(spotId) } returns VisitedFixture.trashSpotInfo
+                    every { trashSpotService.findById(spotId) } returns VisitedFixture.trashSpotDto
                     every { spotVisitedService.findTodaySpotVisitedByUser(userId) } returns todayVisits
                     every { spotVisitedService.verifyVisited(todayVisits, todayVisits[0]) } throws ErrorException(ErrorType.SPOT_VISITED_ALREADY)
 
@@ -117,7 +117,7 @@ class SpotVisitedFacadeTest :
                 it("장소 정보와 함께 방문 목록을 반환한다") {
                     val userId = 1L
                     val visitedList = listOf(VisitedFixture.spotVisitedInfo)
-                    val spotList = listOf(VisitedFixture.trashSpotInfo)
+                    val spotList = listOf(VisitedFixture.trashSpotDto)
 
                     every { spotVisitedService.findAllByUser(userId) } returns visitedList
                     every { trashSpotService.findAllByIds(any()) } returns spotList
@@ -151,7 +151,7 @@ class SpotVisitedFacadeTest :
                             VisitedFixture.spotVisitedInfo.copy(spotId = 1L),
                             VisitedFixture.spotVisitedInfo.copy(spotId = 999L),
                         )
-                    val spotList = listOf(VisitedFixture.trashSpotInfo.copy(id = 1L))
+                    val spotList = listOf(VisitedFixture.trashSpotDto.copy(id = 1L))
 
                     every { spotVisitedService.findAllByUser(userId) } returns visitedList
                     every { trashSpotService.findAllByIds(any()) } returns spotList

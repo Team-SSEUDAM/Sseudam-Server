@@ -1,8 +1,8 @@
 package com.sseudam.trashspot.internal
 
+import com.sseudam.contract.suggestion.SuggestionUpdateEvent
 import com.sseudam.pet.PetPointAction
 import com.sseudam.pet.event.UserPetContextEvent
-import com.sseudam.suggestion.event.SuggestionUpdateEvent
 import com.sseudam.support.Cache
 import com.sseudam.support.extension.logger
 import com.sseudam.trashspot.TrashSpotService
@@ -25,7 +25,7 @@ class TrashSpotSuggestionEventHandler(
 
     @ApplicationModuleListener(
         id = "trashspot-create-from-suggestion",
-        condition = "#event.suggestion.status.name() == 'APPROVE'",
+        condition = "#event.suggestion.status == 'APPROVE'",
     )
     fun handleApprovedSuggestion(event: SuggestionUpdateEvent) {
         try {

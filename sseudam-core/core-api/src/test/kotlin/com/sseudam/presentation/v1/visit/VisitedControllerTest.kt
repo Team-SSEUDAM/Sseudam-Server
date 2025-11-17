@@ -51,7 +51,7 @@ class VisitedControllerTest : RestDocsTestSuite() {
                 id = 1L,
                 key = UUID.randomUUID().toString(),
             )
-        every { trashSpotService.findBy(any()) } returns mockk(relaxed = true)
+        every { trashSpotService.findById(any()) } returns mockk(relaxed = true)
     }
 
     @DisplayName("방문하기 - 200")

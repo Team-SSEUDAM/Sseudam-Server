@@ -1,12 +1,13 @@
 package com.sseudam.suggestion
 
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.contract.suggestion.SuggestionDto
+import com.sseudam.contract.suggestion.SuggestionUpdateEvent
 import com.sseudam.suggestion.command.CancelSuggestionCommand
 import com.sseudam.suggestion.component.SuggestionAppender
 import com.sseudam.suggestion.component.SuggestionReader
 import com.sseudam.suggestion.component.SuggestionUpdater
 import com.sseudam.suggestion.component.SuggestionValidator
-import com.sseudam.suggestion.event.SuggestionUpdateEvent
 import com.sseudam.suggestion.result.CreateSpotSuggestionResult
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
@@ -90,7 +91,7 @@ class SuggestionService(
             .also {
                 applicationEventPublisher.publishEvent(
                     SuggestionUpdateEvent(
-                        suggestion = it,
+                        suggestion = it.toDto(),
                         reason = reason,
                         rewardPoint = rewardPoint,
                     ),
@@ -108,4 +109,17 @@ class SuggestionService(
         suggestionValidator.verifySuggestion(command.userId, suggestion)
         suggestionUpdater.cancel(command.suggestionId)
     }
+
+    private fun SpotSuggestion.Info.toDto() =
+        SuggestionDto(
+            id = id,
+            userId = userId,
+            spotName = spotName,
+            point = point,
+            region = region,
+            address = address,
+            trashType = trashType,
+            imageUrl = imageUrl,
+            status = status.name,
+        )
 }
