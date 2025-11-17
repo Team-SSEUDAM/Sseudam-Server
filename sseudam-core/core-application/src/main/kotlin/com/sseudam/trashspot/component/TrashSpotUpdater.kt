@@ -1,7 +1,7 @@
 package com.sseudam.trashspot.component
 
 import com.sseudam.common.Region
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import com.sseudam.trashspot.repository.TrashSpotRepository
 import org.locationtech.jts.geom.Point
 import org.springframework.stereotype.Component

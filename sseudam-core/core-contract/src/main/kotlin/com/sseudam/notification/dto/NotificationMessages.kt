@@ -1,7 +1,5 @@
 package com.sseudam.notification.dto
 
-import com.sseudam.pet.PetPointAction
-
 object NotificationMessages {
     private val regularMessages: List<Pair<String, String>> =
         listOf(
@@ -27,13 +25,17 @@ object NotificationMessages {
 
     fun randomRegularMessage(): Pair<String, String> = regularMessages.random()
 
-    fun approveSuggestionContents(nickname: String) =
-        "${nickname}님이 제보한 쓰레기통이 승인되어 ${PetPointAction.SUGGESTION_APPROVED.point}포인트를 추가로 받았어요!"
+    fun approveSuggestionContents(
+        nickname: String,
+        point: Long,
+    ) = "${nickname}님이 제보한 쓰레기통이 승인되어 ${point}포인트를 추가로 받았어요!"
 
     fun rejectSuggestionContents(nickname: String) = "${nickname}님이 제보한 쓰레기통이 반려되었어요. 사유를 확인해볼까요?"
 
-    fun approveReportContents(nickname: String) =
-        "${nickname}님이 수정 제안한 쓰레기통이 승인되어 ${PetPointAction.SUGGESTION_APPROVED.point}포인트를 추가로 받았어요!"
+    fun approveReportContents(
+        nickname: String,
+        point: Long,
+    ) = "${nickname}님이 수정 제안한 쓰레기통이 승인되어 ${point}포인트를 추가로 받았어요!"
 
     fun rejectReportContents(nickname: String) = "${nickname}님이 수정 제안한 쓰레기통이 반려되었어요. 사유를 확인해볼까요?"
 }

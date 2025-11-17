@@ -10,10 +10,15 @@ data class AdminUpdateSuggestionRequest(
     @Schema(description = "제보 상태", example = "APPROVE")
     val status: SuggestionStatus,
 ) {
+    companion object {
+        private const val SUGGESTION_APPROVED_POINT = 15L
+    }
+
     fun toCommand(suggestionId: Long) =
         UpdateSuggestionCommand(
             suggestionId = suggestionId,
             reason = reason,
             status = status,
+            rewardPoint = if (status == SuggestionStatus.APPROVE) SUGGESTION_APPROVED_POINT else 0L,
         )
 }

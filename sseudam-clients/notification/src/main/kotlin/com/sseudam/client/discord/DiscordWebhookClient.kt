@@ -13,7 +13,3 @@ interface DiscordWebhookClient {
         @RequestBody message: DiscordMessagePayload,
     )
 }
-
-data class DiscordMessagePayload(
-    val content: String,
-)

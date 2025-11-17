@@ -3,39 +3,34 @@ package com.sseudam.trashspot
 import com.sseudam.common.GeoConverter
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
-import com.sseudam.suggestion.SpotSuggestion
+import com.sseudam.common.TrashType
+import com.sseudam.contract.suggestion.SuggestionDto
+import com.sseudam.contract.trashspot.TrashSpotDto
+import com.sseudam.contract.trashspot.TrashSpotQueryContract
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.trashspot.component.FindTrashSpotPolicyCondition
 import com.sseudam.trashspot.component.TrashSpotAppender
 import com.sseudam.trashspot.component.TrashSpotReader
-import com.sseudam.trashspot.component.TrashSpotValidator
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import com.sseudam.trashspot.dto.isNotSet
-import org.locationtech.jts.geom.Coordinate
-import org.locationtech.jts.geom.GeometryFactory
-import org.locationtech.jts.geom.PrecisionModel
 import org.springframework.stereotype.Service
 
 @Service
 class TrashSpotService(
     private val trashSpotReader: TrashSpotReader,
     private val trashSpotAppender: TrashSpotAppender,
-    private val trashSpotValidator: TrashSpotValidator,
     private val geoConverter: GeoConverter,
-) {
-    companion object {
-        private val GEOMETRY_FACTORY = GeometryFactory(PrecisionModel(), 4326)
-    }
-
-    fun createTrashSpotBySuggestion(suggestionInfo: SpotSuggestion.Info): TrashSpot.Info =
+) : TrashSpotQueryContract {
+    fun createTrashSpotBySuggestion(suggestionDto: SuggestionDto): TrashSpot.Info =
         trashSpotAppender.append(
             TrashSpot.Create(
-                name = suggestionInfo.spotName,
-                region = suggestionInfo.region,
-                trashType = suggestionInfo.trashType,
-                address = suggestionInfo.address,
-                point = geoConverter.geoJsonPointToJtsPoint(suggestionInfo.point as GeoJson.Point),
+                name = suggestionDto.spotName,
+                region = suggestionDto.region,
+                trashType = suggestionDto.trashType,
+                address = suggestionDto.address,
+                point = geoConverter.geoJsonPointToJtsPoint(suggestionDto.point as GeoJson.Point),
+                suggesterId = suggestionDto.userId,
             ),
         )
 
@@ -62,24 +57,25 @@ class TrashSpotService(
 
     fun findBy(spotId: Long): TrashSpot.Info = trashSpotReader.readBy(spotId)
 
-    fun findAllByIds(spotIds: List<Long>): List<TrashSpot.Info> = trashSpotReader.readAllByIds(spotIds)
-
     fun validateSpotName(name: String) {
         if (trashSpotReader.existsByName(name)) {
             throw ErrorException(ErrorType.DUPLICATE_SPOT_NAME)
         }
     }
 
-    fun appendVerifySpot(
-        site: String,
-        longitude: Double,
-        latitude: Double,
-    ) {
-        val point =
-            GEOMETRY_FACTORY.createPoint(
-                Coordinate(longitude, latitude),
-            )
+    override fun findById(spotId: Long): TrashSpotDto = trashSpotReader.readBy(spotId).toDto()
 
-        trashSpotValidator.verifyPoint(point)
-    }
+    override fun findAllByIds(spotIds: List<Long>): List<TrashSpotDto> = trashSpotReader.readAllByIds(spotIds).map { it.toDto() }
+
+    private fun TrashSpot.Info.toDto() =
+        TrashSpotDto(
+            id = id,
+            name = name,
+            region = region,
+            address = address,
+            point = point,
+            trashType = trashType,
+            suggesterId = suggesterId,
+            updatedAt = updatedAt,
+        )
 }

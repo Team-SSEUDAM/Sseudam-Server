@@ -1,9 +1,9 @@
 package com.sseudam.presentation.v1.report.request
 
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
-import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "신고하기 요청 Json")

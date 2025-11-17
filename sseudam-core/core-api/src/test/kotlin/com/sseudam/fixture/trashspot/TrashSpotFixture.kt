@@ -4,10 +4,10 @@ import com.navercorp.fixturemonkey.kotlin.setExp
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.test.helper.fixtureBuilder
 import com.sseudam.test.helper.fixtureBuilders
 import com.sseudam.trashspot.TrashSpot
-import com.sseudam.trashspot.TrashType
 import com.sseudam.trashspot.image.TrashSpotImage
 import net.jqwik.api.Arbitraries
 

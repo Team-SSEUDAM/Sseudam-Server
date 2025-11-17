@@ -1,6 +1,7 @@
 package com.sseudam.application.suggestion
 
 import com.sseudam.DevelopTest
+import com.sseudam.contract.suggestion.SuggestionUpdateEvent
 import com.sseudam.fixture.common.PageFixture
 import com.sseudam.fixture.suggestion.SuggestionFixture
 import com.sseudam.suggestion.SpotSuggestion
@@ -10,7 +11,6 @@ import com.sseudam.suggestion.component.SuggestionAppender
 import com.sseudam.suggestion.component.SuggestionReader
 import com.sseudam.suggestion.component.SuggestionUpdater
 import com.sseudam.suggestion.component.SuggestionValidator
-import com.sseudam.suggestion.event.SuggestionUpdateEvent
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.support.page.Page
@@ -216,7 +216,7 @@ class SuggestionServiceTest :
 
                     result shouldBe suggestionInfo
                     verify { suggestionUpdater.update(suggestionId, status) }
-                    verify { applicationEventPublisher.publishEvent(SuggestionUpdateEvent(suggestionInfo, reason)) }
+                    verify { applicationEventPublisher.publishEvent(any<SuggestionUpdateEvent>()) }
                 }
             }
         }

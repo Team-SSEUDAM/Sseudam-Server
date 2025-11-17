@@ -1,13 +1,13 @@
 package com.sseudam.user.event
 
-import com.sseudam.notification.discord.DiscordClient
+import com.sseudam.notification.event.UserDiscordNotificationRequestedEvent
 import com.sseudam.pet.Pet
 import com.sseudam.pet.component.PetReader
 import com.sseudam.pet.component.UserPetAppender
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
 import com.sseudam.user.component.UserReader
-import com.sseudam.user.dto.SendMessageUserProfileDto
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -17,7 +17,7 @@ class UserEventHandler(
     private val petReader: PetReader,
     private val userPetAppender: UserPetAppender,
     private val userReader: UserReader,
-    private val discordClient: DiscordClient,
+    private val eventPublisher: ApplicationEventPublisher,
 ) {
     @ApplicationModuleListener(id = "user-signup-create-pet", condition = "#event.userId != null")
     fun onCreatePetListener(event: UserSignUpEvent) {
@@ -35,6 +35,15 @@ class UserEventHandler(
         val userProfile =
             userReader.readUserProfile(event.userId)
                 ?: throw ErrorException(ErrorType.NOT_FOUND_USER)
-        discordClient.sendCreateUserMessage(SendMessageUserProfileDto.from(userProfile))
+
+        eventPublisher.publishEvent(
+            UserDiscordNotificationRequestedEvent(
+                id = userProfile.id,
+                email = userProfile.email,
+                nickname = userProfile.nickname,
+                site = userProfile.address.site,
+                createdAt = userProfile.createdAt,
+            ),
+        )
     }
 }

@@ -1,8 +1,8 @@
 package com.sseudam.storage.db.core.user
 
 import com.sseudam.common.Address
+import com.sseudam.common.SocialType
 import com.sseudam.storage.db.core.support.BaseEntity
-import com.sseudam.user.SocialType
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User
 import com.sseudam.user.UserCredentials

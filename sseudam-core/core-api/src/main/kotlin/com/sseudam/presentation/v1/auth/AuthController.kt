@@ -4,6 +4,7 @@ import com.sseudam.auth.AuthenticationFacade
 import com.sseudam.auth.AuthenticationService
 import com.sseudam.auth.command.CredentialSocialCommand
 import com.sseudam.client.oauth.OAuthService
+import com.sseudam.common.SocialType
 import com.sseudam.presentation.v1.annotation.ApiV1Controller
 import com.sseudam.presentation.v1.auth.request.LoginRequest
 import com.sseudam.presentation.v1.auth.request.RefreshTokenRequest
@@ -15,7 +16,6 @@ import com.sseudam.presentation.v1.auth.response.SignUpResponse
 import com.sseudam.presentation.v1.auth.response.TokenResponse
 import com.sseudam.support.error.ErrorException
 import com.sseudam.support.error.ErrorType
-import com.sseudam.user.SocialType
 import com.sseudam.user.User
 import com.sseudam.user.UserService
 import io.swagger.v3.oas.annotations.Operation

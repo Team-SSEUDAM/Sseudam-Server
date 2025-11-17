@@ -3,7 +3,7 @@ package com.sseudam.presentation.v1.auth.request
 import com.sseudam.auth.AuthorityType
 import com.sseudam.auth.command.AuthenticationSseudamCommand
 import com.sseudam.auth.dto.GrantedAuthority
-import com.sseudam.user.SocialType
+import com.sseudam.common.SocialType
 import com.sseudam.user.command.UserCommand
 import io.swagger.v3.oas.annotations.media.Schema
 

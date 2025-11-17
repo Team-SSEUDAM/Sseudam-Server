@@ -1,4 +1,4 @@
-package com.sseudam.trashspot
+package com.sseudam.common
 
 enum class TrashType(
     val displayName: String,

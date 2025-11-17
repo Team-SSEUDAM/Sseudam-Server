@@ -1,6 +1,7 @@
 package com.sseudam.presentation.v1.history
 
 import com.sseudam.RestDocsTest
+import com.sseudam.common.TrashType
 import com.sseudam.config.UserArgumentResolver
 import com.sseudam.docs.RestDocsTestSuite
 import com.sseudam.docs.support.ARRAY
@@ -19,7 +20,6 @@ import com.sseudam.fixture.history.HistoryFixture
 import com.sseudam.history.HistoryFacade
 import com.sseudam.history.dto.HistoryStatus
 import com.sseudam.history.dto.SpotActionType
-import com.sseudam.trashspot.TrashType
 import com.sseudam.user.User
 import io.mockk.every
 import io.mockk.mockk

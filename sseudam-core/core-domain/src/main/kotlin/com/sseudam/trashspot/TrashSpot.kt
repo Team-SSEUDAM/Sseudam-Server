@@ -3,6 +3,7 @@ package com.sseudam.trashspot
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import org.locationtech.jts.geom.Point
 import java.time.LocalDateTime
 
@@ -13,6 +14,7 @@ class TrashSpot {
      * @property address 쓰레기통 주소
      * @property point 쓰레기통 위치
      * @property trashType 쓰레기통 타입
+     * @property suggesterId 제안자 ID (optional)
      */
     data class Create(
         val name: String,
@@ -20,6 +22,7 @@ class TrashSpot {
         val address: Address,
         val point: Point,
         val trashType: TrashType,
+        val suggesterId: Long? = null,
     )
 
     /** TrashSpot Info
@@ -29,6 +32,7 @@ class TrashSpot {
      * @property address 쓰레기통 주소
      * @property point 쓰레기통 위치
      * @property trashType 쓰레기통 타입
+     * @property suggesterId 제안자 ID (optional)
      */
     data class Info(
         val id: Long,
@@ -37,6 +41,7 @@ class TrashSpot {
         val address: Address,
         val point: GeoJson,
         val trashType: TrashType,
+        val suggesterId: Long? = null,
         val updatedAt: LocalDateTime? = null,
     )
 }

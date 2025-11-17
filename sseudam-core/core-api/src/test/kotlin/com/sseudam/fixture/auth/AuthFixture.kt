@@ -8,8 +8,8 @@ import com.sseudam.auth.command.CredentialSseudamCommand
 import com.sseudam.auth.dto.GrantedAuthority
 import com.sseudam.client.oauth.AppleClientResult
 import com.sseudam.client.oauth.KaKaoClientResult
+import com.sseudam.common.SocialType
 import com.sseudam.test.helper.fixtureBuilder
-import com.sseudam.user.SocialType
 import com.sseudam.user.SocialUser
 
 object AuthFixture {

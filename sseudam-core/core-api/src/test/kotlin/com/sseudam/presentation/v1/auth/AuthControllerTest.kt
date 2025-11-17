@@ -8,6 +8,7 @@ import com.sseudam.auth.result.SocialLoginResult
 import com.sseudam.client.oauth.AppleClientResult
 import com.sseudam.client.oauth.KaKaoClientResult
 import com.sseudam.client.oauth.OAuthService
+import com.sseudam.common.SocialType
 import com.sseudam.docs.RestDocsTestSuite
 import com.sseudam.docs.support.BOOLEAN
 import com.sseudam.docs.support.DocsTag
@@ -21,7 +22,6 @@ import com.sseudam.presentation.v1.auth.request.RefreshTokenRequest
 import com.sseudam.presentation.v1.auth.request.SignUpRequest
 import com.sseudam.presentation.v1.auth.request.SignUpSocialRequest
 import com.sseudam.presentation.v1.auth.request.TokenRequest
-import com.sseudam.user.SocialType
 import com.sseudam.user.SocialUser
 import com.sseudam.user.UserCredentials
 import com.sseudam.user.UserService
