@@ -2,6 +2,7 @@ package com.sseudam.presentation.v1.suggestion
 
 import com.sseudam.RestDocsTest
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.config.UserArgumentResolver
 import com.sseudam.docs.RestDocsTestSuite
 import com.sseudam.docs.support.ARRAY
@@ -23,7 +24,6 @@ import com.sseudam.suggestion.SuggestionFacade
 import com.sseudam.suggestion.SuggestionService
 import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.result.CreateSpotSuggestionResult
-import com.sseudam.trashspot.TrashType
 import com.sseudam.user.User
 import io.mockk.Runs
 import io.mockk.every

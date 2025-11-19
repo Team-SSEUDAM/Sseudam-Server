@@ -1,8 +1,8 @@
 package com.sseudam.notification.discord
 
-import com.sseudam.report.dto.SendMessageReportDto
-import com.sseudam.suggestion.dto.SendMessageSuggestionDto
-import com.sseudam.user.dto.SendMessageUserProfileDto
+import com.sseudam.notification.dto.SendMessageReportDto
+import com.sseudam.notification.dto.SendMessageSuggestionDto
+import com.sseudam.notification.dto.SendMessageUserProfileDto
 
 interface DiscordClient {
     fun sendCreateUserMessage(messageUserProfileDto: SendMessageUserProfileDto)

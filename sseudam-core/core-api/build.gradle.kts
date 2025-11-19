@@ -165,6 +165,10 @@ dependencies {
     testImplementation(project(":sseudam-tests:test-helper"))
     testImplementation(testFixtures(project(":sseudam-tests:test-container")))
     testImplementation(libs.bundles.openfeign)
+
+    // Spring Modulith test support
+    testImplementation(libs.spring.modulith.test)
+    testImplementation(libs.spring.modulith.docs)
 }
 
 dependencyManagement {

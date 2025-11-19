@@ -2,6 +2,7 @@ package com.sseudam.presentation.v1.trashspot
 
 import com.sseudam.RestDocsTest
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.docs.RestDocsTestSuite
 import com.sseudam.docs.support.ARRAY
 import com.sseudam.docs.support.DOUBLE
@@ -20,7 +21,6 @@ import com.sseudam.docs.support.parameterType
 import com.sseudam.docs.support.type
 import com.sseudam.fixture.trashspot.TrashSpotFixture
 import com.sseudam.trashspot.TrashSpotFacade
-import com.sseudam.trashspot.TrashType
 import com.sseudam.trashspot.result.TrashSpotDetail
 import io.mockk.every
 import io.mockk.mockk

@@ -3,10 +3,10 @@ package com.sseudam.presentation.v1.report.response
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
-import com.sseudam.trashspot.TrashType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
@@ -45,7 +45,7 @@ data class SpotReportResponse(
                 id = detail.id,
                 spotId = detail.spotId,
                 spotName = detail.spotName,
-                region = detail.region ?: Region.UNKNOWN,
+                region = detail.region,
                 userId = detail.userId,
                 reportType = detail.reportType,
                 point = detail.point,

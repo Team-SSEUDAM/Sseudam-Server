@@ -2,7 +2,7 @@ package com.sseudam.history.dto
 
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
-import com.sseudam.trashspot.TrashType
+import com.sseudam.common.TrashType
 import java.time.LocalDateTime
 
 class SpotHistory {

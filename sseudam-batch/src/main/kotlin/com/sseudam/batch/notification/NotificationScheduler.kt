@@ -1,5 +1,7 @@
-package com.sseudam.notification
+package com.sseudam.batch.notification
 
+import com.sseudam.notification.NotificationService
+import com.sseudam.notification.NotificationType
 import com.sseudam.notification.command.CreateNotificationStoredCommand
 import com.sseudam.notification.command.FirebaseCloudMessageCommand
 import com.sseudam.notification.component.NotificationStoredKeyGenerator
@@ -7,30 +9,28 @@ import com.sseudam.notification.dto.NotificationMessages
 import com.sseudam.notification.fcm.FcmSender
 import com.sseudam.user.UserDeviceService
 import com.sseudam.user.UserService
-import org.springframework.stereotype.Service
+import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Component
 
-@Service
-class NotificationFacade(
+@Component
+class NotificationScheduler(
     private val userDeviceService: UserDeviceService,
     private val userService: UserService,
     private val notificationStoredKeyGenerator: NotificationStoredKeyGenerator,
     private val notificationService: NotificationService,
     private val fcmSender: FcmSender,
 ) {
-    companion object {
-        private const val DEFAULT_USER_NICKNAME = "사용자"
-    }
-
-    fun createWeeklyNotificationMessages(): List<FirebaseCloudMessageCommand> {
+    // TODO: 테스트 후 매주 화요일 9시로 변경
+    @Scheduled(cron = "0 0 9 * * *")
+    fun sendWeeklyNotification() {
         val userDevices =
             userDeviceService
                 .findAll()
                 .sortedByDescending { it.createdAt }
                 .filter { it.fcmToken.isNotBlank() && it.fcmToken.isNotEmpty() }
                 .distinctBy { it.userId }
-        if (userDevices.isEmpty()) {
-            return listOf()
-        }
+
+        if (userDevices.isEmpty()) return
 
         val userIds = userDevices.map { it.userId }.distinct()
         val users = userService.findAllBy(userIds)
@@ -46,6 +46,8 @@ class NotificationFacade(
                     destination = "HomeView",
                 )
             }
+
+        fcmSender.sendAll(messages.toSet())
 
         notificationService.appendAll(
             messages
@@ -65,53 +67,5 @@ class NotificationFacade(
                     )
                 }.filterNotNull(),
         )
-
-        return messages
-    }
-
-    fun sendNewPetNotifications() {
-        val userDevices =
-            userDeviceService
-                .findAll()
-                .sortedByDescending { it.createdAt }
-                .filter { it.fcmToken.isNotBlank() && it.fcmToken.isNotEmpty() }
-                .distinctBy { it.userId }
-        if (userDevices.isEmpty()) return
-        val userProfiles =
-            userService
-                .findAllBy(userDevices.map { it.userId }.distinct())
-                .associateBy { it.id }
-        val messages =
-            userDevices.map { device ->
-                FirebaseCloudMessageCommand(
-                    fcmToken = device.fcmToken,
-                    title = NotificationMessages.DEFAULT_TITLE,
-                    body =
-                        NotificationMessages.newPetContents(
-                            userProfiles[device.userId]?.nickname
-                                ?: DEFAULT_USER_NICKNAME,
-                        ),
-                    destination = "MyPetView",
-                )
-            }
-        fcmSender.sendAll(messages.toSet()).apply {
-            notificationService.appendAll(
-                messages
-                    .map { message ->
-                        CreateNotificationStoredCommand(
-                            userId =
-                                userDevices
-                                    .find { it.fcmToken == message.fcmToken }
-                                    ?.userId
-                                    ?: return@map null,
-                            notificationStoredKey = notificationStoredKeyGenerator.generate(),
-                            type = NotificationType.NEW_PET_SEASON,
-                            parameterValue = "",
-                            topic = message.title,
-                            contents = message.body,
-                        )
-                    }.filterNotNull(),
-            )
-        }
     }
 }

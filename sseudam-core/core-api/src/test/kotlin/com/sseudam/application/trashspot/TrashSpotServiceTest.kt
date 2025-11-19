@@ -5,12 +5,11 @@ import com.sseudam.common.Address
 import com.sseudam.common.GeoConverter
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.trashspot.TrashSpot
 import com.sseudam.trashspot.TrashSpotService
-import com.sseudam.trashspot.TrashType
 import com.sseudam.trashspot.component.TrashSpotAppender
 import com.sseudam.trashspot.component.TrashSpotReader
-import com.sseudam.trashspot.component.TrashSpotValidator
 import com.sseudam.trashspot.dto.TrashSpotLocation
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -22,10 +21,9 @@ class TrashSpotServiceTest :
     DescribeSpec({
         val reader: TrashSpotReader = mockk()
         val appender: TrashSpotAppender = mockk()
-        val validator: TrashSpotValidator = mockk(relaxed = true)
         val geoConverter: GeoConverter = mockk(relaxed = true)
 
-        val service = TrashSpotService(reader, appender, validator, geoConverter)
+        val service = TrashSpotService(reader, appender, geoConverter)
 
         describe("findAll") {
             it("delegates condition lookup to reader and returns results") {

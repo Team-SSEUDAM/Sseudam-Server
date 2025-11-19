@@ -3,10 +3,10 @@ package com.sseudam.admin.application.report
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.report.ReportStatus
 import com.sseudam.report.ReportType
 import com.sseudam.report.SpotReport
-import com.sseudam.trashspot.TrashType
 import com.sseudam.user.UserProfile
 import java.time.LocalDateTime
 

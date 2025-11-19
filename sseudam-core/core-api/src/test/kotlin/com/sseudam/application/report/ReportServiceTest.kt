@@ -248,7 +248,13 @@ class ReportServiceTest :
 
                     result shouldBe reportInfo
                     verify { reportUpdater.update(updateCommand.reportId, updateCommand.status) }
-                    verify { applicationEventPublisher.publishEvent(SpotReportUpdateEvent(reportInfo, updateCommand.rejectReason)) }
+                    verify {
+                        applicationEventPublisher.publishEvent(
+                            match<SpotReportUpdateEvent> {
+                                it.report == reportInfo && it.reason == updateCommand.rejectReason
+                            },
+                        )
+                    }
                 }
             }
         }

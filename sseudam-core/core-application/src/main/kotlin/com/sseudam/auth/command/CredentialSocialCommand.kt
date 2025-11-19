@@ -1,6 +1,6 @@
 package com.sseudam.auth.command
 
-import com.sseudam.user.SocialType
+import com.sseudam.common.SocialType
 
 data class CredentialSocialCommand(
     val email: String,

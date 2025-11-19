@@ -5,6 +5,7 @@ import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
 import com.sseudam.common.S3ImageUrl
+import com.sseudam.common.TrashType
 import com.sseudam.pet.PetPointAction
 import com.sseudam.presentation.v1.suggestion.request.SpotSuggestionCreateRequest
 import com.sseudam.presentation.v1.suggestion.request.SuggestionCancelRequest
@@ -14,7 +15,6 @@ import com.sseudam.suggestion.SuggestionStatus
 import com.sseudam.suggestion.command.CancelSuggestionCommand
 import com.sseudam.suggestion.event.SpotSuggestionCreatedEvent
 import com.sseudam.test.helper.fixtureBuilder
-import com.sseudam.trashspot.TrashType
 import net.jqwik.api.Arbitraries
 import java.time.LocalDateTime
 

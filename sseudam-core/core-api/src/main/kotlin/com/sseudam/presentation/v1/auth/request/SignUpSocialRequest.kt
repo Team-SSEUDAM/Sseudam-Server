@@ -4,7 +4,7 @@ import com.sseudam.auth.AuthorityType
 import com.sseudam.auth.command.AuthenticationSocialCommand
 import com.sseudam.auth.dto.GrantedAuthority
 import com.sseudam.common.Address
-import com.sseudam.user.SocialType
+import com.sseudam.common.SocialType
 import com.sseudam.user.command.UserCommand
 import io.swagger.v3.oas.annotations.media.Schema
 

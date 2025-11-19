@@ -1,9 +1,9 @@
 package com.sseudam.fixture.user
 
 import com.navercorp.fixturemonkey.kotlin.setExp
+import com.sseudam.common.SocialType
 import com.sseudam.fixture.common.AddressFixture
 import com.sseudam.test.helper.fixtureBuilder
-import com.sseudam.user.SocialType
 import com.sseudam.user.SocialUser
 import com.sseudam.user.User
 import com.sseudam.user.UserProfile

@@ -1,5 +1,6 @@
 package com.sseudam.visit
 
+import com.sseudam.contract.visit.SpotVisitedQueryContract
 import com.sseudam.visit.component.SpotVisitedAppender
 import com.sseudam.visit.component.SpotVisitedReader
 import com.sseudam.visit.component.SpotVisitedValidator
@@ -11,7 +12,7 @@ class SpotVisitedService(
     private val spotVisitedAppender: SpotVisitedAppender,
     private val spotVisitedReader: SpotVisitedReader,
     private val spotVisitedValidator: SpotVisitedValidator,
-) {
+) : SpotVisitedQueryContract {
     fun append(spotVisited: SpotVisited.Create) = spotVisitedAppender.append(spotVisited)
 
     fun findAllByUser(userId: Long): List<SpotVisited.Info> = spotVisitedReader.readByUserId(userId)
@@ -28,7 +29,7 @@ class SpotVisitedService(
         spotId: Long,
     ): SpotVisited.Info? = spotVisitedReader.readLastVisited(userId, spotId)
 
-    fun countBySpotId(spotId: Long): Long = spotVisitedReader.countBySpotId(spotId)
+    override fun countBySpotId(spotId: Long): Long = spotVisitedReader.countBySpotId(spotId)
 
     fun verifyVisited(
         todayVisited: List<SpotVisited.Info>,

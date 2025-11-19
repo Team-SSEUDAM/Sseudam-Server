@@ -3,8 +3,8 @@ package com.sseudam.report
 import com.sseudam.common.Address
 import com.sseudam.common.GeoJson
 import com.sseudam.common.Region
+import com.sseudam.common.TrashType
 import com.sseudam.report.reject.ReportReject
-import com.sseudam.trashspot.TrashType
 import java.time.LocalDateTime
 
 class SpotReport {
