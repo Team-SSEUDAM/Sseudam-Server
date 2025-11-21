@@ -12,14 +12,14 @@ arrow_fx = "1.2.1"
 jwt = "0.12.6"
 bouncycastle = "1.70"
 # Spring
-spring_boot = "4.0.0-RC2"
+spring_boot = "4.0.0"
 spring_dependency_management = "1.1.7"
 spring_cloud_dependencies = "2024.0.0"
 jakartaAnnotation = "3.0.0"
 spring_modulith = "2.0.0-RC1"
 
 # Redis version
-redisson = "3.30.0"
+redisson = "3.52.0"
 
 # DB version
 postgresql = "42.7.5"
@@ -38,7 +38,7 @@ testcontainers = "1.21.3"
 asciidoctor_convert = "4.0.5"
 epages_restdocs_api_spec = "0.17.1"
 hidetake_swagger_generator = "2.18.2"
-swaggerVersion = "3.0.0-RC1"
+swaggerVersion = "3.0.0"
 restassured = "5.5.0"
 spring_boot_rest_docs="4.0.0"
 
@@ -59,9 +59,9 @@ spring_mockk = "4.0.2"
 firebase = "9.5.0"
 
 # sentry
-sentry = "6.0.0-beta.1"  # Gradle plugin version
-sentry_sdk = "8.25.0"     # SDK version
-sentry_logback = "8.25.0"
+sentry = "6.0.0-beta.2"  # Gradle plugin version
+sentry_sdk = "8.26.0"     # SDK version
+sentry_logback = "8.26.0"
 
 # OpenFeign
 spring_cloud_openfeign = "4.2.0"
