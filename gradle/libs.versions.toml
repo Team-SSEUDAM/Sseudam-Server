@@ -16,7 +16,7 @@ spring_boot = "4.0.0"
 spring_dependency_management = "1.1.7"
 spring_cloud_dependencies = "2024.0.0"
 jakartaAnnotation = "3.0.0"
-spring_modulith = "2.0.0-RC1"
+spring_modulith = "2.0.0"
 
 # Redis version
 redisson = "3.52.0"
