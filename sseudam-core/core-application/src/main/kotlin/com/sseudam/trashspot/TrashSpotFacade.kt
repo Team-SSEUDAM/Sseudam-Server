@@ -1,6 +1,5 @@
 package com.sseudam.trashspot
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.sseudam.common.Region
 import com.sseudam.common.TrashType
 import com.sseudam.contract.visit.SpotVisitedQueryContract
@@ -10,6 +9,7 @@ import com.sseudam.trashspot.image.TrashSpotImageService
 import com.sseudam.trashspot.result.TrashSpotDetail
 import com.sseudam.user.UserService
 import org.springframework.stereotype.Service
+import tools.jackson.core.type.TypeReference
 
 @Service
 class TrashSpotFacade(

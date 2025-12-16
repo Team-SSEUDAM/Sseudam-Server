@@ -7,9 +7,10 @@ management:
     web:
       exposure:
         include: health, prometheus, modulith
+      base-path: /actuator
   health:
     defaults:
-      enabled: false
+      enabled: true
 sentry:
   dsn: ${SENTRY_DSN}
   send-default-pii: ${SENTRY_SEND_DEFAULT_PII:false}
@@ -17,3 +18,7 @@ sentry:
   logs:
     enabled: true
   traces-sample-rate: ${SENTRY_TRACES_SAMPLE_RATE:1.0}
+  ignored-exceptions-for-type:
+    - org.apache.catalina.connector.ClientAbortException
+    - java.io.EOFException
+    - org.springframework.web.client.HttpClientErrorException

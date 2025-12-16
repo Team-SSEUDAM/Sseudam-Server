@@ -2,7 +2,7 @@ package com.sseudam.storage.db.core.common
 
 import org.springframework.data.domain.Page
 
-class OffsetPage<T>(
+class OffsetPage<T : Any>(
     val page: Int,
     val size: Int,
     val totalCount: Long,
@@ -17,7 +17,7 @@ class OffsetPage<T>(
         hasNext = page.hasNext(),
     )
 
-    fun <R> map(mapper: (T) -> R): OffsetPage<R> =
+    fun <R : Any> map(mapper: (T) -> R): OffsetPage<R> =
         OffsetPage(
             page = page,
             size = size,

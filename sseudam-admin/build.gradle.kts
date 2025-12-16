@@ -1,6 +1,6 @@
 dependencies {
     implementation(libs.spring.boot.starter.web)
-    implementation(libs.spring.boot.starter.aop)
+    implementation(libs.spring.boot.starter.aspectj)
     implementation(libs.spring.boot.starter.validation)
     implementation(libs.jakarta.validation)
 

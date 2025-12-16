@@ -1,9 +1,5 @@
 package com.sseudam.filter
 
-import com.fasterxml.jackson.core.JsonProcessingException
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.ObjectNode
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
@@ -13,6 +9,8 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.WebUtils
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.node.ObjectNode
 import java.io.IOException
 import java.io.UnsupportedEncodingException
 
@@ -33,7 +31,7 @@ class LoggingFilter(
         val isFirstRequest = !this.isAsyncDispatch(request)
         var wrapper = request
         if (isFirstRequest && request !is ContentCachingRequestWrapper) {
-            wrapper = ContentCachingRequestWrapper(request)
+            wrapper = ContentCachingRequestWrapper(request, 1024)
         }
         try {
             filterChain.doFilter(wrapper, response)
@@ -44,7 +42,6 @@ class LoggingFilter(
         }
     }
 
-    @Throws(JsonProcessingException::class)
     private fun createMessage(request: HttpServletRequest) {
         val logData = objectMapper.createObjectNode()
         setClient(request, logData)
@@ -73,14 +70,14 @@ class LoggingFilter(
                 for (value in values) {
                     arrayNode.add(value)
                 }
-                parametersNode.set<JsonNode>(key, arrayNode)
+                parametersNode.set(key, arrayNode)
             }
         }
 
         val queryString = request.queryString
         parametersNode.put("_queryString", queryString)
 
-        logData.set<JsonNode>("parameters", parametersNode)
+        logData.set("parameters", parametersNode)
     }
 
     private fun setPayload(
@@ -96,7 +93,7 @@ class LoggingFilter(
             val buf = wrapper.contentAsByteArray
             if (buf.isNotEmpty()) {
                 try {
-                    node.set<JsonNode>("payload", objectMapper.readTree(buf))
+                    node.set("payload", objectMapper.readTree(buf))
                 } catch (e: IOException) {
                     try {
                         val content = String(buf, charset(wrapper.characterEncoding))

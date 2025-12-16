@@ -1,8 +1,8 @@
 [versions]
 
 # Kotlin
-kotlin = "2.1.0"
-ktlint = "12.1.2"
+kotlin = "2.3.0"
+ktlint = "14.0.1"
 ktlint_version_set = "1.5.0"
 
 # Arrow-kt
@@ -12,14 +12,14 @@ arrow_fx = "1.2.1"
 jwt = "0.12.6"
 bouncycastle = "1.70"
 # Spring
-spring_boot = "3.4.11"
+spring_boot = "4.0.0"
 spring_dependency_management = "1.1.7"
-spring_cloud_dependencies = "2024.0.0"
+spring_cloud_dependencies = "2025.1.0"
 jakartaAnnotation = "3.0.0"
-spring_modulith = "1.4.2"
+spring_modulith = "2.0.0"
 
 # Redis version
-redisson = "3.30.0"
+redisson = "4.0.0"
 
 # DB version
 postgresql = "42.7.5"
@@ -32,12 +32,15 @@ assertj = "3.24.2"
 fixture_monkey = "1.0.13"
 kotest = "5.6.2"
 kotest_extension = "1.1.3"
+testcontainers = "1.21.3"
 
 # Api-Docs version
-asciidoctor_convert = "3.3.2"
+asciidoctor_convert = "4.0.5"
 epages_restdocs_api_spec = "0.17.1"
 hidetake_swagger_generator = "2.18.2"
-swaggerVersion = "2.8.5"
+swaggerVersion = "3.0.0"
+restassured = "5.5.0"
+spring_boot_rest_docs="4.0.0"
 
 # AWS version
 aws = "2.25.47"
@@ -56,16 +59,19 @@ spring_mockk = "4.0.2"
 firebase = "9.5.0"
 
 # sentry
-sentry = "5.8.1"
-sentry_logback = "8.14.0"
+sentry = "5.12.2"  # Gradle plugin version
+sentry_sdk = "8.29.0"     # SDK version
+sentry_logback = "8.29.0"
 
 # OpenFeign
-spring_cloud_openfeign = "4.2.0"
 openfeign_hc5 = "13.1"
 openfeign_micrometer = "13.1"
 
 # Spring Retry
 spring_retry = "2.0.11"
+
+# Jackson
+jackson = "3.0.1"
 
 micrometer = "1.5.1"
 micrometer-registry-prometheus = "1.15.1"
@@ -107,16 +113,16 @@ spring_context = { module = "org.springframework:spring-context" }
 spring_tx = { module = "org.springframework:spring-tx" }
 spring_cloud_dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "spring_cloud_dependencies" }
 spring_boot_starter_web = { module = "org.springframework.boot:spring-boot-starter-web" }
-spring_boot_starter_data_jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa", version.ref = "spring_boot" }
-spring_boot_starter_actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring_boot" }
-spring_boot_starter_aop = { module = "org.springframework.boot:spring-boot-starter-aop", version.ref = "spring_boot" }
+spring_boot_starter_data_jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+spring_boot_starter_actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring_boot_starter_aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
 
 # validation
 spring_boot_starter_validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
-spring_boot_configuration_processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "spring_boot" }
+spring_boot_configuration_processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 spring_boot_starter_test = { module = "org.springframework.boot:spring-boot-starter-test" }
-spring_restdocs_mockmvc = { module = "org.springframework.restdocs:spring-restdocs-mockmvc" }
-spring_restdocs_restassured = { module = "org.springframework.restdocs:spring-restdocs-restassured" }
+spring_restdocs_core = { module = "org.springframework.restdocs:spring-restdocs-core", version.ref = "spring_boot_rest_docs" }
+spring_restdocs_mockmvc = { module = "org.springframework.restdocs:spring-restdocs-mockmvc", version.ref = "spring_boot_rest_docs" }
 spring_boot_starter_redis = { module = "org.springframework.boot:spring-boot-starter-data-redis" }
 spring_boot_starter_security = { module = "org.springframework.boot:spring-boot-starter-security" }
 spring_security_test = { module = "org.springframework.security:spring-security-test" }
@@ -146,7 +152,7 @@ jjwt_api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jwt" }
 jjwt_impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jwt" }
 jjwt_jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jwt" }
 
-spring_boot_starter_oauth2_resource_server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "spring_boot" }
+spring_boot_starter_oauth2_resource_server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server" }
 
 # Coroutine Libraries
 kotlinx_coroutine_core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
@@ -161,9 +167,9 @@ arrow_fx_stm = { module = "io.arrow-kt:arrow-fx-stm", version.ref = "arrow_fx" }
 
 # TestContainers Libraries
 spring_boot_testcontainers = { module = "org.springframework.boot:spring-boot-testcontainers" }
-test_containers_junit_jupiter = { module = "org.testcontainers:junit-jupiter" }
-test_containers_postgres = { module = "org.testcontainers:postgresql" }
-test_containers_localstack = { module = "org.testcontainers:localstack" }
+test_containers_junit_jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+test_containers_postgres = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+test_containers_localstack = { module = "org.testcontainers:localstack", version.ref = "testcontainers" }
 
 # FixtureMonkey Library
 fixture_monkey_starter_kotlin = { module = "com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin", version.ref = "fixture_monkey" }
@@ -171,9 +177,10 @@ fixture_monkey_starter_kotlin = { module = "com.navercorp.fixturemonkey:fixture-
 # Redisson Library
 redisson = { module = "org.redisson:redisson-spring-boot-starter", version.ref = "redisson" }
 
-# Jackson Libraries
-jackson_kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
-jackson_datatype_jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" }
+# Jackson 3 Libraries
+# Note: jackson-annotations는 여전히 com.fasterxml.jackson.core를 사용합니다
+# Jackson 3.0에서 jackson-datatype-jsr310은 jackson-databind에 병합되어 별도 의존성 불필요
+jackson_kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 
 # DataBase Libraries
 # postgresql
@@ -191,7 +198,7 @@ line_kotlin_jdsl_jpql_render = { module = "com.linecorp.kotlin-jdsl:jpql-render"
 line_kotlin_jdsl_spring_data_jpa_support = { module = "com.linecorp.kotlin-jdsl:spring-data-jpa-support", version.ref = "line_kotlin_jdsl" }
 
 # OpenFeign Libraries
-spring_cloud_openfeign = { module = "org.springframework.cloud:spring-cloud-starter-openfeign", version.ref = "spring_cloud_openfeign" }
+spring_cloud_openfeign = { module = "org.springframework.cloud:spring-cloud-starter-openfeign" }
 openfeign_hc5 = { module = "io.github.openfeign:feign-hc5", version.ref = "openfeign_hc5" }
 openfeign_micrometer = { module = "io.github.openfeign:feign-micrometer", version.ref = "openfeign_micrometer" }
 
@@ -199,7 +206,9 @@ openfeign_micrometer = { module = "io.github.openfeign:feign-micrometer", versio
 spring_retry = { module = "org.springframework.retry:spring-retry", version.ref = "spring_retry" }
 
 # Sentry
-sentry_logback = { module = "io.sentry:sentry-logback", version.ref = "sentry_logback"}
+sentry_bom = { module = "io.sentry:sentry-bom", version.ref = "sentry_sdk" }
+sentry_spring_boot = { module = "io.sentry:sentry-spring-boot-4", version.ref = "sentry_sdk" }
+sentry_logback = { module = "io.sentry:sentry-logback", version.ref = "sentry_logback" }
 
 # Test Libraries
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
@@ -213,7 +222,7 @@ kotest_extensions = { module = "io.kotest.extensions:kotest-extensions-spring", 
 
 # Api-Docs Libraries
 jakarta_servlet_api = { module = "jakarta.servlet:jakarta.servlet-api" }
-restassured_spring_mock_mvc = { module = "io.rest-assured:spring-mock-mvc" }
+restassured_spring_mock_mvc = { module = "io.rest-assured:spring-mock-mvc", version.ref = "restassured" }
 epages_restdocs_api_spec_mock_mvc = { module = "com.epages:restdocs-api-spec-mockmvc", version.ref = "epages_restdocs_api_spec" }
 epages_restdocs_api_spec_restassured = { module = "com.epages:restdocs-api-spec-restassured", version.ref = "epages_restdocs_api_spec" }
 
@@ -243,6 +252,11 @@ kotest = [
 spring_test = [
     "spring_mockk",
     "kotest_extensions",
+]
+
+spring_restdocs = [
+    "spring_restdocs_core",
+    "spring_restdocs_mockmvc",
 ]
 
 spring_modulith = [

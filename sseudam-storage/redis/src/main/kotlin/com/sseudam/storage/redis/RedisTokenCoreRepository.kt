@@ -1,6 +1,5 @@
 package com.sseudam.storage.redis
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.sseudam.auth.dto.Provider
 import com.sseudam.auth.dto.ProviderDetail
 import com.sseudam.auth.repository.RedisTokenRepository
@@ -9,6 +8,7 @@ import com.sseudam.support.error.AuthenticationErrorException
 import com.sseudam.support.error.AuthenticationErrorType
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
+import tools.jackson.databind.ObjectMapper
 import java.time.Duration
 
 @Repository

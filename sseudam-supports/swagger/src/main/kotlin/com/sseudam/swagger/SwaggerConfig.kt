@@ -1,7 +1,5 @@
 package com.sseudam.swagger
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.swagger.v3.core.jackson.ModelResolver
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
@@ -35,9 +33,6 @@ internal class SwaggerConfig(
             ).components(authComponents())
             .addSecurityItem(SecurityRequirement().addList("accessToken"))
     }
-
-    @Bean
-    fun modelResolver(objectMapper: ObjectMapper): ModelResolver = ModelResolver(objectMapper)
 
     private fun swaggerInfo(): Info {
         val license =

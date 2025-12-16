@@ -1,6 +1,5 @@
 package com.sseudam.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.sseudam.ApiResponse
 import com.sseudam.ErrorResponse
 import com.sseudam.support.error.AuthenticationErrorType
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
+import tools.jackson.databind.ObjectMapper
 
 class CustomAuthenticationEntryPoint(
     private val objectMapper: ObjectMapper,

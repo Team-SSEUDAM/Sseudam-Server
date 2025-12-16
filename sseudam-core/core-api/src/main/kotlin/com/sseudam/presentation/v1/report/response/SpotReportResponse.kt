@@ -45,7 +45,7 @@ data class SpotReportResponse(
                 id = detail.id,
                 spotId = detail.spotId,
                 spotName = detail.spotName,
-                region = detail.region ?: Region.UNKNOWN,
+                region = detail.region,
                 userId = detail.userId,
                 reportType = detail.reportType,
                 point = detail.point,

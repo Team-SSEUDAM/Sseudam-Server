@@ -50,7 +50,12 @@ class AuthController(
         if (!passwordEncoder.matches(request.password, storedPassword)) {
             throw ErrorException(ErrorType.INVALID_PASSWORD)
         }
-        val token = authenticationService.login(deviceId, User(userCredentials.id, userCredentials.key), request.toCredentialSseudam())
+        val token =
+            authenticationService.login(
+                deviceId ?: "",
+                User(userCredentials.id, userCredentials.key),
+                request.toCredentialSseudam(),
+            )
         return TokenResponse.toResponse(false, token)
     }
 

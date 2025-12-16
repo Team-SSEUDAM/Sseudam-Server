@@ -1,4 +1,4 @@
-FROM amazoncorretto:21
+FROM amazoncorretto:25
 ENV TZ="Asia/Seoul"
 
 ARG SENTRY_AUTH_TOKEN

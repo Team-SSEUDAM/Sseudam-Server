@@ -16,7 +16,7 @@ tasks.getByName("jar") {
 
 jib {
     from {
-        image = "amazoncorretto:21-alpine"
+        image = "amazoncorretto:25-alpine"
         platforms {
             platform {
                 architecture = "amd64"
@@ -125,7 +125,7 @@ tasks.register("jibProd") {
 
 dependencies {
     implementation(libs.spring.boot.starter.web)
-    implementation(libs.spring.boot.starter.aop)
+    implementation(libs.spring.boot.starter.aspectj)
     implementation(libs.spring.boot.starter.validation)
     implementation(libs.jakarta.validation)
 
@@ -154,6 +154,9 @@ dependencies {
     runtimeOnly(project(":sseudam-supports:monitoring"))
     runtimeOnly(project(":sseudam-storage:db-core"))
     runtimeOnly(project(":sseudam-storage:redis"))
+
+    // Sentry
+    implementation(libs.sentry.spring.boot)
 
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(project(":sseudam-storage:db-core"))

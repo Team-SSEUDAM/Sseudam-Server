@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -46,11 +47,21 @@ subprojects {
     apply(plugin = getPlugin(libs.plugins.sentry.gradle))
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_21
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(25)
+        }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom(SpringBootPlugin.BOM_COORDINATES)
+            mavenBom(libs.spring.cloud.dependencies.get().toString())
+            mavenBom(libs.spring.modulith.bom.get().toString())
+            mavenBom(libs.sentry.bom.get().toString())
+        }
     }
 
     dependencies {
-        implementation(platform(libs.spring.modulith.bom))
         implementation(libs.kotlin.reflect)
         implementation(libs.kotlin.stdlib.jdk8)
         implementation(libs.jackson.kotlin)
@@ -72,6 +83,9 @@ subprojects {
             org = "sseudam"
             projectName = "sseudam-server"
             authToken = sentryAuthToken
+            autoInstallation {
+                sentryVersion.set(libs.versions.sentry.sdk.get())
+            }
         }
     } else {
         tasks.matching { it.name.startsWith("sentry") }.configureEach {
@@ -80,11 +94,12 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        kotlin {
-            compilerOptions {
-                freeCompilerArgs.set(listOf("-Xjsr305=strict"))
-                jvmTarget.set(JvmTarget.JVM_21)
-            }
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_25)
+            freeCompilerArgs.set(listOf(
+                "-Xjsr305=strict",
+                "-Xannotation-default-target=param-property"
+            ))
         }
     }
 

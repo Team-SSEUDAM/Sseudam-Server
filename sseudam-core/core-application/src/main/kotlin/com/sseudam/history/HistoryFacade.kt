@@ -1,6 +1,5 @@
 package com.sseudam.history
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.sseudam.history.dto.HistoryStatus
 import com.sseudam.history.dto.SpotActionType
 import com.sseudam.history.dto.SpotHistory
@@ -14,6 +13,7 @@ import com.sseudam.support.Cache
 import com.sseudam.support.extension.parZipWithMDC
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
+import tools.jackson.core.type.TypeReference
 
 @Service
 class HistoryFacade(
