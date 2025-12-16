@@ -1,7 +1,7 @@
 [versions]
 
 # Kotlin
-kotlin = "2.3.0-RC"
+kotlin = "2.3.0"
 ktlint = "14.0.1"
 ktlint_version_set = "1.5.0"
 
@@ -14,12 +14,12 @@ bouncycastle = "1.70"
 # Spring
 spring_boot = "4.0.0"
 spring_dependency_management = "1.1.7"
-spring_cloud_dependencies = "2024.0.0"
+spring_cloud_dependencies = "2025.1.0"
 jakartaAnnotation = "3.0.0"
 spring_modulith = "2.0.0"
 
 # Redis version
-redisson = "3.52.0"
+redisson = "4.0.0"
 
 # DB version
 postgresql = "42.7.5"
@@ -59,12 +59,11 @@ spring_mockk = "4.0.2"
 firebase = "9.5.0"
 
 # sentry
-sentry = "6.0.0-beta.2"  # Gradle plugin version
-sentry_sdk = "8.26.0"     # SDK version
-sentry_logback = "8.26.0"
+sentry = "5.12.2"  # Gradle plugin version
+sentry_sdk = "8.29.0"     # SDK version
+sentry_logback = "8.29.0"
 
 # OpenFeign
-spring_cloud_openfeign = "4.2.0"
 openfeign_hc5 = "13.1"
 openfeign_micrometer = "13.1"
 
@@ -199,7 +198,7 @@ line_kotlin_jdsl_jpql_render = { module = "com.linecorp.kotlin-jdsl:jpql-render"
 line_kotlin_jdsl_spring_data_jpa_support = { module = "com.linecorp.kotlin-jdsl:spring-data-jpa-support", version.ref = "line_kotlin_jdsl" }
 
 # OpenFeign Libraries
-spring_cloud_openfeign = { module = "org.springframework.cloud:spring-cloud-starter-openfeign", version.ref = "spring_cloud_openfeign" }
+spring_cloud_openfeign = { module = "org.springframework.cloud:spring-cloud-starter-openfeign" }
 openfeign_hc5 = { module = "io.github.openfeign:feign-hc5", version.ref = "openfeign_hc5" }
 openfeign_micrometer = { module = "io.github.openfeign:feign-micrometer", version.ref = "openfeign_micrometer" }
 
@@ -207,8 +206,9 @@ openfeign_micrometer = { module = "io.github.openfeign:feign-micrometer", versio
 spring_retry = { module = "org.springframework.retry:spring-retry", version.ref = "spring_retry" }
 
 # Sentry
-sentry_spring_boot_jakarta = { module = "io.sentry:sentry-spring-boot-starter-jakarta", version.ref = "sentry_sdk" }
-sentry_logback = { module = "io.sentry:sentry-logback", version.ref = "sentry_logback"}
+sentry_bom = { module = "io.sentry:sentry-bom", version.ref = "sentry_sdk" }
+sentry_spring_boot = { module = "io.sentry:sentry-spring-boot-4", version.ref = "sentry_sdk" }
+sentry_logback = { module = "io.sentry:sentry-logback", version.ref = "sentry_logback" }
 
 # Test Libraries
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }

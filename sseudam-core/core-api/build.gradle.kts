@@ -156,7 +156,7 @@ dependencies {
     runtimeOnly(project(":sseudam-storage:redis"))
 
     // Sentry
-    implementation(libs.sentry.spring.boot.jakarta)
+    implementation(libs.sentry.spring.boot)
 
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(project(":sseudam-storage:db-core"))

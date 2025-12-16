@@ -55,7 +55,9 @@ subprojects {
     dependencyManagement {
         imports {
             mavenBom(SpringBootPlugin.BOM_COORDINATES)
+            mavenBom(libs.spring.cloud.dependencies.get().toString())
             mavenBom(libs.spring.modulith.bom.get().toString())
+            mavenBom(libs.sentry.bom.get().toString())
         }
     }
 
@@ -81,6 +83,9 @@ subprojects {
             org = "sseudam"
             projectName = "sseudam-server"
             authToken = sentryAuthToken
+            autoInstallation {
+                sentryVersion.set(libs.versions.sentry.sdk.get())
+            }
         }
     } else {
         tasks.matching { it.name.startsWith("sentry") }.configureEach {

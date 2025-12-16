@@ -31,6 +31,16 @@ class SecurityConfig(
 
     @Bean
     @Order(1)
+    fun actuatorFilterChain(http: HttpSecurity): SecurityFilterChain =
+        http
+            .securityMatcher("/actuator/**", "/ping")
+            .authorizeHttpRequests { auth ->
+                auth.anyRequest().permitAll()
+            }.csrf { it.disable() }
+            .build()
+
+    @Bean
+    @Order(2)
     fun swaggerFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .securityMatcher(getSwaggerUrls())
@@ -105,7 +115,7 @@ class SecurityConfig(
                 .hasRole("ADMIN")
 
             // 추가로 열어줄 API
-            authorize.requestMatchers("/h2-console/**", "/actuator/**", "/ping").permitAll()
+            authorize.requestMatchers("/h2-console/**").permitAll()
 
             // 그 외 모든 API는 JWT 인증 필요
             authorize
