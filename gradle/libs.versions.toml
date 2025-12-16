@@ -96,7 +96,7 @@ epages_restdocs_api_spec = { id = "com.epages.restdocs-api-spec", version.ref = 
 hidetake_swagger_generator = { id = "org.hidetake.swagger.generator", version.ref = "hidetake_swagger_generator" }
 
 sentry_gradle = { id = "io.sentry.jvm.gradle", version.ref = "sentry" }
-jib = { id = "com.google.cloud.tools.jib", version = "3.4.5" }
+jib = { id = "com.google.cloud.tools.jib", version = "3.5.2" }
 
 [libraries]
 # Kotlin
@@ -112,7 +112,7 @@ jakarta_validation = { group = "jakarta.validation", name = "jakarta.validation-
 spring_context = { module = "org.springframework:spring-context" }
 spring_tx = { module = "org.springframework:spring-tx" }
 spring_cloud_dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "spring_cloud_dependencies" }
-spring_boot_starter_web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring_boot_starter_web = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
 spring_boot_starter_data_jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 spring_boot_starter_actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring_boot_starter_aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
@@ -230,6 +230,7 @@ epages_restdocs_api_spec_restassured = { module = "com.epages:restdocs-api-spec-
 micrometer_tracing_bridge_brave = { module = "io.micrometer:micrometer-tracing-bridge-brave" }
 micrometer_registry_prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
 slf4j = { module = "org.slf4j:slf4j-api", version = "2.0.9" }
+spring_opentelemetry = { module = "org.springframework.boot:spring-boot-starter-opentelemetry" }
 
 # AWS Libraries
 aws_sdk_s3 = { module = "software.amazon.awssdk:s3", version.ref = "aws" }

@@ -6,11 +6,11 @@ plugins {
     alias(libs.plugins.jib)
 }
 
-tasks.getByName("bootJar") {
+tasks.named<Jar>("bootJar").configure {
     enabled = true
 }
 
-tasks.getByName("jar") {
+tasks.named<Jar>("jar").configure {
     enabled = false
 }
 

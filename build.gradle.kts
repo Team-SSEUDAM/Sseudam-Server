@@ -108,11 +108,11 @@ subprojects {
         version.set(libs.versions.ktlint.version.set)
     }
 
-    tasks.getByName("bootJar") {
+    tasks.named<Jar>("bootJar").configure {
         enabled = false
     }
 
-    tasks.getByName("jar") {
+    tasks.named<Jar>("jar").configure {
         enabled = true
     }
 
